@@ -1,5 +1,5 @@
-import 'package:mobile_app_skeleton/pages/page5/page5_item_entity.dart';
-import 'package:mobile_app_skeleton/pages/page5/page5_repository.dart';
+import 'package:open_plant/pages/page5/page5_item_entity.dart';
+import 'package:open_plant/pages/page5/page5_repository.dart';
 
 class Page5Usecases {
   final Page5Repository repository;

@@ -12,7 +12,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get helloWorld => 'Hello World!';
 
   @override
-  String get appTitle => 'Template App';
+  String get appTitle => 'OpenPlant';
 
   @override
   String get page1Title => 'Page 1';
@@ -55,11 +55,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get onboardingIntroBody =>
-      'This is a skeleton app that preserves the architecture and UI shell.';
+      'Welcome to OpenPlant — your open-source & privacy-friendly plant companion.';
 
   @override
   String get onboardingIntroHint =>
-      'Replace \"Page 1..Page 6\" with your own features.';
+      'Track your plants, set reminders, and watch them thrive.';
 
   @override
   String get onboardingPreferencesTitle => 'Preferences';
@@ -114,14 +114,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get secondaryActionSnack => 'Another placeholder action';
 
   @override
-  String get menuSettingsSubtitle => 'Template app settings';
+  String get menuSettingsSubtitle => 'OpenPlant settings';
 
   @override
-  String get menuAboutSubtitle => 'About this template';
+  String get menuAboutSubtitle => 'About OpenPlant';
 
   @override
   String get aboutBody =>
-      'This repository is a mobile app skeleton.\n\nReplace the placeholder pages (Page 1..Page 6) with your own features while keeping the architecture (datasources, repositories, usecases, entities, pages).';
+      'OpenPlant is an open-source & privacy-friendly companion app for your plants.\n\nTrack your plant care, set watering reminders, and keep your garden healthy — all without compromising your privacy.';
 
   @override
   String get serverFailureMessage => 'Could not load server data.';

@@ -3,7 +3,7 @@
   
   "helloWorld": "Hello World!",
 
-  "appTitle": "Template App",
+  "appTitle": "OpenPlant",
 
   "page1Title": "Page 1",
   "page2Title": "Page 2",
@@ -22,8 +22,8 @@
   "next": "Next",
   "finish": "Finish",
 
-  "onboardingIntroBody": "This is a skeleton app that preserves the architecture and UI shell.",
-  "onboardingIntroHint": "Replace \"Page 1..Page 6\" with your own features.",
+  "onboardingIntroBody": "Welcome to OpenPlant — your open-source & privacy-friendly plant companion.",
+  "onboardingIntroHint": "Track your plants, set reminders, and watch them thrive.",
   "onboardingPreferencesTitle": "Preferences",
   "themeLabel": "Theme",
   "languageLabel": "Language",
@@ -43,9 +43,9 @@
   "primaryActionSnack": "Replace this with your real action",
   "secondaryActionSnack": "Another placeholder action",
 
-  "menuSettingsSubtitle": "Template app settings",
-  "menuAboutSubtitle": "About this template",
-  "aboutBody": "This repository is a mobile app skeleton.\n\nReplace the placeholder pages (Page 1..Page 6) with your own features while keeping the architecture (datasources, repositories, usecases, entities, pages).",
+  "menuSettingsSubtitle": "OpenPlant settings",
+  "menuAboutSubtitle": "About OpenPlant",
+  "aboutBody": "OpenPlant is an open-source & privacy-friendly companion app for your plants.\n\nTrack your plant care, set watering reminders, and keep your garden healthy — all without compromising your privacy.",
   
   "serverFailureMessage": "Could not load server data.",
   "generalFailureMessage": "An error has occurred.",

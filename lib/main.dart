@@ -1,15 +1,15 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'package:mobile_app_skeleton/core/app_scope.dart';
-import 'package:mobile_app_skeleton/core/app_services.dart';
-import 'package:mobile_app_skeleton/core/injection.dart' as ic;
-import 'package:mobile_app_skeleton/core/settings.dart';
-import 'package:mobile_app_skeleton/core/themes.dart';
-import 'package:mobile_app_skeleton/l10n/l10n.dart';
-import 'package:mobile_app_skeleton/l10n/l10n_x.dart';
-import 'package:mobile_app_skeleton/pages/home/home_page.dart';
-import 'package:mobile_app_skeleton/pages/home/onboarding.dart';
+import 'package:open_plant/core/app_scope.dart';
+import 'package:open_plant/core/app_services.dart';
+import 'package:open_plant/core/injection.dart' as ic;
+import 'package:open_plant/core/settings.dart';
+import 'package:open_plant/core/themes.dart';
+import 'package:open_plant/l10n/l10n.dart';
+import 'package:open_plant/l10n/l10n_x.dart';
+import 'package:open_plant/pages/home/home_page.dart';
+import 'package:open_plant/pages/home/onboarding.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,19 +25,19 @@ Future<void> main() async {
     AppScope(
       settings: settings,
       services: services,
-      child: const SkeletonApp(),
+      child: const OpenPlantApp(),
     ),
   );
 }
 
-class SkeletonApp extends StatefulWidget {
-  const SkeletonApp({super.key});
+class OpenPlantApp extends StatefulWidget {
+  const OpenPlantApp({super.key});
 
   @override
-  State<SkeletonApp> createState() => _SkeletonAppState();
+  State<OpenPlantApp> createState() => _OpenPlantAppState();
 }
 
-class _SkeletonAppState extends State<SkeletonApp> {
+class _OpenPlantAppState extends State<OpenPlantApp> {
   final GlobalKey<NavigatorState> _mainNavigatorKey =
       GlobalKey<NavigatorState>();
 

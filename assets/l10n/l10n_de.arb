@@ -3,7 +3,7 @@
 
   "helloWorld": "Hallo Welt!",
 
-  "appTitle": "Template App",
+  "appTitle": "OpenPlant",
 
   "page1Title": "Seite 1",
   "page2Title": "Seite 2",
@@ -22,8 +22,8 @@
   "next": "Weiter",
   "finish": "Fertig",
 
-  "onboardingIntroBody": "Dies ist eine Skeleton-App, die Architektur und UI-Shell beibehält.",
-  "onboardingIntroHint": "Ersetze \"Page 1..Page 6\" durch deine eigenen Features.",
+  "onboardingIntroBody": "Willkommen bei OpenPlant — deine Open-Source & datenschutzfreundliche Pflanzen-App.",
+  "onboardingIntroHint": "Erfasse deine Pflanzen, setze Erinnerungen und beobachte ihr Wachstum.",
   "onboardingPreferencesTitle": "Einstellungen",
   "themeLabel": "Theme",
   "languageLabel": "Sprache",
@@ -43,9 +43,9 @@
   "primaryActionSnack": "Ersetze das durch deine echte Aktion",
   "secondaryActionSnack": "Noch eine Platzhalter-Aktion",
 
-  "menuSettingsSubtitle": "Einstellungen der Template-App",
-  "menuAboutSubtitle": "Ueber dieses Template",
-  "aboutBody": "Dieses Repository ist ein Mobile-App-Skeleton.\n\nErsetze die Platzhalter-Seiten (Page 1..Page 6) durch deine eigenen Features und behalte dabei die Architektur (Datasources, Repositories, Usecases, Entities, Pages) bei.",
+  "menuSettingsSubtitle": "OpenPlant-Einstellungen",
+  "menuAboutSubtitle": "Ueber OpenPlant",
+  "aboutBody": "OpenPlant ist eine Open-Source & datenschutzfreundliche Begleiter-App fuer deine Pflanzen.\n\nErfasse deine Pflanzenpflege, setze Giesserinnerungen und halte deinen Garten gesund — alles ohne dein Privatschutz zu kompromittieren.",
 
   "serverFailureMessage": "Serverdaten konnten nicht geladen werden.",
   "generalFailureMessage": "Ein Fehler ist aufgetreten.",

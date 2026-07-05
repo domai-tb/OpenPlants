@@ -1,6 +1,5 @@
-package com.example.mobile_app_skeleton
+package com.domai_tb.openplants
 
 import io.flutter.embedding.android.FlutterActivity
 
-// This is just a demo on how to register a activity
 class MainActivity: FlutterActivity() {}

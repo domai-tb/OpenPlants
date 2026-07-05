@@ -15,7 +15,7 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-    namespace = "com.example.mobile_app_skeleton"
+    namespace = "com.domai_tb.openplants"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -33,7 +33,7 @@ android {
 
     defaultConfig {
         // Application ID: https://developer.android.com/studio/build/application-id.html
-        applicationId = "com.example.mobile_app_skeleton"
+        applicationId = "com.domai_tb.openplants"
         
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
@@ -88,7 +88,7 @@ dependencies {
     // even on older Android devices with lower API levels. 
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.5")
 
-    // Skeleton: keep Android config minimal; avoid unnecessary Play Services requirements.
+    // Keep Android config minimal; avoid unnecessary Play Services requirements.
     //
     // The Dio packages uses [cronet_http] libary to perform network requests. 
     // At default, this libary depends on Google Play services instead of 

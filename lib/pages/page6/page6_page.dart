@@ -2,14 +2,14 @@ import 'dart:io' show Platform;
 
 import 'package:flutter/material.dart';
 
-import 'package:mobile_app_skeleton/core/app_scope.dart';
-import 'package:mobile_app_skeleton/l10n/l10n_x.dart';
-import 'package:mobile_app_skeleton/pages/home/widgets/page_navigation_animation.dart';
-import 'package:mobile_app_skeleton/pages/page6/page6_about_page.dart';
-import 'package:mobile_app_skeleton/pages/page6/page6_item_entity.dart';
-import 'package:mobile_app_skeleton/pages/page6/page6_settings_page.dart';
-import 'package:mobile_app_skeleton/pages/page6/page6_usecases.dart';
-import 'package:mobile_app_skeleton/widgets/scroll_to_top_button.dart';
+import 'package:open_plant/core/app_scope.dart';
+import 'package:open_plant/l10n/l10n_x.dart';
+import 'package:open_plant/pages/home/widgets/page_navigation_animation.dart';
+import 'package:open_plant/pages/page6/page6_about_page.dart';
+import 'package:open_plant/pages/page6/page6_item_entity.dart';
+import 'package:open_plant/pages/page6/page6_settings_page.dart';
+import 'package:open_plant/pages/page6/page6_usecases.dart';
+import 'package:open_plant/widgets/scroll_to_top_button.dart';
 
 class Page6Page extends StatefulWidget {
   final GlobalKey<NavigatorState> mainNavigatorKey;

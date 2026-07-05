@@ -1,4 +1,4 @@
-import 'package:mobile_app_skeleton/pages/page2/page2_item_entity.dart';
+import 'package:open_plant/pages/page2/page2_item_entity.dart';
 
 class Page2DataSource {
   Future<List<Page2ItemEntity>> fetchItems() async {

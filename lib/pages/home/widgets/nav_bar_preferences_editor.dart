@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:mobile_app_skeleton/l10n/l10n_x.dart';
-import 'package:mobile_app_skeleton/pages/home/page_navigator.dart';
+import 'package:open_plant/l10n/l10n_x.dart';
+import 'package:open_plant/pages/home/page_navigator.dart';
 
 class NavBarPreferencesEditor extends StatelessWidget {
   final List<PageItem> orderedItems;
