@@ -1,19 +1,37 @@
-# Flutter Mobile App Skeleton
+# OpenPlant 🌱
 
-This repository is a Flutter mobile app template that preserves an opinionated app shell:
-- Home page with bottom navigation (and tablet side navigation).
-- Clean-ish feature structure: datasources, repositories, usecases, entities, pages.
-- Placeholder features named `Page 1` through `Page 6`.
+An open-source & privacy-friendly companion app for your plants.
 
-## Structure
-- `lib/pages/page1` ... `lib/pages/page6`: feature placeholders
-- `lib/core`: app-wide concerns (settings, theme, DI)
-- `lib/utils/widgets`: reusable UI building blocks
+## Features
 
-## Replace Placeholders
-1. Pick a page folder (e.g. `lib/pages/page1`).
-2. Replace the datasource/repository/usecases/entity/page with your real implementation.
-3. Keep the public surface area similar so the navigation shell stays stable.
+- Track your plants and their care routines
+- Set watering and care reminders
+- Responsive layout (bottom nav on phones, side nav on tablets)
+- Dark mode support
+- Multi-language support (English, German)
+
+## Architecture
+
+Clean Architecture with layered design:
+- **Presentation**: Flutter widgets (pages)
+- **Application**: Use-cases orchestrate business logic
+- **Domain**: Entities and repositories
+- **Infrastructure**: Datasources (API, DB, platform)
+
+## Getting Started
+
+```bash
+fvm flutter pub get
+fvm flutter run
+```
+
+## Project Structure
+
+- `lib/pages/` — Feature modules (page1–page6 placeholders)
+- `lib/core/` — App-wide concerns (settings, theme, DI)
+- `lib/widgets/` — Reusable UI building blocks
+- `assets/l10n/` — Localization ARB files
 
 ## License
-See `LICENSE`.
+
+AGPL v3 — See [LICENSE](LICENSE).

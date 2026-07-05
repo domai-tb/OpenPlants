@@ -11,7 +11,7 @@ This repository is a Flutter app template that demonstrates a lightweight, layer
 - `lib/l10n/`
   - Generated localization code (see the Localization page).
 - `lib/pages/`
-  - Feature modules. In this skeleton they are `page1` to `page6`.
+  - Feature modules. In this app they are `page1` to `page6`.
   - Each module demonstrates a layered approach:
     - `*_datasource.dart` for I/O (API, DB, etc.)
     - `*_repository.dart` for domain-friendly access
@@ -23,7 +23,7 @@ This repository is a Flutter app template that demonstrates a lightweight, layer
 
 ## Dependency Wiring
 
-The skeleton uses GetIt for dependency injection, wired in one place:
+OpenPlant uses GetIt for dependency injection, wired in one place:
 
 - `lib/core/injection.dart` registers datasources, repositories, and usecases, and builds `AppServices`.
 - `lib/main.dart` calls `init()` at startup.
