@@ -6,7 +6,9 @@
     <item>
         <bitmap android:gravity="center" android:src="@drawable/splash"/>
     </item>
-    <item>
-        <bitmap android:gravity="bottom" android:src="@drawable/branding"/>
+    <item
+        android:gravity="bottom"
+        android:height="80dp">
+        <bitmap android:gravity="center" android:src="@drawable/splash_text"/>
     </item>
 </layer-list>

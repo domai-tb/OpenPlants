@@ -12,7 +12,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get helloWorld => 'Hallo Welt!';
 
   @override
-  String get appTitle => 'Template App';
+  String get appTitle => 'OpenPlant';
 
   @override
   String get page1Title => 'Seite 1';
@@ -55,11 +55,11 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get onboardingIntroBody =>
-      'Dies ist eine Skeleton-App, die Architektur und UI-Shell beibehält.';
+      'Willkommen bei OpenPlant — deine Open-Source & datenschutzfreundliche Pflanzen-App.';
 
   @override
   String get onboardingIntroHint =>
-      'Ersetze \"Page 1..Page 6\" durch deine eigenen Features.';
+      'Erfasse deine Pflanzen, setze Erinnerungen und beobachte ihr Wachstum.';
 
   @override
   String get onboardingPreferencesTitle => 'Einstellungen';
@@ -116,14 +116,14 @@ class AppLocalizationsDe extends AppLocalizations {
   String get secondaryActionSnack => 'Noch eine Platzhalter-Aktion';
 
   @override
-  String get menuSettingsSubtitle => 'Einstellungen der Template-App';
+  String get menuSettingsSubtitle => 'OpenPlant-Einstellungen';
 
   @override
-  String get menuAboutSubtitle => 'Ueber dieses Template';
+  String get menuAboutSubtitle => 'Ueber OpenPlant';
 
   @override
   String get aboutBody =>
-      'Dieses Repository ist ein Mobile-App-Skeleton.\n\nErsetze die Platzhalter-Seiten (Page 1..Page 6) durch deine eigenen Features und behalte dabei die Architektur (Datasources, Repositories, Usecases, Entities, Pages) bei.';
+      'OpenPlant ist eine Open-Source & datenschutzfreundliche Begleiter-App fuer deine Pflanzen.\n\nErfasse deine Pflanzenpflege, setze Giesserinnerungen und halte deinen Garten gesund — alles ohne dein Privatschutz zu kompromittieren.';
 
   @override
   String get serverFailureMessage =>

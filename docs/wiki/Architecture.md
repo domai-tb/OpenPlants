@@ -1,6 +1,6 @@
 # Architecture
 
-This page documents the current project architecture used by this Flutter skeleton.
+This page documents the current project architecture used by OpenPlant.
 
 It is intentionally small: the goal is to demonstrate a repeatable structure (layers, wiring, testing seams) without pulling in app-specific concepts from the original repository this template came from.
 
@@ -8,10 +8,10 @@ It is intentionally small: the goal is to demonstrate a repeatable structure (la
 
 All source code lives in `lib/` and tests live in `test/`.
 
-At the top level, the skeleton is split into:
+At the top level, OpenPlant is split into:
 
 - `lib/core/`: Cross-cutting code (settings persistence, theming, dependency wiring).
-- `lib/pages/`: Feature modules. In this skeleton they are `page1` to `page6` and serve as examples.
+- `lib/pages/`: Feature modules. In this app they are `page1` to `page6` and serve as examples.
 - `lib/widgets/`: Globally reusable widgets (buttons, search bar, etc.).
 - `lib/l10n/`: Generated localization code.
 
@@ -48,7 +48,7 @@ As a simplified tree:
 
 ## Layered Architecture
 
-The skeleton uses a simple layered approach inspired by Clean Architecture. The exact naming is less important than the dependency direction:
+OpenPlant uses a simple layered approach inspired by Clean Architecture. The exact naming is less important than the dependency direction:
 
 - UI depends on use-cases.
 - Use-cases depend on repositories.
@@ -94,12 +94,12 @@ The Presentation layer is made of Flutter widgets (pages and shared widgets). It
 
 The Application layer holds UI-facing state and orchestration that should not live directly in the widgets.
 
-In this skeleton:
+In this app:
 
 - Feature pages use `StatefulWidget` for local UI state.
 - Global app state is managed by `SettingsController` (a `ChangeNotifier`) and observed in `lib/main.dart`.
 
-No BLoC pattern is used by this skeleton.
+No BLoC pattern is used by this app.
 
 ### Domain Layer
 
@@ -115,7 +115,7 @@ The Infrastructure layer contains datasources. A datasource is the only place th
 
 ## Dependency Injection
 
-The skeleton uses GetIt as a service locator to keep object creation centralized and testable.
+OpenPlant uses GetIt as a service locator to keep object creation centralized and testable.
 
 - DI container: `lib/core/injection.dart`
 - Called from: `lib/main.dart`

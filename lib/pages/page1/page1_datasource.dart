@@ -1,10 +1,10 @@
 import 'dart:math';
 
-import 'package:mobile_app_skeleton/pages/page1/page1_item_entity.dart';
+import 'package:open_plant/pages/page1/page1_item_entity.dart';
 
 /// Placeholder data source.
 ///
-/// Replace this with real API/storage access when turning the template into a real app.
+/// Replace this with real API/storage access for production use.
 class Page1DataSource {
   final Random _random = Random();
 

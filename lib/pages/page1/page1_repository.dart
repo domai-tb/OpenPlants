@@ -1,5 +1,5 @@
-import 'package:mobile_app_skeleton/pages/page1/page1_datasource.dart';
-import 'package:mobile_app_skeleton/pages/page1/page1_item_entity.dart';
+import 'package:open_plant/pages/page1/page1_datasource.dart';
+import 'package:open_plant/pages/page1/page1_item_entity.dart';
 
 class Page1Repository {
   final Page1DataSource dataSource;

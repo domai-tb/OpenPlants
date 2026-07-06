@@ -107,7 +107,7 @@ abstract class AppLocalizations {
   /// No description provided for @appTitle.
   ///
   /// In en, this message translates to:
-  /// **'Template App'**
+  /// **'OpenPlant'**
   String get appTitle;
 
   /// No description provided for @page1Title.
@@ -191,13 +191,13 @@ abstract class AppLocalizations {
   /// No description provided for @onboardingIntroBody.
   ///
   /// In en, this message translates to:
-  /// **'This is a skeleton app that preserves the architecture and UI shell.'**
+  /// **'Welcome to OpenPlant — your open-source & privacy-friendly plant companion.'**
   String get onboardingIntroBody;
 
   /// No description provided for @onboardingIntroHint.
   ///
   /// In en, this message translates to:
-  /// **'Replace \"Page 1..Page 6\" with your own features.'**
+  /// **'Track your plants, set reminders, and watch them thrive.'**
   String get onboardingIntroHint;
 
   /// No description provided for @onboardingPreferencesTitle.
@@ -305,19 +305,19 @@ abstract class AppLocalizations {
   /// No description provided for @menuSettingsSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Template app settings'**
+  /// **'OpenPlant settings'**
   String get menuSettingsSubtitle;
 
   /// No description provided for @menuAboutSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'About this template'**
+  /// **'About OpenPlant'**
   String get menuAboutSubtitle;
 
   /// No description provided for @aboutBody.
   ///
   /// In en, this message translates to:
-  /// **'This repository is a mobile app skeleton.\n\nReplace the placeholder pages (Page 1..Page 6) with your own features while keeping the architecture (datasources, repositories, usecases, entities, pages).'**
+  /// **'OpenPlant is an open-source & privacy-friendly companion app for your plants.\n\nTrack your plant care, set watering reminders, and keep your garden healthy — all without compromising your privacy.'**
   String get aboutBody;
 
   /// No description provided for @serverFailureMessage.

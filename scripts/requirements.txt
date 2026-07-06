@@ -1,0 +1,10 @@
+torch
+torchvision
+transformers
+safetensors
+huggingface_hub
+onnx
+onnxscript
+onnxruntime
+numpy
+pillow

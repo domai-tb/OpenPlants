@@ -48,3 +48,7 @@ app.*.map.json
 
 # exclude all .env files
 *.env
+.tokensave
+
+# FVM Version Cache
+.fvm/

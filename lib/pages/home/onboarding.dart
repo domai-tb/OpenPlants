@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-import 'package:mobile_app_skeleton/core/app_scope.dart';
-import 'package:mobile_app_skeleton/l10n/l10n_x.dart';
-import 'package:mobile_app_skeleton/pages/home/page_navigator.dart';
-import 'package:mobile_app_skeleton/pages/home/widgets/nav_bar_preferences_editor.dart';
-import 'package:mobile_app_skeleton/widgets/app_segmented_triple_control.dart';
+import 'package:open_plant/core/app_scope.dart';
+import 'package:open_plant/l10n/l10n_x.dart';
+import 'package:open_plant/pages/home/page_navigator.dart';
+import 'package:open_plant/pages/home/widgets/nav_bar_preferences_editor.dart';
+import 'package:open_plant/widgets/app_segmented_triple_control.dart';
 
 class OnboardingPage extends StatefulWidget {
   final GlobalKey<NavigatorState> mainNavigatorKey;

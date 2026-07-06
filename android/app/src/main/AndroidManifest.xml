@@ -16,7 +16,7 @@
     </queries>
 
     <application
-        android:label="Template App"
+        android:label="OpenPlant"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
         android:usesCleartextTraffic="false"

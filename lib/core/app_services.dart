@@ -1,9 +1,9 @@
-import 'package:mobile_app_skeleton/pages/page1/page1_usecases.dart';
-import 'package:mobile_app_skeleton/pages/page2/page2_usecases.dart';
-import 'package:mobile_app_skeleton/pages/page3/page3_usecases.dart';
-import 'package:mobile_app_skeleton/pages/page4/page4_usecases.dart';
-import 'package:mobile_app_skeleton/pages/page5/page5_usecases.dart';
-import 'package:mobile_app_skeleton/pages/page6/page6_usecases.dart';
+import 'package:open_plant/pages/page1/page1_usecases.dart';
+import 'package:open_plant/pages/page2/page2_usecases.dart';
+import 'package:open_plant/pages/page3/page3_usecases.dart';
+import 'package:open_plant/pages/page4/page4_usecases.dart';
+import 'package:open_plant/pages/page5/page5_usecases.dart';
+import 'package:open_plant/pages/page6/page6_usecases.dart';
 
 /// Aggregates feature use-cases for convenient access via `AppScope`.
 ///
