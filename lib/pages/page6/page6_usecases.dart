@@ -8,4 +8,3 @@ class Page6Usecases {
 
   Future<List<Page6ItemEntity>> getMenuItems() => repository.listItems();
 }
-

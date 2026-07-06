@@ -8,4 +8,3 @@ class Page5Repository {
 
   Future<List<Page5ItemEntity>> listItems() => dataSource.fetchItems();
 }
-

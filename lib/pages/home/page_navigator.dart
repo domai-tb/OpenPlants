@@ -4,12 +4,12 @@ import 'package:open_plant/l10n/l10n_x.dart';
 import 'package:open_plant/pages/home/widgets/page_navigation_animation.dart';
 import 'package:open_plant/pages/page1/page1_page.dart';
 import 'package:open_plant/pages/page2/page2_page.dart';
-import 'package:open_plant/pages/page3/page3_page.dart';
+import 'package:open_plant/pages/plant_identification/plant_identification_page.dart';
 import 'package:open_plant/pages/page4/page4_page.dart';
 import 'package:open_plant/pages/page5/page5_page.dart';
 import 'package:open_plant/pages/page6/page6_page.dart';
 
-enum PageItem { page1, page2, page3, page4, page5, page6 }
+enum PageItem { page1, page2, plantIdentification, page4, page5, page6 }
 
 PageItem? pageItemFromId(String id) {
   for (final item in PageItem.values) {
@@ -87,11 +87,11 @@ PageItemPresentation pageItemPresentation(BuildContext context, PageItem item) {
         inactiveIcon: Icons.calendar_month_outlined,
         iconPaddingLeft: 14,
       );
-    case PageItem.page3:
+    case PageItem.plantIdentification:
       return PageItemPresentation(
-        title: context.l10n.page3Title,
-        activeIcon: Icons.map,
-        inactiveIcon: Icons.map_outlined,
+        title: context.l10n.plantIdentificationTitle,
+        activeIcon: Icons.camera_alt,
+        inactiveIcon: Icons.camera_alt_outlined,
       );
     case PageItem.page4:
       return PageItemPresentation(
@@ -179,8 +179,8 @@ class NavBarNavigator extends StatelessWidget {
           pageExitAnimationKey: pageExitAnimationKey,
         );
         break;
-      case PageItem.page3:
-        rootPage = Page3Page(
+      case PageItem.plantIdentification:
+        rootPage = PlantIdentificationPage(
           pageEntryAnimationKey: pageEntryAnimationKey,
           pageExitAnimationKey: pageExitAnimationKey,
         );

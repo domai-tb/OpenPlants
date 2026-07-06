@@ -46,7 +46,8 @@ class NavBarPreferencesEditor extends StatelessWidget {
           itemCount: orderedItems.length,
           onReorder: (oldIndex, newIndex) {
             final nextItems = List<PageItem>.from(orderedItems);
-            if (newIndex > oldIndex) newIndex -= 1;
+            var adjustedNewIndex = newIndex;
+            if (adjustedNewIndex > oldIndex) adjustedNewIndex -= 1;
             final item = nextItems.removeAt(oldIndex);
             nextItems.insert(newIndex, item);
             onOrderChanged(nextItems);
@@ -68,9 +69,7 @@ class NavBarPreferencesEditor extends StatelessWidget {
                     borderRadius: BorderRadius.circular(16),
                   ),
                   leading: Icon(
-                    isVisible
-                        ? presentation.activeIcon
-                        : presentation.inactiveIcon,
+                    isVisible ? presentation.activeIcon : presentation.inactiveIcon,
                   ),
                   title: Text(presentation.title),
                   subtitle: Text(
@@ -86,8 +85,7 @@ class NavBarPreferencesEditor extends StatelessWidget {
                         onChanged: isLockedVisible
                             ? null
                             : (value) {
-                                final nextHiddenItems =
-                                    Set<PageItem>.from(hiddenItems);
+                                final nextHiddenItems = Set<PageItem>.from(hiddenItems);
                                 if (value) {
                                   nextHiddenItems.remove(item);
                                 } else {

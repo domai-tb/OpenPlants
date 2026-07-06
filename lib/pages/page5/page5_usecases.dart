@@ -8,4 +8,3 @@ class Page5Usecases {
 
   Future<List<Page5ItemEntity>> getItems() => repository.listItems();
 }
-

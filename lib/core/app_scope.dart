@@ -27,4 +27,3 @@ class AppScope extends InheritedWidget {
     return settings != oldWidget.settings || services != oldWidget.services;
   }
 }
-

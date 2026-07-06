@@ -21,7 +21,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get page2Title => 'Seite 2';
 
   @override
-  String get page3Title => 'Seite 3';
+  String get plantIdentificationTitle => 'Pflanzen-ID';
 
   @override
   String get page4Title => 'Seite 4';
@@ -176,4 +176,38 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get enter_totp => 'Bitte gib deinen Einmalcode (TOTP) ein.';
+
+  @override
+  String get plantIdCapturePrompt =>
+      'Mache ein Foto einer Pflanze, um sie zu erkennen';
+
+  @override
+  String get plantIdCamera => 'Kamera';
+
+  @override
+  String get plantIdGallery => 'Galerie';
+
+  @override
+  String get plantIdResults => 'Ergebnisse';
+
+  @override
+  String get plantIdRetake => 'Neu aufnehmen';
+
+  @override
+  String get plantIdBestMatch => 'Bester Treffer';
+
+  @override
+  String get plantIdCouldNotIdentify => 'Pflanze konnte nicht erkannt werden';
+
+  @override
+  String get plantIdFailedToCapture => 'Fotoaufnahme fehlgeschlagen';
+
+  @override
+  String get plantIdFailedToPick => 'Auswahl fehlgeschlagen';
+
+  @override
+  String get plantIdIdentificationFailed => 'Erkennung fehlgeschlagen';
+
+  @override
+  String get plantIdTryAgain => 'Erneut versuchen';
 }

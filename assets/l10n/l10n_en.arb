@@ -7,7 +7,7 @@
 
   "page1Title": "Page 1",
   "page2Title": "Page 2",
-  "page3Title": "Page 3",
+  "plantIdentificationTitle": "Plant ID",
   "page4Title": "Page 4",
   "page5Title": "Page 5",
   "page6Title": "Page 6",
@@ -62,5 +62,17 @@
   "login_error": "Invalid input!",
   "login_success": "Successfully logged in!",
   "login_already": "Allready logged in.",
-  "enter_totp": "Please enter your TOTP."
+  "enter_totp": "Please enter your TOTP.",
+
+  "plantIdCapturePrompt": "Take a photo of a plant to identify it",
+  "plantIdCamera": "Camera",
+  "plantIdGallery": "Gallery",
+  "plantIdResults": "Results",
+  "plantIdRetake": "Retake",
+  "plantIdBestMatch": "Best match",
+  "plantIdCouldNotIdentify": "Could not identify plant",
+  "plantIdFailedToCapture": "Failed to capture image",
+  "plantIdFailedToPick": "Failed to pick image",
+  "plantIdIdentificationFailed": "Identification failed",
+  "plantIdTryAgain": "Try Again"
 }

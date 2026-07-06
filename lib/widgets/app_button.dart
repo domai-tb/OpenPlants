@@ -76,7 +76,7 @@ class AppButton extends StatelessWidget {
                       ? theme.textTheme.labelMedium
                           ?.copyWith(color: Colors.white)
                       : theme.textTheme.labelMedium?.copyWith(
-                          color: const Color.fromARGB(255, 146, 146, 146)))
+                          color: const Color.fromARGB(255, 146, 146, 146),))
                   : theme.textTheme.labelMedium,
             ),
           ),

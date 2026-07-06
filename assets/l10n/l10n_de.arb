@@ -7,7 +7,7 @@
 
   "page1Title": "Seite 1",
   "page2Title": "Seite 2",
-  "page3Title": "Seite 3",
+  "plantIdentificationTitle": "Pflanzen-ID",
   "page4Title": "Seite 4",
   "page5Title": "Seite 5",
   "page6Title": "Seite 6",
@@ -62,5 +62,17 @@
   "login_error": "Ungültige Eingabe!",
   "login_success": "Erfolgreich angemeldet!",
   "login_already": "Du bist bereits angemeldet.",
-  "enter_totp": "Bitte gib deinen Einmalcode (TOTP) ein."
+  "enter_totp": "Bitte gib deinen Einmalcode (TOTP) ein.",
+
+  "plantIdCapturePrompt": "Mache ein Foto einer Pflanze, um sie zu erkennen",
+  "plantIdCamera": "Kamera",
+  "plantIdGallery": "Galerie",
+  "plantIdResults": "Ergebnisse",
+  "plantIdRetake": "Neu aufnehmen",
+  "plantIdBestMatch": "Bester Treffer",
+  "plantIdCouldNotIdentify": "Pflanze konnte nicht erkannt werden",
+  "plantIdFailedToCapture": "Fotoaufnahme fehlgeschlagen",
+  "plantIdFailedToPick": "Auswahl fehlgeschlagen",
+  "plantIdIdentificationFailed": "Erkennung fehlgeschlagen",
+  "plantIdTryAgain": "Erneut versuchen"
 }

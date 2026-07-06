@@ -8,4 +8,3 @@ class Page1Usecases {
 
   Future<List<Page1ItemEntity>> getItems({String query = ''}) => repository.listItems(query: query);
 }
-

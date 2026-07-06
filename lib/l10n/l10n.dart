@@ -122,11 +122,11 @@ abstract class AppLocalizations {
   /// **'Page 2'**
   String get page2Title;
 
-  /// No description provided for @page3Title.
+  /// No description provided for @plantIdentificationTitle.
   ///
   /// In en, this message translates to:
-  /// **'Page 3'**
-  String get page3Title;
+  /// **'Plant ID'**
+  String get plantIdentificationTitle;
 
   /// No description provided for @page4Title.
   ///
@@ -415,6 +415,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Please enter your TOTP.'**
   String get enter_totp;
+
+  /// No description provided for @plantIdCapturePrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Take a photo of a plant to identify it'**
+  String get plantIdCapturePrompt;
+
+  /// No description provided for @plantIdCamera.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera'**
+  String get plantIdCamera;
+
+  /// No description provided for @plantIdGallery.
+  ///
+  /// In en, this message translates to:
+  /// **'Gallery'**
+  String get plantIdGallery;
+
+  /// No description provided for @plantIdResults.
+  ///
+  /// In en, this message translates to:
+  /// **'Results'**
+  String get plantIdResults;
+
+  /// No description provided for @plantIdRetake.
+  ///
+  /// In en, this message translates to:
+  /// **'Retake'**
+  String get plantIdRetake;
+
+  /// No description provided for @plantIdBestMatch.
+  ///
+  /// In en, this message translates to:
+  /// **'Best match'**
+  String get plantIdBestMatch;
+
+  /// No description provided for @plantIdCouldNotIdentify.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not identify plant'**
+  String get plantIdCouldNotIdentify;
+
+  /// No description provided for @plantIdFailedToCapture.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to capture image'**
+  String get plantIdFailedToCapture;
+
+  /// No description provided for @plantIdFailedToPick.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to pick image'**
+  String get plantIdFailedToPick;
+
+  /// No description provided for @plantIdIdentificationFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Identification failed'**
+  String get plantIdIdentificationFailed;
+
+  /// No description provided for @plantIdTryAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Try Again'**
+  String get plantIdTryAgain;
 }
 
 class _AppLocalizationsDelegate

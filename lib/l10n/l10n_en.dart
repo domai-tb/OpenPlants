@@ -21,7 +21,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get page2Title => 'Page 2';
 
   @override
-  String get page3Title => 'Page 3';
+  String get plantIdentificationTitle => 'Plant ID';
 
   @override
   String get page4Title => 'Page 4';
@@ -172,4 +172,37 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get enter_totp => 'Please enter your TOTP.';
+
+  @override
+  String get plantIdCapturePrompt => 'Take a photo of a plant to identify it';
+
+  @override
+  String get plantIdCamera => 'Camera';
+
+  @override
+  String get plantIdGallery => 'Gallery';
+
+  @override
+  String get plantIdResults => 'Results';
+
+  @override
+  String get plantIdRetake => 'Retake';
+
+  @override
+  String get plantIdBestMatch => 'Best match';
+
+  @override
+  String get plantIdCouldNotIdentify => 'Could not identify plant';
+
+  @override
+  String get plantIdFailedToCapture => 'Failed to capture image';
+
+  @override
+  String get plantIdFailedToPick => 'Failed to pick image';
+
+  @override
+  String get plantIdIdentificationFailed => 'Identification failed';
+
+  @override
+  String get plantIdTryAgain => 'Try Again';
 }

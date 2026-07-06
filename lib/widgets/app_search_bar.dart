@@ -69,7 +69,7 @@ class AppSearchBar extends StatelessWidget {
                   errorBorder: InputBorder.none,
                   disabledBorder: InputBorder.none,
                   contentPadding: EdgeInsets.only(
-                      left: !arrowHidden ? 12 : 20, right: 15, bottom: 21.6),
+                      left: !arrowHidden ? 12 : 20, right: 15, bottom: 21.6,),
                   floatingLabelBehavior: FloatingLabelBehavior.never,
                 ),
               ),

@@ -8,8 +8,6 @@ class AppTheme {
     colorScheme: const ColorScheme.light(
       primary: Colors.black,
       secondary: Color.fromRGBO(21, 0, 62, 1),
-      surface: Colors.white,
-      onSurface: Colors.black,
       error: Colors.red,
     ),
     cardColor: Colors.white,
@@ -54,7 +52,6 @@ class AppTheme {
       primary: Colors.white,
       secondary: Color.fromRGBO(49, 113, 236, 1),
       surface: Color.fromRGBO(14, 20, 32, 1),
-      onSurface: Colors.white,
       error: Colors.red,
     ),
     cardColor: const Color.fromRGBO(17, 25, 38, 1),

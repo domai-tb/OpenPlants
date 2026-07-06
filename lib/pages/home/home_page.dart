@@ -26,7 +26,7 @@ class HomePageState extends State<HomePage> {
   Map<PageItem, GlobalKey<NavigatorState>> navigatorKeys = {
     PageItem.page1: GlobalKey<NavigatorState>(),
     PageItem.page2: GlobalKey<NavigatorState>(),
-    PageItem.page3: GlobalKey<NavigatorState>(),
+    PageItem.plantIdentification: GlobalKey<NavigatorState>(),
     PageItem.page4: GlobalKey<NavigatorState>(),
     PageItem.page5: GlobalKey<NavigatorState>(),
     PageItem.page6: GlobalKey<NavigatorState>(),
@@ -37,7 +37,7 @@ class HomePageState extends State<HomePage> {
   Map<PageItem, GlobalKey<AnimatedExitState>> exitAnimationKeys = {
     PageItem.page1: GlobalKey<AnimatedExitState>(),
     PageItem.page2: GlobalKey<AnimatedExitState>(),
-    PageItem.page3: GlobalKey<AnimatedExitState>(),
+    PageItem.plantIdentification: GlobalKey<AnimatedExitState>(),
     PageItem.page4: GlobalKey<AnimatedExitState>(),
     PageItem.page5: GlobalKey<AnimatedExitState>(),
     PageItem.page6: GlobalKey<AnimatedExitState>(),
@@ -45,7 +45,7 @@ class HomePageState extends State<HomePage> {
   Map<PageItem, GlobalKey<AnimatedEntryState>> entryAnimationKeys = {
     PageItem.page1: GlobalKey<AnimatedEntryState>(),
     PageItem.page2: GlobalKey<AnimatedEntryState>(),
-    PageItem.page3: GlobalKey<AnimatedEntryState>(),
+    PageItem.plantIdentification: GlobalKey<AnimatedEntryState>(),
     PageItem.page4: GlobalKey<AnimatedEntryState>(),
     PageItem.page5: GlobalKey<AnimatedEntryState>(),
     PageItem.page6: GlobalKey<AnimatedEntryState>(),
@@ -352,7 +352,7 @@ class HomePageState extends State<HomePage> {
                                   ),
                                   child: Center(
                                     child: SizedBox(
-                                      width: currentPage != PageItem.page3
+                                      width: currentPage != PageItem.plantIdentification
                                           ? 550
                                           : null,
                                       child: Stack(

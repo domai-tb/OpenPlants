@@ -124,7 +124,7 @@ class AppSegmentedTripleControlState extends State<AppSegmentedTripleControl> {
                     : const Color.fromRGBO(34, 40, 54, 1),
                 borderRadius: BorderRadius.circular(6),
                 boxShadow: const [
-                  BoxShadow(color: Colors.black12, blurRadius: 5)
+                  BoxShadow(color: Colors.black12, blurRadius: 5),
                 ],
               ),
             ),

@@ -8,4 +8,3 @@ class Page1Repository {
 
   Future<List<Page1ItemEntity>> listItems({String query = ''}) => dataSource.fetchItems(query: query);
 }
-

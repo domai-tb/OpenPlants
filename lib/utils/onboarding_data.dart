@@ -5,4 +5,3 @@ const String onboardingWelcomeTitle = 'OpenPlant';
 const String onboardingWelcomeBody =
     'Welcome to OpenPlant — your open-source & privacy-friendly companion app for your plants. '
     'Track your plants, set reminders, and watch them thrive.';
-

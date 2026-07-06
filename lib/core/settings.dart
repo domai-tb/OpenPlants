@@ -46,7 +46,7 @@ class Settings {
   static const List<String> _defaultNavBarOrder = [
     'page1',
     'page2',
-    'page3',
+    'plantIdentification',
     'page4',
     'page5',
     'page6',

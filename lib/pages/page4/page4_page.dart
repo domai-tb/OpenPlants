@@ -35,10 +35,6 @@ class _Page4PageState extends State<Page4Page> with AutomaticKeepAliveClientMixi
   @override
   bool get wantKeepAlive => true;
 
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   void dispose() {

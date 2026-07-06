@@ -8,9 +8,9 @@ import 'package:open_plant/pages/page1/page1_usecases.dart';
 import 'package:open_plant/pages/page2/page2_datasource.dart';
 import 'package:open_plant/pages/page2/page2_repository.dart';
 import 'package:open_plant/pages/page2/page2_usecases.dart';
-import 'package:open_plant/pages/page3/page3_datasource.dart';
-import 'package:open_plant/pages/page3/page3_repository.dart';
-import 'package:open_plant/pages/page3/page3_usecases.dart';
+import 'package:open_plant/pages/plant_identification/classifier/plant_classifier_datasource.dart';
+import 'package:open_plant/pages/plant_identification/classifier/plant_classifier_repository.dart';
+import 'package:open_plant/pages/plant_identification/classifier/plant_classifier_usecases.dart';
 import 'package:open_plant/pages/page4/page4_datasource.dart';
 import 'package:open_plant/pages/page4/page4_repository.dart';
 import 'package:open_plant/pages/page4/page4_usecases.dart';
@@ -49,13 +49,15 @@ Future<void> init() async {
     () => Page2Usecases(repository: sl()),
   );
 
-  // Page 3
-  sl.registerLazySingleton<Page3DataSource>(Page3DataSource.new);
-  sl.registerLazySingleton<Page3Repository>(
-    () => Page3Repository(dataSource: sl()),
+  // Plant Classifier
+  sl.registerLazySingleton<PlantClassifierDatasource>(
+    PlantClassifierDatasource.new,
   );
-  sl.registerLazySingleton<Page3Usecases>(
-    () => Page3Usecases(repository: sl()),
+  sl.registerLazySingleton<PlantClassifierRepository>(
+    () => PlantClassifierRepository(dataSource: sl()),
+  );
+  sl.registerLazySingleton<PlantClassifierUsecases>(
+    () => PlantClassifierUsecases(repository: sl()),
   );
 
   // Page 4
@@ -90,7 +92,7 @@ Future<void> init() async {
     () => AppServices(
       page1: sl(),
       page2: sl(),
-      page3: sl(),
+      plantIdentification: sl(),
       page4: sl(),
       page5: sl(),
       page6: sl(),
