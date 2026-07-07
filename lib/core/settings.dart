@@ -44,12 +44,10 @@ class SettingsController with ChangeNotifier {
 class Settings {
   static const Object _noChange = Object();
   static const List<String> _defaultNavBarOrder = [
-    'page1',
-    'page2',
+    'todayDashboard',
+    'careSchedule',
     'plantIdentification',
-    'page4',
-    'page5',
-    'page6',
+    'speciesLibrary',
     'plantCollection',
   ];
 

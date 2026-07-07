@@ -25,6 +25,7 @@ class HomePageState extends State<HomePage> {
   /// Creates a [GlobalKey] for each page that should be accessable within the bottom nav-menu
   Map<PageItem, GlobalKey<NavigatorState>> navigatorKeys = {
     PageItem.todayDashboard: GlobalKey<NavigatorState>(),
+    PageItem.careSchedule: GlobalKey<NavigatorState>(),
     PageItem.page2: GlobalKey<NavigatorState>(),
     PageItem.plantIdentification: GlobalKey<NavigatorState>(),
     PageItem.page4: GlobalKey<NavigatorState>(),
@@ -38,6 +39,7 @@ class HomePageState extends State<HomePage> {
   /// entry-animation from outside the page
   Map<PageItem, GlobalKey<AnimatedExitState>> exitAnimationKeys = {
     PageItem.todayDashboard: GlobalKey<AnimatedExitState>(),
+    PageItem.careSchedule: GlobalKey<AnimatedExitState>(),
     PageItem.page2: GlobalKey<AnimatedExitState>(),
     PageItem.plantIdentification: GlobalKey<AnimatedExitState>(),
     PageItem.page4: GlobalKey<AnimatedExitState>(),
@@ -48,6 +50,7 @@ class HomePageState extends State<HomePage> {
   };
   Map<PageItem, GlobalKey<AnimatedEntryState>> entryAnimationKeys = {
     PageItem.todayDashboard: GlobalKey<AnimatedEntryState>(),
+    PageItem.careSchedule: GlobalKey<AnimatedEntryState>(),
     PageItem.page2: GlobalKey<AnimatedEntryState>(),
     PageItem.plantIdentification: GlobalKey<AnimatedEntryState>(),
     PageItem.page4: GlobalKey<AnimatedEntryState>(),
