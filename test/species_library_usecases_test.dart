@@ -14,9 +14,7 @@ void main() {
   late SpeciesLibraryRepository repository;
   late SpeciesLibraryUsecases usecases;
 
-  setUpAll(() {
-    TestWidgetsFlutterBinding.ensureInitialized();
-  });
+  setUpAll(TestWidgetsFlutterBinding.ensureInitialized);
 
   setUp(() {
     // Load the actual species.json to use as mock data

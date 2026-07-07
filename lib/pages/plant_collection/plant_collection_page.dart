@@ -83,7 +83,7 @@ class _PlantCollectionPageState extends State<PlantCollectionPage>
       MaterialPageRoute(builder: (_) => const PlantCollectionFormPage()),
     );
     if (mounted) {
-      _load();
+      await _load();
     }
   }
 

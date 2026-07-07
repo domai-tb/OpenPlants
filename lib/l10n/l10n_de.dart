@@ -515,4 +515,35 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get speciesLibraryViewDetails => 'Arten-Details anzeigen';
+
+  @override
+  String get careScheduleTitle => 'Pflegeplan';
+
+  @override
+  String get careScheduleOverdue => 'Überfällig';
+
+  @override
+  String get careScheduleDueToday => 'Heute fällig';
+
+  @override
+  String get careScheduleUpcoming => 'Bevorstehend';
+
+  @override
+  String get careScheduleMarkDone => 'Erledigt';
+
+  @override
+  String get careScheduleSnooze => 'Aufschieben';
+
+  @override
+  String get careScheduleSkip => 'Überspringen';
+
+  @override
+  String get careScheduleAllPlants => 'Alle Pflanzen';
+
+  @override
+  String get careScheduleAllTypes => 'Alle Typen';
+
+  @override
+  String get careScheduleEmpty =>
+      'Fügen Sie Pflanzen hinzu, um Pflegeaufgaben zu sehen';
 }

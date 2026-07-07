@@ -1,3 +1,4 @@
+import 'package:open_plant/pages/care_schedule/care_schedule_usecases.dart';
 import 'package:open_plant/pages/page1/page1_usecases.dart';
 import 'package:open_plant/pages/page2/page2_usecases.dart';
 import 'package:open_plant/pages/plant_identification/classifier/plant_classifier_usecases.dart';
@@ -22,6 +23,7 @@ class AppServices {
   final PlantCollectionUsecases plantCollection;
   final SpeciesLibraryUsecases speciesLibrary;
   final TodayDashboardUsecases todayDashboard;
+  final CareScheduleUsecases careSchedule;
 
   const AppServices({
     required this.page1,
@@ -33,5 +35,6 @@ class AppServices {
     required this.plantCollection,
     required this.speciesLibrary,
     required this.todayDashboard,
+    required this.careSchedule,
   });
 }

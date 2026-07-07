@@ -509,4 +509,34 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get speciesLibraryViewDetails => 'View Species Details';
+
+  @override
+  String get careScheduleTitle => 'Care Schedule';
+
+  @override
+  String get careScheduleOverdue => 'Overdue';
+
+  @override
+  String get careScheduleDueToday => 'Due Today';
+
+  @override
+  String get careScheduleUpcoming => 'Upcoming';
+
+  @override
+  String get careScheduleMarkDone => 'Mark done';
+
+  @override
+  String get careScheduleSnooze => 'Snooze';
+
+  @override
+  String get careScheduleSkip => 'Skip';
+
+  @override
+  String get careScheduleAllPlants => 'All plants';
+
+  @override
+  String get careScheduleAllTypes => 'All types';
+
+  @override
+  String get careScheduleEmpty => 'Add plants to see care tasks';
 }

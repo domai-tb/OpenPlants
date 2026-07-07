@@ -1,0 +1,101 @@
+# Care Schedule Engine
+
+Pure-function scheduling engine that computes when each care task is due for a given plant.
+
+## Purpose
+
+Provide a deterministic, testable computation layer that transforms plant data, species defaults, room context, pot type, and completion history into a prioritized list of care tasks.
+
+## Requirements
+
+### Requirement: Engine generates a deterministic task schedule per plant
+The system SHALL expose a pure function that accepts a plant entity, its schedule config, room attributes, current season, pot type, task completion history, and today's date, and returns a list of care tasks ordered by urgency (overdue first, then due-today, then upcoming).
+
+#### Scenario: Happy path returns sorted task list
+- **WHEN** the engine receives valid inputs for a plant with known species defaults and no overdue tasks
+- **THEN** the engine returns a list of tasks sorted by next-due date, with no overdue items
+
+#### Scenario: Same inputs produce identical output
+- **WHEN** the engine is called twice with identical inputs
+- **THEN** both calls return identical task lists
+
+#### Scenario: Empty history computes from species defaults
+- **WHEN** the engine receives a new plant with no task completion history
+- **THEN** all tasks are scheduled based on the species-default intervals from today
+
+### Requirement: Engine identifies overdue tasks
+A task SHALL be flagged as overdue when the elapsed time since the last completion exceeds the effective interval by a tolerance margin of 20%.
+
+#### Scenario: Task past interval plus tolerance is overdue
+- **WHEN** the last completion of a task type was more than 1.2× the effective interval ago
+- **THEN** the engine flags that task as `overdue`
+
+#### Scenario: Task within tolerance is not overdue
+- **WHEN** the last completion of a task type was within 1.2× the effective interval
+- **THEN** the engine flags that task as `due` or `upcoming` based on its position
+
+### Requirement: Engine applies seasonal modifiers
+The engine SHALL apply a monthly multiplier table per task type, reducing or increasing the base interval based on the current month.
+
+#### Scenario: Winter dormancy reduces watering frequency
+- **WHEN** the current month is December and the species has a winter dormancy multiplier of 0.5 for watering
+- **THEN** the effective watering interval is 2× the base interval (half as frequent)
+
+#### Scenario: Summer growth increases fertilizing frequency
+- **WHEN** the current month is July and the species has a summer growth multiplier of 1.5 for fertilizing
+- **THEN** the effective fertilizing interval is reduced to 67% of the base interval (more frequent)
+
+### Requirement: Engine applies room-context modifiers
+The engine SHALL modulate watering and misting intervals based on room attributes (sunlight level, humidity, temperature) if room config exists for the plant's assigned room.
+
+#### Scenario: High light increases watering frequency
+- **WHEN** a plant is in a room configured with "full sun" and the species has a high-light modifier
+- **THEN** the effective watering interval is shorter than the base
+
+#### Scenario: High humidity reduces watering frequency
+- **WHEN** a plant is in a room configured with "high humidity"
+- **THEN** the effective watering interval is longer than the base
+
+#### Scenario: Missing room config uses baseline
+- **WHEN** a plant has no room assigned or the room has no attributes configured
+- **THEN** the engine uses 1.0× (no modifier) for all room-based factors
+
+### Requirement: Engine applies pot-type modifiers
+The engine SHALL adjust the watering interval based on the plant's pot type.
+
+#### Scenario: Terracotta pot shortens watering interval
+- **WHEN** a plant is in a terracotta pot
+- **THEN** the effective watering interval is 0.8× the base (more frequent — clay breathes)
+
+#### Scenario: Self-watering pot lengthens watering interval
+- **WHEN** a plant is in a self-watering pot
+- **THEN** the effective watering interval is 1.5× the base (less frequent — reservoir)
+
+#### Scenario: Plastic pot uses moderate modifier
+- **WHEN** a plant is in a standard plastic pot
+- **THEN** the effective watering interval is 1.0× (baseline)
+
+### Requirement: Engine supports 8 built-in task types
+The engine SHALL recognize 8 built-in task types by default: watering, fertilizing, misting, pruning, rotating, repotting, leaf cleaning, pest inspection. Each has a species-default interval.
+
+#### Scenario: All 8 task types present in output
+- **WHEN** the engine computes a schedule for a species with all 8 defaults defined
+- **THEN** the output includes tasks for all 8 types
+
+#### Scenario: Zero-interval task types are omitted
+- **WHEN** a species defines an interval of 0 days for a task type (e.g., "never needs repotting")
+- **THEN** the engine does not include that task type in the output
+
+### Requirement: Engine supports custom user-defined task types
+The engine SHALL accept an optional list of custom task types defined by the user, each with a name and interval in days.
+
+#### Scenario: Custom task appears in schedule
+- **WHEN** a user has defined a custom task type "Check for flowers" with interval 7 days
+- **THEN** the engine includes that task in the generated schedule
+
+### Requirement: Engine resets next-due after completion
+When a completion event is recorded for a task type, the engine SHALL use that event's timestamp as the anchor for the next computation.
+
+#### Scenario: Completion resets the timer
+- **WHEN** a plant was watered 5 days ago (interval 7 days) and then watered again today
+- **THEN** the next watering due date shifts to today + 7 days (adjusted by modifiers)

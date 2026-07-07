@@ -1069,6 +1069,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'View Species Details'**
   String get speciesLibraryViewDetails;
+
+  /// No description provided for @careScheduleTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Care Schedule'**
+  String get careScheduleTitle;
+
+  /// No description provided for @careScheduleOverdue.
+  ///
+  /// In en, this message translates to:
+  /// **'Overdue'**
+  String get careScheduleOverdue;
+
+  /// No description provided for @careScheduleDueToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Due Today'**
+  String get careScheduleDueToday;
+
+  /// No description provided for @careScheduleUpcoming.
+  ///
+  /// In en, this message translates to:
+  /// **'Upcoming'**
+  String get careScheduleUpcoming;
+
+  /// No description provided for @careScheduleMarkDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark done'**
+  String get careScheduleMarkDone;
+
+  /// No description provided for @careScheduleSnooze.
+  ///
+  /// In en, this message translates to:
+  /// **'Snooze'**
+  String get careScheduleSnooze;
+
+  /// No description provided for @careScheduleSkip.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip'**
+  String get careScheduleSkip;
+
+  /// No description provided for @careScheduleAllPlants.
+  ///
+  /// In en, this message translates to:
+  /// **'All plants'**
+  String get careScheduleAllPlants;
+
+  /// No description provided for @careScheduleAllTypes.
+  ///
+  /// In en, this message translates to:
+  /// **'All types'**
+  String get careScheduleAllTypes;
+
+  /// No description provided for @careScheduleEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Add plants to see care tasks'**
+  String get careScheduleEmpty;
 }
 
 class _AppLocalizationsDelegate

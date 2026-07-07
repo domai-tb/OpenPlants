@@ -177,5 +177,15 @@
   "speciesLibraryToxicToHumans": "Toxic to humans",
   "speciesLibraryToxicToPets": "Toxic to pets",
   "speciesLibraryToxicityWarning": "Toxicity Warning",
-  "speciesLibraryViewDetails": "View Species Details"
+  "speciesLibraryViewDetails": "View Species Details",
+  "careScheduleTitle": "Care Schedule",
+  "careScheduleOverdue": "Overdue",
+  "careScheduleDueToday": "Due Today",
+  "careScheduleUpcoming": "Upcoming",
+  "careScheduleMarkDone": "Mark done",
+  "careScheduleSnooze": "Snooze",
+  "careScheduleSkip": "Skip",
+  "careScheduleAllPlants": "All plants",
+  "careScheduleAllTypes": "All types",
+  "careScheduleEmpty": "Add plants to see care tasks"
 }

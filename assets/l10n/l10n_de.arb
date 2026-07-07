@@ -177,5 +177,15 @@
   "speciesLibraryToxicToHumans": "Giftig für Menschen",
   "speciesLibraryToxicToPets": "Giftig für Haustiere",
   "speciesLibraryToxicityWarning": "Giftigkeitswarnung",
-  "speciesLibraryViewDetails": "Arten-Details anzeigen"
+  "speciesLibraryViewDetails": "Arten-Details anzeigen",
+  "careScheduleTitle": "Pflegeplan",
+  "careScheduleOverdue": "Überfällig",
+  "careScheduleDueToday": "Heute fällig",
+  "careScheduleUpcoming": "Bevorstehend",
+  "careScheduleMarkDone": "Erledigt",
+  "careScheduleSnooze": "Aufschieben",
+  "careScheduleSkip": "Überspringen",
+  "careScheduleAllPlants": "Alle Pflanzen",
+  "careScheduleAllTypes": "Alle Typen",
+  "careScheduleEmpty": "Fügen Sie Pflanzen hinzu, um Pflegeaufgaben zu sehen"
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:open_plant/l10n/l10n_x.dart';
 import 'package:open_plant/pages/home/widgets/page_navigation_animation.dart';
+import 'package:open_plant/pages/care_schedule/care_schedule_page.dart';
 import 'package:open_plant/pages/today_dashboard/today_dashboard_page.dart';
 import 'package:open_plant/pages/page2/page2_page.dart';
 import 'package:open_plant/pages/plant_identification/plant_identification_page.dart';
@@ -11,7 +12,7 @@ import 'package:open_plant/pages/page6/page6_page.dart';
 import 'package:open_plant/pages/plant_collection/plant_collection_page.dart';
 import 'package:open_plant/pages/species_library/species_library_page.dart';
 
-enum PageItem { todayDashboard, page2, plantIdentification, page4, page5, page6, plantCollection, speciesLibrary }
+enum PageItem { todayDashboard, careSchedule, page2, plantIdentification, page4, page5, page6, plantCollection, speciesLibrary }
 
 PageItem? pageItemFromId(String id) {
   for (final item in PageItem.values) {
@@ -81,6 +82,12 @@ PageItemPresentation pageItemPresentation(BuildContext context, PageItem item) {
         activeIcon: Icons.today,
         inactiveIcon: Icons.today_outlined,
         iconPaddingLeft: 0,
+      );
+    case PageItem.careSchedule:
+      return PageItemPresentation(
+        title: context.l10n.careScheduleTitle,
+        activeIcon: Icons.event_note,
+        inactiveIcon: Icons.event_note_outlined,
       );
     case PageItem.page2:
       return PageItemPresentation(
@@ -180,6 +187,12 @@ class NavBarNavigator extends StatelessWidget {
       case PageItem.todayDashboard:
         rootPage = TodayDashboardPage(
           mainNavigatorKey: mainNavigatorKey,
+          pageEntryAnimationKey: pageEntryAnimationKey,
+          pageExitAnimationKey: pageExitAnimationKey,
+        );
+        break;
+      case PageItem.careSchedule:
+        rootPage = CareSchedulePage(
           pageEntryAnimationKey: pageEntryAnimationKey,
           pageExitAnimationKey: pageExitAnimationKey,
         );
