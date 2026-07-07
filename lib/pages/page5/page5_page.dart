@@ -1,5 +1,3 @@
-import 'dart:io' show Platform;
-
 import 'package:flutter/material.dart';
 
 import 'package:open_plant/core/app_scope.dart';
@@ -78,7 +76,7 @@ class _Page5PageState extends State<Page5Page> with AutomaticKeepAliveClientMixi
                 children: [
                   ListView(
                     controller: _scrollController,
-                    padding: const EdgeInsets.fromLTRB(20, 10, 20, 120),
+                    padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
                     children: [
                       Text(
                         context.l10n.page5Title,
@@ -156,7 +154,6 @@ class _Page5PageState extends State<Page5Page> with AutomaticKeepAliveClientMixi
                   ),
                   ScrollToTopButton(
                     scrollController: _scrollController,
-                    bottomOffset: Platform.isIOS ? 110 : 90,
                   ),
                 ],
               ),

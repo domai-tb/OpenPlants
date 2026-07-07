@@ -1,4 +1,4 @@
-import 'dart:io' show File, Platform;
+import 'dart:io' show File;
 
 import 'package:flutter/material.dart';
 
@@ -122,9 +122,8 @@ class _TodayDashboardPageState extends State<TodayDashboardPage>
         controller: _scrollController,
         slivers: [
           SliverPadding(
-            padding: EdgeInsets.only(
+            padding: const EdgeInsets.only(
               top: 10,
-              bottom: Platform.isIOS ? 110 : 90,
             ),
             sliver: SliverList(
               delegate: SliverChildListDelegate([
@@ -193,11 +192,10 @@ class _TodayDashboardPageState extends State<TodayDashboardPage>
 
   Widget _buildLoadingState(ThemeData theme) {
     return Padding(
-      padding: EdgeInsets.only(
+      padding: const EdgeInsets.only(
         left: 20,
         right: 20,
         top: 60,
-        bottom: Platform.isIOS ? 110 : 90,
       ),
       child: ListView(
         children: [

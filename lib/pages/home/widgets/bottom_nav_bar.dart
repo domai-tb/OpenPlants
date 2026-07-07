@@ -2,6 +2,7 @@ import 'dart:io' show Platform;
 
 import 'package:flutter/material.dart';
 
+import 'package:open_plant/core/constants.dart';
 import 'package:open_plant/pages/home/page_navigator.dart';
 import 'package:open_plant/pages/home/widgets/bottom_nav_bar_item.dart';
 
@@ -61,9 +62,8 @@ class _BottomNavBarState extends State<BottomNavBar> {
     final index = widget.pages.indexOf(widget.currentPage);
     if (index < 0) return;
 
-    const itemWidth = 80.0;
     final viewportWidth = _scrollController.position.viewportDimension;
-    final targetOffset = (index * itemWidth) - (viewportWidth / 2) + (itemWidth / 2);
+    final targetOffset = (index * kNavBarItemWidth) - (viewportWidth / 2) + (kNavBarItemWidth / 2);
     final clampedOffset = targetOffset.clamp(
       _scrollController.position.minScrollExtent,
       _scrollController.position.maxScrollExtent,
@@ -85,7 +85,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
     final theme = Theme.of(context);
 
     return Container(
-      height: Platform.isIOS ? 88 : 98,
+      height: bottomNavBarHeight,
       padding: Platform.isIOS ? const EdgeInsets.only(bottom: 20) : null,
       decoration: BoxDecoration(
         color: theme.cardColor,
@@ -111,7 +111,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
             final presentation = pageItemPresentation(context, page);
 
             return SizedBox(
-              width: 80,
+              width: kNavBarItemWidth,
               child: BottomNavBarItem(
                 title: presentation.title,
                 activeIcon: presentation.activeIcon,

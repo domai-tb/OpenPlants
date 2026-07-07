@@ -1,8 +1,7 @@
-import 'dart:io' show Platform;
-
 import 'package:flutter/material.dart';
 
 import 'package:open_plant/core/app_scope.dart';
+import 'package:open_plant/core/constants.dart';
 import 'package:open_plant/l10n/l10n_x.dart';
 import 'package:open_plant/pages/home/widgets/page_navigation_animation.dart';
 import 'package:open_plant/pages/plant_collection/plant_collection_detail_page.dart';
@@ -101,102 +100,99 @@ class _PlantCollectionPageState extends State<PlantCollectionPage>
           backgroundColor: theme.colorScheme.surface,
           body: SafeArea(
             bottom: false,
-            child: Column(
+            child: Stack(
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 20, right: 20, top: 10),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          context.l10n.plantCollectionTitle,
-                          style: theme.textTheme.displayMedium,
-                        ),
+                Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 20, right: 20, top: 10),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              context.l10n.plantCollectionTitle,
+                              style: theme.textTheme.displayMedium,
+                            ),
+                          ),
+                          AppIconButton(
+                            icon: _showSearch ? Icons.arrow_back : Icons.search,
+                            onTap: () {
+                              setState(() {
+                                _showSearch = !_showSearch;
+                                if (!_showSearch) {
+                                  _query = '';
+                                  _load();
+                                }
+                              });
+                            },
+                            transparent: true,
+                          ),
+                        ],
                       ),
-                      AppIconButton(
-                        icon: _showSearch ? Icons.arrow_back : Icons.search,
-                        onTap: () {
-                          setState(() {
-                            _showSearch = !_showSearch;
-                            if (!_showSearch) {
-                              _query = '';
+                    ),
+                    const SizedBox(height: 10),
+                    if (_showSearch)
+                      AppSearchBar(
+                        arrowHidden: true,
+                        onBack: () {},
+                        onChange: (q) {
+                          setState(() => _query = q);
+                          _load();
+                        },
+                      ),
+                    const SizedBox(height: 10),
+                    // Care status filter chips
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Row(
+                        children: [
+                          _buildFilterChip(
+                            context,
+                            label: context.l10n.filterAll,
+                            selected: _filterStatus == null,
+                            onTap: () {
+                              setState(() => _filterStatus = null);
                               _load();
-                            }
-                          });
-                        },
-                        transparent: true,
+                            },
+                          ),
+                          const SizedBox(width: 8),
+                          _buildFilterChip(
+                            context,
+                            label: context.l10n.careStatusNeedsWater,
+                            selected: _filterStatus == CareStatus.needsWater,
+                            onTap: () {
+                              setState(() {
+                                _filterStatus = _filterStatus == CareStatus.needsWater ? null : CareStatus.needsWater;
+                              });
+                              _load();
+                            },
+                          ),
+                          const SizedBox(width: 8),
+                          _buildFilterChip(
+                            context,
+                            label: context.l10n.careStatusNeedsFertilizer,
+                            selected: _filterStatus == CareStatus.needsFertilizer,
+                            onTap: () {
+                              setState(() {
+                                _filterStatus =
+                                    _filterStatus == CareStatus.needsFertilizer ? null : CareStatus.needsFertilizer;
+                              });
+                              _load();
+                            },
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 10),
-                if (_showSearch)
-                  AppSearchBar(
-                    arrowHidden: true,
-                    onBack: () {},
-                    onChange: (q) {
-                      setState(() => _query = q);
-                      _load();
-                    },
-                  ),
-                const SizedBox(height: 10),
-                // Care status filter chips
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Row(
-                    children: [
-                      _buildFilterChip(
-                        context,
-                        label: context.l10n.filterAll,
-                        selected: _filterStatus == null,
-                        onTap: () {
-                          setState(() => _filterStatus = null);
-                          _load();
-                        },
-                      ),
-                      const SizedBox(width: 8),
-                      _buildFilterChip(
-                        context,
-                        label: context.l10n.careStatusNeedsWater,
-                        selected: _filterStatus == CareStatus.needsWater,
-                        onTap: () {
-                          setState(() {
-                            _filterStatus = _filterStatus == CareStatus.needsWater ? null : CareStatus.needsWater;
-                          });
-                          _load();
-                        },
-                      ),
-                      const SizedBox(width: 8),
-                      _buildFilterChip(
-                        context,
-                        label: context.l10n.careStatusNeedsFertilizer,
-                        selected: _filterStatus == CareStatus.needsFertilizer,
-                        onTap: () {
-                          setState(() {
-                            _filterStatus =
-                                _filterStatus == CareStatus.needsFertilizer ? null : CareStatus.needsFertilizer;
-                          });
-                          _load();
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 10),
-                Expanded(
-                  child: Stack(
-                    children: [
-                      RefreshIndicator(
+                    ),
+                    const SizedBox(height: 10),
+                    Expanded(
+                      child: RefreshIndicator(
                         key: _refreshIndicatorKey,
                         onRefresh: _load,
                         child: _plants.isEmpty && !_loading
                             ? _buildEmptyState(context)
                             : ListView.builder(
                                 controller: _scrollController,
-                                padding: EdgeInsets.only(
-                                  bottom: Platform.isIOS ? 110 : 90,
-                                  top: 10,
-                                ),
+                                padding: const EdgeInsets.only(top: 10),
                                 itemCount: _loading ? 6 : _plants.length,
                                 itemBuilder: (context, index) {
                                   if (_loading) {
@@ -206,19 +202,29 @@ class _PlantCollectionPageState extends State<PlantCollectionPage>
                                 },
                               ),
                       ),
-                      ScrollToTopButton(
-                        scrollController: _scrollController,
-                        bottomOffset: Platform.isIOS ? 110 : 90,
-                      ),
-                    ],
+                    ),
+                  ],
+                ),
+                // FAB positioned above the navbar
+                Positioned(
+                  right: 16,
+                  bottom: 16,
+                  child: FloatingActionButton(
+                    onPressed: _addPlant,
+                    child: const Icon(Icons.add),
+                  ),
+                ),
+                ),
+                // Scroll to top button positioned above the navbar
+                Positioned(
+                  right: 16,
+                  bottom: bottomNavBarHeight + MediaQuery.of(context).padding.bottom + 80,
+                  child: ScrollToTopButton(
+                    scrollController: _scrollController,
                   ),
                 ),
               ],
             ),
-          ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: _addPlant,
-            child: const Icon(Icons.add),
           ),
         ),
       ),

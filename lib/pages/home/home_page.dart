@@ -1,9 +1,9 @@
-import 'dart:io' show Platform;
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:open_plant/core/app_scope.dart';
+import 'package:open_plant/core/constants.dart';
 import 'package:open_plant/core/settings.dart';
 import 'package:open_plant/pages/home/page_navigator.dart';
 import 'package:open_plant/pages/home/widgets/page_navigation_animation.dart';
@@ -272,7 +272,9 @@ class HomePageState extends State<HomePage> {
                   child: Stack(
                     children: [
                       Padding(
-                        padding: EdgeInsets.only(bottom: Platform.isIOS ? 80 : 60),
+                        padding: EdgeInsets.only(
+                          bottom: bottomNavBarHeight + MediaQuery.of(context).padding.bottom,
+                        ),
                         child: PageView.builder(
                           physics: swipeDisabled ? const NeverScrollableScrollPhysics() : const ScrollPhysics(),
                           controller: pageController,

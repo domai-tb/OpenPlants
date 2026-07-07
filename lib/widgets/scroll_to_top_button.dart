@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:open_plant/core/constants.dart';
+
 class ScrollToTopButton extends StatefulWidget {
   final ScrollController scrollController;
   final double bottomOffset;
@@ -8,7 +10,7 @@ class ScrollToTopButton extends StatefulWidget {
   const ScrollToTopButton({
     super.key,
     required this.scrollController,
-    this.bottomOffset = 20,
+    this.bottomOffset = kBottomNavBarHeight,
     this.rightOffset = 20,
   });
 

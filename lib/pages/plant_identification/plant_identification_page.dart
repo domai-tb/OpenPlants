@@ -1,4 +1,3 @@
-import 'dart:io' show Platform;
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 
@@ -266,10 +265,9 @@ class _PlantIdentificationPageState extends State<PlantIdentificationPage> {
                   ),
                 )
               : ListView.separated(
-                  padding: EdgeInsets.only(
+                  padding: const EdgeInsets.only(
                     left: 20,
                     right: 20,
-                    bottom: Platform.isIOS ? 110 : 90,
                   ),
                   itemCount: predictions.length,
                   separatorBuilder: (_, __) => const SizedBox(height: 8),
