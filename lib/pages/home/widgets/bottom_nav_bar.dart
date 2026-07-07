@@ -26,13 +26,67 @@ class BottomNavBar extends StatefulWidget {
 }
 
 class _BottomNavBarState extends State<BottomNavBar> {
+  final ScrollController _scrollController = ScrollController();
+
+  /// All pages — the viewport width (~360px) naturally shows ~4-5 items.
+  /// Scroll position is animated to center the active item.
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _scrollToActive(animated: false);
+    });
+  }
+
+  @override
+  void didUpdateWidget(BottomNavBar oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.currentPage != oldWidget.currentPage) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _scrollToActive(animated: true);
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _scrollToActive({required bool animated}) {
+    if (!_scrollController.hasClients) return;
+
+    final index = widget.pages.indexOf(widget.currentPage);
+    if (index < 0) return;
+
+    const itemWidth = 80.0;
+    final viewportWidth = _scrollController.position.viewportDimension;
+    final targetOffset = (index * itemWidth) - (viewportWidth / 2) + (itemWidth / 2);
+    final clampedOffset = targetOffset.clamp(
+      _scrollController.position.minScrollExtent,
+      _scrollController.position.maxScrollExtent,
+    );
+
+    if (animated) {
+      _scrollController.animateTo(
+        clampedOffset,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      );
+    } else {
+      _scrollController.jumpTo(clampedOffset);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
     return Container(
       height: Platform.isIOS ? 88 : 98,
-      padding: Platform.isIOS ? const EdgeInsets.only(bottom: 20, left: 5) : const EdgeInsets.only(left: 7),
+      padding: Platform.isIOS ? const EdgeInsets.only(bottom: 20) : null,
       decoration: BoxDecoration(
         color: theme.cardColor,
         borderRadius: const BorderRadius.only(
@@ -48,26 +102,25 @@ class _BottomNavBarState extends State<BottomNavBar> {
         ],
       ),
       child: SingleChildScrollView(
-        physics: const NeverScrollableScrollPhysics(),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: widget.pages.map((page) {
-              final presentation = pageItemPresentation(context, page);
+        controller: _scrollController,
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.symmetric(horizontal: 12),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: widget.pages.map((page) {
+            final presentation = pageItemPresentation(context, page);
 
-              return BottomNavBarItem(
+            return SizedBox(
+              width: 80,
+              child: BottomNavBarItem(
                 title: presentation.title,
                 activeIcon: presentation.activeIcon,
                 inactiveIcon: presentation.inactiveIcon,
                 onTap: () => widget.onSelectedPage(page),
                 isActive: widget.currentPage == page,
-                iconPaddingLeft: presentation.iconPaddingLeft,
-                iconPaddingRight: presentation.iconPaddingRight,
-              );
-            }).toList(),
-          ),
+              ),
+            );
+          }).toList(),
         ),
       ),
     );

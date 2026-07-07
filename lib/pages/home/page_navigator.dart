@@ -62,15 +62,11 @@ class PageItemPresentation {
   final String title;
   final IconData activeIcon;
   final IconData inactiveIcon;
-  final double iconPaddingLeft;
-  final double iconPaddingRight;
 
   const PageItemPresentation({
     required this.title,
     required this.activeIcon,
     required this.inactiveIcon,
-    this.iconPaddingLeft = 10,
-    this.iconPaddingRight = 10,
   });
 }
 
@@ -81,7 +77,6 @@ PageItemPresentation pageItemPresentation(BuildContext context, PageItem item) {
         title: context.l10n.todayDashboardTitle,
         activeIcon: Icons.today,
         inactiveIcon: Icons.today_outlined,
-        iconPaddingLeft: 0,
       );
     case PageItem.careSchedule:
       return PageItemPresentation(
@@ -94,7 +89,6 @@ PageItemPresentation pageItemPresentation(BuildContext context, PageItem item) {
         title: context.l10n.page2Title,
         activeIcon: Icons.calendar_month,
         inactiveIcon: Icons.calendar_month_outlined,
-        iconPaddingLeft: 14,
       );
     case PageItem.plantIdentification:
       return PageItemPresentation(
@@ -119,8 +113,6 @@ PageItemPresentation pageItemPresentation(BuildContext context, PageItem item) {
         title: context.l10n.page6Title,
         activeIcon: Icons.more_horiz,
         inactiveIcon: Icons.more_horiz,
-        iconPaddingLeft: 5,
-        iconPaddingRight: 0,
       );
     case PageItem.plantCollection:
       return PageItemPresentation(
