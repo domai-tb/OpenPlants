@@ -24,7 +24,7 @@ class HomePage extends StatefulWidget {
 class HomePageState extends State<HomePage> {
   /// Creates a [GlobalKey] for each page that should be accessable within the bottom nav-menu
   Map<PageItem, GlobalKey<NavigatorState>> navigatorKeys = {
-    PageItem.page1: GlobalKey<NavigatorState>(),
+    PageItem.todayDashboard: GlobalKey<NavigatorState>(),
     PageItem.page2: GlobalKey<NavigatorState>(),
     PageItem.plantIdentification: GlobalKey<NavigatorState>(),
     PageItem.page4: GlobalKey<NavigatorState>(),
@@ -37,7 +37,7 @@ class HomePageState extends State<HomePage> {
   /// Creates two [GlobalKey] for each page in order to control the exit- and
   /// entry-animation from outside the page
   Map<PageItem, GlobalKey<AnimatedExitState>> exitAnimationKeys = {
-    PageItem.page1: GlobalKey<AnimatedExitState>(),
+    PageItem.todayDashboard: GlobalKey<AnimatedExitState>(),
     PageItem.page2: GlobalKey<AnimatedExitState>(),
     PageItem.plantIdentification: GlobalKey<AnimatedExitState>(),
     PageItem.page4: GlobalKey<AnimatedExitState>(),
@@ -47,7 +47,7 @@ class HomePageState extends State<HomePage> {
     PageItem.speciesLibrary: GlobalKey<AnimatedExitState>(),
   };
   Map<PageItem, GlobalKey<AnimatedEntryState>> entryAnimationKeys = {
-    PageItem.page1: GlobalKey<AnimatedEntryState>(),
+    PageItem.todayDashboard: GlobalKey<AnimatedEntryState>(),
     PageItem.page2: GlobalKey<AnimatedEntryState>(),
     PageItem.plantIdentification: GlobalKey<AnimatedEntryState>(),
     PageItem.page4: GlobalKey<AnimatedEntryState>(),
@@ -87,7 +87,7 @@ class HomePageState extends State<HomePage> {
   );
 
   /// Holds the currently active page.
-  PageItem currentPage = PageItem.page1;
+  PageItem currentPage = PageItem.todayDashboard;
   late SettingsController _settingsController;
   bool _settingsWired = false;
 

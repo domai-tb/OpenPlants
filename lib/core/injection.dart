@@ -26,6 +26,9 @@ import 'package:open_plant/pages/plant_collection/plant_collection_usecases.dart
 import 'package:open_plant/pages/species_library/species_library_datasource.dart';
 import 'package:open_plant/pages/species_library/species_library_repository.dart';
 import 'package:open_plant/pages/species_library/species_library_usecases.dart';
+import 'package:open_plant/pages/today_dashboard/today_dashboard_datasource.dart';
+import 'package:open_plant/pages/today_dashboard/today_dashboard_repository.dart';
+import 'package:open_plant/pages/today_dashboard/today_dashboard_usecases.dart';
 
 /// Global service locator (GetIt).
 ///
@@ -115,6 +118,17 @@ Future<void> init() async {
     () => SpeciesLibraryUsecases(repository: sl()),
   );
 
+  // Today Dashboard
+  sl.registerLazySingleton<TodayDashboardDataSource>(
+    () => TodayDashboardDataSource(plantCollection: sl()),
+  );
+  sl.registerLazySingleton<TodayDashboardRepository>(
+    () => TodayDashboardRepository(dataSource: sl()),
+  );
+  sl.registerLazySingleton<TodayDashboardUsecases>(
+    () => TodayDashboardUsecases(repository: sl()),
+  );
+
   // Aggregate wiring
   sl.registerLazySingleton<AppServices>(
     () => AppServices(
@@ -126,6 +140,7 @@ Future<void> init() async {
       page6: sl(),
       plantCollection: sl(),
       speciesLibrary: sl(),
+      todayDashboard: sl(),
     ),
   );
 }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:open_plant/l10n/l10n_x.dart';
 import 'package:open_plant/pages/home/widgets/page_navigation_animation.dart';
-import 'package:open_plant/pages/page1/page1_page.dart';
+import 'package:open_plant/pages/today_dashboard/today_dashboard_page.dart';
 import 'package:open_plant/pages/page2/page2_page.dart';
 import 'package:open_plant/pages/plant_identification/plant_identification_page.dart';
 import 'package:open_plant/pages/page4/page4_page.dart';
@@ -11,7 +11,7 @@ import 'package:open_plant/pages/page6/page6_page.dart';
 import 'package:open_plant/pages/plant_collection/plant_collection_page.dart';
 import 'package:open_plant/pages/species_library/species_library_page.dart';
 
-enum PageItem { page1, page2, plantIdentification, page4, page5, page6, plantCollection, speciesLibrary }
+enum PageItem { todayDashboard, page2, plantIdentification, page4, page5, page6, plantCollection, speciesLibrary }
 
 PageItem? pageItemFromId(String id) {
   for (final item in PageItem.values) {
@@ -75,11 +75,11 @@ class PageItemPresentation {
 
 PageItemPresentation pageItemPresentation(BuildContext context, PageItem item) {
   switch (item) {
-    case PageItem.page1:
+    case PageItem.todayDashboard:
       return PageItemPresentation(
-        title: context.l10n.page1Title,
-        activeIcon: Icons.home,
-        inactiveIcon: Icons.home_outlined,
+        title: context.l10n.todayDashboardTitle,
+        activeIcon: Icons.today,
+        inactiveIcon: Icons.today_outlined,
         iconPaddingLeft: 0,
       );
     case PageItem.page2:
@@ -177,8 +177,8 @@ class NavBarNavigator extends StatelessWidget {
   Map<String, WidgetBuilder> _routeBuilders(BuildContext context) {
     Widget rootPage;
     switch (pageItem) {
-      case PageItem.page1:
-        rootPage = Page1Page(
+      case PageItem.todayDashboard:
+        rootPage = TodayDashboardPage(
           mainNavigatorKey: mainNavigatorKey,
           pageEntryAnimationKey: pageEntryAnimationKey,
           pageExitAnimationKey: pageExitAnimationKey,

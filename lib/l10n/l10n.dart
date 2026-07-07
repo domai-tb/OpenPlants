@@ -110,11 +110,125 @@ abstract class AppLocalizations {
   /// **'OpenPlant'**
   String get appTitle;
 
+  /// No description provided for @todayDashboardTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get todayDashboardTitle;
+
   /// No description provided for @page1Title.
   ///
   /// In en, this message translates to:
   /// **'Page 1'**
   String get page1Title;
+
+  /// No description provided for @dueToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Due Today'**
+  String get dueToday;
+
+  /// No description provided for @overdue.
+  ///
+  /// In en, this message translates to:
+  /// **'Overdue'**
+  String get overdue;
+
+  /// No description provided for @recentPlants.
+  ///
+  /// In en, this message translates to:
+  /// **'Recent Plants'**
+  String get recentPlants;
+
+  /// No description provided for @noPlantsYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No plants yet'**
+  String get noPlantsYet;
+
+  /// No description provided for @addYourFirstPlant.
+  ///
+  /// In en, this message translates to:
+  /// **'Add your first plant to get started!'**
+  String get addYourFirstPlant;
+
+  /// No description provided for @quickAddPlant.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Plant'**
+  String get quickAddPlant;
+
+  /// No description provided for @quickIdentify.
+  ///
+  /// In en, this message translates to:
+  /// **'Identify'**
+  String get quickIdentify;
+
+  /// No description provided for @quickDiagnose.
+  ///
+  /// In en, this message translates to:
+  /// **'Diagnose'**
+  String get quickDiagnose;
+
+  /// No description provided for @daysOverdue.
+  ///
+  /// In en, this message translates to:
+  /// **'d overdue'**
+  String get daysOverdue;
+
+  /// No description provided for @taskDueToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Due today'**
+  String get taskDueToday;
+
+  /// No description provided for @taskTypeWater.
+  ///
+  /// In en, this message translates to:
+  /// **'Water'**
+  String get taskTypeWater;
+
+  /// No description provided for @taskTypeFertilize.
+  ///
+  /// In en, this message translates to:
+  /// **'Fertilize'**
+  String get taskTypeFertilize;
+
+  /// No description provided for @taskTypeMist.
+  ///
+  /// In en, this message translates to:
+  /// **'Mist'**
+  String get taskTypeMist;
+
+  /// No description provided for @taskTypePrune.
+  ///
+  /// In en, this message translates to:
+  /// **'Prune'**
+  String get taskTypePrune;
+
+  /// No description provided for @taskTypeRotate.
+  ///
+  /// In en, this message translates to:
+  /// **'Rotate'**
+  String get taskTypeRotate;
+
+  /// No description provided for @taskTypeRepot.
+  ///
+  /// In en, this message translates to:
+  /// **'Repot'**
+  String get taskTypeRepot;
+
+  /// No description provided for @taskTypeClean.
+  ///
+  /// In en, this message translates to:
+  /// **'Clean'**
+  String get taskTypeClean;
+
+  /// No description provided for @taskTypeInspect.
+  ///
+  /// In en, this message translates to:
+  /// **'Inspect'**
+  String get taskTypeInspect;
 
   /// No description provided for @page2Title.
   ///

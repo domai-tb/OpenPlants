@@ -15,7 +15,64 @@ class AppLocalizationsDe extends AppLocalizations {
   String get appTitle => 'OpenPlant';
 
   @override
+  String get todayDashboardTitle => 'Heute';
+
+  @override
   String get page1Title => 'Seite 1';
+
+  @override
+  String get dueToday => 'Heute fällig';
+
+  @override
+  String get overdue => 'Überfällig';
+
+  @override
+  String get recentPlants => 'Aktuelle Pflanzen';
+
+  @override
+  String get noPlantsYet => 'Noch keine Pflanzen';
+
+  @override
+  String get addYourFirstPlant => 'Füge deine erste Pflanze hinzu!';
+
+  @override
+  String get quickAddPlant => 'Pflanze hinzuf.';
+
+  @override
+  String get quickIdentify => 'Bestimmen';
+
+  @override
+  String get quickDiagnose => 'Diagnose';
+
+  @override
+  String get daysOverdue => ' T überf.';
+
+  @override
+  String get taskDueToday => 'Heute fällig';
+
+  @override
+  String get taskTypeWater => 'Gießen';
+
+  @override
+  String get taskTypeFertilize => 'Düngen';
+
+  @override
+  String get taskTypeMist => 'Besprühen';
+
+  @override
+  String get taskTypePrune => 'Schneiden';
+
+  @override
+  String get taskTypeRotate => 'Drehen';
+
+  @override
+  String get taskTypeRepot => 'Umtopfen';
+
+  @override
+  String get taskTypeClean => 'Reinigen';
+
+  @override
+  String get taskTypeInspect => 'Untersuchen';
 
   @override
   String get page2Title => 'Seite 2';

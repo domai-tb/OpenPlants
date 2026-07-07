@@ -6,6 +6,7 @@ import 'package:open_plant/pages/page5/page5_usecases.dart';
 import 'package:open_plant/pages/page6/page6_usecases.dart';
 import 'package:open_plant/pages/plant_collection/plant_collection_usecases.dart';
 import 'package:open_plant/pages/species_library/species_library_usecases.dart';
+import 'package:open_plant/pages/today_dashboard/today_dashboard_usecases.dart';
 
 /// Aggregates feature use-cases for convenient access via `AppScope`.
 ///
@@ -20,6 +21,7 @@ class AppServices {
   final Page6Usecases page6;
   final PlantCollectionUsecases plantCollection;
   final SpeciesLibraryUsecases speciesLibrary;
+  final TodayDashboardUsecases todayDashboard;
 
   const AppServices({
     required this.page1,
@@ -30,5 +32,6 @@ class AppServices {
     required this.page6,
     required this.plantCollection,
     required this.speciesLibrary,
+    required this.todayDashboard,
   });
 }
