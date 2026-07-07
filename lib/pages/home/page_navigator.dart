@@ -8,8 +8,9 @@ import 'package:open_plant/pages/plant_identification/plant_identification_page.
 import 'package:open_plant/pages/page4/page4_page.dart';
 import 'package:open_plant/pages/page5/page5_page.dart';
 import 'package:open_plant/pages/page6/page6_page.dart';
+import 'package:open_plant/pages/plant_collection/plant_collection_page.dart';
 
-enum PageItem { page1, page2, plantIdentification, page4, page5, page6 }
+enum PageItem { page1, page2, plantIdentification, page4, page5, page6, plantCollection }
 
 PageItem? pageItemFromId(String id) {
   for (final item in PageItem.values) {
@@ -113,6 +114,12 @@ PageItemPresentation pageItemPresentation(BuildContext context, PageItem item) {
         iconPaddingLeft: 5,
         iconPaddingRight: 0,
       );
+    case PageItem.plantCollection:
+      return PageItemPresentation(
+        title: context.l10n.plantCollectionTitle,
+        activeIcon: Icons.yard,
+        inactiveIcon: Icons.yard_outlined,
+      );
   }
 }
 
@@ -194,6 +201,12 @@ class NavBarNavigator extends StatelessWidget {
       case PageItem.page6:
         rootPage = Page6Page(
           mainNavigatorKey: mainNavigatorKey,
+          pageEntryAnimationKey: pageEntryAnimationKey,
+          pageExitAnimationKey: pageExitAnimationKey,
+        );
+        break;
+      case PageItem.plantCollection:
+        rootPage = PlantCollectionPage(
           pageEntryAnimationKey: pageEntryAnimationKey,
           pageExitAnimationKey: pageExitAnimationKey,
         );

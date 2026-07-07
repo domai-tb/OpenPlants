@@ -205,4 +205,104 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get plantIdTryAgain => 'Try Again';
+
+  @override
+  String get plantCollectionTitle => 'Plant Collection';
+
+  @override
+  String get plantCollectionEmpty => 'No plants yet';
+
+  @override
+  String get plantCollectionTapToAdd => 'Tap + to add your first plant';
+
+  @override
+  String get addPlant => 'Add Plant';
+
+  @override
+  String get editPlant => 'Edit Plant';
+
+  @override
+  String get deletePlant => 'Delete Plant';
+
+  @override
+  String get deletePlantTitle => 'Delete Plant';
+
+  @override
+  String deletePlantConfirm(Object plantName) {
+    return 'Are you sure you want to delete $plantName?';
+  }
+
+  @override
+  String get careStatus => 'Care Status';
+
+  @override
+  String get careStatusHappy => 'Happy';
+
+  @override
+  String get careStatusNeedsWater => 'Needs Water';
+
+  @override
+  String get careStatusNeedsFertilizer => 'Needs Fertilizer';
+
+  @override
+  String get markAsWatered => 'Mark as Watered';
+
+  @override
+  String get markAsFertilized => 'Mark as Fertilized';
+
+  @override
+  String get lastWatered => 'Last Watered';
+
+  @override
+  String get lastFertilized => 'Last Fertilized';
+
+  @override
+  String get confirmDelete => 'Are you sure you want to delete this plant?';
+
+  @override
+  String get searchPlants => 'Search plants';
+
+  @override
+  String get filterAll => 'All';
+
+  @override
+  String get room => 'Room';
+
+  @override
+  String get species => 'Species';
+
+  @override
+  String get notes => 'Notes';
+
+  @override
+  String get photo => 'Photo';
+
+  @override
+  String get addPhoto => 'Add Photo';
+
+  @override
+  String get changePhoto => 'Change Photo';
+
+  @override
+  String get save => 'Save';
+
+  @override
+  String get cancel => 'Cancel';
+
+  @override
+  String get confirm => 'Confirm';
+
+  @override
+  String get nameRequired => 'Name *';
+
+  @override
+  String get nameIsRequired => 'Name is required';
+
+  @override
+  String errorSavingPlant(Object error) {
+    return 'Error saving plant: $error';
+  }
+
+  @override
+  String get never => 'Never';
 }

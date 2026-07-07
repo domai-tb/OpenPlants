@@ -481,6 +481,198 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Try Again'**
   String get plantIdTryAgain;
+
+  /// No description provided for @plantCollectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Plant Collection'**
+  String get plantCollectionTitle;
+
+  /// No description provided for @plantCollectionEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No plants yet'**
+  String get plantCollectionEmpty;
+
+  /// No description provided for @plantCollectionTapToAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap + to add your first plant'**
+  String get plantCollectionTapToAdd;
+
+  /// No description provided for @addPlant.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Plant'**
+  String get addPlant;
+
+  /// No description provided for @editPlant.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Plant'**
+  String get editPlant;
+
+  /// No description provided for @deletePlant.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Plant'**
+  String get deletePlant;
+
+  /// No description provided for @deletePlantTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Plant'**
+  String get deletePlantTitle;
+
+  /// No description provided for @deletePlantConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete {plantName}?'**
+  String deletePlantConfirm(Object plantName);
+
+  /// No description provided for @careStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Care Status'**
+  String get careStatus;
+
+  /// No description provided for @careStatusHappy.
+  ///
+  /// In en, this message translates to:
+  /// **'Happy'**
+  String get careStatusHappy;
+
+  /// No description provided for @careStatusNeedsWater.
+  ///
+  /// In en, this message translates to:
+  /// **'Needs Water'**
+  String get careStatusNeedsWater;
+
+  /// No description provided for @careStatusNeedsFertilizer.
+  ///
+  /// In en, this message translates to:
+  /// **'Needs Fertilizer'**
+  String get careStatusNeedsFertilizer;
+
+  /// No description provided for @markAsWatered.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark as Watered'**
+  String get markAsWatered;
+
+  /// No description provided for @markAsFertilized.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark as Fertilized'**
+  String get markAsFertilized;
+
+  /// No description provided for @lastWatered.
+  ///
+  /// In en, this message translates to:
+  /// **'Last Watered'**
+  String get lastWatered;
+
+  /// No description provided for @lastFertilized.
+  ///
+  /// In en, this message translates to:
+  /// **'Last Fertilized'**
+  String get lastFertilized;
+
+  /// No description provided for @confirmDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete this plant?'**
+  String get confirmDelete;
+
+  /// No description provided for @searchPlants.
+  ///
+  /// In en, this message translates to:
+  /// **'Search plants'**
+  String get searchPlants;
+
+  /// No description provided for @filterAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get filterAll;
+
+  /// No description provided for @room.
+  ///
+  /// In en, this message translates to:
+  /// **'Room'**
+  String get room;
+
+  /// No description provided for @species.
+  ///
+  /// In en, this message translates to:
+  /// **'Species'**
+  String get species;
+
+  /// No description provided for @notes.
+  ///
+  /// In en, this message translates to:
+  /// **'Notes'**
+  String get notes;
+
+  /// No description provided for @photo.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo'**
+  String get photo;
+
+  /// No description provided for @addPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Photo'**
+  String get addPhoto;
+
+  /// No description provided for @changePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Change Photo'**
+  String get changePhoto;
+
+  /// No description provided for @save.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get save;
+
+  /// No description provided for @cancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancel;
+
+  /// No description provided for @confirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm'**
+  String get confirm;
+
+  /// No description provided for @nameRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Name *'**
+  String get nameRequired;
+
+  /// No description provided for @nameIsRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Name is required'**
+  String get nameIsRequired;
+
+  /// No description provided for @errorSavingPlant.
+  ///
+  /// In en, this message translates to:
+  /// **'Error saving plant: {error}'**
+  String errorSavingPlant(Object error);
+
+  /// No description provided for @never.
+  ///
+  /// In en, this message translates to:
+  /// **'Never'**
+  String get never;
 }
 
 class _AppLocalizationsDelegate

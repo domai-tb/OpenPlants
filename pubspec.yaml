@@ -17,6 +17,7 @@ dependencies:
   path_provider: ^2.1.5
   flutter_onnxruntime: ^1.8.0
   shared_preferences: ^2.3.3
+  uuid: ^4.5.1
 
 dev_dependencies:
   flutter_test:

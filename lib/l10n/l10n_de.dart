@@ -210,4 +210,105 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get plantIdTryAgain => 'Erneut versuchen';
+
+  @override
+  String get plantCollectionTitle => 'Pflanzensammlung';
+
+  @override
+  String get plantCollectionEmpty => 'Noch keine Pflanzen';
+
+  @override
+  String get plantCollectionTapToAdd =>
+      'Tippe auf + um deine erste Pflanze hinzuzufuegen';
+
+  @override
+  String get addPlant => 'Pflanze hinzufuegen';
+
+  @override
+  String get editPlant => 'Pflanze bearbeiten';
+
+  @override
+  String get deletePlant => 'Pflanze loeschen';
+
+  @override
+  String get deletePlantTitle => 'Pflanze loeschen';
+
+  @override
+  String deletePlantConfirm(Object plantName) {
+    return 'Moechtest du $plantName wirklich loeschen?';
+  }
+
+  @override
+  String get careStatus => 'Pflegezustand';
+
+  @override
+  String get careStatusHappy => 'Gluecklich';
+
+  @override
+  String get careStatusNeedsWater => 'Braucht Wasser';
+
+  @override
+  String get careStatusNeedsFertilizer => 'Braucht Duenger';
+
+  @override
+  String get markAsWatered => 'Als gegossen markieren';
+
+  @override
+  String get markAsFertilized => 'Als geduengt markieren';
+
+  @override
+  String get lastWatered => 'Zuletzt gegossen';
+
+  @override
+  String get lastFertilized => 'Zuletzt geduengt';
+
+  @override
+  String get confirmDelete => 'Moechtest du diese Pflanze wirklich loeschen?';
+
+  @override
+  String get searchPlants => 'Pflanzen suchen';
+
+  @override
+  String get filterAll => 'Alle';
+
+  @override
+  String get room => 'Raum';
+
+  @override
+  String get species => 'Art';
+
+  @override
+  String get notes => 'Notizen';
+
+  @override
+  String get photo => 'Foto';
+
+  @override
+  String get addPhoto => 'Foto hinzufuegen';
+
+  @override
+  String get changePhoto => 'Foto aendern';
+
+  @override
+  String get save => 'Speichern';
+
+  @override
+  String get cancel => 'Abbrechen';
+
+  @override
+  String get confirm => 'Bestaetigen';
+
+  @override
+  String get nameRequired => 'Name *';
+
+  @override
+  String get nameIsRequired => 'Name ist erforderlich';
+
+  @override
+  String errorSavingPlant(Object error) {
+    return 'Fehler beim Speichern der Pflanze: $error';
+  }
+
+  @override
+  String get never => 'Nie';
 }

@@ -4,6 +4,7 @@ import 'package:open_plant/pages/plant_identification/classifier/plant_classifie
 import 'package:open_plant/pages/page4/page4_usecases.dart';
 import 'package:open_plant/pages/page5/page5_usecases.dart';
 import 'package:open_plant/pages/page6/page6_usecases.dart';
+import 'package:open_plant/pages/plant_collection/plant_collection_usecases.dart';
 
 /// Aggregates feature use-cases for convenient access via `AppScope`.
 ///
@@ -16,6 +17,7 @@ class AppServices {
   final Page4Usecases page4;
   final Page5Usecases page5;
   final Page6Usecases page6;
+  final PlantCollectionUsecases plantCollection;
 
   const AppServices({
     required this.page1,
@@ -24,5 +26,6 @@ class AppServices {
     required this.page4,
     required this.page5,
     required this.page6,
+    required this.plantCollection,
   });
 }

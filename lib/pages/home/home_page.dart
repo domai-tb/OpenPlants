@@ -30,6 +30,7 @@ class HomePageState extends State<HomePage> {
     PageItem.page4: GlobalKey<NavigatorState>(),
     PageItem.page5: GlobalKey<NavigatorState>(),
     PageItem.page6: GlobalKey<NavigatorState>(),
+    PageItem.plantCollection: GlobalKey<NavigatorState>(),
   };
 
   /// Creates two [GlobalKey] for each page in order to control the exit- and
@@ -41,6 +42,7 @@ class HomePageState extends State<HomePage> {
     PageItem.page4: GlobalKey<AnimatedExitState>(),
     PageItem.page5: GlobalKey<AnimatedExitState>(),
     PageItem.page6: GlobalKey<AnimatedExitState>(),
+    PageItem.plantCollection: GlobalKey<AnimatedExitState>(),
   };
   Map<PageItem, GlobalKey<AnimatedEntryState>> entryAnimationKeys = {
     PageItem.page1: GlobalKey<AnimatedEntryState>(),
@@ -49,6 +51,7 @@ class HomePageState extends State<HomePage> {
     PageItem.page4: GlobalKey<AnimatedEntryState>(),
     PageItem.page5: GlobalKey<AnimatedEntryState>(),
     PageItem.page6: GlobalKey<AnimatedEntryState>(),
+    PageItem.plantCollection: GlobalKey<AnimatedEntryState>(),
   };
 
   final SystemUiOverlayStyle lightSystemUiStyle = const SystemUiOverlayStyle(

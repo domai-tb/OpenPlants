@@ -50,6 +50,7 @@ class Settings {
     'page4',
     'page5',
     'page6',
+    'plantCollection',
   ];
 
   final bool useSystemDarkmode;
