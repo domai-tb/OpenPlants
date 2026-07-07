@@ -214,7 +214,6 @@ class _PlantCollectionPageState extends State<PlantCollectionPage>
                     child: const Icon(Icons.add),
                   ),
                 ),
-                ),
                 // Scroll to top button positioned above the navbar
                 Positioned(
                   right: 16,
