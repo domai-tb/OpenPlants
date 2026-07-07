@@ -6,8 +6,8 @@ import 'package:open_plant/pages/home/page_navigator.dart';
 import 'package:open_plant/pages/home/widgets/nav_bar_preferences_editor.dart';
 import 'package:open_plant/widgets/app_segmented_triple_control.dart';
 
-class Page6SettingsPage extends StatelessWidget {
-  const Page6SettingsPage({super.key});
+class MoreSettingsPage extends StatelessWidget {
+  const MoreSettingsPage({super.key});
 
   @override
   Widget build(BuildContext context) {

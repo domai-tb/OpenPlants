@@ -18,9 +18,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get todayDashboardTitle => 'Today';
 
   @override
-  String get page1Title => 'Page 1';
-
-  @override
   String get dueToday => 'Due Today';
 
   @override
@@ -75,19 +72,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get taskTypeInspect => 'Inspect';
 
   @override
-  String get page2Title => 'Page 2';
-
-  @override
   String get plantIdentificationTitle => 'Plant ID';
 
   @override
-  String get page4Title => 'Page 4';
-
-  @override
-  String get page5Title => 'Page 5';
-
-  @override
-  String get page6Title => 'Page 6';
+  String get moreTitle => 'More';
 
   @override
   String get settingsTitle => 'Settings';
@@ -196,7 +184,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get navigationSettingsAlwaysVisibleHint =>
-      'Page 6 stays visible so settings remain reachable.';
+      'More stays visible so settings remain reachable.';
 
   @override
   String get walletPlaceholderBody => 'Placeholder for a wallet-style feature.';

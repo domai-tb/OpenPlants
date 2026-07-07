@@ -6,7 +6,6 @@
   "appTitle": "OpenPlant",
 
   "todayDashboardTitle": "Heute",
-  "page1Title": "Seite 1",
   "dueToday": "Heute fällig",
   "overdue": "Überfällig",
   "recentPlants": "Aktuelle Pflanzen",
@@ -25,11 +24,8 @@
   "taskTypeRepot": "Umtopfen",
   "taskTypeClean": "Reinigen",
   "taskTypeInspect": "Untersuchen",
-  "page2Title": "Seite 2",
   "plantIdentificationTitle": "Pflanzen-ID",
-  "page4Title": "Seite 4",
-  "page5Title": "Seite 5",
-  "page6Title": "Seite 6",
+  "moreTitle": "Mehr",
 
   "settingsTitle": "Einstellungen",
   "aboutTitle": "Ueber",
@@ -70,7 +66,7 @@
   "navigationLabel": "Navigation",
   "navigationOrderHint": "Menuepunkte per Drag-and-drop neu anordnen.",
   "navigationVisibilityLabel": "In der Navigation anzeigen",
-  "navigationSettingsAlwaysVisibleHint": "Seite 6 bleibt sichtbar, damit Einstellungen erreichbar bleiben.",
+  "navigationSettingsAlwaysVisibleHint": "Mehr bleibt sichtbar, damit Einstellungen erreichbar bleiben.",
 
   "walletPlaceholderBody": "Platzhalter fuer eine Wallet-aehnliche Funktion.",
   "primaryAction": "Primaere Aktion",

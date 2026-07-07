@@ -4,15 +4,12 @@ import 'package:open_plant/l10n/l10n_x.dart';
 import 'package:open_plant/pages/home/widgets/page_navigation_animation.dart';
 import 'package:open_plant/pages/care_schedule/care_schedule_page.dart';
 import 'package:open_plant/pages/today_dashboard/today_dashboard_page.dart';
-import 'package:open_plant/pages/page2/page2_page.dart';
 import 'package:open_plant/pages/plant_identification/plant_identification_page.dart';
-import 'package:open_plant/pages/page4/page4_page.dart';
-import 'package:open_plant/pages/page5/page5_page.dart';
-import 'package:open_plant/pages/page6/page6_page.dart';
+import 'package:open_plant/pages/more/more_page.dart';
 import 'package:open_plant/pages/plant_collection/plant_collection_page.dart';
 import 'package:open_plant/pages/species_library/species_library_page.dart';
 
-enum PageItem { todayDashboard, careSchedule, page2, plantIdentification, page4, page5, page6, plantCollection, speciesLibrary }
+enum PageItem { todayDashboard, careSchedule, plantIdentification, more, plantCollection, speciesLibrary }
 
 PageItem? pageItemFromId(String id) {
   for (final item in PageItem.values) {
@@ -46,7 +43,7 @@ Set<PageItem> hiddenPageItemsFromSettings(List<String> hiddenItems) {
 
   for (final id in hiddenItems) {
     final item = pageItemFromId(id);
-    if (item != null && item != PageItem.page6) {
+    if (item != null && item != PageItem.more) {
       hiddenPageItems.add(item);
     }
   }
@@ -84,33 +81,15 @@ PageItemPresentation pageItemPresentation(BuildContext context, PageItem item) {
         activeIcon: Icons.event_note,
         inactiveIcon: Icons.event_note_outlined,
       );
-    case PageItem.page2:
-      return PageItemPresentation(
-        title: context.l10n.page2Title,
-        activeIcon: Icons.calendar_month,
-        inactiveIcon: Icons.calendar_month_outlined,
-      );
     case PageItem.plantIdentification:
       return PageItemPresentation(
         title: context.l10n.plantIdentificationTitle,
         activeIcon: Icons.camera_alt,
         inactiveIcon: Icons.camera_alt_outlined,
       );
-    case PageItem.page4:
+    case PageItem.more:
       return PageItemPresentation(
-        title: context.l10n.page4Title,
-        activeIcon: Icons.restaurant,
-        inactiveIcon: Icons.restaurant_outlined,
-      );
-    case PageItem.page5:
-      return PageItemPresentation(
-        title: context.l10n.page5Title,
-        activeIcon: Icons.account_balance_wallet,
-        inactiveIcon: Icons.account_balance_wallet_outlined,
-      );
-    case PageItem.page6:
-      return PageItemPresentation(
-        title: context.l10n.page6Title,
+        title: context.l10n.moreTitle,
         activeIcon: Icons.more_horiz,
         inactiveIcon: Icons.more_horiz,
       );
@@ -207,20 +186,6 @@ class NavBarNavigator extends StatelessWidget {
           tabSwitchNotifier: tabSwitchNotifier,
         );
         break;
-      case PageItem.page2:
-        rootPage = Page2Page(
-          mainNavigatorKey: mainNavigatorKey,
-          pageEntryAnimationKey: pageEntryAnimationKey,
-          pageExitAnimationKey: pageExitAnimationKey,
-        );
-        break;
-      case PageItem.page4:
-        rootPage = Page4Page(
-          mainNavigatorKey: mainNavigatorKey,
-          pageEntryAnimationKey: pageEntryAnimationKey,
-          pageExitAnimationKey: pageExitAnimationKey,
-        );
-        break;
       case PageItem.plantIdentification:
         rootPage = PlantIdentificationPage(
           mainNavigatorKey: mainNavigatorKey,
@@ -229,14 +194,8 @@ class NavBarNavigator extends StatelessWidget {
           onViewSpeciesLibrary: onSwitchToSpeciesLibrary,
         );
         break;
-      case PageItem.page5:
-        rootPage = Page5Page(
-          pageEntryAnimationKey: pageEntryAnimationKey,
-          pageExitAnimationKey: pageExitAnimationKey,
-        );
-        break;
-      case PageItem.page6:
-        rootPage = Page6Page(
+      case PageItem.more:
+        rootPage = MorePage(
           mainNavigatorKey: mainNavigatorKey,
           pageEntryAnimationKey: pageEntryAnimationKey,
           pageExitAnimationKey: pageExitAnimationKey,

@@ -56,7 +56,7 @@ class NavBarPreferencesEditor extends StatelessWidget {
             final item = orderedItems[index];
             final presentation = pageItemPresentation(context, item);
             final isVisible = !hiddenItems.contains(item);
-            final isLockedVisible = item == PageItem.page6;
+            final isLockedVisible = item == PageItem.more;
 
             return Padding(
               key: ValueKey(item.name),

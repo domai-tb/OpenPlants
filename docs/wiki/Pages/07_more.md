@@ -1,4 +1,4 @@
-# Page 6
+# More
 
 Demonstrates:
 
@@ -10,10 +10,11 @@ The Settings screen also demonstrates:
 - Theme selection
 - Language selection (English/German/System)
 - A persisted onboarding flag
+- Navigation bar preferences (reorder, show/hide)
 
 Files:
 
-- `lib/pages/page6/page6_page.dart`
-- `lib/pages/page6/page6_settings_page.dart`
-- `lib/pages/page6/page6_about_page.dart`
+- `lib/pages/more/more_page.dart`
+- `lib/pages/more/more_settings_page.dart`
+- `lib/pages/more/more_about_page.dart`
 

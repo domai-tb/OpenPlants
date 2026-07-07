@@ -1,9 +1,9 @@
-class Page6ItemEntity {
+class MoreItemEntity {
   final String id;
   final String title;
   final String subtitle;
 
-  const Page6ItemEntity({
+  const MoreItemEntity({
     required this.id,
     required this.title,
     required this.subtitle,

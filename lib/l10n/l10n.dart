@@ -116,12 +116,6 @@ abstract class AppLocalizations {
   /// **'Today'**
   String get todayDashboardTitle;
 
-  /// No description provided for @page1Title.
-  ///
-  /// In en, this message translates to:
-  /// **'Page 1'**
-  String get page1Title;
-
   /// No description provided for @dueToday.
   ///
   /// In en, this message translates to:
@@ -230,35 +224,17 @@ abstract class AppLocalizations {
   /// **'Inspect'**
   String get taskTypeInspect;
 
-  /// No description provided for @page2Title.
-  ///
-  /// In en, this message translates to:
-  /// **'Page 2'**
-  String get page2Title;
-
   /// No description provided for @plantIdentificationTitle.
   ///
   /// In en, this message translates to:
   /// **'Plant ID'**
   String get plantIdentificationTitle;
 
-  /// No description provided for @page4Title.
+  /// No description provided for @moreTitle.
   ///
   /// In en, this message translates to:
-  /// **'Page 4'**
-  String get page4Title;
-
-  /// No description provided for @page5Title.
-  ///
-  /// In en, this message translates to:
-  /// **'Page 5'**
-  String get page5Title;
-
-  /// No description provided for @page6Title.
-  ///
-  /// In en, this message translates to:
-  /// **'Page 6'**
-  String get page6Title;
+  /// **'More'**
+  String get moreTitle;
 
   /// No description provided for @settingsTitle.
   ///
@@ -461,7 +437,7 @@ abstract class AppLocalizations {
   /// No description provided for @navigationSettingsAlwaysVisibleHint.
   ///
   /// In en, this message translates to:
-  /// **'Page 6 stays visible so settings remain reachable.'**
+  /// **'More stays visible so settings remain reachable.'**
   String get navigationSettingsAlwaysVisibleHint;
 
   /// No description provided for @walletPlaceholderBody.

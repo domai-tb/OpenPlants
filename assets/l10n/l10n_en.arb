@@ -6,7 +6,6 @@
   "appTitle": "OpenPlant",
 
   "todayDashboardTitle": "Today",
-  "page1Title": "Page 1",
   "dueToday": "Due Today",
   "overdue": "Overdue",
   "recentPlants": "Recent Plants",
@@ -25,11 +24,8 @@
   "taskTypeRepot": "Repot",
   "taskTypeClean": "Clean",
   "taskTypeInspect": "Inspect",
-  "page2Title": "Page 2",
   "plantIdentificationTitle": "Plant ID",
-  "page4Title": "Page 4",
-  "page5Title": "Page 5",
-  "page6Title": "Page 6",
+  "moreTitle": "More",
 
   "settingsTitle": "Settings",
   "aboutTitle": "About",
@@ -70,7 +66,7 @@
   "navigationLabel": "Navigation",
   "navigationOrderHint": "Drag to reorder menu items.",
   "navigationVisibilityLabel": "Show in navigation",
-  "navigationSettingsAlwaysVisibleHint": "Page 6 stays visible so settings remain reachable.",
+  "navigationSettingsAlwaysVisibleHint": "More stays visible so settings remain reachable.",
 
   "walletPlaceholderBody": "Placeholder for a wallet-style feature.",
   "primaryAction": "Primary Action",

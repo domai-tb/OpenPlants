@@ -3,18 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:open_plant/core/app_scope.dart';
 import 'package:open_plant/l10n/l10n_x.dart';
 import 'package:open_plant/pages/home/widgets/page_navigation_animation.dart';
-import 'package:open_plant/pages/page6/page6_about_page.dart';
-import 'package:open_plant/pages/page6/page6_item_entity.dart';
-import 'package:open_plant/pages/page6/page6_settings_page.dart';
-import 'package:open_plant/pages/page6/page6_usecases.dart';
+import 'package:open_plant/pages/more/more_about_page.dart';
+import 'package:open_plant/pages/more/more_item_entity.dart';
+import 'package:open_plant/pages/more/more_settings_page.dart';
+import 'package:open_plant/pages/more/more_usecases.dart';
 import 'package:open_plant/widgets/scroll_to_top_button.dart';
 
-class Page6Page extends StatefulWidget {
+class MorePage extends StatefulWidget {
   final GlobalKey<NavigatorState> mainNavigatorKey;
   final GlobalKey<AnimatedEntryState> pageEntryAnimationKey;
   final GlobalKey<AnimatedExitState> pageExitAnimationKey;
 
-  const Page6Page({
+  const MorePage({
     super.key,
     required this.mainNavigatorKey,
     required this.pageEntryAnimationKey,
@@ -22,15 +22,15 @@ class Page6Page extends StatefulWidget {
   });
 
   @override
-  State<Page6Page> createState() => _Page6PageState();
+  State<MorePage> createState() => _MorePageState();
 }
 
-class _Page6PageState extends State<Page6Page> with AutomaticKeepAliveClientMixin<Page6Page> {
+class _MorePageState extends State<MorePage> with AutomaticKeepAliveClientMixin<MorePage> {
   final ScrollController _scrollController = ScrollController();
-  late Page6Usecases _usecases;
+  late MoreUsecases _usecases;
   bool _wired = false;
   bool _loading = true;
-  List<Page6ItemEntity> _items = const [];
+  List<MoreItemEntity> _items = const [];
 
   @override
   bool get wantKeepAlive => true;
@@ -45,7 +45,7 @@ class _Page6PageState extends State<Page6Page> with AutomaticKeepAliveClientMixi
   void didChangeDependencies() {
     super.didChangeDependencies();
     if (_wired) return;
-    _usecases = AppScope.of(context).services.page6;
+    _usecases = AppScope.of(context).services.more;
     _wired = true;
     _load();
   }
@@ -60,13 +60,13 @@ class _Page6PageState extends State<Page6Page> with AutomaticKeepAliveClientMixi
     });
   }
 
-  void _open(Page6ItemEntity item) {
+  void _open(MoreItemEntity item) {
     switch (item.id) {
       case 'settings':
-        Navigator.of(context).push(MaterialPageRoute(builder: (_) => const Page6SettingsPage()));
+        Navigator.of(context).push(MaterialPageRoute(builder: (_) => const MoreSettingsPage()));
         break;
       case 'about':
-        Navigator.of(context).push(MaterialPageRoute(builder: (_) => const Page6AboutPage()));
+        Navigator.of(context).push(MaterialPageRoute(builder: (_) => const MoreAboutPage()));
         break;
       default:
         break;
@@ -78,7 +78,7 @@ class _Page6PageState extends State<Page6Page> with AutomaticKeepAliveClientMixi
     super.build(context);
     final theme = Theme.of(context);
 
-    String itemTitle(Page6ItemEntity item) {
+    String itemTitle(MoreItemEntity item) {
       switch (item.id) {
         case 'settings':
           return context.l10n.settingsTitle;
@@ -89,7 +89,7 @@ class _Page6PageState extends State<Page6Page> with AutomaticKeepAliveClientMixi
       }
     }
 
-    String itemSubtitle(Page6ItemEntity item) {
+    String itemSubtitle(MoreItemEntity item) {
       switch (item.id) {
         case 'settings':
           return context.l10n.menuSettingsSubtitle;
@@ -113,7 +113,7 @@ class _Page6PageState extends State<Page6Page> with AutomaticKeepAliveClientMixi
               children: [
                 Padding(
                   padding: const EdgeInsets.only(left: 20, right: 20, top: 10),
-                  child: Text(context.l10n.page6Title, style: theme.textTheme.displayMedium),
+                  child: Text(context.l10n.moreTitle, style: theme.textTheme.displayMedium),
                 ),
                 const SizedBox(height: 10),
                 Expanded(

@@ -99,7 +99,7 @@ class Settings {
       navBarItemOrder: (json['navBarItemOrder'] as List<dynamic>?)?.whereType<String>().toList() ?? _defaultNavBarOrder,
       hiddenNavBarItems: (json['hiddenNavBarItems'] as List<dynamic>?)
               ?.whereType<String>()
-              .where((item) => item != 'page6')
+              .where((item) => item != 'more')
               .toList() ??
           const [],
     );
@@ -113,7 +113,7 @@ class Settings {
       'didCompleteOnboarding': didCompleteOnboarding,
       'localeCode': localeCode,
       'navBarItemOrder': navBarItemOrder,
-      'hiddenNavBarItems': hiddenNavBarItems.where((item) => item != 'page6').toList(),
+      'hiddenNavBarItems': hiddenNavBarItems.where((item) => item != 'more').toList(),
     };
   }
 }

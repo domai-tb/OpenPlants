@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:open_plant/l10n/l10n_x.dart';
 
-class Page6AboutPage extends StatelessWidget {
-  const Page6AboutPage({super.key});
+class MoreAboutPage extends StatelessWidget {
+  const MoreAboutPage({super.key});
 
   @override
   Widget build(BuildContext context) {

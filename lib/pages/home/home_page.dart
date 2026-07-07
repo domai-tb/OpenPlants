@@ -27,11 +27,8 @@ class HomePageState extends State<HomePage> {
   Map<PageItem, GlobalKey<NavigatorState>> navigatorKeys = {
     PageItem.todayDashboard: GlobalKey<NavigatorState>(),
     PageItem.careSchedule: GlobalKey<NavigatorState>(),
-    PageItem.page2: GlobalKey<NavigatorState>(),
     PageItem.plantIdentification: GlobalKey<NavigatorState>(),
-    PageItem.page4: GlobalKey<NavigatorState>(),
-    PageItem.page5: GlobalKey<NavigatorState>(),
-    PageItem.page6: GlobalKey<NavigatorState>(),
+    PageItem.more: GlobalKey<NavigatorState>(),
     PageItem.plantCollection: GlobalKey<NavigatorState>(),
     PageItem.speciesLibrary: GlobalKey<NavigatorState>(),
   };
@@ -41,22 +38,16 @@ class HomePageState extends State<HomePage> {
   Map<PageItem, GlobalKey<AnimatedExitState>> exitAnimationKeys = {
     PageItem.todayDashboard: GlobalKey<AnimatedExitState>(),
     PageItem.careSchedule: GlobalKey<AnimatedExitState>(),
-    PageItem.page2: GlobalKey<AnimatedExitState>(),
     PageItem.plantIdentification: GlobalKey<AnimatedExitState>(),
-    PageItem.page4: GlobalKey<AnimatedExitState>(),
-    PageItem.page5: GlobalKey<AnimatedExitState>(),
-    PageItem.page6: GlobalKey<AnimatedExitState>(),
+    PageItem.more: GlobalKey<AnimatedExitState>(),
     PageItem.plantCollection: GlobalKey<AnimatedExitState>(),
     PageItem.speciesLibrary: GlobalKey<AnimatedExitState>(),
   };
   Map<PageItem, GlobalKey<AnimatedEntryState>> entryAnimationKeys = {
     PageItem.todayDashboard: GlobalKey<AnimatedEntryState>(),
     PageItem.careSchedule: GlobalKey<AnimatedEntryState>(),
-    PageItem.page2: GlobalKey<AnimatedEntryState>(),
     PageItem.plantIdentification: GlobalKey<AnimatedEntryState>(),
-    PageItem.page4: GlobalKey<AnimatedEntryState>(),
-    PageItem.page5: GlobalKey<AnimatedEntryState>(),
-    PageItem.page6: GlobalKey<AnimatedEntryState>(),
+    PageItem.more: GlobalKey<AnimatedEntryState>(),
     PageItem.plantCollection: GlobalKey<AnimatedEntryState>(),
     PageItem.speciesLibrary: GlobalKey<AnimatedEntryState>(),
   };
