@@ -24,6 +24,22 @@
 
   "onboardingIntroBody": "Welcome to OpenPlant — your open-source & privacy-friendly plant companion.",
   "onboardingIntroHint": "Track your plants, set reminders, and watch them thrive.",
+
+  "onboardingPrivacyTitle": "Your Privacy Matters",
+  "onboardingPrivacyWorksLocally": "Works Locally",
+  "onboardingPrivacyWorksLocallyBody": "All data and processing happen on-device. No internet connection needed.",
+  "onboardingPrivacyNoAccount": "No Account Required",
+  "onboardingPrivacyNoAccountBody": "No sign-up, login, or account creation. Just open and use.",
+  "onboardingPrivacyPhotosPrivate": "Photos Stay Private",
+  "onboardingPrivacyPhotosPrivateBody": "Plant photos are processed on-device and never uploaded.",
+  "onboardingPrivacyNoThirdParties": "No Third Parties",
+  "onboardingPrivacyNoThirdPartiesBody": "No analytics SDKs, no ad trackers, no external services.",
+
+  "onboardingPrivacyBadgeLocal": "Local",
+  "onboardingPrivacyBadgeNoAccount": "No account",
+  "onboardingPrivacyBadgePhotos": "Private photos",
+  "onboardingPrivacyBadgeNoTrackers": "No trackers",
+
   "onboardingPreferencesTitle": "Preferences",
   "themeLabel": "Theme",
   "languageLabel": "Language",

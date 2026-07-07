@@ -62,6 +62,49 @@ class AppLocalizationsEn extends AppLocalizations {
       'Track your plants, set reminders, and watch them thrive.';
 
   @override
+  String get onboardingPrivacyTitle => 'Your Privacy Matters';
+
+  @override
+  String get onboardingPrivacyWorksLocally => 'Works Locally';
+
+  @override
+  String get onboardingPrivacyWorksLocallyBody =>
+      'All data and processing happen on-device. No internet connection needed.';
+
+  @override
+  String get onboardingPrivacyNoAccount => 'No Account Required';
+
+  @override
+  String get onboardingPrivacyNoAccountBody =>
+      'No sign-up, login, or account creation. Just open and use.';
+
+  @override
+  String get onboardingPrivacyPhotosPrivate => 'Photos Stay Private';
+
+  @override
+  String get onboardingPrivacyPhotosPrivateBody =>
+      'Plant photos are processed on-device and never uploaded.';
+
+  @override
+  String get onboardingPrivacyNoThirdParties => 'No Third Parties';
+
+  @override
+  String get onboardingPrivacyNoThirdPartiesBody =>
+      'No analytics SDKs, no ad trackers, no external services.';
+
+  @override
+  String get onboardingPrivacyBadgeLocal => 'Local';
+
+  @override
+  String get onboardingPrivacyBadgeNoAccount => 'No account';
+
+  @override
+  String get onboardingPrivacyBadgePhotos => 'Private photos';
+
+  @override
+  String get onboardingPrivacyBadgeNoTrackers => 'No trackers';
+
+  @override
   String get onboardingPreferencesTitle => 'Preferences';
 
   @override

@@ -200,6 +200,84 @@ abstract class AppLocalizations {
   /// **'Track your plants, set reminders, and watch them thrive.'**
   String get onboardingIntroHint;
 
+  /// No description provided for @onboardingPrivacyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Privacy Matters'**
+  String get onboardingPrivacyTitle;
+
+  /// No description provided for @onboardingPrivacyWorksLocally.
+  ///
+  /// In en, this message translates to:
+  /// **'Works Locally'**
+  String get onboardingPrivacyWorksLocally;
+
+  /// No description provided for @onboardingPrivacyWorksLocallyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'All data and processing happen on-device. No internet connection needed.'**
+  String get onboardingPrivacyWorksLocallyBody;
+
+  /// No description provided for @onboardingPrivacyNoAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'No Account Required'**
+  String get onboardingPrivacyNoAccount;
+
+  /// No description provided for @onboardingPrivacyNoAccountBody.
+  ///
+  /// In en, this message translates to:
+  /// **'No sign-up, login, or account creation. Just open and use.'**
+  String get onboardingPrivacyNoAccountBody;
+
+  /// No description provided for @onboardingPrivacyPhotosPrivate.
+  ///
+  /// In en, this message translates to:
+  /// **'Photos Stay Private'**
+  String get onboardingPrivacyPhotosPrivate;
+
+  /// No description provided for @onboardingPrivacyPhotosPrivateBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Plant photos are processed on-device and never uploaded.'**
+  String get onboardingPrivacyPhotosPrivateBody;
+
+  /// No description provided for @onboardingPrivacyNoThirdParties.
+  ///
+  /// In en, this message translates to:
+  /// **'No Third Parties'**
+  String get onboardingPrivacyNoThirdParties;
+
+  /// No description provided for @onboardingPrivacyNoThirdPartiesBody.
+  ///
+  /// In en, this message translates to:
+  /// **'No analytics SDKs, no ad trackers, no external services.'**
+  String get onboardingPrivacyNoThirdPartiesBody;
+
+  /// No description provided for @onboardingPrivacyBadgeLocal.
+  ///
+  /// In en, this message translates to:
+  /// **'Local'**
+  String get onboardingPrivacyBadgeLocal;
+
+  /// No description provided for @onboardingPrivacyBadgeNoAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'No account'**
+  String get onboardingPrivacyBadgeNoAccount;
+
+  /// No description provided for @onboardingPrivacyBadgePhotos.
+  ///
+  /// In en, this message translates to:
+  /// **'Private photos'**
+  String get onboardingPrivacyBadgePhotos;
+
+  /// No description provided for @onboardingPrivacyBadgeNoTrackers.
+  ///
+  /// In en, this message translates to:
+  /// **'No trackers'**
+  String get onboardingPrivacyBadgeNoTrackers;
+
   /// No description provided for @onboardingPreferencesTitle.
   ///
   /// In en, this message translates to:

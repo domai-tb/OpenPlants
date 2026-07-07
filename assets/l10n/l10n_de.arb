@@ -24,6 +24,22 @@
 
   "onboardingIntroBody": "Willkommen bei OpenPlant — deine Open-Source & datenschutzfreundliche Pflanzen-App.",
   "onboardingIntroHint": "Erfasse deine Pflanzen, setze Erinnerungen und beobachte ihr Wachstum.",
+
+  "onboardingPrivacyTitle": "Dein Datenschutz ist uns wichtig",
+  "onboardingPrivacyWorksLocally": "Lokal",
+  "onboardingPrivacyWorksLocallyBody": "Alle Daten und Verarbeitungen finden auf dem Gerät statt. Keine Internetverbindung nötig.",
+  "onboardingPrivacyNoAccount": "Kein Konto nötig",
+  "onboardingPrivacyNoAccountBody": "Keine Anmeldung, kein Login, kein Konto. Einfach öffnen und nutzen.",
+  "onboardingPrivacyPhotosPrivate": "Fotos bleiben privat",
+  "onboardingPrivacyPhotosPrivateBody": "Pflanzenfotos werden auf dem Gerät verarbeitet und nie hochgeladen.",
+  "onboardingPrivacyNoThirdParties": "Keine Drittanbieter",
+  "onboardingPrivacyNoThirdPartiesBody": "Keine Analytics-SDKs, keine Werbe-Tracker, keine externen Dienste.",
+
+  "onboardingPrivacyBadgeLocal": "Lokal",
+  "onboardingPrivacyBadgeNoAccount": "Kein Konto",
+  "onboardingPrivacyBadgePhotos": "Private Fotos",
+  "onboardingPrivacyBadgeNoTrackers": "Keine Tracker",
+
   "onboardingPreferencesTitle": "Einstellungen",
   "themeLabel": "Theme",
   "languageLabel": "Sprache",
