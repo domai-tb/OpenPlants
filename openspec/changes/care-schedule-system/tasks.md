@@ -18,8 +18,8 @@
 
 ## 3. Persistence Layer
 
-- [ ] 3.1 Create `page8_datasource.dart` — SharedPreferences JSON read/write for schedule config, room configs, and task completion log
-- [ ] 3.2 Create `page8_repository.dart` — wraps datasource, provides typed getters/setters for config and history
+- [ ] 3.1 Create `care_schedule_datasource.dart` — SharedPreferences JSON read/write for schedule config, room configs, and task completion log
+- [ ] 3.2 Create `care_schedule_repository.dart` — wraps datasource, provides typed getters/setters for config and history
 - [ ] 3.3 Implement migration handling — default values for new keys on first access
 
 ## 4. Use Cases
@@ -32,14 +32,14 @@
 - [ ] 4.6 Implement `UpdateRoomConfigUseCase` — saves/updates room attributes
 - [ ] 4.7 Implement `GetTaskHistoryUseCase` — retrieves completion log filtered by plant/task type
 
-## 5. Page8 UI — Care Schedule Dashboard
+## 5. Care Schedule UI
 
-- [ ] 5.1 Create `page8_page.dart` — StatefulWidget with three-section layout (Overdue / Due Today / Upcoming)
+- [ ] 5.1 Create `care_schedule_page.dart` — StatefulWidget with three-section layout (Overdue / Due Today / Upcoming)
 - [ ] 5.2 Build task card widget — icon + label, plant name, due-status badge, "Mark done" / Snooze / Skip actions
 - [ ] 5.3 Build plant filter dropdown — populates from collection, "All plants" default
 - [ ] 5.4 Build task-type filter chips — 8 built-in types + "All" default
 - [ ] 5.5 Build empty state widget — "Add plants to see care tasks" with navigation to collection page
-- [ ] 5.6 Add task history section on plant detail page (from plant-collection page7)
+- [ ] 5.6 Add task history section on plant detail page (from plant-collection plant_collection)
 
 ## 6. Species Care Profiles
 
@@ -49,9 +49,9 @@
 
 ## 7. Integration & DI
 
-- [ ] 7.1 Register page8 datasource, repository, and all use-cases in `lib/core/injection.dart`
-- [ ] 7.2 Add `page8` use-cases field to `AppServices` in `lib/core/app_services.dart`
-- [ ] 7.3 Add `page8` case to navigation in `lib/pages/home/home_page.dart`
+- [ ] 7.1 Register care_schedule datasource, repository, and all use-cases in `lib/core/injection.dart`
+- [ ] 7.2 Add `care_schedule` use-cases field to `AppServices` in `lib/core/app_services.dart`
+- [ ] 7.3 Add `care_schedule` case to navigation in `lib/pages/home/home_page.dart`
 - [ ] 7.4 Add care-schedule-related strings to l10n ARB files
 - [ ] 7.5 Run `fvm flutter analyze` and fix any lint violations
 - [ ] 7.6 Run `fvm flutter test` and verify all tests pass

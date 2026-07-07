@@ -5,11 +5,11 @@ The system SHALL display a persistent row of action buttons at the top of the da
 
 #### Scenario: Quick actions navigate to correct pages
 - **WHEN** user taps "Add Plant"
-- **THEN** the system navigates to the plant collection add-flow (page7)
+- **THEN** the system navigates to the plant collection add-flow (plant_collection)
 - **WHEN** user taps "Identify"
-- **THEN** the system navigates to the classifier camera (page3)
+- **THEN** the system navigates to the classifier camera (plant_identification)
 - **WHEN** user taps "Diagnose"
-- **THEN** the system navigates to the care schedule page (page8)
+- **THEN** the system navigates to the care schedule page (care_schedule)
 
 ### Requirement: Dashboard shows due tasks section
 The system SHALL query the care schedule engine and display care tasks that are due today, grouped under a "Due Today" heading.
@@ -53,7 +53,7 @@ The system SHALL detect when the user has no plants and display a full-section o
 
 #### Scenario: Onboarding CTA navigates to add plant
 - **WHEN** user taps "Add your first plant" in the onboarding empty state
-- **THEN** the system navigates to the plant collection add-flow (page7)
+- **THEN** the system navigates to the plant collection add-flow (plant_collection)
 
 ### Requirement: Dashboard refreshes data on tab focus
 The system SHALL fetch fresh dashboard data (tasks, plants) each time the home tab becomes visible.

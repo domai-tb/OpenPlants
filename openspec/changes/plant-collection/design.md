@@ -1,8 +1,8 @@
 ## Context
 
-OpenPlants uses Clean Architecture with a 5-file feature pattern (datasource → repository → usecases → entity → page) and GetIt DI. The app is Android-only, offline-first, with no remote backend. Settings persist via `shared_preferences` JSON serialization. Six placeholder pages (page1–page6) exist; page7 will be the plant inventory.
+OpenPlants uses Clean Architecture with a 5-file feature pattern (datasource → repository → usecases → entity → page) and GetIt DI. The app is Android-only, offline-first, with no remote backend. Settings persist via `shared_preferences` JSON serialization. Six placeholder pages (page1–page6) exist; the plant collection will be the plant inventory.
 
-The plant collection is the central feature that unifies the app — users identify species via the classifier (page3) and manage their plants here (page7). Every other feature (care reminders, notes, stats) builds on top of this inventory.
+The plant collection is the central feature that unifies the app — users identify species via the classifier (plant_identification) and manage their plants here (plant_collection). Every other feature (care reminders, notes, stats) builds on top of this inventory.
 
 ## Goals / Non-Goals
 
@@ -13,12 +13,12 @@ The plant collection is the central feature that unifies the app — users ident
 - Room tagging with free-form room names
 - Care status tracking (needs_water, needs_fertilizer, happy)
 - Follow existing Clean Architecture + GetIt patterns
-- Navigation as a new bottom-nav tab (PageItem.page7)
+- Navigation as a new bottom-nav tab (PageItem.plantCollection)
 
 **Non-Goals:**
 - Cloud sync or backup (future consideration)
 - Push notifications for care reminders (requires platform channels)
-- Automatic species recognition from collection photos (scope of page3 classifier)
+- Automatic species recognition from collection photos (scope of plant_identification classifier)
 - Multi-user or sharing features
 - Barcode/PLU scanning
 - Import/export of collection data

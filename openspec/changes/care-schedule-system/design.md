@@ -17,12 +17,12 @@ The care schedule system introduces an intelligent scheduling engine that builds
 - Pot-type modifiers (terracotta = faster drying, plastic = slower, self-watering)
 - History-aware: completing a task resets its timer; overdue items escalate
 - Follow existing Clean Architecture + GetIt patterns
-- New page (page8) — care schedule dashboard
+- New page (care_schedule) — care schedule dashboard
 
 **Non-Goals:**
 - Push notifications for due tasks (requires platform channels — future)
 - Background sync or cloud backup
-- Automatic species recognition (scope of page3 classifier)
+- Automatic species recognition (scope of plant_identification classifier)
 - Multi-user or sharing features
 - Recurring task patterns beyond fixed-interval + modifiers (e.g., "every other Tuesday" — future)
 
@@ -69,9 +69,9 @@ Each task completion is an event: `{taskType, plantId, completedAt, notes?}`. Th
 
 A task is "overdue" when `now - lastCompleted > effectiveInterval × 1.2`. The engine flags this at computation time. This keeps the data model clean — no boolean flags to go stale.
 
-### Decision 7: Page8 follows the same 5-file pattern
+### Decision 7: Care schedule follows the same 5-file pattern
 
-New page at `lib/pages/page8/` with the standard structure: datasource, repository, usecases, entity, page_widget. The same DI registration pattern applies.
+New page at `lib/pages/care_schedule/` with the standard structure: datasource, repository, usecases, entity, page_widget. The same DI registration pattern applies.
 
 ## Risks / Trade-offs
 

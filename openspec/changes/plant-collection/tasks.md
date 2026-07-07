@@ -5,28 +5,28 @@
 
 ## 2. Data Layer — Entity
 
-- [ ] 2.1 Create `PlantEntity` class at `lib/pages/page7/page7_item_entity.dart` with fields: id (String), name (String), photoPath (String?), speciesName (String?), room (String?), notes (String?), careStatus (enum: happy/needs_water/needs_fertilizer), lastWateredAt (DateTime?), lastFertilizedAt (DateTime?), createdAt (DateTime), updatedAt (DateTime)
+- [ ] 2.1 Create `PlantEntity` class at `lib/pages/plant_collection/plant_collection_item_entity.dart` with fields: id (String), name (String), photoPath (String?), speciesName (String?), room (String?), notes (String?), careStatus (enum: happy/needs_water/needs_fertilizer), lastWateredAt (DateTime?), lastFertilizedAt (DateTime?), createdAt (DateTime), updatedAt (DateTime)
 - [ ] 2.2 Add `toJson()` / `fromJson()` serialization on `PlantEntity` and its `CareStatus` enum
 
 ## 3. Data Layer — Data Source & Repository
 
-- [ ] 3.1 Create `Page7DataSource` at `lib/pages/page7/page7_datasource.dart` — loads/saves plant list JSON from `shared_preferences` under key `plant_collection_v1`, manages photo file copy/deletion via local filesystem
-- [ ] 3.2 Create `Page7Repository` at `lib/pages/page7/page7_repository.dart` — maps data source CRUD to domain operations, handles ID generation with `uuid`
+- [ ] 3.1 Create `PlantCollectionDataSource` at `lib/pages/plant_collection/plant_collection_datasource.dart` — loads/saves plant list JSON from `shared_preferences` under key `plant_collection_v1`, manages photo file copy/deletion via local filesystem
+- [ ] 3.2 Create `PlantCollectionRepository` at `lib/pages/plant_collection/plant_collection_repository.dart` — maps data source CRUD to domain operations, handles ID generation with `uuid`
 
 ## 4. Business Logic — Use Cases
 
-- [ ] 4.1 Create `Page7Usecases` at `lib/pages/page7/page7_usecases.dart` with methods: `loadPlants()`, `addPlant(PlantEntity)`, `updatePlant(PlantEntity)`, `deletePlant(String id)`, `searchPlants(String query)`, `filterByCareStatus(CareStatus?)`
+- [ ] 4.1 Create `PlantCollectionUsecases` at `lib/pages/plant_collection/plant_collection_usecases.dart` with methods: `loadPlants()`, `addPlant(PlantEntity)`, `updatePlant(PlantEntity)`, `deletePlant(String id)`, `searchPlants(String query)`, `filterByCareStatus(CareStatus?)`
 - [ ] 4.2 Implement `addPlant` use-case — generates UUID, copies photo file to app documents directory, persists JSON
 - [ ] 4.3 Implement `deletePlant` use-case — removes photo file from disk, removes entity from list, persists JSON
 
 ## 5. Dependency Injection Wiring
 
-- [ ] 5.1 Register `Page7DataSource`, `Page7Repository`, `Page7Usecases` as lazy singletons in `lib/core/injection.dart`
-- [ ] 5.2 Add `Page7Usecases page7` field to `AppServices` in `lib/core/app_services.dart` and wire in constructor
+- [ ] 5.1 Register `PlantCollectionDataSource`, `PlantCollectionRepository`, `PlantCollectionUsecases` as lazy singletons in `lib/core/injection.dart`
+- [ ] 5.2 Add `PlantCollectionUsecases plantCollection` field to `AppServices` in `lib/core/app_services.dart` and wire in constructor
 
 ## 6. UI — Collection List Page
 
-- [ ] 6.1 Create `Page7Page` at `lib/pages/page7/page7_page.dart` — StatefulWidget with collection list, empty state, floating action button for add, search bar, and care-status filter chips
+- [ ] 6.1 Create `PlantCollectionPage` at `lib/pages/plant_collection/plant_collection_page.dart` — StatefulWidget with collection list, empty state, floating action button for add, search bar, and care-status filter chips
 - [ ] 6.2 Build plant list tile widget showing name, species, room badge, and care status indicator
 
 ## 7. UI — Add/Edit Plant Form
@@ -41,16 +41,16 @@
 
 ## 9. Navigation Integration
 
-- [ ] 9.1 Add `PageItem.page7` to the `PageItem` enum in `lib/pages/home/page_navigator.dart`
-- [ ] 9.2 Add case for `PageItem.page7` in `pageItemPresentation()` with title from l10n and an appropriate icon (e.g., `Icons.yard`)
-- [ ] 9.3 Add `PageItem.page7` routed to `Page7Page` in `NavBarNavigator._routeBuilders()`
-- [ ] 9.4 Add page7 navigator keys in `HomePage` (navigatorKeys, exitAnimationKeys, entryAnimationKeys)
+- [ ] 9.1 Add `PageItem.plantCollection` to the `PageItem` enum in `lib/pages/home/page_navigator.dart`
+- [ ] 9.2 Add case for `PageItem.plantCollection` in `pageItemPresentation()` with title from l10n and an appropriate icon (e.g., `Icons.yard`)
+- [ ] 9.3 Add `PageItem.plantCollection` routed to `PlantCollectionPage` in `NavBarNavigator._routeBuilders()`
+- [ ] 9.4 Add plant_collection navigator keys in `HomePage` (navigatorKeys, exitAnimationKeys, entryAnimationKeys)
 
 ## 10. L10n & Settings
 
-- [ ] 10.1 Add l10n strings to asset ARB files: `page7Title`, `plantCollectionEmpty`, `addPlant`, `editPlant`, `deletePlant`, `careStatusHappy`, `careStatusNeedsWater`, `careStatusNeedsFertilizer`, `markAsWatered`, `markAsFertilized`, `lastWatered`, `lastFertilized`, `confirmDelete`, `searchPlants`, `room`, `species`, `notes`, `photo`
+- [ ] 10.1 Add l10n strings to asset ARB files: `plantCollectionTitle`, `plantCollectionEmpty`, `addPlant`, `editPlant`, `deletePlant`, `careStatusHappy`, `careStatusNeedsWater`, `careStatusNeedsFertilizer`, `markAsWatered`, `markAsFertilized`, `lastWatered`, `lastFertilized`, `confirmDelete`, `searchPlants`, `room`, `species`, `notes`, `photo`
 - [ ] 10.2 Run `fvm flutter gen-l10n` to regenerate localizations
-- [ ] 10.3 Update default `navBarItemOrder` in `Settings` to include `'page7'`
+- [ ] 10.3 Update default `navBarItemOrder` in `Settings` to include `'plant_collection'`
 
 ## 11. Verification
 

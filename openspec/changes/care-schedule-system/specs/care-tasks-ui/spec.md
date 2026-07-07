@@ -1,7 +1,7 @@
 ## ADDED Requirements
 
-### Requirement: Page8 displays a care schedule dashboard
-The system SHALL display a new page (page8) that shows the user's care tasks grouped into three sections: Overdue, Due Today, and Upcoming. Each section is ordered by due date (closest first).
+### Requirement: Care schedule page displays a dashboard
+The system SHALL display a new page (care_schedule) that shows the user's care tasks grouped into three sections: Overdue, Due Today, and Upcoming. Each section is ordered by due date (closest first).
 
 #### Scenario: Dashboard shows all three sections
 - **WHEN** user navigates to the care schedule page and there are overdue, due-today, and upcoming tasks
