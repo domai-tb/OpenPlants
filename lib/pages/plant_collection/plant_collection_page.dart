@@ -16,10 +16,14 @@ class PlantCollectionPage extends StatefulWidget {
   final GlobalKey<AnimatedEntryState> pageEntryAnimationKey;
   final GlobalKey<AnimatedExitState> pageExitAnimationKey;
 
+  /// Notifies this page to reload data after a tab switch.
+  final Listenable? tabSwitchNotifier;
+
   const PlantCollectionPage({
     super.key,
     required this.pageEntryAnimationKey,
     required this.pageExitAnimationKey,
+    this.tabSwitchNotifier,
   });
 
   @override
@@ -49,11 +53,17 @@ class _PlantCollectionPageState extends State<PlantCollectionPage>
     if (_wired) return;
     _usecases = AppScope.of(context).services.plantCollection;
     _wired = true;
+    widget.tabSwitchNotifier?.addListener(_reloadOnTabSwitch);
+    _load();
+  }
+
+  void _reloadOnTabSwitch() {
     _load();
   }
 
   @override
   void dispose() {
+    widget.tabSwitchNotifier?.removeListener(_reloadOnTabSwitch);
     _scrollController.dispose();
     super.dispose();
   }
@@ -77,13 +87,18 @@ class _PlantCollectionPageState extends State<PlantCollectionPage>
     });
   }
 
+  /// Reload data after returning from a detail or form page.
+  Future<void> _reloadAfterNavigation() async {
+    if (mounted) {
+      await _load();
+    }
+  }
+
   Future<void> _addPlant() async {
     await Navigator.of(context).push(
       MaterialPageRoute(builder: (_) => const PlantCollectionFormPage()),
     );
-    if (mounted) {
-      await _load();
-    }
+    await _reloadAfterNavigation();
   }
 
   @override
@@ -304,12 +319,13 @@ class _PlantCollectionPageState extends State<PlantCollectionPage>
         borderRadius: BorderRadius.circular(16),
         child: InkWell(
           borderRadius: BorderRadius.circular(16),
-          onTap: () {
-            Navigator.of(context).push(
+          onTap: () async {
+            await Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (_) => PlantCollectionDetailPage(plant: plant),
               ),
             );
+            await _reloadAfterNavigation();
           },
           child: Padding(
             padding: const EdgeInsets.all(14),

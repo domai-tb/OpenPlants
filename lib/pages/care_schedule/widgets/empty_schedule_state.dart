@@ -4,7 +4,10 @@ import 'package:open_plant/l10n/l10n_x.dart';
 
 /// Empty state widget shown when no care tasks exist.
 class EmptyScheduleState extends StatelessWidget {
-  const EmptyScheduleState({super.key});
+  /// Optional callback: navigate to the Plant Collection tab.
+  final VoidCallback? onNavigateToPlantCollection;
+
+  const EmptyScheduleState({super.key, this.onNavigateToPlantCollection});
 
   @override
   Widget build(BuildContext context) {
@@ -23,26 +26,18 @@ class EmptyScheduleState extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             Text(
-              'No care tasks yet',
+              context.l10n.careScheduleEmpty,
               style: theme.textTheme.headlineSmall?.copyWith(
                 fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              context.l10n.careScheduleEmpty,
-              textAlign: TextAlign.center,
-              style: theme.textTheme.bodyMedium?.copyWith(
-                color: theme.colorScheme.onSurfaceVariant,
               ),
             ),
             const SizedBox(height: 24),
             FilledButton.icon(
               onPressed: () {
-                Navigator.of(context).pop();
+                onNavigateToPlantCollection?.call();
               },
               icon: const Icon(Icons.yard),
-              label: const Text('Go to Plant Collection'),
+              label: Text(context.l10n.careScheduleGoToCollection),
             ),
           ],
         ),

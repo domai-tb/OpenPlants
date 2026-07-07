@@ -14,11 +14,20 @@ class TodayDashboardPage extends StatefulWidget {
   final GlobalKey<AnimatedEntryState> pageEntryAnimationKey;
   final GlobalKey<AnimatedExitState> pageExitAnimationKey;
 
+  /// Optional callback: navigate to the Plant Collection tab and open the
+  /// add-plant form.
+  final VoidCallback? onNavigateToAddPlant;
+
+  /// Notifies this page to reload data after a tab switch.
+  final Listenable? tabSwitchNotifier;
+
   const TodayDashboardPage({
     super.key,
     required this.mainNavigatorKey,
     required this.pageEntryAnimationKey,
     required this.pageExitAnimationKey,
+    this.onNavigateToAddPlant,
+    this.tabSwitchNotifier,
   });
 
   @override
@@ -47,11 +56,17 @@ class _TodayDashboardPageState extends State<TodayDashboardPage>
     if (_wired) return;
     _usecases = AppScope.of(context).services.todayDashboard;
     _wired = true;
+    widget.tabSwitchNotifier?.addListener(_reloadOnTabSwitch);
+    _load();
+  }
+
+  void _reloadOnTabSwitch() {
     _load();
   }
 
   @override
   void dispose() {
+    widget.tabSwitchNotifier?.removeListener(_reloadOnTabSwitch);
     _scrollController.dispose();
     super.dispose();
   }
@@ -111,7 +126,7 @@ class _TodayDashboardPageState extends State<TodayDashboardPage>
     final data = _data;
     if (data == null || data.isEmpty) {
       return _OnboardingEmptyState(
-        mainNavigatorKey: widget.mainNavigatorKey,
+        onNavigateToAddPlant: widget.onNavigateToAddPlant,
       );
     }
 
@@ -131,6 +146,7 @@ class _TodayDashboardPageState extends State<TodayDashboardPage>
                 const SizedBox(height: 8),
                 _QuickActionStrip(
                   mainNavigatorKey: widget.mainNavigatorKey,
+                  onNavigateToAddPlant: widget.onNavigateToAddPlant,
                 ),
                 const SizedBox(height: 24),
                 if (data.dueToday.isNotEmpty)
@@ -280,8 +296,12 @@ class _ShimmerPlaceholderState extends State<_ShimmerPlaceholder>
 
 class _QuickActionStrip extends StatelessWidget {
   final GlobalKey<NavigatorState> mainNavigatorKey;
+  final VoidCallback? onNavigateToAddPlant;
 
-  const _QuickActionStrip({required this.mainNavigatorKey});
+  const _QuickActionStrip({
+    required this.mainNavigatorKey,
+    this.onNavigateToAddPlant,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -298,8 +318,7 @@ class _QuickActionStrip extends StatelessWidget {
               label: l10n.quickAddPlant,
               color: theme.colorScheme.primary,
               onTap: () {
-                mainNavigatorKey.currentState
-                    ?.pushNamed('/plant_collection/add');
+                onNavigateToAddPlant?.call();
               },
             ),
           ),
@@ -653,9 +672,9 @@ class _PlantThumbnail extends StatelessWidget {
 // ─── Onboarding Empty State ─────────────────────────────────────────────────
 
 class _OnboardingEmptyState extends StatelessWidget {
-  final GlobalKey<NavigatorState> mainNavigatorKey;
+  final VoidCallback? onNavigateToAddPlant;
 
-  const _OnboardingEmptyState({required this.mainNavigatorKey});
+  const _OnboardingEmptyState({this.onNavigateToAddPlant});
 
   @override
   Widget build(BuildContext context) {
@@ -688,8 +707,7 @@ class _OnboardingEmptyState extends StatelessWidget {
             const SizedBox(height: 24),
             FilledButton.icon(
               onPressed: () {
-                mainNavigatorKey.currentState
-                    ?.pushNamed('/plant_collection/add');
+                onNavigateToAddPlant?.call();
               },
               icon: const Icon(Icons.add),
               label: Text(l10n.quickAddPlant),

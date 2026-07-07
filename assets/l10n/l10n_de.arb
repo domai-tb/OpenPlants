@@ -187,5 +187,6 @@
   "careScheduleSkip": "Überspringen",
   "careScheduleAllPlants": "Alle Pflanzen",
   "careScheduleAllTypes": "Alle Typen",
-  "careScheduleEmpty": "Fügen Sie Pflanzen hinzu, um Pflegeaufgaben zu sehen"
+  "careScheduleEmpty": "Fügen Sie Pflanzen hinzu, um Pflegeaufgaben zu sehen",
+  "careScheduleGoToCollection": "Zur Pflanzensammlung"
 }

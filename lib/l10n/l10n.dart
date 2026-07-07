@@ -1129,6 +1129,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Add plants to see care tasks'**
   String get careScheduleEmpty;
+
+  /// No description provided for @careScheduleGoToCollection.
+  ///
+  /// In en, this message translates to:
+  /// **'Go to Plant Collection'**
+  String get careScheduleGoToCollection;
 }
 
 class _AppLocalizationsDelegate

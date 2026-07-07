@@ -21,7 +21,12 @@ The system SHALL display a new page (care_schedule) that shows the user's care t
 
 #### Scenario: Empty state when no tasks exist
 - **WHEN** user has no plants in their collection
-- **THEN** the page displays a message "Add plants to see care tasks" with a button linking to the collection page
+- **THEN** the page displays a message and a "Go to Plant Collection" button
+- **AND** tapping the button switches to the Plant Collection tab without crashing
+
+#### Scenario: Empty state uses l10n
+- **WHEN** the Care Schedule empty state renders
+- **THEN** all user-facing text comes from `AppLocalizations` keys, not string literals
 
 ### Requirement: Each task card shows task type, plant name, and due status
 Each task SHALL be displayed as a card showing the task type icon and label, the associated plant name, and the due status (overdue badge, "Due today", or "Due in N days").

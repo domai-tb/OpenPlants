@@ -14,10 +14,18 @@ class CareSchedulePage extends StatefulWidget {
   final GlobalKey<AnimatedEntryState> pageEntryAnimationKey;
   final GlobalKey<AnimatedExitState> pageExitAnimationKey;
 
+  /// Optional callback: navigate to the Plant Collection tab from the empty state.
+  final VoidCallback? onNavigateToPlantCollection;
+
+  /// Notifies this page to reload data after a tab switch.
+  final Listenable? tabSwitchNotifier;
+
   const CareSchedulePage({
     super.key,
     required this.pageEntryAnimationKey,
     required this.pageExitAnimationKey,
+    this.onNavigateToPlantCollection,
+    this.tabSwitchNotifier,
   });
 
   @override
@@ -48,11 +56,17 @@ class _CareSchedulePageState extends State<CareSchedulePage>
     if (_wired) return;
     _usecases = AppScope.of(context).services.careSchedule;
     _wired = true;
+    widget.tabSwitchNotifier?.addListener(_reloadOnTabSwitch);
+    _load();
+  }
+
+  void _reloadOnTabSwitch() {
     _load();
   }
 
   @override
   void dispose() {
+    widget.tabSwitchNotifier?.removeListener(_reloadOnTabSwitch);
     _scrollController.dispose();
     super.dispose();
   }
@@ -105,7 +119,9 @@ class _CareSchedulePageState extends State<CareSchedulePage>
           body: _loading
               ? const Center(child: CircularProgressIndicator())
               : _tasks.isEmpty
-                  ? const EmptyScheduleState()
+                  ? EmptyScheduleState(
+                      onNavigateToPlantCollection: widget.onNavigateToPlantCollection,
+                    )
                   : RefreshIndicator(
                       key: _refreshIndicatorKey,
                       onRefresh: _load,

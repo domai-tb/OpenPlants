@@ -187,5 +187,6 @@
   "careScheduleSkip": "Skip",
   "careScheduleAllPlants": "All plants",
   "careScheduleAllTypes": "All types",
-  "careScheduleEmpty": "Add plants to see care tasks"
+  "careScheduleEmpty": "Add plants to see care tasks",
+  "careScheduleGoToCollection": "Go to Plant Collection"
 }

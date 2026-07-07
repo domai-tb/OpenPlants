@@ -539,4 +539,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get careScheduleEmpty => 'Add plants to see care tasks';
+
+  @override
+  String get careScheduleGoToCollection => 'Go to Plant Collection';
 }

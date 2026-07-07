@@ -162,6 +162,17 @@ class NavBarNavigator extends StatelessWidget {
   /// identification result page requests a species detail view.
   final VoidCallback? onSwitchToSpeciesLibrary;
 
+  /// Optional callback: navigate to the Plant Collection tab and open the
+  /// add-plant form from the Today Dashboard.
+  final VoidCallback? onNavigateToAddPlant;
+
+  /// Optional callback: navigate to the Plant Collection tab from the
+  /// Care Schedule empty state.
+  final VoidCallback? onNavigateToPlantCollection;
+
+  /// Notifies child pages when a tab switch completes so they can reload data.
+  final ValueNotifier<int>? tabSwitchNotifier;
+
   const NavBarNavigator({
     super.key,
     required this.mainNavigatorKey,
@@ -170,6 +181,9 @@ class NavBarNavigator extends StatelessWidget {
     required this.pageEntryAnimationKey,
     required this.pageExitAnimationKey,
     this.onSwitchToSpeciesLibrary,
+    this.onNavigateToAddPlant,
+    this.onNavigateToPlantCollection,
+    this.tabSwitchNotifier,
   });
 
   /// Creates a map of the root and detail page of the specific page.
@@ -181,12 +195,16 @@ class NavBarNavigator extends StatelessWidget {
           mainNavigatorKey: mainNavigatorKey,
           pageEntryAnimationKey: pageEntryAnimationKey,
           pageExitAnimationKey: pageExitAnimationKey,
+          onNavigateToAddPlant: onNavigateToAddPlant,
+          tabSwitchNotifier: tabSwitchNotifier,
         );
         break;
       case PageItem.careSchedule:
         rootPage = CareSchedulePage(
           pageEntryAnimationKey: pageEntryAnimationKey,
           pageExitAnimationKey: pageExitAnimationKey,
+          onNavigateToPlantCollection: onNavigateToPlantCollection,
+          tabSwitchNotifier: tabSwitchNotifier,
         );
         break;
       case PageItem.page2:
@@ -228,6 +246,7 @@ class NavBarNavigator extends StatelessWidget {
         rootPage = PlantCollectionPage(
           pageEntryAnimationKey: pageEntryAnimationKey,
           pageExitAnimationKey: pageExitAnimationKey,
+          tabSwitchNotifier: tabSwitchNotifier,
         );
         break;
       case PageItem.speciesLibrary:

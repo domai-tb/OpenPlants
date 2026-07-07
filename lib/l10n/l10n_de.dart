@@ -546,4 +546,7 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get careScheduleEmpty =>
       'Fügen Sie Pflanzen hinzu, um Pflegeaufgaben zu sehen';
+
+  @override
+  String get careScheduleGoToCollection => 'Zur Pflanzensammlung';
 }

@@ -9,6 +9,7 @@ import 'package:open_plant/pages/home/page_navigator.dart';
 import 'package:open_plant/pages/home/widgets/page_navigation_animation.dart';
 import 'package:open_plant/pages/home/widgets/bottom_nav_bar.dart';
 import 'package:open_plant/pages/home/widgets/side_nav_bar.dart';
+import 'package:open_plant/pages/plant_collection/plant_collection_form_page.dart';
 
 /// The [HomePage] displays all general UI elements like the bottom nav-menu and
 /// handles the switching between the different pages.
@@ -91,6 +92,9 @@ class HomePageState extends State<HomePage> {
 
   /// Holds the currently active page.
   PageItem currentPage = PageItem.todayDashboard;
+
+  /// Notifies child pages when a tab switch completes so they can reload data.
+  final ValueNotifier<int> tabSwitchNotifier = ValueNotifier<int>(0);
   late SettingsController _settingsController;
   bool _settingsWired = false;
 
@@ -151,7 +155,26 @@ class HomePageState extends State<HomePage> {
     // Enable swiping upon navigation
     setSwipeDisabled();
 
+    // Notify child pages to reload data after tab switch
+    tabSwitchNotifier.value++;
+
     return true;
+  }
+
+  /// Switches to the Plant Collection tab and opens the add-plant form.
+  void _onNavigateToAddPlant() {
+    unawaited(
+      selectedPage(PageItem.plantCollection).then((_) {
+        navigatorKeys[PageItem.plantCollection]?.currentState?.push(
+          MaterialPageRoute(builder: (_) => const PlantCollectionFormPage()),
+        );
+      }),
+    );
+  }
+
+  /// Switches to the Plant Collection tab.
+  void _onNavigateToPlantCollection() {
+    unawaited(selectedPage(PageItem.plantCollection));
   }
 
   /// Returns the [NavBarNavigator] for the specified PageItem on phones
@@ -164,6 +187,10 @@ class HomePageState extends State<HomePage> {
       pageExitAnimationKey: exitAnimationKeys[tabItem]!,
       onSwitchToSpeciesLibrary:
           tabItem == PageItem.plantIdentification ? () => selectedPage(PageItem.speciesLibrary) : null,
+      onNavigateToAddPlant: tabItem == PageItem.todayDashboard ? _onNavigateToAddPlant : null,
+      onNavigateToPlantCollection:
+          tabItem == PageItem.careSchedule ? _onNavigateToPlantCollection : null,
+      tabSwitchNotifier: tabSwitchNotifier,
     );
   }
 
@@ -181,6 +208,10 @@ class HomePageState extends State<HomePage> {
         pageExitAnimationKey: exitAnimationKeys[tabItem]!,
         onSwitchToSpeciesLibrary:
             tabItem == PageItem.plantIdentification ? () => selectedPage(PageItem.speciesLibrary) : null,
+        onNavigateToAddPlant: tabItem == PageItem.todayDashboard ? _onNavigateToAddPlant : null,
+        onNavigateToPlantCollection:
+            tabItem == PageItem.careSchedule ? _onNavigateToPlantCollection : null,
+        tabSwitchNotifier: tabSwitchNotifier,
       ),
     );
   }
