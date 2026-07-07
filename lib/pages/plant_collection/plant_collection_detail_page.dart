@@ -15,8 +15,7 @@ class PlantCollectionDetailPage extends StatefulWidget {
   const PlantCollectionDetailPage({super.key, required this.plant});
 
   @override
-  State<PlantCollectionDetailPage> createState() =>
-      _PlantCollectionDetailPageState();
+  State<PlantCollectionDetailPage> createState() => _PlantCollectionDetailPageState();
 }
 
 class _PlantCollectionDetailPageState extends State<PlantCollectionDetailPage> {
@@ -165,9 +164,7 @@ class _PlantCollectionDetailPageState extends State<PlantCollectionDetailPage> {
             theme,
             icon: Icons.water_drop,
             label: context.l10n.lastWatered,
-            value: _plant.lastWateredAt != null
-                ? _formatDate(_plant.lastWateredAt!)
-                : context.l10n.never,
+            value: _plant.lastWateredAt != null ? _formatDate(_plant.lastWateredAt!) : context.l10n.never,
           ),
           const Divider(height: 32),
 
@@ -176,9 +173,7 @@ class _PlantCollectionDetailPageState extends State<PlantCollectionDetailPage> {
             theme,
             icon: Icons.grass,
             label: context.l10n.lastFertilized,
-            value: _plant.lastFertilizedAt != null
-                ? _formatDate(_plant.lastFertilizedAt!)
-                : context.l10n.never,
+            value: _plant.lastFertilizedAt != null ? _formatDate(_plant.lastFertilizedAt!) : context.l10n.never,
           ),
           const SizedBox(height: 32),
 

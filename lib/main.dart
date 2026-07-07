@@ -38,8 +38,7 @@ class OpenPlantApp extends StatefulWidget {
 }
 
 class _OpenPlantAppState extends State<OpenPlantApp> {
-  final GlobalKey<NavigatorState> _mainNavigatorKey =
-      GlobalKey<NavigatorState>();
+  final GlobalKey<NavigatorState> _mainNavigatorKey = GlobalKey<NavigatorState>();
 
   @override
   Widget build(BuildContext context) {
@@ -49,11 +48,9 @@ class _OpenPlantAppState extends State<OpenPlantApp> {
       animation: scope.settings,
       builder: (context, _) {
         final settings = scope.settings.settings;
-        final themeMode = settings.useSystemDarkmode
-            ? ThemeMode.system
-            : (settings.useDarkmode ? ThemeMode.dark : ThemeMode.light);
-        final locale =
-            settings.localeCode == null ? null : Locale(settings.localeCode!);
+        final themeMode =
+            settings.useSystemDarkmode ? ThemeMode.system : (settings.useDarkmode ? ThemeMode.dark : ThemeMode.light);
+        final locale = settings.localeCode == null ? null : Locale(settings.localeCode!);
 
         return MaterialApp(
           debugShowCheckedModeBanner: false,
@@ -69,9 +66,7 @@ class _OpenPlantAppState extends State<OpenPlantApp> {
             final mq = MediaQuery.of(context);
             return MediaQuery(
               data: mq.copyWith(
-                textScaler: settings.useSystemTextScaling
-                    ? mq.textScaler
-                    : TextScaler.noScaling,
+                textScaler: settings.useSystemTextScaling ? mq.textScaler : TextScaler.noScaling,
               ),
               child: child,
             );

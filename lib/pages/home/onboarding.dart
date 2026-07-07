@@ -80,8 +80,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
               : 1;
       _useSystemTextScaling = settings.useSystemTextScaling;
       _navBarOrder = orderedPageItemsFromSettings(settings.navBarItemOrder);
-      _hiddenNavBarItems =
-          hiddenPageItemsFromSettings(settings.hiddenNavBarItems);
+      _hiddenNavBarItems = hiddenPageItemsFromSettings(settings.hiddenNavBarItems);
       _hydrated = true;
     }
 
@@ -211,9 +210,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                           _applySettings();
                         },
                         child: Text(
-                          _pageIndex == 2
-                              ? context.l10n.finish
-                              : context.l10n.next,
+                          _pageIndex == 2 ? context.l10n.finish : context.l10n.next,
                         ),
                       ),
                     ],

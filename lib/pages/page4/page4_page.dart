@@ -35,7 +35,6 @@ class _Page4PageState extends State<Page4Page> with AutomaticKeepAliveClientMixi
   @override
   bool get wantKeepAlive => true;
 
-
   @override
   void dispose() {
     _scrollController.dispose();

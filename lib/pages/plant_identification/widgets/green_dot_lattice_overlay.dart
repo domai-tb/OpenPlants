@@ -16,8 +16,7 @@ class GreenDotLatticeOverlay extends StatefulWidget {
   State<GreenDotLatticeOverlay> createState() => _GreenDotLatticeOverlayState();
 }
 
-class _GreenDotLatticeOverlayState extends State<GreenDotLatticeOverlay>
-    with SingleTickerProviderStateMixin {
+class _GreenDotLatticeOverlayState extends State<GreenDotLatticeOverlay> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
 
   @override

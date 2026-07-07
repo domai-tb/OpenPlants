@@ -35,7 +35,6 @@ class _Page2PageState extends State<Page2Page> with AutomaticKeepAliveClientMixi
   @override
   bool get wantKeepAlive => true;
 
-
   @override
   void dispose() {
     _scrollController.dispose();

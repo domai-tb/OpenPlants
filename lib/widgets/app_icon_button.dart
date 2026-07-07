@@ -33,9 +33,7 @@ class AppIconButton extends StatelessWidget {
         border: !transparent
             ? Border.all(
                 color: borderColor ??
-                    (isLight
-                        ? const Color.fromRGBO(245, 246, 250, 1)
-                        : const Color.fromRGBO(34, 40, 54, 1)),
+                    (isLight ? const Color.fromRGBO(245, 246, 250, 1) : const Color.fromRGBO(34, 40, 54, 1)),
                 width: 2,
               )
             : null,
@@ -45,20 +43,14 @@ class AppIconButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(15),
         child: InkWell(
           onTap: onTap,
-          splashColor: isLight
-              ? const Color.fromRGBO(0, 0, 0, 0.04)
-              : const Color.fromRGBO(255, 255, 255, 0.04),
-          highlightColor: isLight
-              ? const Color.fromRGBO(0, 0, 0, 0.02)
-              : const Color.fromRGBO(255, 255, 255, 0.02),
+          splashColor: isLight ? const Color.fromRGBO(0, 0, 0, 0.04) : const Color.fromRGBO(255, 255, 255, 0.04),
+          highlightColor: isLight ? const Color.fromRGBO(0, 0, 0, 0.02) : const Color.fromRGBO(255, 255, 255, 0.02),
           borderRadius: BorderRadius.circular(15),
           child: Center(
             child: Icon(
               icon,
               size: 22,
-              color: isLight
-                  ? Colors.black
-                  : const Color.fromRGBO(184, 186, 191, 1),
+              color: isLight ? Colors.black : const Color.fromRGBO(184, 186, 191, 1),
             ),
           ),
         ),

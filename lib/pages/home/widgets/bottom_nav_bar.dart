@@ -32,9 +32,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
 
     return Container(
       height: Platform.isIOS ? 88 : 98,
-      padding: Platform.isIOS
-          ? const EdgeInsets.only(bottom: 20, left: 5)
-          : const EdgeInsets.only(left: 7),
+      padding: Platform.isIOS ? const EdgeInsets.only(bottom: 20, left: 5) : const EdgeInsets.only(left: 7),
       decoration: BoxDecoration(
         color: theme.cardColor,
         borderRadius: const BorderRadius.only(

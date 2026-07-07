@@ -31,6 +31,7 @@ class HomePageState extends State<HomePage> {
     PageItem.page5: GlobalKey<NavigatorState>(),
     PageItem.page6: GlobalKey<NavigatorState>(),
     PageItem.plantCollection: GlobalKey<NavigatorState>(),
+    PageItem.speciesLibrary: GlobalKey<NavigatorState>(),
   };
 
   /// Creates two [GlobalKey] for each page in order to control the exit- and
@@ -43,6 +44,7 @@ class HomePageState extends State<HomePage> {
     PageItem.page5: GlobalKey<AnimatedExitState>(),
     PageItem.page6: GlobalKey<AnimatedExitState>(),
     PageItem.plantCollection: GlobalKey<AnimatedExitState>(),
+    PageItem.speciesLibrary: GlobalKey<AnimatedExitState>(),
   };
   Map<PageItem, GlobalKey<AnimatedEntryState>> entryAnimationKeys = {
     PageItem.page1: GlobalKey<AnimatedEntryState>(),
@@ -52,6 +54,7 @@ class HomePageState extends State<HomePage> {
     PageItem.page5: GlobalKey<AnimatedEntryState>(),
     PageItem.page6: GlobalKey<AnimatedEntryState>(),
     PageItem.plantCollection: GlobalKey<AnimatedEntryState>(),
+    PageItem.speciesLibrary: GlobalKey<AnimatedEntryState>(),
   };
 
   final SystemUiOverlayStyle lightSystemUiStyle = const SystemUiOverlayStyle(
@@ -68,16 +71,14 @@ class HomePageState extends State<HomePage> {
     systemNavigationBarColor: Color.fromRGBO(17, 25, 38, 1), // Android
     systemNavigationBarIconBrightness: Brightness.light, // Android
   );
-  final SystemUiOverlayStyle lightTabletSystemUiStyle =
-      const SystemUiOverlayStyle(
+  final SystemUiOverlayStyle lightTabletSystemUiStyle = const SystemUiOverlayStyle(
     statusBarBrightness: Brightness.light, // iOS
     statusBarColor: Color.fromRGBO(245, 246, 250, 1), // Android
     statusBarIconBrightness: Brightness.dark, // Android
     systemNavigationBarColor: Color.fromRGBO(245, 246, 250, 1), // Android
     systemNavigationBarIconBrightness: Brightness.dark, // Android
   );
-  final SystemUiOverlayStyle darkTabletSystemUiStyle =
-      const SystemUiOverlayStyle(
+  final SystemUiOverlayStyle darkTabletSystemUiStyle = const SystemUiOverlayStyle(
     statusBarBrightness: Brightness.dark, // iOS
     statusBarColor: Color.fromRGBO(17, 25, 38, 1), // Android
     statusBarIconBrightness: Brightness.light, // Android
@@ -105,8 +106,7 @@ class HomePageState extends State<HomePage> {
         _settingsController.settings.hiddenNavBarItems,
       );
 
-  List<PageItem> get _visiblePages =>
-      _orderedPages.where((page) => !_hiddenPages.contains(page)).toList();
+  List<PageItem> get _visiblePages => _orderedPages.where((page) => !_hiddenPages.contains(page)).toList();
 
   /// Temporarily disable swiping for certain pages e.g. in app web view
   void setSwipeDisabled({bool disableSwipe = false}) {
@@ -124,8 +124,7 @@ class HomePageState extends State<HomePage> {
 
     // Phone Layout
     if (MediaQuery.of(context).size.shortestSide < 600) {
-      final int indexNewPage =
-          pages.indexWhere((element) => element == selectedPageItem);
+      final int indexNewPage = pages.indexWhere((element) => element == selectedPageItem);
 
       // Switch to the selected page
       await pageController.animateToPage(
@@ -143,9 +142,7 @@ class HomePageState extends State<HomePage> {
       // Switch to the new page
       setState(() => currentPage = selectedPageItem);
       // Start the entry animation of the new page
-      await entryAnimationKeys[selectedPageItem]
-          ?.currentState
-          ?.startEntryAnimation();
+      await entryAnimationKeys[selectedPageItem]?.currentState?.startEntryAnimation();
     }
 
     // Enable swiping upon navigation
@@ -162,6 +159,8 @@ class HomePageState extends State<HomePage> {
       pageItem: tabItem,
       pageEntryAnimationKey: entryAnimationKeys[tabItem]!,
       pageExitAnimationKey: exitAnimationKeys[tabItem]!,
+      onSwitchToSpeciesLibrary:
+          tabItem == PageItem.plantIdentification ? () => selectedPage(PageItem.speciesLibrary) : null,
     );
   }
 
@@ -177,6 +176,8 @@ class HomePageState extends State<HomePage> {
         pageItem: tabItem,
         pageEntryAnimationKey: entryAnimationKeys[tabItem]!,
         pageExitAnimationKey: exitAnimationKeys[tabItem]!,
+        onSwitchToSpeciesLibrary:
+            tabItem == PageItem.plantIdentification ? () => selectedPage(PageItem.speciesLibrary) : null,
       ),
     );
   }
@@ -187,13 +188,11 @@ class HomePageState extends State<HomePage> {
     final visiblePages = _visiblePages;
     if (visiblePages.isEmpty) return;
 
-    final nextPage =
-        visiblePages.contains(currentPage) ? currentPage : visiblePages.first;
+    final nextPage = visiblePages.contains(currentPage) ? currentPage : visiblePages.first;
     final nextIndex = visiblePages.indexOf(nextPage);
 
     if (pageController.hasClients) {
-      final currentIndex =
-          pageController.page?.round() ?? pageController.initialPage;
+      final currentIndex = pageController.page?.round() ?? pageController.initialPage;
       if (currentIndex != nextIndex) {
         pageController.jumpToPage(nextIndex);
       }
@@ -270,12 +269,9 @@ class HomePageState extends State<HomePage> {
                   child: Stack(
                     children: [
                       Padding(
-                        padding:
-                            EdgeInsets.only(bottom: Platform.isIOS ? 80 : 60),
+                        padding: EdgeInsets.only(bottom: Platform.isIOS ? 80 : 60),
                         child: PageView.builder(
-                          physics: swipeDisabled
-                              ? const NeverScrollableScrollPhysics()
-                              : const ScrollPhysics(),
+                          physics: swipeDisabled ? const NeverScrollableScrollPhysics() : const ScrollPhysics(),
                           controller: pageController,
                           itemCount: visiblePages.length,
                           onPageChanged: (page) {
@@ -325,17 +321,13 @@ class HomePageState extends State<HomePage> {
               // Tablet layout
               : SafeArea(
                   child: Container(
-                    color: isLight
-                        ? const Color.fromRGBO(245, 246, 250, 1)
-                        : theme.cardColor,
+                    color: isLight ? const Color.fromRGBO(245, 246, 250, 1) : theme.cardColor,
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Container(
                           height: 20,
-                          color: isLight
-                              ? const Color.fromRGBO(245, 246, 250, 1)
-                              : theme.cardColor,
+                          color: isLight ? const Color.fromRGBO(245, 246, 250, 1) : theme.cardColor,
                         ),
                         Expanded(
                           child: Row(
@@ -355,13 +347,9 @@ class HomePageState extends State<HomePage> {
                                   ),
                                   child: Center(
                                     child: SizedBox(
-                                      width: currentPage != PageItem.plantIdentification
-                                          ? 550
-                                          : null,
+                                      width: currentPage != PageItem.plantIdentification ? 550 : null,
                                       child: Stack(
-                                        children: visiblePages
-                                            .map(buildOffstateNavigator)
-                                            .toList(),
+                                        children: visiblePages.map(buildOffstateNavigator).toList(),
                                       ),
                                     ),
                                   ),
@@ -370,18 +358,14 @@ class HomePageState extends State<HomePage> {
                               // Detail space
                               Container(
                                 width: 20,
-                                color: isLight
-                                    ? const Color.fromRGBO(245, 246, 250, 1)
-                                    : theme.cardColor,
+                                color: isLight ? const Color.fromRGBO(245, 246, 250, 1) : theme.cardColor,
                               ),
                             ],
                           ),
                         ),
                         Container(
                           height: 20,
-                          color: isLight
-                              ? const Color.fromRGBO(245, 246, 250, 1)
-                              : theme.cardColor,
+                          color: isLight ? const Color.fromRGBO(245, 246, 250, 1) : theme.cardColor,
                         ),
                       ],
                     ),

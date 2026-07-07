@@ -29,9 +29,7 @@ class AppSearchBar extends StatelessWidget {
         height: 55,
         alignment: Alignment.centerLeft,
         decoration: BoxDecoration(
-          color: isLight
-              ? const Color.fromRGBO(245, 246, 250, 1)
-              : const Color.fromRGBO(34, 40, 54, 1),
+          color: isLight ? const Color.fromRGBO(245, 246, 250, 1) : const Color.fromRGBO(34, 40, 54, 1),
           borderRadius: BorderRadius.circular(15),
         ),
         child: Row(
@@ -44,12 +42,9 @@ class AppSearchBar extends StatelessWidget {
                   icon: Icons.arrow_back,
                   onTap: onBack,
                   transparent: true,
-                  backgroundColor: isLight
-                      ? const Color.fromRGBO(245, 246, 250, 1)
-                      : const Color.fromRGBO(34, 40, 54, 1),
-                  borderColor: isLight
-                      ? const Color.fromRGBO(245, 246, 250, 1)
-                      : const Color.fromRGBO(34, 40, 54, 1),
+                  backgroundColor:
+                      isLight ? const Color.fromRGBO(245, 246, 250, 1) : const Color.fromRGBO(34, 40, 54, 1),
+                  borderColor: isLight ? const Color.fromRGBO(245, 246, 250, 1) : const Color.fromRGBO(34, 40, 54, 1),
                 ),
               ),
             ],
@@ -69,7 +64,10 @@ class AppSearchBar extends StatelessWidget {
                   errorBorder: InputBorder.none,
                   disabledBorder: InputBorder.none,
                   contentPadding: EdgeInsets.only(
-                      left: !arrowHidden ? 12 : 20, right: 15, bottom: 21.6,),
+                    left: !arrowHidden ? 12 : 20,
+                    right: 15,
+                    bottom: 21.6,
+                  ),
                   floatingLabelBehavior: FloatingLabelBehavior.never,
                 ),
               ),

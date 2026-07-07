@@ -24,10 +24,8 @@ class Page6SettingsPage extends StatelessWidget {
         animation: settingsController,
         builder: (context, _) {
           final settings = settingsController.settings;
-          final orderedItems =
-              orderedPageItemsFromSettings(settings.navBarItemOrder);
-          final hiddenItems =
-              hiddenPageItemsFromSettings(settings.hiddenNavBarItems);
+          final orderedItems = orderedPageItemsFromSettings(settings.navBarItemOrder);
+          final hiddenItems = hiddenPageItemsFromSettings(settings.hiddenNavBarItems);
 
           // 0 = system, 1 = light, 2 = dark
           final initialSelection = settings.useSystemDarkmode
@@ -71,8 +69,7 @@ class Page6SettingsPage extends StatelessWidget {
                 initialValue: settings.localeCode ?? 'system',
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
-                  contentPadding:
-                      EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                  contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
                 ),
                 items: [
                   DropdownMenuItem(
@@ -108,8 +105,7 @@ class Page6SettingsPage extends StatelessWidget {
                 title: Text(context.l10n.useSystemTextScaling),
                 value: settings.useSystemTextScaling,
                 onChanged: (val) {
-                  settingsController
-                      .update(settings.copyWith(useSystemTextScaling: val));
+                  settingsController.update(settings.copyWith(useSystemTextScaling: val));
                 },
               ),
               const SizedBox(height: 24),

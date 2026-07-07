@@ -50,9 +50,7 @@ class AppButton extends StatelessWidget {
       ),
       child: Material(
         color: isLight
-            ? (type == AppButtonType.normal
-                ? Colors.black
-                : const Color.fromRGBO(245, 246, 250, 1))
+            ? (type == AppButtonType.normal ? Colors.black : const Color.fromRGBO(245, 246, 250, 1))
             : const Color.fromRGBO(34, 40, 54, 1),
         borderRadius: BorderRadius.circular(15),
         child: InkWell(
@@ -73,10 +71,10 @@ class AppButton extends StatelessWidget {
               text,
               style: isLight
                   ? (type == AppButtonType.normal
-                      ? theme.textTheme.labelMedium
-                          ?.copyWith(color: Colors.white)
+                      ? theme.textTheme.labelMedium?.copyWith(color: Colors.white)
                       : theme.textTheme.labelMedium?.copyWith(
-                          color: const Color.fromARGB(255, 146, 146, 146),))
+                          color: const Color.fromARGB(255, 146, 146, 146),
+                        ))
                   : theme.textTheme.labelMedium,
             ),
           ),

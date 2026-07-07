@@ -7,8 +7,7 @@ import 'package:open_plant/pages/plant_identification/classifier/labels_loader.d
 class SoftmaxPostprocessor {
   final LabelsLoader _labelsLoader;
 
-  const SoftmaxPostprocessor({required LabelsLoader labelsLoader})
-      : _labelsLoader = labelsLoader;
+  const SoftmaxPostprocessor({required LabelsLoader labelsLoader}) : _labelsLoader = labelsLoader;
 
   /// Applies softmax to raw logits and returns the top-k predictions.
   Future<ClassificationResult> postprocess({

@@ -29,8 +29,7 @@ class AppSegmentedTripleControl extends StatefulWidget {
   });
 
   @override
-  State<AppSegmentedTripleControl> createState() =>
-      AppSegmentedTripleControlState();
+  State<AppSegmentedTripleControl> createState() => AppSegmentedTripleControlState();
 }
 
 class AppSegmentedTripleControlState extends State<AppSegmentedTripleControl> {
@@ -95,16 +94,10 @@ class AppSegmentedTripleControlState extends State<AppSegmentedTripleControl> {
           // Background
           Container(
             decoration: BoxDecoration(
-              color: isLight
-                  ? const Color.fromRGBO(245, 246, 250, 1)
-                  : theme.colorScheme.surface,
-              borderRadius: isLight
-                  ? BorderRadius.circular(6)
-                  : BorderRadius.circular(10),
+              color: isLight ? const Color.fromRGBO(245, 246, 250, 1) : theme.colorScheme.surface,
+              borderRadius: isLight ? BorderRadius.circular(6) : BorderRadius.circular(10),
               border: Border.all(
-                color: isLight
-                    ? const Color.fromRGBO(245, 246, 250, 1)
-                    : const Color.fromRGBO(34, 40, 54, 1),
+                color: isLight ? const Color.fromRGBO(245, 246, 250, 1) : const Color.fromRGBO(34, 40, 54, 1),
                 width: isLight ? 0 : 2,
               ),
             ),
@@ -119,9 +112,7 @@ class AppSegmentedTripleControlState extends State<AppSegmentedTripleControl> {
               height: 32,
               margin: const EdgeInsets.symmetric(horizontal: 5),
               decoration: BoxDecoration(
-                color: isLight
-                    ? Colors.white
-                    : const Color.fromRGBO(34, 40, 54, 1),
+                color: isLight ? Colors.white : const Color.fromRGBO(34, 40, 54, 1),
                 borderRadius: BorderRadius.circular(6),
                 boxShadow: const [
                   BoxShadow(color: Colors.black12, blurRadius: 5),
@@ -138,8 +129,7 @@ class AppSegmentedTripleControlState extends State<AppSegmentedTripleControl> {
                   widget.leftTitle,
                   textAlign: TextAlign.center,
                   style: isLight
-                      ? theme.textTheme.labelMedium
-                          ?.copyWith(color: Colors.black)
+                      ? theme.textTheme.labelMedium?.copyWith(color: Colors.black)
                       : theme.textTheme.labelMedium,
                 ),
               ),
@@ -148,8 +138,7 @@ class AppSegmentedTripleControlState extends State<AppSegmentedTripleControl> {
                   widget.centerTitle,
                   textAlign: TextAlign.center,
                   style: isLight
-                      ? theme.textTheme.labelMedium
-                          ?.copyWith(color: Colors.black)
+                      ? theme.textTheme.labelMedium?.copyWith(color: Colors.black)
                       : theme.textTheme.labelMedium,
                 ),
               ),
@@ -158,8 +147,7 @@ class AppSegmentedTripleControlState extends State<AppSegmentedTripleControl> {
                   widget.rightTitle,
                   textAlign: TextAlign.center,
                   style: isLight
-                      ? theme.textTheme.labelMedium
-                          ?.copyWith(color: Colors.black)
+                      ? theme.textTheme.labelMedium?.copyWith(color: Colors.black)
                       : theme.textTheme.labelMedium,
                 ),
               ),

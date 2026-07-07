@@ -71,16 +71,12 @@ class PlantEntity {
       id: id ?? this.id,
       name: name ?? this.name,
       photoPath: clearPhoto ? null : (photoPath ?? this.photoPath),
-      speciesName:
-          clearSpecies ? null : (speciesName ?? this.speciesName),
+      speciesName: clearSpecies ? null : (speciesName ?? this.speciesName),
       room: clearRoom ? null : (room ?? this.room),
       notes: clearNotes ? null : (notes ?? this.notes),
       careStatus: careStatus ?? this.careStatus,
-      lastWateredAt:
-          clearLastWatered ? null : (lastWateredAt ?? this.lastWateredAt),
-      lastFertilizedAt: clearLastFertilized
-          ? null
-          : (lastFertilizedAt ?? this.lastFertilizedAt),
+      lastWateredAt: clearLastWatered ? null : (lastWateredAt ?? this.lastWateredAt),
+      lastFertilizedAt: clearLastFertilized ? null : (lastFertilizedAt ?? this.lastFertilizedAt),
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
     );
@@ -113,12 +109,8 @@ class PlantEntity {
       room: json['room'] as String?,
       notes: json['notes'] as String?,
       careStatus: CareStatusExtension.fromJson(json['careStatus'] as String? ?? 'happy'),
-      lastWateredAt: json['lastWateredAt'] != null
-          ? DateTime.parse(json['lastWateredAt'] as String)
-          : null,
-      lastFertilizedAt: json['lastFertilizedAt'] != null
-          ? DateTime.parse(json['lastFertilizedAt'] as String)
-          : null,
+      lastWateredAt: json['lastWateredAt'] != null ? DateTime.parse(json['lastWateredAt'] as String) : null,
+      lastFertilizedAt: json['lastFertilizedAt'] != null ? DateTime.parse(json['lastFertilizedAt'] as String) : null,
       createdAt: DateTime.parse(json['createdAt'] as String),
       updatedAt: DateTime.parse(json['updatedAt'] as String),
     );

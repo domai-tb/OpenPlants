@@ -25,9 +25,7 @@ class PlantCollectionDataSource {
 
     try {
       final decoded = jsonDecode(raw) as List<dynamic>;
-      return decoded
-          .map((item) => PlantEntity.fromJson(item as Map<String, dynamic>))
-          .toList();
+      return decoded.map((item) => PlantEntity.fromJson(item as Map<String, dynamic>)).toList();
     } catch (_) {
       return [];
     }

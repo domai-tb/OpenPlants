@@ -32,8 +32,7 @@ class _SideNavBarState extends State<SideNavBar> {
       width: 80,
       padding: const EdgeInsets.only(top: 40, bottom: 10, left: 15, right: 15),
       decoration: BoxDecoration(
-        color:
-            isLight ? const Color.fromRGBO(245, 246, 250, 1) : theme.cardColor,
+        color: isLight ? const Color.fromRGBO(245, 246, 250, 1) : theme.cardColor,
       ),
       child: Column(
         children: widget.pages.map((page) {

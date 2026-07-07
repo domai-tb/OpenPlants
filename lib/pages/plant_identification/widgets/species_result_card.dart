@@ -25,9 +25,7 @@ class SpeciesResultCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
-        color: isTopResult
-            ? theme.colorScheme.primaryContainer.withValues(alpha: 0.3)
-            : theme.cardColor,
+        color: isTopResult ? theme.colorScheme.primaryContainer.withValues(alpha: 0.3) : theme.cardColor,
         borderRadius: BorderRadius.circular(12),
         border: isTopResult
             ? Border.all(

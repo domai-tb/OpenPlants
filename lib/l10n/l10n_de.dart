@@ -354,4 +354,108 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get never => 'Nie';
+
+  @override
+  String get speciesLibraryTitle => 'Artenbibliothek';
+
+  @override
+  String get speciesLibrarySearchHint => 'Arten suchen...';
+
+  @override
+  String get speciesLibraryEasy => 'Einfach';
+
+  @override
+  String get speciesLibraryModerate => 'Mäßig';
+
+  @override
+  String get speciesLibraryChallenging => 'Anspruchsvoll';
+
+  @override
+  String get speciesLibraryToxicOnly => 'Giftig';
+
+  @override
+  String get speciesLibraryEmpty => 'Keine Arten gefunden';
+
+  @override
+  String get speciesLibraryCarePlan => 'Pflegeplan';
+
+  @override
+  String get speciesLibraryWatering => 'Bewässerung';
+
+  @override
+  String get speciesLibraryLight => 'Licht';
+
+  @override
+  String get speciesLibraryHumidity => 'Luftfeuchtigkeit';
+
+  @override
+  String get speciesLibrarySoil => 'Erde';
+
+  @override
+  String get speciesLibraryRepotting => 'Umtopfen';
+
+  @override
+  String get speciesLibraryQuickFacts => 'Kurzinfos';
+
+  @override
+  String get speciesLibraryLightNeeds => 'Lichtbedarf';
+
+  @override
+  String get speciesLibraryWaterNeeds => 'Wasserbedarf';
+
+  @override
+  String get speciesLibraryHumidityPref => 'Luftfeuchtigkeit';
+
+  @override
+  String get speciesLibrarySoilType => 'Erdart';
+
+  @override
+  String get speciesLibraryRepottingInterval => 'Umtopfen';
+
+  @override
+  String speciesLibraryMonths(Object months) {
+    return '$months Monate';
+  }
+
+  @override
+  String get speciesLibraryLightLow => 'Wenig Licht';
+
+  @override
+  String get speciesLibraryLightMedium => 'Mittel indirekt';
+
+  @override
+  String get speciesLibraryLightBright => 'Hell indirekt';
+
+  @override
+  String get speciesLibraryLightDirect => 'Direkte Sonne';
+
+  @override
+  String get speciesLibraryWaterLow => 'Wenig (trockenheitsresistent)';
+
+  @override
+  String get speciesLibraryWaterModerate => 'Mäßig';
+
+  @override
+  String get speciesLibraryWaterFrequent => 'Häufig';
+
+  @override
+  String get speciesLibraryHumidityLow => 'Niedrig (30-40%)';
+
+  @override
+  String get speciesLibraryHumidityModerate => 'Mäßig (40-60%)';
+
+  @override
+  String get speciesLibraryHumidityHigh => 'Hoch (60%+)';
+
+  @override
+  String get speciesLibraryToxicToHumans => 'Giftig für Menschen';
+
+  @override
+  String get speciesLibraryToxicToPets => 'Giftig für Haustiere';
+
+  @override
+  String get speciesLibraryToxicityWarning => 'Giftigkeitswarnung';
+
+  @override
+  String get speciesLibraryViewDetails => 'Arten-Details anzeigen';
 }

@@ -38,9 +38,7 @@ class PlantCollectionUsecases {
     if (query.trim().isEmpty) return plants;
 
     final lowerQuery = query.toLowerCase();
-    return plants
-        .where((p) => p.name.toLowerCase().contains(lowerQuery))
-        .toList();
+    return plants.where((p) => p.name.toLowerCase().contains(lowerQuery)).toList();
   }
 
   /// Filter plants by care status.
@@ -58,9 +56,7 @@ class PlantCollectionUsecases {
   /// Updates the lastWateredAt timestamp and sets care status to happy
   /// if it was needs_water.
   Future<PlantEntity> markAsWatered(PlantEntity plant) async {
-    final newStatus = plant.careStatus == CareStatus.needsWater
-        ? CareStatus.happy
-        : plant.careStatus;
+    final newStatus = plant.careStatus == CareStatus.needsWater ? CareStatus.happy : plant.careStatus;
 
     final updated = plant.copyWith(
       careStatus: newStatus,
@@ -75,9 +71,7 @@ class PlantCollectionUsecases {
   /// Updates the lastFertilizedAt timestamp and sets care status to happy
   /// if it was needs_fertilizer.
   Future<PlantEntity> markAsFertilized(PlantEntity plant) async {
-    final newStatus = plant.careStatus == CareStatus.needsFertilizer
-        ? CareStatus.happy
-        : plant.careStatus;
+    final newStatus = plant.careStatus == CareStatus.needsFertilizer ? CareStatus.happy : plant.careStatus;
 
     final updated = plant.copyWith(
       careStatus: newStatus,

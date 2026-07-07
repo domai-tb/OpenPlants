@@ -14,15 +14,22 @@ import 'package:open_plant/pages/plant_identification/identification_state.dart'
 import 'package:open_plant/pages/plant_identification/widgets/capture_prompt.dart';
 import 'package:open_plant/pages/plant_identification/widgets/green_dot_lattice_overlay.dart';
 import 'package:open_plant/pages/plant_identification/widgets/species_result_card.dart';
+import 'package:open_plant/pages/species_library/species_library_item_entity.dart';
+import 'package:open_plant/pages/species_library/species_library_usecases.dart';
+import 'package:open_plant/pages/species_library/species_detail_page.dart';
 
 class PlantIdentificationPage extends StatefulWidget {
   final GlobalKey<AnimatedEntryState> pageEntryAnimationKey;
   final GlobalKey<AnimatedExitState> pageExitAnimationKey;
+  final GlobalKey<NavigatorState> mainNavigatorKey;
+  final VoidCallback? onViewSpeciesLibrary;
 
   const PlantIdentificationPage({
     super.key,
     required this.pageEntryAnimationKey,
     required this.pageExitAnimationKey,
+    required this.mainNavigatorKey,
+    this.onViewSpeciesLibrary,
   });
 
   @override
@@ -31,6 +38,7 @@ class PlantIdentificationPage extends StatefulWidget {
 
 class _PlantIdentificationPageState extends State<PlantIdentificationPage> {
   late PlantClassifierUsecases _usecases;
+  late SpeciesLibraryUsecases _speciesUsecases;
   late ImageCaptureService _captureService;
   bool _wired = false;
 
@@ -40,7 +48,9 @@ class _PlantIdentificationPageState extends State<PlantIdentificationPage> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     if (_wired) return;
-    _usecases = AppScope.of(context).services.plantIdentification;
+    final services = AppScope.of(context).services;
+    _usecases = services.plantIdentification;
+    _speciesUsecases = services.speciesLibrary;
     _captureService = ImageCaptureService();
     _wired = true;
   }
@@ -272,7 +282,61 @@ class _PlantIdentificationPageState extends State<PlantIdentificationPage> {
                   },
                 ),
         ),
+        // Species detail button for top result
+        if (predictions.isNotEmpty) _buildSpeciesDetailButton(theme, predictions.first.name),
       ],
+    );
+  }
+
+  Widget _buildSpeciesDetailButton(ThemeData theme, String scientificName) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 8, 20, 16),
+      child: FutureBuilder<SpeciesEntity?>(
+        future: _speciesUsecases.speciesForIdentifiedPlant(scientificName),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const SizedBox(
+              height: 48,
+              child: Center(
+                child: SizedBox(
+                  width: 20,
+                  height: 20,
+                  child: CircularProgressIndicator(strokeWidth: 2),
+                ),
+              ),
+            );
+          }
+
+          if (snapshot.hasError) {
+            debugPrint('Species lookup failed: ${snapshot.error}');
+            return const SizedBox.shrink();
+          }
+
+          final species = snapshot.data;
+          if (species == null) return const SizedBox.shrink();
+
+          return SizedBox(
+            width: double.infinity,
+            child: FilledButton.icon(
+              onPressed: () => _openSpeciesDetail(species),
+              icon: const Icon(Icons.menu_book),
+              label: Text(context.l10n.speciesLibraryViewDetails),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  void _openSpeciesDetail(SpeciesEntity species) {
+    widget.onViewSpeciesLibrary?.call();
+    widget.mainNavigatorKey.currentState?.push(
+      MaterialPageRoute(
+        builder: (_) => SpeciesDetailPage(
+          species: species,
+          usecases: _speciesUsecases,
+        ),
+      ),
     );
   }
 

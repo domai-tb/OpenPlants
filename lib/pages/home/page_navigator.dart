@@ -9,8 +9,9 @@ import 'package:open_plant/pages/page4/page4_page.dart';
 import 'package:open_plant/pages/page5/page5_page.dart';
 import 'package:open_plant/pages/page6/page6_page.dart';
 import 'package:open_plant/pages/plant_collection/plant_collection_page.dart';
+import 'package:open_plant/pages/species_library/species_library_page.dart';
 
-enum PageItem { page1, page2, plantIdentification, page4, page5, page6, plantCollection }
+enum PageItem { page1, page2, plantIdentification, page4, page5, page6, plantCollection, speciesLibrary }
 
 PageItem? pageItemFromId(String id) {
   for (final item in PageItem.values) {
@@ -120,6 +121,12 @@ PageItemPresentation pageItemPresentation(BuildContext context, PageItem item) {
         activeIcon: Icons.yard,
         inactiveIcon: Icons.yard_outlined,
       );
+    case PageItem.speciesLibrary:
+      return PageItemPresentation(
+        title: context.l10n.speciesLibraryTitle,
+        activeIcon: Icons.menu_book,
+        inactiveIcon: Icons.menu_book_outlined,
+      );
   }
 }
 
@@ -152,6 +159,10 @@ class NavBarNavigator extends StatelessWidget {
   /// to control the animation from outside the page.
   final GlobalKey<AnimatedExitState> pageExitAnimationKey;
 
+  /// Optional callback: switch to the species library tab when the
+  /// identification result page requests a species detail view.
+  final VoidCallback? onSwitchToSpeciesLibrary;
+
   const NavBarNavigator({
     super.key,
     required this.mainNavigatorKey,
@@ -159,6 +170,7 @@ class NavBarNavigator extends StatelessWidget {
     required this.pageItem,
     required this.pageEntryAnimationKey,
     required this.pageExitAnimationKey,
+    this.onSwitchToSpeciesLibrary,
   });
 
   /// Creates a map of the root and detail page of the specific page.
@@ -188,8 +200,10 @@ class NavBarNavigator extends StatelessWidget {
         break;
       case PageItem.plantIdentification:
         rootPage = PlantIdentificationPage(
+          mainNavigatorKey: mainNavigatorKey,
           pageEntryAnimationKey: pageEntryAnimationKey,
           pageExitAnimationKey: pageExitAnimationKey,
+          onViewSpeciesLibrary: onSwitchToSpeciesLibrary,
         );
         break;
       case PageItem.page5:
@@ -207,6 +221,13 @@ class NavBarNavigator extends StatelessWidget {
         break;
       case PageItem.plantCollection:
         rootPage = PlantCollectionPage(
+          pageEntryAnimationKey: pageEntryAnimationKey,
+          pageExitAnimationKey: pageExitAnimationKey,
+        );
+        break;
+      case PageItem.speciesLibrary:
+        rootPage = SpeciesLibraryPage(
+          mainNavigatorKey: mainNavigatorKey,
           pageEntryAnimationKey: pageEntryAnimationKey,
           pageExitAnimationKey: pageExitAnimationKey,
         );

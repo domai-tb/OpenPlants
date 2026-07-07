@@ -84,11 +84,8 @@ class Settings {
       useSystemDarkmode: useSystemDarkmode ?? this.useSystemDarkmode,
       useDarkmode: useDarkmode ?? this.useDarkmode,
       useSystemTextScaling: useSystemTextScaling ?? this.useSystemTextScaling,
-      didCompleteOnboarding:
-          didCompleteOnboarding ?? this.didCompleteOnboarding,
-      localeCode: identical(localeCode, _noChange)
-          ? this.localeCode
-          : localeCode as String?,
+      didCompleteOnboarding: didCompleteOnboarding ?? this.didCompleteOnboarding,
+      localeCode: identical(localeCode, _noChange) ? this.localeCode : localeCode as String?,
       navBarItemOrder: navBarItemOrder ?? this.navBarItemOrder,
       hiddenNavBarItems: hiddenNavBarItems ?? this.hiddenNavBarItems,
     );
@@ -101,10 +98,7 @@ class Settings {
       useSystemTextScaling: json['useSystemTextScaling'] ?? false,
       didCompleteOnboarding: json['didCompleteOnboarding'] ?? false,
       localeCode: json['localeCode'],
-      navBarItemOrder: (json['navBarItemOrder'] as List<dynamic>?)
-              ?.whereType<String>()
-              .toList() ??
-          _defaultNavBarOrder,
+      navBarItemOrder: (json['navBarItemOrder'] as List<dynamic>?)?.whereType<String>().toList() ?? _defaultNavBarOrder,
       hiddenNavBarItems: (json['hiddenNavBarItems'] as List<dynamic>?)
               ?.whereType<String>()
               .where((item) => item != 'page6')
@@ -121,8 +115,7 @@ class Settings {
       'didCompleteOnboarding': didCompleteOnboarding,
       'localeCode': localeCode,
       'navBarItemOrder': navBarItemOrder,
-      'hiddenNavBarItems':
-          hiddenNavBarItems.where((item) => item != 'page6').toList(),
+      'hiddenNavBarItems': hiddenNavBarItems.where((item) => item != 'page6').toList(),
     };
   }
 }

@@ -88,17 +88,11 @@ class _PlantCollectionFormPageState extends State<PlantCollectionFormPage> {
       if (_isEditing) {
         final updated = widget.plant!.copyWith(
           name: _nameController.text.trim(),
-          speciesName: _speciesController.text.trim().isEmpty
-              ? null
-              : _speciesController.text.trim(),
+          speciesName: _speciesController.text.trim().isEmpty ? null : _speciesController.text.trim(),
           clearSpecies: _speciesController.text.trim().isEmpty,
-          room: _roomController.text.trim().isEmpty
-              ? null
-              : _roomController.text.trim(),
+          room: _roomController.text.trim().isEmpty ? null : _roomController.text.trim(),
           clearRoom: _roomController.text.trim().isEmpty,
-          notes: _notesController.text.trim().isEmpty
-              ? null
-              : _notesController.text.trim(),
+          notes: _notesController.text.trim().isEmpty ? null : _notesController.text.trim(),
           clearNotes: _notesController.text.trim().isEmpty,
           careStatus: _careStatus,
           clearPhoto: _photoFile == null && _existingPhotoPath == null,
@@ -114,15 +108,9 @@ class _PlantCollectionFormPageState extends State<PlantCollectionFormPage> {
         final plant = PlantEntity(
           id: '',
           name: _nameController.text.trim(),
-          speciesName: _speciesController.text.trim().isEmpty
-              ? null
-              : _speciesController.text.trim(),
-          room: _roomController.text.trim().isEmpty
-              ? null
-              : _roomController.text.trim(),
-          notes: _notesController.text.trim().isEmpty
-              ? null
-              : _notesController.text.trim(),
+          speciesName: _speciesController.text.trim().isEmpty ? null : _speciesController.text.trim(),
+          room: _roomController.text.trim().isEmpty ? null : _roomController.text.trim(),
+          notes: _notesController.text.trim().isEmpty ? null : _notesController.text.trim(),
           careStatus: _careStatus,
           createdAt: now,
           updatedAt: now,

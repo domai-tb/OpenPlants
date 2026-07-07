@@ -29,8 +29,7 @@ class PlantCollectionPage extends StatefulWidget {
 
 class _PlantCollectionPageState extends State<PlantCollectionPage>
     with AutomaticKeepAliveClientMixin<PlantCollectionPage> {
-  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
-      GlobalKey<RefreshIndicatorState>();
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
   final ScrollController _scrollController = ScrollController();
 
   late PlantCollectionUsecases _usecases;
@@ -162,9 +161,7 @@ class _PlantCollectionPageState extends State<PlantCollectionPage>
                         selected: _filterStatus == CareStatus.needsWater,
                         onTap: () {
                           setState(() {
-                            _filterStatus = _filterStatus == CareStatus.needsWater
-                                ? null
-                                : CareStatus.needsWater;
+                            _filterStatus = _filterStatus == CareStatus.needsWater ? null : CareStatus.needsWater;
                           });
                           _load();
                         },
@@ -177,9 +174,7 @@ class _PlantCollectionPageState extends State<PlantCollectionPage>
                         onTap: () {
                           setState(() {
                             _filterStatus =
-                                _filterStatus == CareStatus.needsFertilizer
-                                    ? null
-                                    : CareStatus.needsFertilizer;
+                                _filterStatus == CareStatus.needsFertilizer ? null : CareStatus.needsFertilizer;
                           });
                           _load();
                         },
@@ -242,17 +237,13 @@ class _PlantCollectionPageState extends State<PlantCollectionPage>
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
         decoration: BoxDecoration(
-          color: selected
-              ? theme.colorScheme.primary
-              : theme.colorScheme.surfaceContainerHighest,
+          color: selected ? theme.colorScheme.primary : theme.colorScheme.surfaceContainerHighest,
           borderRadius: BorderRadius.circular(16),
         ),
         child: Text(
           label,
           style: theme.textTheme.labelMedium?.copyWith(
-            color: selected
-                ? theme.colorScheme.onPrimary
-                : theme.colorScheme.onSurface,
+            color: selected ? theme.colorScheme.onPrimary : theme.colorScheme.onSurface,
           ),
         ),
       ),

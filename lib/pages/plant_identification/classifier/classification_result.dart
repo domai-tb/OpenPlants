@@ -19,8 +19,7 @@ class ClassificationResult {
 
   /// Returns the top-k predictions sorted by confidence descending.
   List<SpeciesPrediction> topK(int k) {
-    final sorted = List<SpeciesPrediction>.from(predictions)
-      ..sort((a, b) => b.confidence.compareTo(a.confidence));
+    final sorted = List<SpeciesPrediction>.from(predictions)..sort((a, b) => b.confidence.compareTo(a.confidence));
     return sorted.take(k).toList();
   }
 }
