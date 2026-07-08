@@ -763,4 +763,74 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get careStatusNeedsAttention => 'Needs Attention';
+
+  @override
+  String get journalTitle => 'Tagebuch';
+
+  @override
+  String journalPageTitle(Object plantName) {
+    return '$plantName — Tagebuch';
+  }
+
+  @override
+  String get journalEmpty => 'Noch keine Tagebucheinträge';
+
+  @override
+  String get journalTapToAdd =>
+      'Tippe auf + um deinen ersten Eintrag hinzuzufügen';
+
+  @override
+  String get journalNewEntry => 'Neuer Tagebucheintrag';
+
+  @override
+  String get journalEditEntry => 'Eintrag bearbeiten';
+
+  @override
+  String get journalDeleteEntry => 'Eintrag löschen';
+
+  @override
+  String get journalDeleteConfirm =>
+      'Möchtest du diesen Tagebucheintrag wirklich löschen?';
+
+  @override
+  String get journalEntryType => 'Eintragstyp';
+
+  @override
+  String get journalTypeText => 'Textnotiz';
+
+  @override
+  String get journalTypePhoto => 'Foto';
+
+  @override
+  String get journalTypeTask => 'Erledigte Aufgabe';
+
+  @override
+  String get journalTypeGrowth => 'Wachstumsupdate';
+
+  @override
+  String get journalTypeRepotting => 'Umtopfen';
+
+  @override
+  String get journalTypePest => 'Schädlingsbeobachtung';
+
+  @override
+  String get journalTypeDiagnosis => 'Diagnose';
+
+  @override
+  String get journalNotes => 'Notizen';
+
+  @override
+  String get journalNotesHint => 'Füge deine Beobachtungen hinzu...';
+
+  @override
+  String get journalPhoto => 'Foto';
+
+  @override
+  String get journalAddPhoto => 'Foto hinzufügen';
+
+  @override
+  String get journalTakePhoto => 'Foto aufnehmen';
+
+  @override
+  String get journalChooseFromGallery => 'Aus Galerie auswählen';
 }

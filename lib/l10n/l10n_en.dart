@@ -756,4 +756,73 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get careStatusNeedsAttention => 'Needs Attention';
+
+  @override
+  String get journalTitle => 'Journal';
+
+  @override
+  String journalPageTitle(Object plantName) {
+    return '$plantName — Journal';
+  }
+
+  @override
+  String get journalEmpty => 'No journal entries yet';
+
+  @override
+  String get journalTapToAdd => 'Tap + to add your first entry';
+
+  @override
+  String get journalNewEntry => 'New Journal Entry';
+
+  @override
+  String get journalEditEntry => 'Edit Entry';
+
+  @override
+  String get journalDeleteEntry => 'Delete Entry';
+
+  @override
+  String get journalDeleteConfirm =>
+      'Are you sure you want to delete this journal entry?';
+
+  @override
+  String get journalEntryType => 'Entry Type';
+
+  @override
+  String get journalTypeText => 'Text Note';
+
+  @override
+  String get journalTypePhoto => 'Photo';
+
+  @override
+  String get journalTypeTask => 'Completed Task';
+
+  @override
+  String get journalTypeGrowth => 'Growth Update';
+
+  @override
+  String get journalTypeRepotting => 'Repotting';
+
+  @override
+  String get journalTypePest => 'Pest Observation';
+
+  @override
+  String get journalTypeDiagnosis => 'Diagnosis';
+
+  @override
+  String get journalNotes => 'Notes';
+
+  @override
+  String get journalNotesHint => 'Add your observations...';
+
+  @override
+  String get journalPhoto => 'Photo';
+
+  @override
+  String get journalAddPhoto => 'Add Photo';
+
+  @override
+  String get journalTakePhoto => 'Take Photo';
+
+  @override
+  String get journalChooseFromGallery => 'Choose from Gallery';
 }

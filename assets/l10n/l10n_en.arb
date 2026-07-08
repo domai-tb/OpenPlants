@@ -265,5 +265,28 @@
   "symptomLoggerMarkResolvedConfirm": "Mark this symptom as resolved?",
   "symptomLoggerRecentEvents": "Recent Health Events",
 
-  "careStatusNeedsAttention": "Needs Attention"
+  "careStatusNeedsAttention": "Needs Attention",
+
+  "journalTitle": "Journal",
+  "journalPageTitle": "{plantName} — Journal",
+  "journalEmpty": "No journal entries yet",
+  "journalTapToAdd": "Tap + to add your first entry",
+  "journalNewEntry": "New Journal Entry",
+  "journalEditEntry": "Edit Entry",
+  "journalDeleteEntry": "Delete Entry",
+  "journalDeleteConfirm": "Are you sure you want to delete this journal entry?",
+  "journalEntryType": "Entry Type",
+  "journalTypeText": "Text Note",
+  "journalTypePhoto": "Photo",
+  "journalTypeTask": "Completed Task",
+  "journalTypeGrowth": "Growth Update",
+  "journalTypeRepotting": "Repotting",
+  "journalTypePest": "Pest Observation",
+  "journalTypeDiagnosis": "Diagnosis",
+  "journalNotes": "Notes",
+  "journalNotesHint": "Add your observations...",
+  "journalPhoto": "Photo",
+  "journalAddPhoto": "Add Photo",
+  "journalTakePhoto": "Take Photo",
+  "journalChooseFromGallery": "Choose from Gallery"
 }

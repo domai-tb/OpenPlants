@@ -8,6 +8,7 @@ import 'package:open_plant/pages/plant_collection/plant_collection_detail_page.d
 import 'package:open_plant/pages/plant_collection/plant_collection_form_page.dart';
 import 'package:open_plant/pages/plant_collection/plant_collection_item_entity.dart';
 import 'package:open_plant/pages/plant_collection/plant_collection_usecases.dart';
+import 'package:open_plant/pages/plant_journal/plant_journal_usecases.dart';
 import 'package:open_plant/widgets/app_icon_button.dart';
 import 'package:open_plant/widgets/app_search_bar.dart';
 import 'package:open_plant/widgets/scroll_to_top_button.dart';
@@ -36,9 +37,11 @@ class _PlantCollectionPageState extends State<PlantCollectionPage>
   final ScrollController _scrollController = ScrollController();
 
   late PlantCollectionUsecases _usecases;
+  late PlantJournalUseCases _journalUsecases;
   bool _wired = false;
 
   List<PlantEntity> _plants = [];
+  Map<String, int> _journalCounts = {};
   bool _loading = true;
   bool _showSearch = false;
   String _query = '';
@@ -52,6 +55,7 @@ class _PlantCollectionPageState extends State<PlantCollectionPage>
     super.didChangeDependencies();
     if (_wired) return;
     _usecases = AppScope.of(context).services.plantCollection;
+    _journalUsecases = AppScope.of(context).services.plantJournal;
     _wired = true;
     widget.tabSwitchNotifier?.addListener(_reloadOnTabSwitch);
     _load();
@@ -80,9 +84,16 @@ class _PlantCollectionPageState extends State<PlantCollectionPage>
       plants = await _usecases.loadPlants();
     }
 
+    // Fetch journal entry counts for each plant.
+    final counts = <String, int>{};
+    for (final plant in plants) {
+      counts[plant.id] = await _journalUsecases.countEntries(plant.id);
+    }
+
     if (!mounted) return;
     setState(() {
       _plants = plants;
+      _journalCounts = counts;
       _loading = false;
     });
   }
@@ -312,6 +323,7 @@ class _PlantCollectionPageState extends State<PlantCollectionPage>
 
   Widget _buildPlantTile(BuildContext context, PlantEntity plant) {
     final theme = Theme.of(context);
+    final journalCount = _journalCounts[plant.id] ?? 0;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
       child: Material(
@@ -375,6 +387,36 @@ class _PlantCollectionPageState extends State<PlantCollectionPage>
                     child: Text(
                       plant.room!,
                       style: theme.textTheme.labelSmall,
+                    ),
+                  ),
+                ],
+                if (journalCount > 0) ...[
+                  const SizedBox(width: 8),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
+                    decoration: BoxDecoration(
+                      color: theme.colorScheme.tertiaryContainer,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.book_outlined,
+                          size: 12,
+                          color: theme.colorScheme.onTertiaryContainer,
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          '$journalCount',
+                          style: theme.textTheme.labelSmall?.copyWith(
+                            color: theme.colorScheme.onTertiaryContainer,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],

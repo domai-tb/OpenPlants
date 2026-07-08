@@ -93,3 +93,14 @@ The system SHALL provide a search bar that filters the plant list by name substr
 #### Scenario: Search by partial name
 - **WHEN** user types a partial substring of a plant's name
 - **THEN** the system displays all plants whose names contain that substring
+
+### Requirement: Plant entity references journal entries
+The system SHALL associate each plant with its journal entries via a plant identifier reference.
+
+#### Scenario: Journal entries linked to plant
+- **WHEN** user creates a journal entry for a specific plant
+- **THEN** the entry is stored with the plant's identifier and appears only in that plant's journal
+
+#### Scenario: Delete plant removes journal entries
+- **WHEN** user deletes a plant that has journal entries
+- **THEN** the system removes all associated journal entries and their photo files from disk

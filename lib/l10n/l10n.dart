@@ -1543,6 +1543,138 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Needs Attention'**
   String get careStatusNeedsAttention;
+
+  /// No description provided for @journalTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Journal'**
+  String get journalTitle;
+
+  /// No description provided for @journalPageTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'{plantName} — Journal'**
+  String journalPageTitle(Object plantName);
+
+  /// No description provided for @journalEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No journal entries yet'**
+  String get journalEmpty;
+
+  /// No description provided for @journalTapToAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap + to add your first entry'**
+  String get journalTapToAdd;
+
+  /// No description provided for @journalNewEntry.
+  ///
+  /// In en, this message translates to:
+  /// **'New Journal Entry'**
+  String get journalNewEntry;
+
+  /// No description provided for @journalEditEntry.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Entry'**
+  String get journalEditEntry;
+
+  /// No description provided for @journalDeleteEntry.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Entry'**
+  String get journalDeleteEntry;
+
+  /// No description provided for @journalDeleteConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete this journal entry?'**
+  String get journalDeleteConfirm;
+
+  /// No description provided for @journalEntryType.
+  ///
+  /// In en, this message translates to:
+  /// **'Entry Type'**
+  String get journalEntryType;
+
+  /// No description provided for @journalTypeText.
+  ///
+  /// In en, this message translates to:
+  /// **'Text Note'**
+  String get journalTypeText;
+
+  /// No description provided for @journalTypePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo'**
+  String get journalTypePhoto;
+
+  /// No description provided for @journalTypeTask.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed Task'**
+  String get journalTypeTask;
+
+  /// No description provided for @journalTypeGrowth.
+  ///
+  /// In en, this message translates to:
+  /// **'Growth Update'**
+  String get journalTypeGrowth;
+
+  /// No description provided for @journalTypeRepotting.
+  ///
+  /// In en, this message translates to:
+  /// **'Repotting'**
+  String get journalTypeRepotting;
+
+  /// No description provided for @journalTypePest.
+  ///
+  /// In en, this message translates to:
+  /// **'Pest Observation'**
+  String get journalTypePest;
+
+  /// No description provided for @journalTypeDiagnosis.
+  ///
+  /// In en, this message translates to:
+  /// **'Diagnosis'**
+  String get journalTypeDiagnosis;
+
+  /// No description provided for @journalNotes.
+  ///
+  /// In en, this message translates to:
+  /// **'Notes'**
+  String get journalNotes;
+
+  /// No description provided for @journalNotesHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Add your observations...'**
+  String get journalNotesHint;
+
+  /// No description provided for @journalPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo'**
+  String get journalPhoto;
+
+  /// No description provided for @journalAddPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Photo'**
+  String get journalAddPhoto;
+
+  /// No description provided for @journalTakePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Take Photo'**
+  String get journalTakePhoto;
+
+  /// No description provided for @journalChooseFromGallery.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose from Gallery'**
+  String get journalChooseFromGallery;
 }
 
 class _AppLocalizationsDelegate

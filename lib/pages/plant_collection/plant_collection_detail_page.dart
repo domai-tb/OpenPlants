@@ -8,6 +8,8 @@ import 'package:open_plant/l10n/l10n_x.dart';
 import 'package:open_plant/pages/plant_collection/plant_collection_form_page.dart';
 import 'package:open_plant/pages/plant_collection/plant_collection_item_entity.dart';
 import 'package:open_plant/pages/plant_collection/plant_collection_usecases.dart';
+import 'package:open_plant/pages/plant_journal/plant_journal_page.dart';
+import 'package:open_plant/pages/plant_journal/plant_journal_usecases.dart';
 import 'package:open_plant/pages/symptom_logger/symptom_logger_extensions.dart';
 import 'package:open_plant/pages/symptom_logger/symptom_logger_item_entity.dart';
 import 'package:open_plant/pages/symptom_logger/symptom_logger_page.dart';
@@ -26,6 +28,7 @@ class PlantCollectionDetailPage extends StatefulWidget {
 class _PlantCollectionDetailPageState extends State<PlantCollectionDetailPage> {
   late PlantCollectionUsecases _usecases;
   late SymptomLoggerUseCases _symptomUsecases;
+  late PlantJournalUseCases _journalUsecases;
   bool _wired = false;
   late PlantEntity _plant;
   List<SymptomLogEntry> _symptomHistory = const [];
@@ -44,6 +47,7 @@ class _PlantCollectionDetailPageState extends State<PlantCollectionDetailPage> {
     final services = AppScope.of(context).services;
     _usecases = services.plantCollection;
     _symptomUsecases = services.symptomLogger;
+    _journalUsecases = services.plantJournal;
     _wired = true;
     _loadSymptomHistory();
   }
@@ -85,6 +89,7 @@ class _PlantCollectionDetailPageState extends State<PlantCollectionDetailPage> {
     );
 
     if (confirmed == true && mounted) {
+      await _journalUsecases.deleteEntriesForPlant(_plant.id);
       await _usecases.deletePlant(_plant.id);
       if (mounted) {
         Navigator.of(context).pop();
@@ -120,6 +125,17 @@ class _PlantCollectionDetailPageState extends State<PlantCollectionDetailPage> {
     }
   }
 
+  Future<void> _openJournal() async {
+    await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => PlantJournalPage(
+          plantId: _plant.id,
+          plantName: _plant.name,
+        ),
+      ),
+    );
+  }
+
   Future<void> _markSymptomResolved(SymptomLogEntry entry) async {
     final confirmed = await showDialog<bool>(
       context: context,
@@ -144,6 +160,11 @@ class _PlantCollectionDetailPageState extends State<PlantCollectionDetailPage> {
       appBar: AppBar(
         title: Text(_plant.name),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.book),
+            tooltip: context.l10n.journalTitle,
+            onPressed: _openJournal,
+          ),
           IconButton(
             icon: const Icon(Icons.healing),
             tooltip: context.l10n.symptomLoggerLogSymptom,

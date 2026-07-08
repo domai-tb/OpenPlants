@@ -14,6 +14,9 @@ import 'package:open_plant/pages/more/more_usecases.dart';
 import 'package:open_plant/pages/plant_collection/plant_collection_datasource.dart';
 import 'package:open_plant/pages/plant_collection/plant_collection_repository.dart';
 import 'package:open_plant/pages/plant_collection/plant_collection_usecases.dart';
+import 'package:open_plant/pages/plant_journal/plant_journal_datasource.dart';
+import 'package:open_plant/pages/plant_journal/plant_journal_repository.dart';
+import 'package:open_plant/pages/plant_journal/plant_journal_usecases.dart';
 import 'package:open_plant/pages/species_library/species_library_datasource.dart';
 import 'package:open_plant/pages/species_library/species_library_repository.dart';
 import 'package:open_plant/pages/species_library/species_library_usecases.dart';
@@ -115,6 +118,17 @@ Future<void> init() async {
     ),
   );
 
+  // Plant Journal
+  sl.registerLazySingleton<PlantJournalDataSource>(
+    PlantJournalDataSource.new,
+  );
+  sl.registerLazySingleton<PlantJournalRepository>(
+    () => PlantJournalRepository(dataSource: sl()),
+  );
+  sl.registerLazySingleton<PlantJournalUseCases>(
+    () => PlantJournalUseCases(repository: sl()),
+  );
+
   // Aggregate wiring
   sl.registerLazySingleton<AppServices>(
     () => AppServices(
@@ -125,6 +139,7 @@ Future<void> init() async {
       todayDashboard: sl(),
       careSchedule: sl(),
       symptomLogger: sl(),
+      plantJournal: sl(),
     ),
   );
 }
