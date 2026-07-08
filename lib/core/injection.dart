@@ -2,6 +2,9 @@ import 'package:get_it/get_it.dart';
 
 import 'package:open_plant/core/app_services.dart';
 import 'package:open_plant/core/settings.dart';
+import 'package:open_plant/pages/model_info/model_info_datasource.dart';
+import 'package:open_plant/pages/model_info/model_info_repository.dart';
+import 'package:open_plant/pages/model_info/model_info_usecases.dart';
 import 'package:open_plant/pages/care_schedule/care_schedule_datasource.dart';
 import 'package:open_plant/pages/care_schedule/care_schedule_repository.dart';
 import 'package:open_plant/pages/care_schedule/care_schedule_usecases.dart';
@@ -144,6 +147,15 @@ Future<void> init() async {
     () => RoomProfilesUsecases(repository: sl()),
   );
 
+  // Model Info
+  sl.registerLazySingleton<ModelInfoDatasource>(ModelInfoDatasource.new);
+  sl.registerLazySingleton<ModelInfoRepository>(
+    () => ModelInfoRepository(datasource: sl()),
+  );
+  sl.registerLazySingleton<ModelInfoUseCase>(
+    () => ModelInfoUseCase(repository: sl()),
+  );
+
   // Aggregate wiring
   sl.registerLazySingleton<AppServices>(
     () => AppServices(
@@ -156,6 +168,7 @@ Future<void> init() async {
       symptomLogger: sl(),
       plantJournal: sl(),
       roomProfiles: sl(),
+      modelInfo: sl(),
     ),
   );
 }

@@ -4,6 +4,7 @@ import 'package:open_plant/core/app_scope.dart';
 import 'package:open_plant/l10n/l10n_x.dart';
 import 'package:open_plant/pages/home/page_navigator.dart';
 import 'package:open_plant/pages/home/widgets/nav_bar_preferences_editor.dart';
+import 'package:open_plant/pages/model_info/model_info_page.dart';
 import 'package:open_plant/widgets/app_segmented_triple_control.dart';
 
 class MoreSettingsPage extends StatelessWidget {
@@ -120,6 +121,24 @@ class MoreSettingsPage extends StatelessWidget {
                 onHiddenItemsChanged: (items) {
                   settingsController.update(
                     settings.copyWith(hiddenNavBarItems: pageItemIds(items)),
+                  );
+                },
+              ),
+              const SizedBox(height: 24),
+              Text(
+                'About',
+                style: theme.textTheme.headlineSmall,
+              ),
+              const SizedBox(height: 10),
+              ListTile(
+                contentPadding: EdgeInsets.zero,
+                title: const Text('Model Information'),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => const ModelInfoPage(),
+                    ),
                   );
                 },
               ),

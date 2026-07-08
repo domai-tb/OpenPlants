@@ -1,4 +1,5 @@
 import 'package:open_plant/pages/care_schedule/care_schedule_usecases.dart';
+import 'package:open_plant/pages/model_info/model_info_usecases.dart';
 import 'package:open_plant/pages/plant_identification/classifier/plant_classifier_usecases.dart';
 import 'package:open_plant/pages/more/more_usecases.dart';
 import 'package:open_plant/pages/plant_collection/plant_collection_usecases.dart';
@@ -22,6 +23,7 @@ class AppServices {
   final SymptomLoggerUseCases symptomLogger;
   final PlantJournalUseCases plantJournal;
   final RoomProfilesUsecases roomProfiles;
+  final ModelInfoUseCase modelInfo;
 
   const AppServices({
     required this.plantIdentification,
@@ -33,5 +35,6 @@ class AppServices {
     required this.symptomLogger,
     required this.plantJournal,
     required this.roomProfiles,
+    required this.modelInfo,
   });
 }
