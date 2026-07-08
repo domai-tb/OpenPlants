@@ -3,6 +3,7 @@ import 'package:open_plant/pages/plant_identification/classifier/plant_classifie
 import 'package:open_plant/pages/more/more_usecases.dart';
 import 'package:open_plant/pages/plant_collection/plant_collection_usecases.dart';
 import 'package:open_plant/pages/plant_journal/plant_journal_usecases.dart';
+import 'package:open_plant/pages/room_profiles/room_profiles_usecases.dart';
 import 'package:open_plant/pages/species_library/species_library_usecases.dart';
 import 'package:open_plant/pages/symptom_logger/symptom_logger_usecases.dart';
 import 'package:open_plant/pages/today_dashboard/today_dashboard_usecases.dart';
@@ -20,6 +21,7 @@ class AppServices {
   final CareScheduleUsecases careSchedule;
   final SymptomLoggerUseCases symptomLogger;
   final PlantJournalUseCases plantJournal;
+  final RoomProfilesUsecases roomProfiles;
 
   const AppServices({
     required this.plantIdentification,
@@ -30,5 +32,6 @@ class AppServices {
     required this.careSchedule,
     required this.symptomLogger,
     required this.plantJournal,
+    required this.roomProfiles,
   });
 }

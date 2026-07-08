@@ -9,6 +9,8 @@ import 'package:open_plant/pages/plant_collection/plant_collection_form_page.dar
 import 'package:open_plant/pages/plant_collection/plant_collection_item_entity.dart';
 import 'package:open_plant/pages/plant_collection/plant_collection_usecases.dart';
 import 'package:open_plant/pages/plant_journal/plant_journal_usecases.dart';
+import 'package:open_plant/pages/room_profiles/room_profiles_entity.dart';
+import 'package:open_plant/pages/room_profiles/room_profiles_usecases.dart';
 import 'package:open_plant/widgets/app_icon_button.dart';
 import 'package:open_plant/widgets/app_search_bar.dart';
 import 'package:open_plant/widgets/scroll_to_top_button.dart';
@@ -38,14 +40,18 @@ class _PlantCollectionPageState extends State<PlantCollectionPage>
 
   late PlantCollectionUsecases _usecases;
   late PlantJournalUseCases _journalUsecases;
+  late RoomProfilesUsecases _roomUsecases;
   bool _wired = false;
 
   List<PlantEntity> _plants = [];
   Map<String, int> _journalCounts = {};
+  List<RoomEntity> _rooms = [];
+  Map<String, String> _roomNames = {};
   bool _loading = true;
   bool _showSearch = false;
   String _query = '';
   CareStatus? _filterStatus;
+  String? _filterRoomId;
 
   @override
   bool get wantKeepAlive => true;
@@ -56,6 +62,7 @@ class _PlantCollectionPageState extends State<PlantCollectionPage>
     if (_wired) return;
     _usecases = AppScope.of(context).services.plantCollection;
     _journalUsecases = AppScope.of(context).services.plantJournal;
+    _roomUsecases = AppScope.of(context).services.roomProfiles;
     _wired = true;
     widget.tabSwitchNotifier?.addListener(_reloadOnTabSwitch);
     _load();
@@ -74,6 +81,14 @@ class _PlantCollectionPageState extends State<PlantCollectionPage>
 
   Future<void> _load() async {
     setState(() => _loading = true);
+
+    // Load rooms and build name map
+    final rooms = await _roomUsecases.getAll();
+    final roomNames = <String, String>{};
+    for (final room in rooms) {
+      roomNames[room.id] = room.name;
+    }
+
     List<PlantEntity> plants;
 
     if (_query.isNotEmpty) {
@@ -82,6 +97,15 @@ class _PlantCollectionPageState extends State<PlantCollectionPage>
       plants = await _usecases.filterByCareStatus(_filterStatus);
     } else {
       plants = await _usecases.loadPlants();
+    }
+
+    // Apply room filter
+    if (_filterRoomId != null) {
+      if (_filterRoomId == kUnassignedSentinel) {
+        plants = plants.where((p) => p.roomId == null).toList();
+      } else {
+        plants = plants.where((p) => p.roomId == _filterRoomId).toList();
+      }
     }
 
     // Fetch journal entry counts for each plant.
@@ -94,6 +118,8 @@ class _PlantCollectionPageState extends State<PlantCollectionPage>
     setState(() {
       _plants = plants;
       _journalCounts = counts;
+      _rooms = rooms;
+      _roomNames = roomNames;
       _loading = false;
     });
   }
@@ -209,6 +235,55 @@ class _PlantCollectionPageState extends State<PlantCollectionPage>
                         ],
                       ),
                     ),
+                    const SizedBox(height: 10),
+                    // Room filter chips
+                    if (_rooms.isNotEmpty)
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: SizedBox(
+                          height: 32,
+                          child: ListView(
+                            scrollDirection: Axis.horizontal,
+                            children: [
+                              _buildFilterChip(
+                                context,
+                                label: 'All Rooms',
+                                selected: _filterRoomId == null,
+                                onTap: () {
+                                  setState(() => _filterRoomId = null);
+                                  _load();
+                                },
+                              ),
+                              const SizedBox(width: 8),
+                              ..._rooms.map((room) => Padding(
+                                    padding: const EdgeInsets.only(right: 8),
+                                    child: _buildFilterChip(
+                                      context,
+                                      label: room.name,
+                                      selected: _filterRoomId == room.id,
+                                      onTap: () {
+                                        setState(() {
+                                          _filterRoomId = _filterRoomId == room.id ? null : room.id;
+                                        });
+                                        _load();
+                                      },
+                                    ),
+                                  ),),
+                              _buildFilterChip(
+                                context,
+                                label: 'Unassigned',
+                                selected: _filterRoomId == kUnassignedSentinel,
+                                onTap: () {
+                                  setState(() {
+                                    _filterRoomId = _filterRoomId == kUnassignedSentinel ? null : kUnassignedSentinel;
+                                  });
+                                  _load();
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                     const SizedBox(height: 10),
                     Expanded(
                       child: RefreshIndicator(
@@ -373,7 +448,7 @@ class _PlantCollectionPageState extends State<PlantCollectionPage>
                     ],
                   ),
                 ),
-                if (plant.room != null) ...[
+                if (plant.roomId != null && _roomNames.containsKey(plant.roomId)) ...[
                   const SizedBox(width: 8),
                   Container(
                     padding: const EdgeInsets.symmetric(
@@ -382,6 +457,23 @@ class _PlantCollectionPageState extends State<PlantCollectionPage>
                     ),
                     decoration: BoxDecoration(
                       color: theme.colorScheme.primaryContainer,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(
+                      _roomNames[plant.roomId] ?? 'Unknown',
+                      style: theme.textTheme.labelSmall,
+                    ),
+                  ),
+                ] else if (plant.roomId == null && plant.room != null) ...[
+                  // Legacy room string fallback
+                  const SizedBox(width: 8),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
+                    decoration: BoxDecoration(
+                      color: theme.colorScheme.secondaryContainer,
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Text(

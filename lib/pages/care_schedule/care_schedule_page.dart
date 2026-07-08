@@ -44,6 +44,7 @@ class _CareSchedulePageState extends State<CareSchedulePage> with AutomaticKeepA
   List<CareTask> _tasks = [];
   List<String> _plantNames = [];
   List<SymptomLogEntry> _recentSymptoms = [];
+  Map<String, ({String name, String environment})> _taskRoomContext = {};
   bool _loading = true;
   String? _selectedPlantId;
   BuiltInTaskType? _selectedTaskType;
@@ -75,7 +76,7 @@ class _CareSchedulePageState extends State<CareSchedulePage> with AutomaticKeepA
   Future<void> _load() async {
     setState(() => _loading = true);
     try {
-      final tasks = await _usecases.getSchedule();
+      final result = await _usecases.getSchedule();
       if (!mounted) return;
 
       // Load recent symptom entries for the timeline
@@ -83,12 +84,13 @@ class _CareSchedulePageState extends State<CareSchedulePage> with AutomaticKeepA
       final allSymptoms = await symptomLogger.getAllSymptoms();
       allSymptoms.sort((a, b) => b.createdAt.compareTo(a.createdAt));
 
-      final plantNames = tasks.map((t) => t.plantName).toSet().toList()..sort();
+      final plantNames = result.tasks.map((t) => t.plantName).toSet().toList()..sort();
       if (!mounted) return;
       setState(() {
-        _tasks = tasks;
+        _tasks = result.tasks;
         _plantNames = plantNames;
         _recentSymptoms = allSymptoms.take(20).toList();
+        _taskRoomContext = result.roomContext;
         _loading = false;
       });
     } catch (e) {
@@ -157,36 +159,51 @@ class _CareSchedulePageState extends State<CareSchedulePage> with AutomaticKeepA
               if (overdue.isNotEmpty) ...[
                 _buildSectionHeader(theme, context.l10n.careScheduleOverdue, Colors.red),
                 ...overdue.map(
-                  (task) => CareTaskCard(
-                    task: task,
-                    onDone: () => _completeTask(task),
-                    onSnooze: (days) => _snoozeTask(task, days),
-                    onSkip: () => _skipTask(task),
-                  ),
+                  (task) {
+                    final roomCtx = _taskRoomContext[task.plantId];
+                    return CareTaskCard(
+                      task: task,
+                      roomName: roomCtx?.name,
+                      roomEnvironmentSummary: roomCtx?.environment,
+                      onDone: () => _completeTask(task),
+                      onSnooze: (days) => _snoozeTask(task, days),
+                      onSkip: () => _skipTask(task),
+                    );
+                  },
                 ),
                 const SizedBox(height: 16),
               ],
               if (dueToday.isNotEmpty) ...[
                 _buildSectionHeader(theme, context.l10n.careScheduleDueToday, Colors.orange),
                 ...dueToday.map(
-                  (task) => CareTaskCard(
-                    task: task,
-                    onDone: () => _completeTask(task),
-                    onSnooze: (days) => _snoozeTask(task, days),
-                    onSkip: () => _skipTask(task),
-                  ),
+                  (task) {
+                    final roomCtx = _taskRoomContext[task.plantId];
+                    return CareTaskCard(
+                      task: task,
+                      roomName: roomCtx?.name,
+                      roomEnvironmentSummary: roomCtx?.environment,
+                      onDone: () => _completeTask(task),
+                      onSnooze: (days) => _snoozeTask(task, days),
+                      onSkip: () => _skipTask(task),
+                    );
+                  },
                 ),
                 const SizedBox(height: 16),
               ],
               if (upcoming.isNotEmpty) ...[
                 _buildSectionHeader(theme, context.l10n.careScheduleUpcoming, Colors.green),
                 ...upcoming.map(
-                  (task) => CareTaskCard(
-                    task: task,
-                    onDone: () => _completeTask(task),
-                    onSnooze: (days) => _snoozeTask(task, days),
-                    onSkip: () => _skipTask(task),
-                  ),
+                  (task) {
+                    final roomCtx = _taskRoomContext[task.plantId];
+                    return CareTaskCard(
+                      task: task,
+                      roomName: roomCtx?.name,
+                      roomEnvironmentSummary: roomCtx?.environment,
+                      onDone: () => _completeTask(task),
+                      onSnooze: (days) => _snoozeTask(task, days),
+                      onSkip: () => _skipTask(task),
+                    );
+                  },
                 ),
               ],
               if (overdue.isEmpty && dueToday.isEmpty && upcoming.isEmpty)

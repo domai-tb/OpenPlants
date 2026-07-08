@@ -10,6 +10,7 @@ import 'package:open_plant/pages/plant_collection/plant_collection_item_entity.d
 import 'package:open_plant/pages/plant_collection/plant_collection_usecases.dart';
 import 'package:open_plant/pages/plant_journal/plant_journal_page.dart';
 import 'package:open_plant/pages/plant_journal/plant_journal_usecases.dart';
+import 'package:open_plant/pages/room_profiles/room_profiles_usecases.dart';
 import 'package:open_plant/pages/symptom_logger/symptom_logger_extensions.dart';
 import 'package:open_plant/pages/symptom_logger/symptom_logger_item_entity.dart';
 import 'package:open_plant/pages/symptom_logger/symptom_logger_page.dart';
@@ -29,10 +30,12 @@ class _PlantCollectionDetailPageState extends State<PlantCollectionDetailPage> {
   late PlantCollectionUsecases _usecases;
   late SymptomLoggerUseCases _symptomUsecases;
   late PlantJournalUseCases _journalUsecases;
+  late RoomProfilesUsecases _roomUsecases;
   bool _wired = false;
   late PlantEntity _plant;
   List<SymptomLogEntry> _symptomHistory = const [];
   bool _loadingSymptoms = true;
+  String? _roomName;
 
   @override
   void initState() {
@@ -48,8 +51,17 @@ class _PlantCollectionDetailPageState extends State<PlantCollectionDetailPage> {
     _usecases = services.plantCollection;
     _symptomUsecases = services.symptomLogger;
     _journalUsecases = services.plantJournal;
+    _roomUsecases = services.roomProfiles;
     _wired = true;
     _loadSymptomHistory();
+    _loadRoomName();
+  }
+
+  Future<void> _loadRoomName() async {
+    if (_plant.roomId == null) return;
+    final room = await _roomUsecases.getById(_plant.roomId!);
+    if (!mounted) return;
+    setState(() => _roomName = room?.name);
   }
 
   Future<void> _loadSymptomHistory() async {
@@ -219,12 +231,12 @@ class _PlantCollectionDetailPageState extends State<PlantCollectionDetailPage> {
           ],
 
           // Room
-          if (_plant.room != null) ...[
+          if (_plant.roomId != null || _plant.room != null) ...[
             _buildInfoRow(
               theme,
               icon: Icons.room,
               label: context.l10n.room,
-              value: _plant.room!,
+              value: _roomName ?? _plant.room ?? 'Unknown room',
             ),
             const Divider(height: 32),
           ],

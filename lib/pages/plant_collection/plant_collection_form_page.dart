@@ -5,12 +5,16 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'package:open_plant/core/app_scope.dart';
+import 'package:open_plant/core/constants.dart';
 import 'package:open_plant/l10n/l10n_x.dart';
 import 'package:open_plant/pages/plant_collection/plant_collection_item_entity.dart';
 import 'package:open_plant/pages/plant_collection/plant_collection_usecases.dart';
 import 'package:open_plant/pages/plant_identification/classifier/classification_result.dart';
 import 'package:open_plant/pages/plant_identification/classifier/plant_classifier_usecases.dart';
 import 'package:open_plant/pages/plant_identification/widgets/identification_picker.dart';
+import 'package:open_plant/pages/room_profiles/room_profiles_entity.dart';
+import 'package:open_plant/pages/room_profiles/room_profiles_form_page.dart';
+import 'package:open_plant/pages/room_profiles/room_profiles_usecases.dart';
 
 /// Identification flow states for the add-plant form.
 enum PhotoIdentificationState { idle, identifying, resultsShown, error }
@@ -28,21 +32,25 @@ class _PlantCollectionFormPageState extends State<PlantCollectionFormPage> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _speciesController = TextEditingController();
-  final _roomController = TextEditingController();
   final _notesController = TextEditingController();
 
   late PlantCollectionUsecases _usecases;
   late PlantClassifierUsecases _identificationUsecases;
+  late RoomProfilesUsecases _roomUsecases;
   bool _wired = false;
 
   File? _photoFile;
   String? _existingPhotoPath;
   CareStatus _careStatus = CareStatus.happy;
+  String? _selectedRoomId;
   bool _saving = false;
+  int _roomDropdownKey = 0;
 
   PhotoIdentificationState _photoIdentificationState = PhotoIdentificationState.idle;
   List<SpeciesPrediction> _identificationResults = [];
   String? _identifyingPhotoPath;
+
+  List<RoomEntity> _rooms = [];
 
   bool get _isEditing => widget.plant != null;
 
@@ -53,23 +61,31 @@ class _PlantCollectionFormPageState extends State<PlantCollectionFormPage> {
     final services = AppScope.of(context).services;
     _usecases = services.plantCollection;
     _identificationUsecases = services.plantIdentification;
+    _roomUsecases = services.roomProfiles;
     _wired = true;
+
+    _loadRooms();
 
     if (_isEditing) {
       _nameController.text = widget.plant!.name;
       _speciesController.text = widget.plant!.speciesName ?? '';
-      _roomController.text = widget.plant!.room ?? '';
       _notesController.text = widget.plant!.notes ?? '';
       _careStatus = widget.plant!.careStatus;
       _existingPhotoPath = widget.plant!.photoPath;
+      _selectedRoomId = widget.plant!.roomId;
     }
+  }
+
+  Future<void> _loadRooms() async {
+    final rooms = await _roomUsecases.getAll();
+    if (!mounted) return;
+    setState(() => _rooms = rooms);
   }
 
   @override
   void dispose() {
     _nameController.dispose();
     _speciesController.dispose();
-    _roomController.dispose();
     _notesController.dispose();
     super.dispose();
   }
@@ -167,8 +183,8 @@ class _PlantCollectionFormPageState extends State<PlantCollectionFormPage> {
           name: _nameController.text.trim(),
           speciesName: _speciesController.text.trim().isEmpty ? null : _speciesController.text.trim(),
           clearSpecies: _speciesController.text.trim().isEmpty,
-          room: _roomController.text.trim().isEmpty ? null : _roomController.text.trim(),
-          clearRoom: _roomController.text.trim().isEmpty,
+          roomId: _selectedRoomId,
+          clearRoomId: _selectedRoomId == null,
           notes: _notesController.text.trim().isEmpty ? null : _notesController.text.trim(),
           clearNotes: _notesController.text.trim().isEmpty,
           careStatus: _careStatus,
@@ -186,7 +202,7 @@ class _PlantCollectionFormPageState extends State<PlantCollectionFormPage> {
           id: '',
           name: _nameController.text.trim(),
           speciesName: _speciesController.text.trim().isEmpty ? null : _speciesController.text.trim(),
-          room: _roomController.text.trim().isEmpty ? null : _roomController.text.trim(),
+          roomId: _selectedRoomId,
           notes: _notesController.text.trim().isEmpty ? null : _notesController.text.trim(),
           careStatus: _careStatus,
           createdAt: now,
@@ -310,13 +326,43 @@ class _PlantCollectionFormPageState extends State<PlantCollectionFormPage> {
               const SizedBox(height: 16),
             ],
 
-            // Room field
-            TextFormField(
-              controller: _roomController,
+            // Room picker
+            DropdownButtonFormField<String?>(
+              key: ValueKey(_roomDropdownKey),
+              initialValue: _selectedRoomId,
               decoration: InputDecoration(
                 labelText: context.l10n.room,
                 border: const OutlineInputBorder(),
               ),
+              items: [
+                const DropdownMenuItem<String?>(
+                  child: Text('No room'),
+                ),
+                ..._rooms.map((room) => DropdownMenuItem<String?>(
+                      value: room.id,
+                      child: Text(room.name),
+                    ),),
+                const DropdownMenuItem<String?>(
+                  value: kNewRoomSentinel,
+                  child: Text('+ New Room'),
+                ),
+              ],
+              onChanged: (value) async {
+                if (value == kNewRoomSentinel) {
+                  final newRoom = await Navigator.of(context).push<RoomEntity>(
+                    MaterialPageRoute(builder: (_) => const RoomProfilesFormPage()),
+                  );
+                  if (newRoom != null) {
+                    await _loadRooms();
+                    setState(() => _selectedRoomId = newRoom.id);
+                  } else {
+                    // User cancelled — force rebuild to reset dropdown
+                    setState(() => _roomDropdownKey++);
+                  }
+                } else {
+                  setState(() => _selectedRoomId = value);
+                }
+              },
             ),
             const SizedBox(height: 16),
 

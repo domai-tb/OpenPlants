@@ -13,3 +13,9 @@ const double kNavBarItemWidth = 80;
 
 /// Returns the platform-appropriate navbar height
 double get bottomNavBarHeight => Platform.isIOS ? kBottomNavBarHeight : kBottomNavBarHeightAndroid;
+
+/// Sentinel value for the "New Room" option in room pickers.
+const String kNewRoomSentinel = '__new_room__';
+
+/// Sentinel value for the "Unassigned" filter in plant collection.
+const String kUnassignedSentinel = '__unassigned__';

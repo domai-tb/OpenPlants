@@ -7,6 +7,8 @@ import 'package:open_plant/pages/care_schedule/care_task_type.dart';
 /// A card displaying a care task with actions.
 class CareTaskCard extends StatelessWidget {
   final CareTask task;
+  final String? roomName;
+  final String? roomEnvironmentSummary;
   final VoidCallback onDone;
   final Function(int days) onSnooze;
   final VoidCallback onSkip;
@@ -14,6 +16,8 @@ class CareTaskCard extends StatelessWidget {
   const CareTaskCard({
     super.key,
     required this.task,
+    this.roomName,
+    this.roomEnvironmentSummary,
     required this.onDone,
     required this.onSnooze,
     required this.onSkip,
@@ -54,6 +58,16 @@ class CareTaskCard extends StatelessWidget {
                           color: theme.colorScheme.onSurfaceVariant,
                         ),
                       ),
+                      if (roomName != null && roomEnvironmentSummary != null) ...[
+                        const SizedBox(height: 2),
+                        Text(
+                          '$roomName — $roomEnvironmentSummary',
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: theme.colorScheme.onSurfaceVariant,
+                            fontSize: 11,
+                          ),
+                        ),
+                      ],
                     ],
                   ),
                 ),

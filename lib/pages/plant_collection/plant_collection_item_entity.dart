@@ -27,6 +27,7 @@ class PlantEntity {
   final String? photoPath;
   final String? speciesName;
   final String? room;
+  final String? roomId;
   final String? notes;
   final CareStatus careStatus;
   final DateTime? lastWateredAt;
@@ -40,6 +41,7 @@ class PlantEntity {
     this.photoPath,
     this.speciesName,
     this.room,
+    this.roomId,
     this.notes,
     this.careStatus = CareStatus.happy,
     this.lastWateredAt,
@@ -58,6 +60,8 @@ class PlantEntity {
     bool clearSpecies = false,
     String? room,
     bool clearRoom = false,
+    String? roomId,
+    bool clearRoomId = false,
     String? notes,
     bool clearNotes = false,
     CareStatus? careStatus,
@@ -74,6 +78,7 @@ class PlantEntity {
       photoPath: clearPhoto ? null : (photoPath ?? this.photoPath),
       speciesName: clearSpecies ? null : (speciesName ?? this.speciesName),
       room: clearRoom ? null : (room ?? this.room),
+      roomId: clearRoomId ? null : (roomId ?? this.roomId),
       notes: clearNotes ? null : (notes ?? this.notes),
       careStatus: careStatus ?? this.careStatus,
       lastWateredAt: clearLastWatered ? null : (lastWateredAt ?? this.lastWateredAt),
@@ -91,6 +96,7 @@ class PlantEntity {
       'photoPath': photoPath,
       'speciesName': speciesName,
       'room': room,
+      'roomId': roomId,
       'notes': notes,
       'careStatus': careStatus.toJson(),
       'lastWateredAt': lastWateredAt?.toIso8601String(),
@@ -108,6 +114,7 @@ class PlantEntity {
       photoPath: json['photoPath'] as String?,
       speciesName: json['speciesName'] as String?,
       room: json['room'] as String?,
+      roomId: json['roomId'] as String?,
       notes: json['notes'] as String?,
       careStatus: CareStatusExtension.fromJson(json['careStatus'] as String? ?? 'happy'),
       lastWateredAt: json['lastWateredAt'] != null ? DateTime.parse(json['lastWateredAt'] as String) : null,

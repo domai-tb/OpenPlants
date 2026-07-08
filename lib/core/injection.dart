@@ -17,6 +17,9 @@ import 'package:open_plant/pages/plant_collection/plant_collection_usecases.dart
 import 'package:open_plant/pages/plant_journal/plant_journal_datasource.dart';
 import 'package:open_plant/pages/plant_journal/plant_journal_repository.dart';
 import 'package:open_plant/pages/plant_journal/plant_journal_usecases.dart';
+import 'package:open_plant/pages/room_profiles/room_profiles_datasource.dart';
+import 'package:open_plant/pages/room_profiles/room_profiles_repository.dart';
+import 'package:open_plant/pages/room_profiles/room_profiles_usecases.dart';
 import 'package:open_plant/pages/species_library/species_library_datasource.dart';
 import 'package:open_plant/pages/species_library/species_library_repository.dart';
 import 'package:open_plant/pages/species_library/species_library_usecases.dart';
@@ -101,6 +104,7 @@ Future<void> init() async {
     () => CareScheduleUsecases(
       repository: sl(),
       plantCollection: sl(),
+      roomProfiles: sl(),
     ),
   );
 
@@ -129,6 +133,17 @@ Future<void> init() async {
     () => PlantJournalUseCases(repository: sl()),
   );
 
+  // Room Profiles
+  sl.registerLazySingleton<RoomProfilesDatasource>(
+    RoomProfilesDatasource.new,
+  );
+  sl.registerLazySingleton<RoomProfilesRepository>(
+    () => RoomProfilesRepository(dataSource: sl()),
+  );
+  sl.registerLazySingleton<RoomProfilesUsecases>(
+    () => RoomProfilesUsecases(repository: sl()),
+  );
+
   // Aggregate wiring
   sl.registerLazySingleton<AppServices>(
     () => AppServices(
@@ -140,6 +155,7 @@ Future<void> init() async {
       careSchedule: sl(),
       symptomLogger: sl(),
       plantJournal: sl(),
+      roomProfiles: sl(),
     ),
   );
 }

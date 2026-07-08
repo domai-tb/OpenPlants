@@ -9,6 +9,7 @@ import 'package:open_plant/pages/care_schedule/schedule_config.dart';
 import 'package:open_plant/pages/care_schedule/schedule_engine.dart';
 import 'package:open_plant/pages/care_schedule/species_care_profile.dart';
 import 'package:open_plant/pages/care_schedule/task_completion.dart';
+import 'package:open_plant/pages/room_profiles/room_profiles_entity.dart';
 
 void main() {
   final today = DateTime(2025, 7, 1); // ignore: avoid_redundant_argument_values
@@ -111,7 +112,6 @@ void main() {
     test('missing room config returns 1.0', () {
       final mod = RoomModifier.compute(
         taskType: BuiltInTaskType.watering,
-        room: null,
       );
       expect(mod, 1.0);
     });
@@ -122,6 +122,62 @@ void main() {
         room: const RoomConfig(
           roomName: 'Test',
           sunlightLevel: SunlightLevel.fullSun,
+        ),
+      );
+      expect(mod, 1.0);
+    });
+
+    test('RoomEntity direct sun shortens watering interval', () {
+      final mod = RoomModifier.compute(
+        taskType: BuiltInTaskType.watering,
+        roomEntity: RoomEntity(
+          id: 'room-1',
+          name: 'Test',
+          lightLevel: RoomLightLevel.directSun,
+          createdAt: DateTime(2025),
+          updatedAt: DateTime(2025),
+        ),
+      );
+      expect(mod, lessThan(1.0));
+    });
+
+    test('RoomEntity high humidity lengthens watering interval', () {
+      final mod = RoomModifier.compute(
+        taskType: BuiltInTaskType.watering,
+        roomEntity: RoomEntity(
+          id: 'room-1',
+          name: 'Test',
+          humidityLevel: RoomHumidityLevel.high,
+          createdAt: DateTime(2025),
+          updatedAt: DateTime(2025),
+        ),
+      );
+      expect(mod, greaterThan(1.0));
+    });
+
+    test('RoomEntity low humidity shortens misting interval', () {
+      final mod = RoomModifier.compute(
+        taskType: BuiltInTaskType.misting,
+        roomEntity: RoomEntity(
+          id: 'room-1',
+          name: 'Test',
+          humidityLevel: RoomHumidityLevel.low,
+          createdAt: DateTime(2025),
+          updatedAt: DateTime(2025),
+        ),
+      );
+      expect(mod, lessThan(1.0));
+    });
+
+    test('RoomEntity non-watering/misting tasks are unaffected', () {
+      final mod = RoomModifier.compute(
+        taskType: BuiltInTaskType.fertilizing,
+        roomEntity: RoomEntity(
+          id: 'room-1',
+          name: 'Test',
+          lightLevel: RoomLightLevel.directSun,
+          createdAt: DateTime(2025),
+          updatedAt: DateTime(2025),
         ),
       );
       expect(mod, 1.0);

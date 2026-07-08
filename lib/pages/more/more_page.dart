@@ -10,6 +10,7 @@ import 'package:open_plant/pages/more/more_item_entity.dart';
 import 'package:open_plant/pages/more/more_settings_page.dart';
 import 'package:open_plant/pages/more/more_usecases.dart';
 import 'package:open_plant/pages/plant_collection/plant_collection_item_entity.dart';
+import 'package:open_plant/pages/room_profiles/room_profiles_page.dart';
 import 'package:open_plant/pages/symptom_logger/symptom_logger_page.dart';
 import 'package:open_plant/widgets/scroll_to_top_button.dart';
 
@@ -66,6 +67,9 @@ class _MorePageState extends State<MorePage> with AutomaticKeepAliveClientMixin<
 
   void _open(MoreItemEntity item) {
     switch (item.id) {
+      case 'rooms':
+        Navigator.of(context).push(MaterialPageRoute(builder: (_) => const RoomProfilesPage()));
+        break;
       case 'settings':
         Navigator.of(context).push(MaterialPageRoute(builder: (_) => const MoreSettingsPage()));
         break;

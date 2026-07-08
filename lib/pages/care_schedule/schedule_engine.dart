@@ -8,6 +8,7 @@ import 'package:open_plant/pages/care_schedule/room_modifier.dart';
 import 'package:open_plant/pages/care_schedule/schedule_config.dart';
 import 'package:open_plant/pages/care_schedule/species_care_profile.dart';
 import 'package:open_plant/pages/care_schedule/task_completion.dart';
+import 'package:open_plant/pages/room_profiles/room_profiles_entity.dart';
 
 /// Input data for computing a schedule for a single plant.
 class PlantScheduleInput {
@@ -15,6 +16,7 @@ class PlantScheduleInput {
   final String plantName;
   final ScheduleConfig config;
   final RoomConfig? roomConfig;
+  final RoomEntity? roomEntity;
   final SpeciesCareProfile profile;
   final List<TaskCompletion> completionHistory;
   final List<CareTaskType> customTaskTypes;
@@ -24,6 +26,7 @@ class PlantScheduleInput {
     required this.plantName,
     required this.config,
     this.roomConfig,
+    this.roomEntity,
     required this.profile,
     this.completionHistory = const [],
     this.customTaskTypes = const [],
@@ -65,6 +68,7 @@ class ScheduleEngine {
         roomMod = RoomModifier.compute(
           taskType: taskType.builtIn!,
           room: input.roomConfig,
+          roomEntity: input.roomEntity,
         );
       }
 
