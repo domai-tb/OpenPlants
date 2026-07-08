@@ -54,4 +54,4 @@
 
 - [x] 9.1 Run `fvm flutter analyze` and resolve any lint issues (especially `always_use_package_imports`, `prefer_const_constructors`, `require_trailing_commas`)
 - [x] 9.2 Run `fvm flutter test` to verify existing tests still pass
-- [ ] 9.3 Manual smoke test: verify dashboard loads with empty state when no plants, verify quick actions navigate correctly, verify sections appear/hide based on data availability
+- [x] 9.3 Manual smoke test: verify dashboard loads with empty state when no plants, verify quick actions navigate correctly, verify sections appear/hide based on data availability
