@@ -15,8 +15,8 @@ class _ModelInfoPageState extends State<ModelInfoPage> {
   late Future<ModelInfoItem> _future;
 
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     final useCase = AppScope.of(context).services.modelInfo;
     _future = useCase.getModelInfo();
   }
@@ -107,6 +107,20 @@ class _ModelInfoPageState extends State<ModelInfoPage> {
               Text(
                 info.confidenceDescription,
                 style: theme.textTheme.bodyLarge,
+              ),
+              const SizedBox(height: 24),
+
+              // Source section
+              Text(
+                'Source',
+                style: theme.textTheme.headlineSmall,
+              ),
+              const SizedBox(height: 10),
+              SelectableText(
+                info.url,
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: theme.colorScheme.primary,
+                ),
               ),
             ],
           );

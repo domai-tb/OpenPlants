@@ -6,6 +6,7 @@ class ModelInfoItem {
   final String inputSize;
   final int labelCount;
   final String confidenceDescription;
+  final String url;
 
   const ModelInfoItem({
     required this.name,
@@ -14,6 +15,7 @@ class ModelInfoItem {
     required this.inputSize,
     required this.labelCount,
     required this.confidenceDescription,
+    required this.url,
   });
 
   /// Creates a [ModelInfoItem] from a parsed JSON map.
@@ -25,6 +27,7 @@ class ModelInfoItem {
       inputSize: json['inputSize'] as String,
       labelCount: json['labelCount'] as int,
       confidenceDescription: json['confidenceDescription'] as String,
+      url: json['url'] as String,
     );
   }
 }
