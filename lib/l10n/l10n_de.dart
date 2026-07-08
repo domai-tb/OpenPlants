@@ -300,6 +300,27 @@ class AppLocalizationsDe extends AppLocalizations {
   String get plantIdTryAgain => 'Erneut versuchen';
 
   @override
+  String get plantIdIdentifying => 'Identifying species...';
+
+  @override
+  String get plantIdSelectSpecies => 'Select a species';
+
+  @override
+  String get plantIdCouldNotIdentifyEnterManually =>
+      'Could not identify species. Enter manually below.';
+
+  @override
+  String get plantIdEnterSpeciesManually => 'Enter species manually';
+
+  @override
+  String get plantIdSkipIdentification =>
+      'Skip identification / enter manually';
+
+  @override
+  String get plantIdIdentificationErrorWithManual =>
+      'Identification failed. You can still enter the species manually.';
+
+  @override
   String get plantCollectionTitle => 'Pflanzensammlung';
 
   @override

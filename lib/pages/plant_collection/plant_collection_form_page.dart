@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -7,6 +8,12 @@ import 'package:open_plant/core/app_scope.dart';
 import 'package:open_plant/l10n/l10n_x.dart';
 import 'package:open_plant/pages/plant_collection/plant_collection_item_entity.dart';
 import 'package:open_plant/pages/plant_collection/plant_collection_usecases.dart';
+import 'package:open_plant/pages/plant_identification/classifier/classification_result.dart';
+import 'package:open_plant/pages/plant_identification/classifier/plant_classifier_usecases.dart';
+import 'package:open_plant/pages/plant_identification/widgets/identification_picker.dart';
+
+/// Identification flow states for the add-plant form.
+enum PhotoIdentificationState { idle, identifying, resultsShown, error }
 
 class PlantCollectionFormPage extends StatefulWidget {
   final PlantEntity? plant;
@@ -25,6 +32,7 @@ class _PlantCollectionFormPageState extends State<PlantCollectionFormPage> {
   final _notesController = TextEditingController();
 
   late PlantCollectionUsecases _usecases;
+  late PlantClassifierUsecases _identificationUsecases;
   bool _wired = false;
 
   File? _photoFile;
@@ -32,13 +40,19 @@ class _PlantCollectionFormPageState extends State<PlantCollectionFormPage> {
   CareStatus _careStatus = CareStatus.happy;
   bool _saving = false;
 
+  PhotoIdentificationState _photoIdentificationState = PhotoIdentificationState.idle;
+  List<SpeciesPrediction> _identificationResults = [];
+  String? _identifyingPhotoPath;
+
   bool get _isEditing => widget.plant != null;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     if (_wired) return;
-    _usecases = AppScope.of(context).services.plantCollection;
+    final services = AppScope.of(context).services;
+    _usecases = services.plantCollection;
+    _identificationUsecases = services.plantIdentification;
     _wired = true;
 
     if (_isEditing) {
@@ -60,23 +74,86 @@ class _PlantCollectionFormPageState extends State<PlantCollectionFormPage> {
     super.dispose();
   }
 
-  Future<void> _pickPhoto() async {
-    final picker = ImagePicker();
-    final image = await picker.pickImage(source: ImageSource.gallery);
+  Future<void> _cameraOrGalleryPicker() async {
+    final source = await showModalBottomSheet<ImageSource>(
+      context: context,
+      builder: (context) => SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                leading: const Icon(Icons.camera_alt),
+                title: Text(context.l10n.plantIdCamera),
+                onTap: () => Navigator.of(context).pop(ImageSource.camera),
+              ),
+              ListTile(
+                leading: const Icon(Icons.photo_library),
+                title: Text(context.l10n.plantIdGallery),
+                onTap: () => Navigator.of(context).pop(ImageSource.gallery),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
 
-    if (image != null) {
+    if (source == null || !mounted) return;
+
+    final picker = ImagePicker();
+    final image = await picker.pickImage(source: source);
+
+    if (image != null && mounted) {
       setState(() {
         _photoFile = File(image.path);
         _existingPhotoPath = null;
       });
+      unawaited(_runIdentification());
     }
   }
 
   void _removePhoto() {
+    _identifyingPhotoPath = null;
     setState(() {
       _photoFile = null;
       _existingPhotoPath = null;
+      _photoIdentificationState = PhotoIdentificationState.idle;
+      _identificationResults = [];
     });
+  }
+
+  Future<void> _runIdentification() async {
+    if (_photoFile == null) return;
+
+    final photoPath = _photoFile!.path;
+    _identifyingPhotoPath = photoPath;
+
+    setState(() {
+      _photoIdentificationState = PhotoIdentificationState.identifying;
+    });
+
+    try {
+      final bytes = await _photoFile!.readAsBytes();
+      final result = await _identificationUsecases.classifyImage(bytes);
+      if (!mounted) return;
+
+      // Discard results if a new photo was picked while identification was in flight
+      if (_identifyingPhotoPath != photoPath) return;
+
+      final topPredictions = result.topK(5);
+      setState(() {
+        _identificationResults = topPredictions;
+        _photoIdentificationState = PhotoIdentificationState.resultsShown;
+      });
+    } catch (e) {
+      if (!mounted) return;
+      if (_identifyingPhotoPath != photoPath) return;
+      debugPrint('Identification failed: $e');
+      setState(() {
+        _photoIdentificationState = PhotoIdentificationState.error;
+      });
+    }
   }
 
   Future<void> _save() async {
@@ -180,15 +257,58 @@ class _PlantCollectionFormPageState extends State<PlantCollectionFormPage> {
             ),
             const SizedBox(height: 16),
 
-            // Species field
-            TextFormField(
-              controller: _speciesController,
-              decoration: InputDecoration(
-                labelText: context.l10n.species,
-                border: const OutlineInputBorder(),
+            // Identification picker (shown when results are available)
+            if (_photoIdentificationState == PhotoIdentificationState.resultsShown) ...[
+              IdentificationPicker(
+                predictions: _identificationResults,
+                onSelected: _onSpeciesSelected,
+                onSkip: _onSkipIdentification,
               ),
-            ),
-            const SizedBox(height: 16),
+              const SizedBox(height: 24),
+            ],
+
+            // Identification loading indicator
+            if (_photoIdentificationState == PhotoIdentificationState.identifying) ...[
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                child: Center(
+                  child: Column(
+                    children: [
+                      const CircularProgressIndicator(),
+                      const SizedBox(height: 12),
+                      Text(context.l10n.plantIdIdentifying),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 24),
+            ],
+
+            // Identification error
+            if (_photoIdentificationState == PhotoIdentificationState.error) ...[
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                child: Text(
+                  context.l10n.plantIdIdentificationErrorWithManual,
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: Theme.of(context).colorScheme.error,
+                      ),
+                ),
+              ),
+              const SizedBox(height: 16),
+            ],
+
+            // Species field (hidden when picker results are shown)
+            if (_photoIdentificationState != PhotoIdentificationState.resultsShown) ...[
+              TextFormField(
+                controller: _speciesController,
+                decoration: InputDecoration(
+                  labelText: context.l10n.species,
+                  border: const OutlineInputBorder(),
+                ),
+              ),
+              const SizedBox(height: 16),
+            ],
 
             // Room field
             TextFormField(
@@ -258,19 +378,36 @@ class _PlantCollectionFormPageState extends State<PlantCollectionFormPage> {
               children: [
                 ClipRRect(
                   borderRadius: BorderRadius.circular(12),
-                  child: _photoFile != null
-                      ? Image.file(
+                  child: Stack(
+                    children: [
+                      if (_photoFile != null)
+                        Image.file(
                           _photoFile!,
                           width: 150,
                           height: 150,
                           fit: BoxFit.cover,
-                        )
-                      : Image.file(
+                        ),
+                      if (_photoFile == null && _existingPhotoPath != null)
+                        Image.file(
                           File(_existingPhotoPath!),
                           width: 150,
                           height: 150,
                           fit: BoxFit.cover,
                         ),
+                      if (_photoIdentificationState == PhotoIdentificationState.identifying)
+                        Positioned.fill(
+                          child: Container(
+                            color: Colors.black.withValues(alpha: 0.4),
+                            child: const Center(
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                                strokeWidth: 2,
+                              ),
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
                 ),
                 Positioned(
                   top: 4,
@@ -295,13 +432,13 @@ class _PlantCollectionFormPageState extends State<PlantCollectionFormPage> {
             ),
             const SizedBox(height: 8),
             TextButton.icon(
-              onPressed: _pickPhoto,
+              onPressed: _cameraOrGalleryPicker,
               icon: const Icon(Icons.edit),
               label: Text(context.l10n.changePhoto),
             ),
           ] else ...[
             GestureDetector(
-              onTap: _pickPhoto,
+              onTap: _cameraOrGalleryPicker,
               child: Container(
                 width: 150,
                 height: 150,
@@ -330,5 +467,20 @@ class _PlantCollectionFormPageState extends State<PlantCollectionFormPage> {
         ],
       ),
     );
+  }
+
+  void _onSpeciesSelected(String speciesName) {
+    setState(() {
+      _speciesController.text = speciesName;
+      _photoIdentificationState = PhotoIdentificationState.idle;
+      _identificationResults = [];
+    });
+  }
+
+  void _onSkipIdentification() {
+    setState(() {
+      _photoIdentificationState = PhotoIdentificationState.idle;
+      _identificationResults = [];
+    });
   }
 }

@@ -106,6 +106,12 @@
   "plantIdFailedToPick": "Failed to pick image",
   "plantIdIdentificationFailed": "Identification failed",
   "plantIdTryAgain": "Try Again",
+  "plantIdIdentifying": "Identifying species...",
+  "plantIdSelectSpecies": "Select a species",
+  "plantIdCouldNotIdentifyEnterManually": "Could not identify species. Enter manually below.",
+  "plantIdEnterSpeciesManually": "Enter species manually",
+  "plantIdSkipIdentification": "Skip identification / enter manually",
+  "plantIdIdentificationErrorWithManual": "Identification failed. You can still enter the species manually.",
 
   "plantCollectionTitle": "Plant Collection",
   "plantCollectionEmpty": "No plants yet",

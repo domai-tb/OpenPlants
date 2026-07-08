@@ -650,6 +650,42 @@ abstract class AppLocalizations {
   /// **'Try Again'**
   String get plantIdTryAgain;
 
+  /// No description provided for @plantIdIdentifying.
+  ///
+  /// In en, this message translates to:
+  /// **'Identifying species...'**
+  String get plantIdIdentifying;
+
+  /// No description provided for @plantIdSelectSpecies.
+  ///
+  /// In en, this message translates to:
+  /// **'Select a species'**
+  String get plantIdSelectSpecies;
+
+  /// No description provided for @plantIdCouldNotIdentifyEnterManually.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not identify species. Enter manually below.'**
+  String get plantIdCouldNotIdentifyEnterManually;
+
+  /// No description provided for @plantIdEnterSpeciesManually.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter species manually'**
+  String get plantIdEnterSpeciesManually;
+
+  /// No description provided for @plantIdSkipIdentification.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip identification / enter manually'**
+  String get plantIdSkipIdentification;
+
+  /// No description provided for @plantIdIdentificationErrorWithManual.
+  ///
+  /// In en, this message translates to:
+  /// **'Identification failed. You can still enter the species manually.'**
+  String get plantIdIdentificationErrorWithManual;
+
   /// No description provided for @plantCollectionTitle.
   ///
   /// In en, this message translates to:
