@@ -96,9 +96,7 @@ class ScheduleEngine {
       );
 
       // 7. Compute due date
-      final dueDate = lastCompletion != null
-          ? lastCompletion.completedAt.add(Duration(days: finalInterval))
-          : today;
+      final dueDate = lastCompletion != null ? lastCompletion.completedAt.add(Duration(days: finalInterval)) : today;
 
       tasks.add(
         CareTask(
@@ -148,9 +146,7 @@ class ScheduleEngine {
     CareTaskType taskType,
     String plantId,
   ) {
-    final matching = history
-        .where((c) => c.plantId == plantId && c.taskType == taskType)
-        .toList()
+    final matching = history.where((c) => c.plantId == plantId && c.taskType == taskType).toList()
       ..sort((a, b) => b.completedAt.compareTo(a.completedAt));
 
     return matching.isNotEmpty ? matching.first : null;

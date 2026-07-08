@@ -558,4 +558,209 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get careScheduleGoToCollection => 'Zur Pflanzensammlung';
+
+  @override
+  String get symptomLoggerTitle => 'Log Symptom';
+
+  @override
+  String get symptomLoggerLogSymptom => 'Log Symptom';
+
+  @override
+  String get symptomLoggerSaved => 'Symptom logged successfully!';
+
+  @override
+  String get symptomLoggerStep => 'Step';
+
+  @override
+  String get symptomLoggerStepSymptoms => 'Symptoms';
+
+  @override
+  String get symptomLoggerStepSeverity => 'Severity';
+
+  @override
+  String get symptomLoggerStepParts => 'Affected Parts';
+
+  @override
+  String get symptomLoggerStepOnset => 'When did it start?';
+
+  @override
+  String get symptomLoggerStepEnvironment => 'Environment';
+
+  @override
+  String get symptomLoggerStepNotes => 'Notes & Photo';
+
+  @override
+  String get symptomLoggerStepReview => 'Review';
+
+  @override
+  String get symptomLoggerSelectSymptoms =>
+      'What symptoms do you see? (select at least one)';
+
+  @override
+  String get symptomLoggerSelectSeverity => 'How severe is the problem?';
+
+  @override
+  String get symptomLoggerSelectParts => 'Which parts are affected?';
+
+  @override
+  String get symptomLoggerSelectOnset => 'When did you first notice?';
+
+  @override
+  String get symptomLoggerSoilMoisture => 'Soil Moisture';
+
+  @override
+  String get symptomLoggerLightCondition => 'Light Condition';
+
+  @override
+  String get symptomLoggerNotesLabel => 'Notes';
+
+  @override
+  String get symptomLoggerNotesHint =>
+      'Add any observations (optional, max 500 characters)';
+
+  @override
+  String get symptomLoggerPhotoLabel => 'Photo';
+
+  @override
+  String get symptomLoggerAddPhoto => 'Add Photo';
+
+  @override
+  String get symptomLoggerRemovePhoto => 'Remove Photo';
+
+  @override
+  String get symptomLoggerPhotoAttached => 'Photo attached';
+
+  @override
+  String get symptomLoggerReviewTitle => 'Review your entry';
+
+  @override
+  String get symptomLoggerSave => 'Save Entry';
+
+  @override
+  String get symptomLoggerSelectRequired =>
+      'Please make a selection before proceeding';
+
+  @override
+  String get symptomLoggerSelectPlant => 'Select a plant';
+
+  @override
+  String get symptomTypeYellowLeaves => 'Yellow Leaves';
+
+  @override
+  String get symptomTypeBrownTips => 'Brown Tips';
+
+  @override
+  String get symptomTypeDrooping => 'Drooping';
+
+  @override
+  String get symptomTypePests => 'Pests';
+
+  @override
+  String get symptomTypeMold => 'Mold';
+
+  @override
+  String get symptomTypeSoftStems => 'Soft Stems';
+
+  @override
+  String get symptomTypeDrySoil => 'Dry Soil';
+
+  @override
+  String get symptomTypeWetSoil => 'Wet Soil';
+
+  @override
+  String get symptomTypeLeafSpots => 'Leaf Spots';
+
+  @override
+  String get symptomSeverityMild => 'Mild';
+
+  @override
+  String get symptomSeverityMildDesc =>
+      'Minor issue, plant looks mostly healthy';
+
+  @override
+  String get symptomSeverityModerate => 'Moderate';
+
+  @override
+  String get symptomSeverityModerateDesc =>
+      'Noticeable problem, needs attention soon';
+
+  @override
+  String get symptomSeveritySevere => 'Severe';
+
+  @override
+  String get symptomSeveritySevereDesc =>
+      'Serious issue, requires immediate action';
+
+  @override
+  String get symptomPartLeaves => 'Leaves';
+
+  @override
+  String get symptomPartStems => 'Stems';
+
+  @override
+  String get symptomPartRoots => 'Roots';
+
+  @override
+  String get symptomPartSoil => 'Soil';
+
+  @override
+  String get symptomPartFlowers => 'Flowers';
+
+  @override
+  String get symptomPartMultiple => 'Multiple Areas';
+
+  @override
+  String get symptomOnsetToday => 'Today';
+
+  @override
+  String get symptomOnsetFewDays => 'A few days ago';
+
+  @override
+  String get symptomOnsetAboutWeek => 'About a week ago';
+
+  @override
+  String get symptomOnsetMoreThanWeek => 'More than a week ago';
+
+  @override
+  String get symptomSoilDry => 'Dry';
+
+  @override
+  String get symptomSoilMoist => 'Moist';
+
+  @override
+  String get symptomSoilWet => 'Wet';
+
+  @override
+  String get symptomSoilSoggy => 'Soggy';
+
+  @override
+  String get symptomLightFullSun => 'Full Sun';
+
+  @override
+  String get symptomLightPartialShade => 'Partial Shade';
+
+  @override
+  String get symptomLightLowLight => 'Low Light';
+
+  @override
+  String get symptomLightUnknown => 'Unknown';
+
+  @override
+  String get symptomLoggerHistory => 'Symptom History';
+
+  @override
+  String get symptomLoggerNoEntries => 'No symptoms logged yet';
+
+  @override
+  String get symptomLoggerMarkResolved => 'Mark Resolved';
+
+  @override
+  String get symptomLoggerMarkResolvedConfirm =>
+      'Mark this symptom as resolved?';
+
+  @override
+  String get symptomLoggerRecentEvents => 'Recent Health Events';
+
+  @override
+  String get careStatusNeedsAttention => 'Needs Attention';
 }

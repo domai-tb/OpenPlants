@@ -1147,6 +1147,402 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Go to Plant Collection'**
   String get careScheduleGoToCollection;
+
+  /// No description provided for @symptomLoggerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Log Symptom'**
+  String get symptomLoggerTitle;
+
+  /// No description provided for @symptomLoggerLogSymptom.
+  ///
+  /// In en, this message translates to:
+  /// **'Log Symptom'**
+  String get symptomLoggerLogSymptom;
+
+  /// No description provided for @symptomLoggerSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Symptom logged successfully!'**
+  String get symptomLoggerSaved;
+
+  /// No description provided for @symptomLoggerStep.
+  ///
+  /// In en, this message translates to:
+  /// **'Step'**
+  String get symptomLoggerStep;
+
+  /// No description provided for @symptomLoggerStepSymptoms.
+  ///
+  /// In en, this message translates to:
+  /// **'Symptoms'**
+  String get symptomLoggerStepSymptoms;
+
+  /// No description provided for @symptomLoggerStepSeverity.
+  ///
+  /// In en, this message translates to:
+  /// **'Severity'**
+  String get symptomLoggerStepSeverity;
+
+  /// No description provided for @symptomLoggerStepParts.
+  ///
+  /// In en, this message translates to:
+  /// **'Affected Parts'**
+  String get symptomLoggerStepParts;
+
+  /// No description provided for @symptomLoggerStepOnset.
+  ///
+  /// In en, this message translates to:
+  /// **'When did it start?'**
+  String get symptomLoggerStepOnset;
+
+  /// No description provided for @symptomLoggerStepEnvironment.
+  ///
+  /// In en, this message translates to:
+  /// **'Environment'**
+  String get symptomLoggerStepEnvironment;
+
+  /// No description provided for @symptomLoggerStepNotes.
+  ///
+  /// In en, this message translates to:
+  /// **'Notes & Photo'**
+  String get symptomLoggerStepNotes;
+
+  /// No description provided for @symptomLoggerStepReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Review'**
+  String get symptomLoggerStepReview;
+
+  /// No description provided for @symptomLoggerSelectSymptoms.
+  ///
+  /// In en, this message translates to:
+  /// **'What symptoms do you see? (select at least one)'**
+  String get symptomLoggerSelectSymptoms;
+
+  /// No description provided for @symptomLoggerSelectSeverity.
+  ///
+  /// In en, this message translates to:
+  /// **'How severe is the problem?'**
+  String get symptomLoggerSelectSeverity;
+
+  /// No description provided for @symptomLoggerSelectParts.
+  ///
+  /// In en, this message translates to:
+  /// **'Which parts are affected?'**
+  String get symptomLoggerSelectParts;
+
+  /// No description provided for @symptomLoggerSelectOnset.
+  ///
+  /// In en, this message translates to:
+  /// **'When did you first notice?'**
+  String get symptomLoggerSelectOnset;
+
+  /// No description provided for @symptomLoggerSoilMoisture.
+  ///
+  /// In en, this message translates to:
+  /// **'Soil Moisture'**
+  String get symptomLoggerSoilMoisture;
+
+  /// No description provided for @symptomLoggerLightCondition.
+  ///
+  /// In en, this message translates to:
+  /// **'Light Condition'**
+  String get symptomLoggerLightCondition;
+
+  /// No description provided for @symptomLoggerNotesLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Notes'**
+  String get symptomLoggerNotesLabel;
+
+  /// No description provided for @symptomLoggerNotesHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Add any observations (optional, max 500 characters)'**
+  String get symptomLoggerNotesHint;
+
+  /// No description provided for @symptomLoggerPhotoLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo'**
+  String get symptomLoggerPhotoLabel;
+
+  /// No description provided for @symptomLoggerAddPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Photo'**
+  String get symptomLoggerAddPhoto;
+
+  /// No description provided for @symptomLoggerRemovePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove Photo'**
+  String get symptomLoggerRemovePhoto;
+
+  /// No description provided for @symptomLoggerPhotoAttached.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo attached'**
+  String get symptomLoggerPhotoAttached;
+
+  /// No description provided for @symptomLoggerReviewTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Review your entry'**
+  String get symptomLoggerReviewTitle;
+
+  /// No description provided for @symptomLoggerSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Save Entry'**
+  String get symptomLoggerSave;
+
+  /// No description provided for @symptomLoggerSelectRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please make a selection before proceeding'**
+  String get symptomLoggerSelectRequired;
+
+  /// No description provided for @symptomLoggerSelectPlant.
+  ///
+  /// In en, this message translates to:
+  /// **'Select a plant'**
+  String get symptomLoggerSelectPlant;
+
+  /// No description provided for @symptomTypeYellowLeaves.
+  ///
+  /// In en, this message translates to:
+  /// **'Yellow Leaves'**
+  String get symptomTypeYellowLeaves;
+
+  /// No description provided for @symptomTypeBrownTips.
+  ///
+  /// In en, this message translates to:
+  /// **'Brown Tips'**
+  String get symptomTypeBrownTips;
+
+  /// No description provided for @symptomTypeDrooping.
+  ///
+  /// In en, this message translates to:
+  /// **'Drooping'**
+  String get symptomTypeDrooping;
+
+  /// No description provided for @symptomTypePests.
+  ///
+  /// In en, this message translates to:
+  /// **'Pests'**
+  String get symptomTypePests;
+
+  /// No description provided for @symptomTypeMold.
+  ///
+  /// In en, this message translates to:
+  /// **'Mold'**
+  String get symptomTypeMold;
+
+  /// No description provided for @symptomTypeSoftStems.
+  ///
+  /// In en, this message translates to:
+  /// **'Soft Stems'**
+  String get symptomTypeSoftStems;
+
+  /// No description provided for @symptomTypeDrySoil.
+  ///
+  /// In en, this message translates to:
+  /// **'Dry Soil'**
+  String get symptomTypeDrySoil;
+
+  /// No description provided for @symptomTypeWetSoil.
+  ///
+  /// In en, this message translates to:
+  /// **'Wet Soil'**
+  String get symptomTypeWetSoil;
+
+  /// No description provided for @symptomTypeLeafSpots.
+  ///
+  /// In en, this message translates to:
+  /// **'Leaf Spots'**
+  String get symptomTypeLeafSpots;
+
+  /// No description provided for @symptomSeverityMild.
+  ///
+  /// In en, this message translates to:
+  /// **'Mild'**
+  String get symptomSeverityMild;
+
+  /// No description provided for @symptomSeverityMildDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Minor issue, plant looks mostly healthy'**
+  String get symptomSeverityMildDesc;
+
+  /// No description provided for @symptomSeverityModerate.
+  ///
+  /// In en, this message translates to:
+  /// **'Moderate'**
+  String get symptomSeverityModerate;
+
+  /// No description provided for @symptomSeverityModerateDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Noticeable problem, needs attention soon'**
+  String get symptomSeverityModerateDesc;
+
+  /// No description provided for @symptomSeveritySevere.
+  ///
+  /// In en, this message translates to:
+  /// **'Severe'**
+  String get symptomSeveritySevere;
+
+  /// No description provided for @symptomSeveritySevereDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Serious issue, requires immediate action'**
+  String get symptomSeveritySevereDesc;
+
+  /// No description provided for @symptomPartLeaves.
+  ///
+  /// In en, this message translates to:
+  /// **'Leaves'**
+  String get symptomPartLeaves;
+
+  /// No description provided for @symptomPartStems.
+  ///
+  /// In en, this message translates to:
+  /// **'Stems'**
+  String get symptomPartStems;
+
+  /// No description provided for @symptomPartRoots.
+  ///
+  /// In en, this message translates to:
+  /// **'Roots'**
+  String get symptomPartRoots;
+
+  /// No description provided for @symptomPartSoil.
+  ///
+  /// In en, this message translates to:
+  /// **'Soil'**
+  String get symptomPartSoil;
+
+  /// No description provided for @symptomPartFlowers.
+  ///
+  /// In en, this message translates to:
+  /// **'Flowers'**
+  String get symptomPartFlowers;
+
+  /// No description provided for @symptomPartMultiple.
+  ///
+  /// In en, this message translates to:
+  /// **'Multiple Areas'**
+  String get symptomPartMultiple;
+
+  /// No description provided for @symptomOnsetToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get symptomOnsetToday;
+
+  /// No description provided for @symptomOnsetFewDays.
+  ///
+  /// In en, this message translates to:
+  /// **'A few days ago'**
+  String get symptomOnsetFewDays;
+
+  /// No description provided for @symptomOnsetAboutWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'About a week ago'**
+  String get symptomOnsetAboutWeek;
+
+  /// No description provided for @symptomOnsetMoreThanWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'More than a week ago'**
+  String get symptomOnsetMoreThanWeek;
+
+  /// No description provided for @symptomSoilDry.
+  ///
+  /// In en, this message translates to:
+  /// **'Dry'**
+  String get symptomSoilDry;
+
+  /// No description provided for @symptomSoilMoist.
+  ///
+  /// In en, this message translates to:
+  /// **'Moist'**
+  String get symptomSoilMoist;
+
+  /// No description provided for @symptomSoilWet.
+  ///
+  /// In en, this message translates to:
+  /// **'Wet'**
+  String get symptomSoilWet;
+
+  /// No description provided for @symptomSoilSoggy.
+  ///
+  /// In en, this message translates to:
+  /// **'Soggy'**
+  String get symptomSoilSoggy;
+
+  /// No description provided for @symptomLightFullSun.
+  ///
+  /// In en, this message translates to:
+  /// **'Full Sun'**
+  String get symptomLightFullSun;
+
+  /// No description provided for @symptomLightPartialShade.
+  ///
+  /// In en, this message translates to:
+  /// **'Partial Shade'**
+  String get symptomLightPartialShade;
+
+  /// No description provided for @symptomLightLowLight.
+  ///
+  /// In en, this message translates to:
+  /// **'Low Light'**
+  String get symptomLightLowLight;
+
+  /// No description provided for @symptomLightUnknown.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown'**
+  String get symptomLightUnknown;
+
+  /// No description provided for @symptomLoggerHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'Symptom History'**
+  String get symptomLoggerHistory;
+
+  /// No description provided for @symptomLoggerNoEntries.
+  ///
+  /// In en, this message translates to:
+  /// **'No symptoms logged yet'**
+  String get symptomLoggerNoEntries;
+
+  /// No description provided for @symptomLoggerMarkResolved.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark Resolved'**
+  String get symptomLoggerMarkResolved;
+
+  /// No description provided for @symptomLoggerMarkResolvedConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark this symptom as resolved?'**
+  String get symptomLoggerMarkResolvedConfirm;
+
+  /// No description provided for @symptomLoggerRecentEvents.
+  ///
+  /// In en, this message translates to:
+  /// **'Recent Health Events'**
+  String get symptomLoggerRecentEvents;
+
+  /// No description provided for @careStatusNeedsAttention.
+  ///
+  /// In en, this message translates to:
+  /// **'Needs Attention'**
+  String get careStatusNeedsAttention;
 }
 
 class _AppLocalizationsDelegate

@@ -3,6 +3,7 @@ enum CareStatus {
   happy,
   needsWater,
   needsFertilizer,
+  needsAttention,
 }
 
 /// Extension methods for CareStatus enum.

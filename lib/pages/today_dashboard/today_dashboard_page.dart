@@ -36,8 +36,7 @@ class TodayDashboardPage extends StatefulWidget {
 
 class _TodayDashboardPageState extends State<TodayDashboardPage>
     with AutomaticKeepAliveClientMixin<TodayDashboardPage> {
-  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
-      GlobalKey<RefreshIndicatorState>();
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
   final ScrollController _scrollController = ScrollController();
 
   late TodayDashboardUsecases _usecases;
@@ -149,10 +148,8 @@ class _TodayDashboardPageState extends State<TodayDashboardPage>
                   onNavigateToAddPlant: widget.onNavigateToAddPlant,
                 ),
                 const SizedBox(height: 24),
-                if (data.dueToday.isNotEmpty)
-                  _DueTasksSection(tasks: data.dueToday),
-                if (data.overdue.isNotEmpty)
-                  _OverdueTasksSection(tasks: data.overdue),
+                if (data.dueToday.isNotEmpty) _DueTasksSection(tasks: data.dueToday),
+                if (data.overdue.isNotEmpty) _OverdueTasksSection(tasks: data.overdue),
                 if (data.recentPlants.isNotEmpty)
                   _RecentPlantsCarousel(
                     plants: data.recentPlants,
@@ -258,8 +255,7 @@ class _ShimmerPlaceholder extends StatefulWidget {
   State<_ShimmerPlaceholder> createState() => _ShimmerPlaceholderState();
 }
 
-class _ShimmerPlaceholderState extends State<_ShimmerPlaceholder>
-    with SingleTickerProviderStateMixin {
+class _ShimmerPlaceholderState extends State<_ShimmerPlaceholder> with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
 
   @override
@@ -486,9 +482,7 @@ class _CareTaskCard extends StatelessWidget {
     final l10n = context.l10n;
 
     return Material(
-      color: isOverdue
-          ? theme.colorScheme.errorContainer
-          : theme.cardColor,
+      color: isOverdue ? theme.colorScheme.errorContainer : theme.cardColor,
       borderRadius: BorderRadius.circular(12),
       child: Padding(
         padding: const EdgeInsets.all(14),
@@ -497,9 +491,7 @@ class _CareTaskCard extends StatelessWidget {
             Icon(
               _iconForTaskType(task.taskType),
               size: 24,
-              color: isOverdue
-                  ? theme.colorScheme.error
-                  : theme.colorScheme.primary,
+              color: isOverdue ? theme.colorScheme.error : theme.colorScheme.primary,
             ),
             const SizedBox(width: 12),
             Expanded(
@@ -604,8 +596,7 @@ class _RecentPlantsCarousel extends StatelessWidget {
                 final plant = plants[index];
                 return GestureDetector(
                   onTap: () {
-                    mainNavigatorKey.currentState
-                        ?.pushNamed('/plant_collection/detail/${plant.id}');
+                    mainNavigatorKey.currentState?.pushNamed('/plant_collection/detail/${plant.id}');
                   },
                   child: Column(
                     children: [

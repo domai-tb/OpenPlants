@@ -97,11 +97,9 @@ class Settings {
       didCompleteOnboarding: json['didCompleteOnboarding'] ?? false,
       localeCode: json['localeCode'],
       navBarItemOrder: (json['navBarItemOrder'] as List<dynamic>?)?.whereType<String>().toList() ?? _defaultNavBarOrder,
-      hiddenNavBarItems: (json['hiddenNavBarItems'] as List<dynamic>?)
-              ?.whereType<String>()
-              .where((item) => item != 'more')
-              .toList() ??
-          const [],
+      hiddenNavBarItems:
+          (json['hiddenNavBarItems'] as List<dynamic>?)?.whereType<String>().where((item) => item != 'more').toList() ??
+              const [],
     );
   }
 

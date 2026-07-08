@@ -8,6 +8,8 @@ import 'package:open_plant/pages/care_schedule/care_task_type.dart';
 import 'package:open_plant/pages/care_schedule/widgets/care_task_card.dart';
 import 'package:open_plant/pages/care_schedule/widgets/empty_schedule_state.dart';
 import 'package:open_plant/pages/home/widgets/page_navigation_animation.dart';
+import 'package:open_plant/pages/symptom_logger/symptom_logger_extensions.dart';
+import 'package:open_plant/pages/symptom_logger/symptom_logger_item_entity.dart';
 
 /// Care schedule page — dashboard showing overdue, due-today, and upcoming tasks.
 class CareSchedulePage extends StatefulWidget {
@@ -32,10 +34,8 @@ class CareSchedulePage extends StatefulWidget {
   State<CareSchedulePage> createState() => _CareSchedulePageState();
 }
 
-class _CareSchedulePageState extends State<CareSchedulePage>
-    with AutomaticKeepAliveClientMixin<CareSchedulePage> {
-  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
-      GlobalKey<RefreshIndicatorState>();
+class _CareSchedulePageState extends State<CareSchedulePage> with AutomaticKeepAliveClientMixin<CareSchedulePage> {
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
   final ScrollController _scrollController = ScrollController();
 
   late CareScheduleUsecases _usecases;
@@ -43,6 +43,7 @@ class _CareSchedulePageState extends State<CareSchedulePage>
 
   List<CareTask> _tasks = [];
   List<String> _plantNames = [];
+  List<SymptomLogEntry> _recentSymptoms = [];
   bool _loading = true;
   String? _selectedPlantId;
   BuiltInTaskType? _selectedTaskType;
@@ -77,10 +78,17 @@ class _CareSchedulePageState extends State<CareSchedulePage>
       final tasks = await _usecases.getSchedule();
       if (!mounted) return;
 
+      // Load recent symptom entries for the timeline
+      final symptomLogger = AppScope.of(context).services.symptomLogger;
+      final allSymptoms = await symptomLogger.getAllSymptoms();
+      allSymptoms.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+
       final plantNames = tasks.map((t) => t.plantName).toSet().toList()..sort();
+      if (!mounted) return;
       setState(() {
         _tasks = tasks;
         _plantNames = plantNames;
+        _recentSymptoms = allSymptoms.take(20).toList();
         _loading = false;
       });
     } catch (e) {
@@ -118,7 +126,7 @@ class _CareSchedulePageState extends State<CareSchedulePage>
           ),
           body: _loading
               ? const Center(child: CircularProgressIndicator())
-              : _tasks.isEmpty
+              : _tasks.isEmpty && _recentSymptoms.isEmpty
                   ? EmptyScheduleState(
                       onNavigateToPlantCollection: widget.onNavigateToPlantCollection,
                     )
@@ -181,12 +189,56 @@ class _CareSchedulePageState extends State<CareSchedulePage>
                   ),
                 ),
               ],
+              if (overdue.isEmpty && dueToday.isEmpty && upcoming.isEmpty)
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  child: Center(
+                    child: Text(context.l10n.careScheduleEmpty),
+                  ),
+                ),
+
+              // Recent health events section
+              if (_recentSymptoms.isNotEmpty) ...[
+                const SizedBox(height: 24),
+                _buildSectionHeader(theme, context.l10n.symptomLoggerRecentEvents, Colors.purple),
+                ..._recentSymptoms.take(5).map(_buildSymptomEventTile),
+              ],
               const SizedBox(height: 32),
             ],
           ),
         ),
       ],
     );
+  }
+
+  Widget _buildSymptomEventTile(SymptomLogEntry entry) {
+    final theme = Theme.of(context);
+    return Card(
+      margin: const EdgeInsets.only(bottom: 8),
+      child: ListTile(
+        leading: CircleAvatar(
+          backgroundColor: Colors.purple.withValues(alpha: 0.15),
+          child: const Icon(Icons.healing, color: Colors.purple, size: 20),
+        ),
+        title: Text(
+          entry.symptomTypes.map((t) => t.label(context)).join(', '),
+          style: theme.textTheme.bodyMedium,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
+        subtitle: Text(
+          '${entry.severity.label(context)} • ${_formatDate(entry.createdAt)}',
+          style: theme.textTheme.bodySmall,
+        ),
+        trailing: entry.resolved
+            ? const Icon(Icons.check_circle, color: Colors.green, size: 18)
+            : const Icon(Icons.circle_outlined, color: Colors.orange, size: 18),
+      ),
+    );
+  }
+
+  String _formatDate(DateTime date) {
+    return '${date.day}/${date.month}/${date.year}';
   }
 
   Widget _buildSectionHeader(ThemeData theme, String title, Color color) {

@@ -157,8 +157,8 @@ class HomePageState extends State<HomePage> {
     unawaited(
       selectedPage(PageItem.plantCollection).then((_) {
         navigatorKeys[PageItem.plantCollection]?.currentState?.push(
-          MaterialPageRoute(builder: (_) => const PlantCollectionFormPage()),
-        );
+              MaterialPageRoute(builder: (_) => const PlantCollectionFormPage()),
+            );
       }),
     );
   }
@@ -179,8 +179,7 @@ class HomePageState extends State<HomePage> {
       onSwitchToSpeciesLibrary:
           tabItem == PageItem.plantIdentification ? () => selectedPage(PageItem.speciesLibrary) : null,
       onNavigateToAddPlant: tabItem == PageItem.todayDashboard ? _onNavigateToAddPlant : null,
-      onNavigateToPlantCollection:
-          tabItem == PageItem.careSchedule ? _onNavigateToPlantCollection : null,
+      onNavigateToPlantCollection: tabItem == PageItem.careSchedule ? _onNavigateToPlantCollection : null,
       tabSwitchNotifier: tabSwitchNotifier,
     );
   }
@@ -200,8 +199,7 @@ class HomePageState extends State<HomePage> {
         onSwitchToSpeciesLibrary:
             tabItem == PageItem.plantIdentification ? () => selectedPage(PageItem.speciesLibrary) : null,
         onNavigateToAddPlant: tabItem == PageItem.todayDashboard ? _onNavigateToAddPlant : null,
-        onNavigateToPlantCollection:
-            tabItem == PageItem.careSchedule ? _onNavigateToPlantCollection : null,
+        onNavigateToPlantCollection: tabItem == PageItem.careSchedule ? _onNavigateToPlantCollection : null,
         tabSwitchNotifier: tabSwitchNotifier,
       ),
     );

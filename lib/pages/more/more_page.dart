@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 import 'package:open_plant/core/app_scope.dart';
@@ -7,6 +9,8 @@ import 'package:open_plant/pages/more/more_about_page.dart';
 import 'package:open_plant/pages/more/more_item_entity.dart';
 import 'package:open_plant/pages/more/more_settings_page.dart';
 import 'package:open_plant/pages/more/more_usecases.dart';
+import 'package:open_plant/pages/plant_collection/plant_collection_item_entity.dart';
+import 'package:open_plant/pages/symptom_logger/symptom_logger_page.dart';
 import 'package:open_plant/widgets/scroll_to_top_button.dart';
 
 class MorePage extends StatefulWidget {
@@ -68,8 +72,89 @@ class _MorePageState extends State<MorePage> with AutomaticKeepAliveClientMixin<
       case 'about':
         Navigator.of(context).push(MaterialPageRoute(builder: (_) => const MoreAboutPage()));
         break;
+      case 'log_symptom':
+        _logSymptom();
+        break;
       default:
         break;
+    }
+  }
+
+  Future<void> _logSymptom() async {
+    final plantCollection = AppScope.of(context).services.plantCollection;
+    final plants = await plantCollection.loadPlants();
+
+    if (!mounted || plants.isEmpty) return;
+
+    if (plants.length == 1) {
+      await Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (_) => SymptomLoggerPage(
+            plantId: plants.first.id,
+            plantName: plants.first.name,
+          ),
+        ),
+      );
+      return;
+    }
+
+    // Show plant picker
+    final plant = await showModalBottomSheet<PlantEntity>(
+      context: context,
+      builder: (context) {
+        final theme = Theme.of(context);
+        return SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: Text(
+                  context.l10n.symptomLoggerSelectPlant,
+                  style: theme.textTheme.titleMedium,
+                ),
+              ),
+              ConstrainedBox(
+                constraints: const BoxConstraints(maxHeight: 300),
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: plants.length,
+                  itemBuilder: (context, index) {
+                    final plant = plants[index];
+                    return ListTile(
+                      leading: plant.photoPath != null
+                          ? ClipRRect(
+                              borderRadius: BorderRadius.circular(8),
+                              child: Image.file(
+                                File(plant.photoPath!),
+                                width: 40,
+                                height: 40,
+                                fit: BoxFit.cover,
+                              ),
+                            )
+                          : const Icon(Icons.yard),
+                      title: Text(plant.name),
+                      onTap: () => Navigator.of(context).pop(plant),
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+
+    if (plant != null && mounted) {
+      await Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (_) => SymptomLoggerPage(
+            plantId: plant.id,
+            plantName: plant.name,
+          ),
+        ),
+      );
     }
   }
 

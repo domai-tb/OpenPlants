@@ -124,9 +124,7 @@ class _IdentificationPickerState extends State<IdentificationPicker> {
             ),
             const SizedBox(width: 8),
             IconButton.filled(
-              onPressed: _manualController.text.trim().isEmpty
-                  ? null
-                  : _submitManualEntry,
+              onPressed: _manualController.text.trim().isEmpty ? null : _submitManualEntry,
               icon: const Icon(Icons.check, size: 20),
               tooltip: context.l10n.plantIdEnterSpeciesManually,
             ),

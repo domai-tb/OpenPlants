@@ -44,7 +44,11 @@ class SpeciesResultCard extends StatelessWidget {
               : isTopResult
                   ? theme.colorScheme.primary.withValues(alpha: 0.5)
                   : theme.colorScheme.outlineVariant.withValues(alpha: 0.3),
-          width: isSelected ? 2 : isTopResult ? 1.5 : 1,
+          width: isSelected
+              ? 2
+              : isTopResult
+                  ? 1.5
+                  : 1,
         ),
       ),
       child: Row(

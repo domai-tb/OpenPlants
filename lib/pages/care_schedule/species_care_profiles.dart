@@ -39,11 +39,8 @@ class SpeciesCareProfiles {
   /// Normalizes free-text input (lowercase, spaces → underscores).
   static SpeciesCareProfile getProfile(String? speciesId) {
     if (speciesId == null || speciesId.trim().isEmpty) return general;
-    final normalized = speciesId
-        .trim()
-        .toLowerCase()
-        .replaceAll(RegExp('[^a-z0-9]+'), '_')
-        .replaceAll(RegExp(r'^_|_$'), '');
+    final normalized =
+        speciesId.trim().toLowerCase().replaceAll(RegExp('[^a-z0-9]+'), '_').replaceAll(RegExp(r'^_|_$'), '');
     return profiles[normalized] ?? general;
   }
 

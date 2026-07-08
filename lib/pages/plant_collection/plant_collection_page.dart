@@ -396,6 +396,8 @@ class _PlantCollectionPageState extends State<PlantCollectionPage>
         return Colors.blue;
       case CareStatus.needsFertilizer:
         return Colors.orange;
+      case CareStatus.needsAttention:
+        return Colors.red;
     }
   }
 }

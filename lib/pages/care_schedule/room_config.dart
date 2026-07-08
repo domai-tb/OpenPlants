@@ -62,8 +62,7 @@ class RoomConfig {
       roomName: roomName ?? this.roomName,
       sunlightLevel: sunlightLevel ?? this.sunlightLevel,
       humidityLevel: humidityLevel ?? this.humidityLevel,
-      temperatureLabel:
-          clearTemperatureLabel ? null : (temperatureLabel ?? this.temperatureLabel),
+      temperatureLabel: clearTemperatureLabel ? null : (temperatureLabel ?? this.temperatureLabel),
     );
   }
 
@@ -79,10 +78,8 @@ class RoomConfig {
   factory RoomConfig.fromJson(Map<String, dynamic> json) {
     return RoomConfig(
       roomName: json['roomName'] as String,
-      sunlightLevel:
-          SunlightLevelExtension.fromJson(json['sunlightLevel'] as String? ?? 'medium'),
-      humidityLevel:
-          HumidityLevelExtension.fromJson(json['humidityLevel'] as String? ?? 'medium'),
+      sunlightLevel: SunlightLevelExtension.fromJson(json['sunlightLevel'] as String? ?? 'medium'),
+      humidityLevel: HumidityLevelExtension.fromJson(json['humidityLevel'] as String? ?? 'medium'),
       temperatureLabel: json['temperatureLabel'] as String?,
     );
   }

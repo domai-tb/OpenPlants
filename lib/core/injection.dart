@@ -17,6 +17,9 @@ import 'package:open_plant/pages/plant_collection/plant_collection_usecases.dart
 import 'package:open_plant/pages/species_library/species_library_datasource.dart';
 import 'package:open_plant/pages/species_library/species_library_repository.dart';
 import 'package:open_plant/pages/species_library/species_library_usecases.dart';
+import 'package:open_plant/pages/symptom_logger/symptom_logger_datasource.dart';
+import 'package:open_plant/pages/symptom_logger/symptom_logger_repository.dart';
+import 'package:open_plant/pages/symptom_logger/symptom_logger_usecases.dart';
 import 'package:open_plant/pages/today_dashboard/today_dashboard_datasource.dart';
 import 'package:open_plant/pages/today_dashboard/today_dashboard_repository.dart';
 import 'package:open_plant/pages/today_dashboard/today_dashboard_usecases.dart';
@@ -98,6 +101,20 @@ Future<void> init() async {
     ),
   );
 
+  // Symptom Logger
+  sl.registerLazySingleton<SymptomLoggerDataSource>(
+    SymptomLoggerDataSource.new,
+  );
+  sl.registerLazySingleton<SymptomLoggerRepository>(
+    () => SymptomLoggerRepository(dataSource: sl()),
+  );
+  sl.registerLazySingleton<SymptomLoggerUseCases>(
+    () => SymptomLoggerUseCases(
+      repository: sl(),
+      plantCollection: sl(),
+    ),
+  );
+
   // Aggregate wiring
   sl.registerLazySingleton<AppServices>(
     () => AppServices(
@@ -107,6 +124,7 @@ Future<void> init() async {
       speciesLibrary: sl(),
       todayDashboard: sl(),
       careSchedule: sl(),
+      symptomLogger: sl(),
     ),
   );
 }

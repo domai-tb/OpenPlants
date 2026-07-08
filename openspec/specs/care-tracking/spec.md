@@ -1,7 +1,7 @@
 ## ADDED Requirements
 
 ### Requirement: Plant has a care status
-Every plant SHALL have a care status field with three allowed values: `happy`, `needs_water`, `needs_fertilizer`. The default value on creation is `happy`.
+Every plant SHALL have a care status field with four allowed values: `happy`, `needs_water`, `needs_fertilizer`, `needs_attention`. The default value on creation is `happy`. Symptom entries with severity `severe` SHALL automatically update the care status to `needs_attention` when the plant's current status is not already `needs_attention`.
 
 #### Scenario: New plant defaults to happy
 - **WHEN** user creates a new plant
@@ -14,6 +14,10 @@ Every plant SHALL have a care status field with three allowed values: `happy`, `
 #### Scenario: Care status is displayed on list
 - **WHEN** the collection list renders a plant
 - **THEN** the list shows a visual indicator of the plant's care status (e.g., colored dot or icon)
+
+#### Scenario: Severe symptom updates care status
+- **WHEN** user logs a symptom with severity `severe` for a plant whose care status is not already `needs_attention`
+- **THEN** the system updates the plant's care status to `needs_attention`
 
 ### Requirement: Plant tracks last-watered and last-fertilized dates
 Each plant SHALL store optional `lastWateredAt` and `lastFertilizedAt` timestamps. Both default to null.

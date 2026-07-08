@@ -61,8 +61,7 @@ class CareScheduleRepository {
   /// Get completions for a specific plant.
   Future<List<TaskCompletion>> getCompletionsForPlant(String plantId) async {
     final all = await dataSource.loadCompletions();
-    return all.where((c) => c.plantId == plantId).toList()
-      ..sort((a, b) => b.completedAt.compareTo(a.completedAt));
+    return all.where((c) => c.plantId == plantId).toList()..sort((a, b) => b.completedAt.compareTo(a.completedAt));
   }
 
   /// Get completions for a specific plant and task type.
@@ -71,9 +70,7 @@ class CareScheduleRepository {
     String taskTypeKey,
   ) async {
     final all = await dataSource.loadCompletions();
-    return all
-        .where((c) => c.plantId == plantId && c.taskType.key == taskTypeKey)
-        .toList()
+    return all.where((c) => c.plantId == plantId && c.taskType.key == taskTypeKey).toList()
       ..sort((a, b) => b.completedAt.compareTo(a.completedAt));
   }
 
