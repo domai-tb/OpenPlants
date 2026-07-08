@@ -49,7 +49,7 @@ class NavBarPreferencesEditor extends StatelessWidget {
             var adjustedNewIndex = newIndex;
             if (adjustedNewIndex > oldIndex) adjustedNewIndex -= 1;
             final item = nextItems.removeAt(oldIndex);
-            nextItems.insert(newIndex, item);
+            nextItems.insert(adjustedNewIndex, item);
             onOrderChanged(nextItems);
           },
           itemBuilder: (context, index) {
