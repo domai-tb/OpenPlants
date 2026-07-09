@@ -22,8 +22,7 @@ class PlantJournalEntryFormPage extends StatefulWidget {
   });
 
   @override
-  State<PlantJournalEntryFormPage> createState() =>
-      _PlantJournalEntryFormPageState();
+  State<PlantJournalEntryFormPage> createState() => _PlantJournalEntryFormPageState();
 }
 
 class _PlantJournalEntryFormPageState extends State<PlantJournalEntryFormPage> {

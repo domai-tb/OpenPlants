@@ -255,20 +255,22 @@ class _PlantCollectionPageState extends State<PlantCollectionPage>
                                 },
                               ),
                               const SizedBox(width: 8),
-                              ..._rooms.map((room) => Padding(
-                                    padding: const EdgeInsets.only(right: 8),
-                                    child: _buildFilterChip(
-                                      context,
-                                      label: room.name,
-                                      selected: _filterRoomId == room.id,
-                                      onTap: () {
-                                        setState(() {
-                                          _filterRoomId = _filterRoomId == room.id ? null : room.id;
-                                        });
-                                        _load();
-                                      },
-                                    ),
-                                  ),),
+                              ..._rooms.map(
+                                (room) => Padding(
+                                  padding: const EdgeInsets.only(right: 8),
+                                  child: _buildFilterChip(
+                                    context,
+                                    label: room.name,
+                                    selected: _filterRoomId == room.id,
+                                    onTap: () {
+                                      setState(() {
+                                        _filterRoomId = _filterRoomId == room.id ? null : room.id;
+                                      });
+                                      _load();
+                                    },
+                                  ),
+                                ),
+                              ),
                               _buildFilterChip(
                                 context,
                                 label: 'Unassigned',

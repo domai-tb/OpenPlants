@@ -20,6 +20,9 @@ import 'package:open_plant/pages/plant_collection/plant_collection_usecases.dart
 import 'package:open_plant/pages/plant_journal/plant_journal_datasource.dart';
 import 'package:open_plant/pages/plant_journal/plant_journal_repository.dart';
 import 'package:open_plant/pages/plant_journal/plant_journal_usecases.dart';
+import 'package:open_plant/pages/plant_photo_timeline/plant_photo_timeline_datasource.dart';
+import 'package:open_plant/pages/plant_photo_timeline/plant_photo_timeline_repository.dart';
+import 'package:open_plant/pages/plant_photo_timeline/plant_photo_timeline_usecases.dart';
 import 'package:open_plant/pages/room_profiles/room_profiles_datasource.dart';
 import 'package:open_plant/pages/room_profiles/room_profiles_repository.dart';
 import 'package:open_plant/pages/room_profiles/room_profiles_usecases.dart';
@@ -72,6 +75,20 @@ Future<void> init() async {
   );
   sl.registerLazySingleton<PlantCollectionUsecases>(
     () => PlantCollectionUsecases(repository: sl()),
+  );
+
+  // Plant Photo Timeline
+  sl.registerLazySingleton<PlantPhotoTimelineDataSource>(
+    PlantPhotoTimelineDataSource.new,
+  );
+  sl.registerLazySingleton<PlantPhotoTimelineRepository>(
+    () => PlantPhotoTimelineRepository(
+      dataSource: sl(),
+      plantCollection: sl(),
+    ),
+  );
+  sl.registerLazySingleton<PlantPhotoTimelineUseCases>(
+    () => PlantPhotoTimelineUseCases(repository: sl()),
   );
 
   // Species Library
@@ -162,6 +179,7 @@ Future<void> init() async {
       plantIdentification: sl(),
       more: sl(),
       plantCollection: sl(),
+      plantPhotoTimeline: sl(),
       speciesLibrary: sl(),
       todayDashboard: sl(),
       careSchedule: sl(),

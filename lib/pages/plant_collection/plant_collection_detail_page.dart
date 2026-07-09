@@ -2,14 +2,19 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 import 'package:open_plant/core/app_scope.dart';
+import 'package:open_plant/core/date_utils.dart';
 import 'package:open_plant/l10n/l10n_x.dart';
 import 'package:open_plant/pages/plant_collection/plant_collection_form_page.dart';
 import 'package:open_plant/pages/plant_collection/plant_collection_item_entity.dart';
 import 'package:open_plant/pages/plant_collection/plant_collection_usecases.dart';
 import 'package:open_plant/pages/plant_journal/plant_journal_page.dart';
 import 'package:open_plant/pages/plant_journal/plant_journal_usecases.dart';
+import 'package:open_plant/pages/plant_photo_timeline/plant_photo_timeline_item_entity.dart';
+import 'package:open_plant/pages/plant_photo_timeline/plant_photo_timeline_page.dart';
+import 'package:open_plant/pages/plant_photo_timeline/plant_photo_timeline_usecases.dart';
 import 'package:open_plant/pages/room_profiles/room_profiles_usecases.dart';
 import 'package:open_plant/pages/symptom_logger/symptom_logger_extensions.dart';
 import 'package:open_plant/pages/symptom_logger/symptom_logger_item_entity.dart';
@@ -28,6 +33,7 @@ class PlantCollectionDetailPage extends StatefulWidget {
 
 class _PlantCollectionDetailPageState extends State<PlantCollectionDetailPage> {
   late PlantCollectionUsecases _usecases;
+  late PlantPhotoTimelineUseCases _photoTimelineUsecases;
   late SymptomLoggerUseCases _symptomUsecases;
   late PlantJournalUseCases _journalUsecases;
   late RoomProfilesUsecases _roomUsecases;
@@ -36,6 +42,8 @@ class _PlantCollectionDetailPageState extends State<PlantCollectionDetailPage> {
   List<SymptomLogEntry> _symptomHistory = const [];
   bool _loadingSymptoms = true;
   String? _roomName;
+  List<PlantPhoto> _photos = [];
+  final ImagePicker _imagePicker = ImagePicker();
 
   @override
   void initState() {
@@ -49,12 +57,14 @@ class _PlantCollectionDetailPageState extends State<PlantCollectionDetailPage> {
     if (_wired) return;
     final services = AppScope.of(context).services;
     _usecases = services.plantCollection;
+    _photoTimelineUsecases = services.plantPhotoTimeline;
     _symptomUsecases = services.symptomLogger;
     _journalUsecases = services.plantJournal;
     _roomUsecases = services.roomProfiles;
     _wired = true;
     _loadSymptomHistory();
     _loadRoomName();
+    _loadPhotos();
   }
 
   Future<void> _loadRoomName() async {
@@ -62,6 +72,75 @@ class _PlantCollectionDetailPageState extends State<PlantCollectionDetailPage> {
     final room = await _roomUsecases.getById(_plant.roomId!);
     if (!mounted) return;
     setState(() => _roomName = room?.name);
+  }
+
+  Future<void> _loadPhotos() async {
+    try {
+      final photos = await _photoTimelineUsecases.getTimeline(_plant.id);
+      if (!mounted) return;
+      setState(() => _photos = photos);
+    } catch (_) {
+      // Silently handle — photos will remain empty
+    }
+  }
+
+  Future<void> _addPhoto() async {
+    final source = await showModalBottomSheet<ImageSource>(
+      context: context,
+      builder: (context) => SafeArea(
+        child: Wrap(
+          children: [
+            ListTile(
+              leading: const Icon(Icons.camera_alt),
+              title: Text(context.l10n.growthPhotoCamera),
+              onTap: () => Navigator.of(context).pop(ImageSource.camera),
+            ),
+            ListTile(
+              leading: const Icon(Icons.photo_library),
+              title: Text(context.l10n.growthPhotoGallery),
+              onTap: () => Navigator.of(context).pop(ImageSource.gallery),
+            ),
+          ],
+        ),
+      ),
+    );
+
+    if (source == null || !mounted) return;
+
+    try {
+      final xFile = await _imagePicker.pickImage(source: source);
+      if (xFile == null || !mounted) return;
+
+      final file = File(xFile.path);
+      final photo = await _photoTimelineUsecases.addPhoto(
+        _plant.id,
+        file,
+        date: DateTime.now(),
+      );
+
+      if (mounted) {
+        setState(() => _photos = [photo, ..._photos]);
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to add photo: $e')),
+        );
+      }
+    }
+  }
+
+  void _openTimeline() {
+    Navigator.of(context)
+        .push(
+          MaterialPageRoute(
+            builder: (_) => PlantPhotoTimelinePage(
+              plantId: _plant.id,
+              plantName: _plant.name,
+            ),
+          ),
+        )
+        .then((_) => _loadPhotos());
   }
 
   Future<void> _loadSymptomHistory() async {
@@ -101,6 +180,8 @@ class _PlantCollectionDetailPageState extends State<PlantCollectionDetailPage> {
     );
 
     if (confirmed == true && mounted) {
+      // Delete growth photo files before deleting the plant
+      await _photoTimelineUsecases.deleteAllPhotos(_plant.id);
       await _journalUsecases.deleteEntriesForPlant(_plant.id);
       await _usecases.deletePlant(_plant.id);
       if (mounted) {
@@ -208,6 +289,10 @@ class _PlantCollectionDetailPageState extends State<PlantCollectionDetailPage> {
             ),
             const SizedBox(height: 24),
           ],
+
+          // Growth Photos
+          _buildGrowthPhotosSection(theme),
+          const SizedBox(height: 24),
 
           // Care status
           _buildInfoRow(
@@ -440,6 +525,96 @@ class _PlantCollectionDetailPageState extends State<PlantCollectionDetailPage> {
     );
   }
 
+  // --- Growth Photos Section ---
+
+  Widget _buildGrowthPhotosSection(ThemeData theme) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Icon(Icons.timeline, size: 20, color: theme.colorScheme.primary),
+            const SizedBox(width: 8),
+            Text(
+              context.l10n.growthPhotosTitle,
+              style: theme.textTheme.titleMedium,
+            ),
+            const Spacer(),
+            TextButton.icon(
+              onPressed: _addPhoto,
+              icon: const Icon(Icons.add, size: 18),
+              label: Text(context.l10n.growthPhotosAdd),
+            ),
+          ],
+        ),
+        const SizedBox(height: 8),
+        if (_photos.isEmpty)
+          GestureDetector(
+            onTap: _addPhoto,
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(vertical: 24),
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: theme.colorScheme.outlineVariant,
+                ),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Column(
+                children: [
+                  Icon(
+                    Icons.add_a_photo_outlined,
+                    size: 32,
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    context.l10n.growthPhotosEmpty,
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          )
+        else
+          SizedBox(
+            height: 100,
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              itemCount: _photos.length,
+              separatorBuilder: (_, __) => const SizedBox(width: 8),
+              itemBuilder: (context, index) {
+                final photo = _photos[index];
+                return GestureDetector(
+                  onTap: _openTimeline,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: Image.file(
+                      File(photo.filePath),
+                      width: 80,
+                      height: 80,
+                      fit: BoxFit.cover,
+                      errorBuilder: (_, __, ___) => Container(
+                        width: 80,
+                        height: 80,
+                        color: theme.colorScheme.surfaceContainerHighest,
+                        child: Icon(
+                          Icons.broken_image,
+                          color: theme.colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+      ],
+    );
+  }
+
   // --- Shared helpers ---
 
   Widget _buildInfoRow(
@@ -503,7 +678,5 @@ class _PlantCollectionDetailPageState extends State<PlantCollectionDetailPage> {
     }
   }
 
-  String _formatDate(DateTime date) {
-    return '${date.day}/${date.month}/${date.year}';
-  }
+  String _formatDate(DateTime date) => formatDateFull(date);
 }

@@ -1675,6 +1675,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Choose from Gallery'**
   String get journalChooseFromGallery;
+
+  /// No description provided for @growthPhotosTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Growth Photos'**
+  String get growthPhotosTitle;
+
+  /// No description provided for @growthPhotosAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add'**
+  String get growthPhotosAdd;
+
+  /// No description provided for @growthPhotosEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Add your first growth photo'**
+  String get growthPhotosEmpty;
+
+  /// No description provided for @growthPhotosEmptyHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Add photos from the plant detail page'**
+  String get growthPhotosEmptyHint;
+
+  /// No description provided for @growthPhotosNoTimeline.
+  ///
+  /// In en, this message translates to:
+  /// **'No growth photos yet'**
+  String get growthPhotosNoTimeline;
+
+  /// No description provided for @growthPhotosNoTimelineHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Add photos from the plant detail page'**
+  String get growthPhotosNoTimelineHint;
+
+  /// No description provided for @growthPhotoDeleteTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Photo'**
+  String get growthPhotoDeleteTitle;
+
+  /// No description provided for @growthPhotoDeleteConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete this photo?'**
+  String get growthPhotoDeleteConfirm;
+
+  /// No description provided for @growthPhotoNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo not found'**
+  String get growthPhotoNotFound;
+
+  /// No description provided for @growthPhotoCamera.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera'**
+  String get growthPhotoCamera;
+
+  /// No description provided for @growthPhotoGallery.
+  ///
+  /// In en, this message translates to:
+  /// **'Gallery'**
+  String get growthPhotoGallery;
 }
 
 class _AppLocalizationsDelegate

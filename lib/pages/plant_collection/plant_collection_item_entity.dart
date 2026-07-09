@@ -1,3 +1,5 @@
+import 'package:open_plant/pages/plant_photo_timeline/plant_photo_timeline_item_entity.dart';
+
 /// Care status for a plant.
 enum CareStatus {
   happy,
@@ -32,6 +34,7 @@ class PlantEntity {
   final CareStatus careStatus;
   final DateTime? lastWateredAt;
   final DateTime? lastFertilizedAt;
+  final List<PlantPhoto> photos;
   final DateTime createdAt;
   final DateTime updatedAt;
 
@@ -46,6 +49,7 @@ class PlantEntity {
     this.careStatus = CareStatus.happy,
     this.lastWateredAt,
     this.lastFertilizedAt,
+    this.photos = const [],
     required this.createdAt,
     required this.updatedAt,
   });
@@ -69,6 +73,7 @@ class PlantEntity {
     bool clearLastWatered = false,
     DateTime? lastFertilizedAt,
     bool clearLastFertilized = false,
+    List<PlantPhoto>? photos,
     DateTime? createdAt,
     DateTime? updatedAt,
   }) {
@@ -83,6 +88,7 @@ class PlantEntity {
       careStatus: careStatus ?? this.careStatus,
       lastWateredAt: clearLastWatered ? null : (lastWateredAt ?? this.lastWateredAt),
       lastFertilizedAt: clearLastFertilized ? null : (lastFertilizedAt ?? this.lastFertilizedAt),
+      photos: photos ?? this.photos,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
     );
@@ -101,6 +107,7 @@ class PlantEntity {
       'careStatus': careStatus.toJson(),
       'lastWateredAt': lastWateredAt?.toIso8601String(),
       'lastFertilizedAt': lastFertilizedAt?.toIso8601String(),
+      'photos': PlantPhoto.listToJson(photos),
       'createdAt': createdAt.toIso8601String(),
       'updatedAt': updatedAt.toIso8601String(),
     };
@@ -119,6 +126,7 @@ class PlantEntity {
       careStatus: CareStatusExtension.fromJson(json['careStatus'] as String? ?? 'happy'),
       lastWateredAt: json['lastWateredAt'] != null ? DateTime.parse(json['lastWateredAt'] as String) : null,
       lastFertilizedAt: json['lastFertilizedAt'] != null ? DateTime.parse(json['lastFertilizedAt'] as String) : null,
+      photos: json['photos'] != null ? PlantPhoto.listFromJson(json['photos'] as List<dynamic>) : const [],
       createdAt: DateTime.parse(json['createdAt'] as String),
       updatedAt: DateTime.parse(json['updatedAt'] as String),
     );

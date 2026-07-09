@@ -338,10 +338,12 @@ class _PlantCollectionFormPageState extends State<PlantCollectionFormPage> {
                 const DropdownMenuItem<String?>(
                   child: Text('No room'),
                 ),
-                ..._rooms.map((room) => DropdownMenuItem<String?>(
-                      value: room.id,
-                      child: Text(room.name),
-                    ),),
+                ..._rooms.map(
+                  (room) => DropdownMenuItem<String?>(
+                    value: room.id,
+                    child: Text(room.name),
+                  ),
+                ),
                 const DropdownMenuItem<String?>(
                   value: kNewRoomSentinel,
                   child: Text('+ New Room'),

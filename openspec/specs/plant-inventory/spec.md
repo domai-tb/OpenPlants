@@ -31,19 +31,19 @@ When the user captures or selects a photo on the add-plant form, the system SHAL
 - **THEN** the system SHALL display an error message and the user can still set species manually or leave it blank
 
 ### Requirement: User can add a plant
-The system SHALL allow users to create a new plant entry with name (required), optional photo, optional species, optional room (selected from defined rooms), optional notes, and initial care status (default: happy).
+The system SHALL allow users to create a new plant entry with name (required), optional photo, optional species, optional room (selected from defined rooms), optional notes, initial care status (default: happy), and an empty photo timeline.
 
 #### Scenario: Add plant with minimal info
 - **WHEN** user taps "Add plant" and enters only a name
-- **THEN** the system creates a plant with name as entered, default care status "happy", and all other fields empty
+- **THEN** the system creates a plant with name as entered, default care status "happy", empty photo timeline, and all other fields empty
 
 #### Scenario: Add plant with photo from gallery
 - **WHEN** user taps "Add plant", fills in name, and picks a photo from the gallery
-- **THEN** the system saves the photo to local storage, runs identification on the photo, displays results as selectable species options, and creates the plant with the photo linked
+- **THEN** the system saves the photo to local storage, runs identification on the photo, displays results as selectable species options, and creates the plant with the photo linked as the first entry in its photo timeline
 
 #### Scenario: Add plant with photo from camera
 - **WHEN** user taps "Add plant", fills in name, and captures a photo with the camera
-- **THEN** the system saves the photo to local storage, runs identification on the photo, displays results as selectable species options, and creates the plant with the photo linked
+- **THEN** the system saves the photo to local storage, runs identification on the photo, displays results as selectable species options, and creates the plant with the photo linked as the first entry in its photo timeline
 
 #### Scenario: Add plant with species selected from identification results
 - **WHEN** identification results are shown and the user taps one of the result cards
@@ -59,7 +59,7 @@ The system SHALL allow users to create a new plant entry with name (required), o
 
 #### Scenario: Add plant with all optional fields
 - **WHEN** user taps "Add plant" and provides name, photo, species, room selection, and notes
-- **THEN** the system creates a plant with all provided fields persisted
+- **THEN** the system creates a plant with all provided fields persisted and the photo added to its timeline
 
 ### Requirement: User can filter plants by room
 The system SHALL provide filter chips on the plant collection page to filter plants by assigned room.
@@ -107,15 +107,15 @@ The system SHALL allow users to modify any field of an existing plant entry.
 - **THEN** the system deletes the photo file from disk and clears the photo reference
 
 ### Requirement: User can delete a plant
-The system SHALL allow users to permanently remove a plant from their collection.
+The system SHALL allow users to permanently remove a plant from their collection, including all its growth photos.
 
 #### Scenario: Delete plant with confirmation
 - **WHEN** user taps delete on a plant and confirms the dialog
-- **THEN** the system removes the plant from the collection and deletes its photo file from disk
+- **THEN** the system removes the plant from the collection and deletes all photo files from disk
 
 #### Scenario: Cancel delete
 - **WHEN** user taps delete on a plant and cancels the confirmation dialog
-- **THEN** the system does not modify the plant or its photo
+- **THEN** the system does not modify the plant, its photos, or any metadata
 
 ### Requirement: User can search plants by name
 The system SHALL provide a search bar that filters the plant list by name substring match.

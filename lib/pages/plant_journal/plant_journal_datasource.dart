@@ -25,9 +25,7 @@ class PlantJournalDataSource {
 
     try {
       final decoded = jsonDecode(raw) as List<dynamic>;
-      return decoded
-          .map((item) => JournalEntry.fromJson(item as Map<String, dynamic>))
-          .toList();
+      return decoded.map((item) => JournalEntry.fromJson(item as Map<String, dynamic>)).toList();
     } catch (_) {
       return [];
     }
@@ -36,10 +34,7 @@ class PlantJournalDataSource {
   /// Load journal entries for a specific plant, sorted newest first.
   Future<List<JournalEntry>> loadByPlant(String plantId) async {
     final all = await loadAll();
-    return all
-        .where((entry) => entry.plantId == plantId)
-        .toList()
-      ..sort((a, b) => b.timestamp.compareTo(a.timestamp));
+    return all.where((entry) => entry.plantId == plantId).toList()..sort((a, b) => b.timestamp.compareTo(a.timestamp));
   }
 
   /// Save the full list of journal entries.

@@ -207,5 +207,17 @@
   "journalPhoto": "Foto",
   "journalAddPhoto": "Foto hinzufügen",
   "journalTakePhoto": "Foto aufnehmen",
-  "journalChooseFromGallery": "Aus Galerie auswählen"
+  "journalChooseFromGallery": "Aus Galerie auswählen",
+
+  "growthPhotosTitle": "Wachstumsfotos",
+  "growthPhotosAdd": "Hinzufügen",
+  "growthPhotosEmpty": "Füge dein erstes Wachstumsfoto hinzu",
+  "growthPhotosEmptyHint": "Füge Fotos von der Pflanzendetailseite hinzu",
+  "growthPhotosNoTimeline": "Noch keine Wachstumsfotos",
+  "growthPhotosNoTimelineHint": "Füge Fotos von der Pflanzendetailseite hinzu",
+  "growthPhotoDeleteTitle": "Foto löschen",
+  "growthPhotoDeleteConfirm": "Möchtest du dieses Foto wirklich löschen?",
+  "growthPhotoNotFound": "Foto nicht gefunden",
+  "growthPhotoCamera": "Kamera",
+  "growthPhotoGallery": "Galerie"
 }

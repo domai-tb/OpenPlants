@@ -23,8 +23,7 @@ class CareScheduleUsecases {
   /// Get the full schedule for all plants, sorted by urgency.
   ///
   /// Returns a record with the tasks and a map of plantId to room context.
-  Future<({List<CareTask> tasks, Map<String, ({String name, String environment})> roomContext})>
-      getSchedule() async {
+  Future<({List<CareTask> tasks, Map<String, ({String name, String environment})> roomContext})> getSchedule() async {
     final plants = await plantCollection.loadPlants();
     final allConfigs = await repository.getAllScheduleConfigs();
     final allRoomConfigs = await repository.getAllRoomConfigs();

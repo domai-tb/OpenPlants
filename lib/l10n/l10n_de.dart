@@ -833,4 +833,40 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get journalChooseFromGallery => 'Aus Galerie auswählen';
+
+  @override
+  String get growthPhotosTitle => 'Wachstumsfotos';
+
+  @override
+  String get growthPhotosAdd => 'Hinzufügen';
+
+  @override
+  String get growthPhotosEmpty => 'Füge dein erstes Wachstumsfoto hinzu';
+
+  @override
+  String get growthPhotosEmptyHint =>
+      'Füge Fotos von der Pflanzendetailseite hinzu';
+
+  @override
+  String get growthPhotosNoTimeline => 'Noch keine Wachstumsfotos';
+
+  @override
+  String get growthPhotosNoTimelineHint =>
+      'Füge Fotos von der Pflanzendetailseite hinzu';
+
+  @override
+  String get growthPhotoDeleteTitle => 'Foto löschen';
+
+  @override
+  String get growthPhotoDeleteConfirm =>
+      'Möchtest du dieses Foto wirklich löschen?';
+
+  @override
+  String get growthPhotoNotFound => 'Foto nicht gefunden';
+
+  @override
+  String get growthPhotoCamera => 'Kamera';
+
+  @override
+  String get growthPhotoGallery => 'Galerie';
 }

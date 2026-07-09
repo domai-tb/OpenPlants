@@ -5,8 +5,7 @@ import 'package:open_plant/pages/model_info/model_info_item_entity.dart';
 class ModelInfoRepository {
   final ModelInfoDatasource _datasource;
 
-  const ModelInfoRepository({required ModelInfoDatasource datasource})
-      : _datasource = datasource;
+  const ModelInfoRepository({required ModelInfoDatasource datasource}) : _datasource = datasource;
 
   /// Returns the model metadata as a [ModelInfoItem].
   Future<ModelInfoItem> getModelInfo() async {

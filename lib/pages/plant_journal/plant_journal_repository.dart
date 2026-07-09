@@ -15,8 +15,7 @@ class PlantJournalRepository {
   PlantJournalRepository({required this.dataSource}) : _uuid = const Uuid();
 
   /// Load all journal entries for a specific plant, newest first.
-  Future<List<JournalEntry>> getEntries(String plantId) =>
-      dataSource.loadByPlant(plantId);
+  Future<List<JournalEntry>> getEntries(String plantId) => dataSource.loadByPlant(plantId);
 
   /// Add a new journal entry with a generated UUID.
   ///

@@ -108,8 +108,7 @@ class _PlantJournalPageState extends State<PlantJournalPage> {
               : ListView.builder(
                   padding: const EdgeInsets.all(16),
                   itemCount: _entries.length,
-                  itemBuilder: (context, index) =>
-                      _buildEntryCard(context, _entries[index]),
+                  itemBuilder: (context, index) => _buildEntryCard(context, _entries[index]),
                 ),
       floatingActionButton: FloatingActionButton(
         onPressed: _addEntry,

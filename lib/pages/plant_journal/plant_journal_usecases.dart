@@ -10,8 +10,7 @@ class PlantJournalUseCases {
   const PlantJournalUseCases({required this.repository});
 
   /// Fetches entries for a plant sorted by timestamp descending.
-  Future<List<JournalEntry>> getEntries(String plantId) =>
-      repository.getEntries(plantId);
+  Future<List<JournalEntry>> getEntries(String plantId) => repository.getEntries(plantId);
 
   /// Validates and persists a new entry with optional photo.
   Future<JournalEntry> addEntry(
@@ -33,10 +32,8 @@ class PlantJournalUseCases {
   Future<void> deleteEntry(String id) => repository.deleteEntry(id);
 
   /// Delete all journal entries for a specific plant.
-  Future<void> deleteEntriesForPlant(String plantId) =>
-      repository.deleteEntriesForPlant(plantId);
+  Future<void> deleteEntriesForPlant(String plantId) => repository.deleteEntriesForPlant(plantId);
 
   /// Count entries for a specific plant.
-  Future<int> countEntries(String plantId) =>
-      repository.countEntries(plantId);
+  Future<int> countEntries(String plantId) => repository.countEntries(plantId);
 }

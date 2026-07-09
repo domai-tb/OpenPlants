@@ -103,4 +103,17 @@ class PlantCollectionRepository {
     plants.removeAt(index);
     await dataSource.savePlants(plants);
   }
+
+  /// Replace a plant in the collection (used by other repositories).
+  Future<void> replacePlant(PlantEntity plant) async {
+    final plants = await dataSource.loadPlants();
+    final index = plants.indexWhere((p) => p.id == plant.id);
+
+    if (index == -1) {
+      throw Exception('Plant not found: ${plant.id}');
+    }
+
+    plants[index] = plant;
+    await dataSource.savePlants(plants);
+  }
 }

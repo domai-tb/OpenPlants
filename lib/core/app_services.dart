@@ -4,6 +4,7 @@ import 'package:open_plant/pages/plant_identification/classifier/plant_classifie
 import 'package:open_plant/pages/more/more_usecases.dart';
 import 'package:open_plant/pages/plant_collection/plant_collection_usecases.dart';
 import 'package:open_plant/pages/plant_journal/plant_journal_usecases.dart';
+import 'package:open_plant/pages/plant_photo_timeline/plant_photo_timeline_usecases.dart';
 import 'package:open_plant/pages/room_profiles/room_profiles_usecases.dart';
 import 'package:open_plant/pages/species_library/species_library_usecases.dart';
 import 'package:open_plant/pages/symptom_logger/symptom_logger_usecases.dart';
@@ -17,6 +18,7 @@ class AppServices {
   final PlantClassifierUsecases plantIdentification;
   final MoreUsecases more;
   final PlantCollectionUsecases plantCollection;
+  final PlantPhotoTimelineUseCases plantPhotoTimeline;
   final SpeciesLibraryUsecases speciesLibrary;
   final TodayDashboardUsecases todayDashboard;
   final CareScheduleUsecases careSchedule;
@@ -29,6 +31,7 @@ class AppServices {
     required this.plantIdentification,
     required this.more,
     required this.plantCollection,
+    required this.plantPhotoTimeline,
     required this.speciesLibrary,
     required this.todayDashboard,
     required this.careSchedule,

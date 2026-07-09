@@ -288,5 +288,17 @@
   "journalPhoto": "Photo",
   "journalAddPhoto": "Add Photo",
   "journalTakePhoto": "Take Photo",
-  "journalChooseFromGallery": "Choose from Gallery"
+  "journalChooseFromGallery": "Choose from Gallery",
+
+  "growthPhotosTitle": "Growth Photos",
+  "growthPhotosAdd": "Add",
+  "growthPhotosEmpty": "Add your first growth photo",
+  "growthPhotosEmptyHint": "Add photos from the plant detail page",
+  "growthPhotosNoTimeline": "No growth photos yet",
+  "growthPhotosNoTimelineHint": "Add photos from the plant detail page",
+  "growthPhotoDeleteTitle": "Delete Photo",
+  "growthPhotoDeleteConfirm": "Are you sure you want to delete this photo?",
+  "growthPhotoNotFound": "Photo not found",
+  "growthPhotoCamera": "Camera",
+  "growthPhotoGallery": "Gallery"
 }
