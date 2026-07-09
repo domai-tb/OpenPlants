@@ -20,6 +20,48 @@ class RoomModifier {
     return _computeFromConfig(taskType: taskType, room: room);
   }
 
+  /// Returns only the light modifier for a task type.
+  ///
+  /// Used when the plant has a user-set light level that overrides room sunlight.
+  static double computeLightModifier({
+    required BuiltInTaskType taskType,
+    RoomConfig? room,
+    RoomEntity? roomEntity,
+  }) {
+    if (taskType != BuiltInTaskType.watering && taskType != BuiltInTaskType.misting) {
+      return 1;
+    }
+
+    if (roomEntity != null) {
+      return _lightModifier(roomEntity.lightLevel);
+    }
+    if (room != null) {
+      return _legacyLightModifier(room.sunlightLevel);
+    }
+    return 1;
+  }
+
+  /// Returns only the humidity modifier for a task type.
+  ///
+  /// Used when the plant has a user-set light level that overrides room sunlight.
+  static double computeHumidityModifier({
+    required BuiltInTaskType taskType,
+    RoomConfig? room,
+    RoomEntity? roomEntity,
+  }) {
+    if (taskType != BuiltInTaskType.watering && taskType != BuiltInTaskType.misting) {
+      return 1;
+    }
+
+    if (roomEntity != null) {
+      return _humidityModifier(roomEntity.humidityLevel);
+    }
+    if (room != null) {
+      return _legacyHumidityModifier(room.humidityLevel);
+    }
+    return 1;
+  }
+
   static double _computeFromEntity({
     required BuiltInTaskType taskType,
     required RoomEntity room,

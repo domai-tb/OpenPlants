@@ -10,6 +10,7 @@ import 'package:open_plant/pages/room_profiles/room_profiles_usecases.dart';
 import 'package:open_plant/pages/species_library/species_library_usecases.dart';
 import 'package:open_plant/pages/symptom_logger/symptom_logger_usecases.dart';
 import 'package:open_plant/pages/today_dashboard/today_dashboard_usecases.dart';
+import 'package:open_plant/pages/lightAssessment/light_assessment_usecases.dart';
 
 /// Aggregates feature use-cases for convenient access via `AppScope`.
 ///
@@ -28,6 +29,7 @@ class AppServices {
   final PlantJournalUseCases plantJournal;
   final RoomProfilesUsecases roomProfiles;
   final ModelInfoUseCase modelInfo;
+  final LightAssessmentUseCases lightAssessment;
 
   const AppServices({
     required this.plantIdentification,
@@ -42,5 +44,6 @@ class AppServices {
     required this.plantJournal,
     required this.roomProfiles,
     required this.modelInfo,
+    required this.lightAssessment,
   });
 }

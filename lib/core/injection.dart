@@ -36,6 +36,9 @@ import 'package:open_plant/pages/symptom_logger/symptom_logger_usecases.dart';
 import 'package:open_plant/pages/today_dashboard/today_dashboard_datasource.dart';
 import 'package:open_plant/pages/today_dashboard/today_dashboard_repository.dart';
 import 'package:open_plant/pages/today_dashboard/today_dashboard_usecases.dart';
+import 'package:open_plant/pages/lightAssessment/light_assessment_datasource.dart';
+import 'package:open_plant/pages/lightAssessment/light_assessment_repository.dart';
+import 'package:open_plant/pages/lightAssessment/light_assessment_usecases.dart';
 
 /// Global service locator (GetIt).
 ///
@@ -177,6 +180,28 @@ Future<void> init() async {
     () => ModelInfoUseCase(repository: sl()),
   );
 
+  // Light Assessment
+  sl.registerLazySingleton<LightAssessmentDataSource>(
+    () => LightAssessmentDataSource(plantDataSource: sl()),
+  );
+  sl.registerLazySingleton<LightAssessmentRepository>(
+    () => LightAssessmentRepository(dataSource: sl()),
+  );
+  sl.registerLazySingleton<LightAssessmentUseCases>(
+    () => LightAssessmentUseCases(
+      repository: sl(),
+      getLatestPhoto: (plantId) async {
+        final timeline = await sl<PlantPhotoTimelineUseCases>().getTimeline(plantId);
+        return timeline.isNotEmpty ? timeline.first : null;
+      },
+      addPhoto: (plantId, image) => sl<PlantPhotoTimelineUseCases>().addPhoto(
+        plantId,
+        image,
+        date: DateTime.now(),
+      ),
+    ),
+  );
+
   // Aggregate wiring
   sl.registerLazySingleton<AppServices>(
     () => AppServices(
@@ -192,6 +217,7 @@ Future<void> init() async {
       plantJournal: sl(),
       roomProfiles: sl(),
       modelInfo: sl(),
+      lightAssessment: sl(),
     ),
   );
 }

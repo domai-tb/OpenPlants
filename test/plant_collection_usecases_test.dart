@@ -49,8 +49,6 @@ void main() {
   group('PlantEntity.effectiveCareStatus', () {
     test('returns needsWater for never-watered plant with happy stored status', () {
       final plant = _makePlant(
-        careStatus: CareStatus.happy,
-        lastWateredAt: null,
         lastFertilizedAt: DateTime(2025),
       );
       expect(plant.effectiveCareStatus, CareStatus.needsWater);
@@ -58,9 +56,7 @@ void main() {
 
     test('returns needsFertilizer for never-fertilized plant with happy stored status', () {
       final plant = _makePlant(
-        careStatus: CareStatus.happy,
         lastWateredAt: DateTime(2025),
-        lastFertilizedAt: null,
       );
       expect(plant.effectiveCareStatus, CareStatus.needsFertilizer);
     });
@@ -85,16 +81,13 @@ void main() {
 
     test('returns needsWater when both timestamps are null (water priority)', () {
       final plant = _makePlant(
-        careStatus: CareStatus.happy,
-        lastWateredAt: null,
-        lastFertilizedAt: null,
+        
       );
       expect(plant.effectiveCareStatus, CareStatus.needsWater);
     });
 
     test('returns happy when both timestamps are set and stored status is happy', () {
       final plant = _makePlant(
-        careStatus: CareStatus.happy,
         lastWateredAt: DateTime(2025),
         lastFertilizedAt: DateTime(2025),
       );
@@ -133,16 +126,13 @@ void main() {
     test('never-watered plant matches needsWater filter', () async {
       datasource._plants.add(_makePlant(
         id: 'never-watered',
-        careStatus: CareStatus.happy,
-        lastWateredAt: null,
         lastFertilizedAt: DateTime(2025),
-      ));
+      ),);
       datasource._plants.add(_makePlant(
         id: 'happy-plant',
-        careStatus: CareStatus.happy,
         lastWateredAt: DateTime(2025),
         lastFertilizedAt: DateTime(2025),
-      ));
+      ),);
 
       final result = await usecases.filterByCareStatus(CareStatus.needsWater);
       expect(result.length, 1);
@@ -152,16 +142,13 @@ void main() {
     test('never-fertilized plant matches needsFertilizer filter', () async {
       datasource._plants.add(_makePlant(
         id: 'never-fertilized',
-        careStatus: CareStatus.happy,
         lastWateredAt: DateTime(2025),
-        lastFertilizedAt: null,
-      ));
+      ),);
       datasource._plants.add(_makePlant(
         id: 'happy-plant',
-        careStatus: CareStatus.happy,
         lastWateredAt: DateTime(2025),
         lastFertilizedAt: DateTime(2025),
-      ));
+      ),);
 
       final result = await usecases.filterByCareStatus(CareStatus.needsFertilizer);
       expect(result.length, 1);
@@ -171,10 +158,9 @@ void main() {
     test('happy plant with both timestamps matches neither filter', () async {
       datasource._plants.add(_makePlant(
         id: 'happy-plant',
-        careStatus: CareStatus.happy,
         lastWateredAt: DateTime(2025),
         lastFertilizedAt: DateTime(2025),
-      ));
+      ),);
 
       final waterResult = await usecases.filterByCareStatus(CareStatus.needsWater);
       final fertResult = await usecases.filterByCareStatus(CareStatus.needsFertilizer);
@@ -189,7 +175,7 @@ void main() {
         careStatus: CareStatus.needsWater,
         lastWateredAt: DateTime(2025),
         lastFertilizedAt: DateTime(2025),
-      ));
+      ),);
 
       final result = await usecases.filterByCareStatus(CareStatus.needsWater);
       expect(result.length, 1);
@@ -199,10 +185,7 @@ void main() {
     test('plant with both timestamps null matches needsWater only', () async {
       datasource._plants.add(_makePlant(
         id: 'brand-new',
-        careStatus: CareStatus.happy,
-        lastWateredAt: null,
-        lastFertilizedAt: null,
-      ));
+      ),);
 
       final waterResult = await usecases.filterByCareStatus(CareStatus.needsWater);
       final fertResult = await usecases.filterByCareStatus(CareStatus.needsFertilizer);

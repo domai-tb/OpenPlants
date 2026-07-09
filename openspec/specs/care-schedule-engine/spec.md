@@ -46,7 +46,7 @@ The engine SHALL apply a monthly multiplier table per task type, reducing or inc
 - **THEN** the effective fertilizing interval is reduced to 67% of the base interval (more frequent)
 
 ### Requirement: Engine applies room-context modifiers
-The system SHALL modulate watering and misting intervals based on the assigned room's structured attributes (LightLevel enum, HumidityLevel enum) from the RoomEntity, if a room is assigned to the plant.
+The system SHALL modulate watering and misting intervals based on the assigned room's structured attributes (LightLevel enum, HumidityLevel enum) from the RoomEntity, if a room is assigned to the plant. When a plant has a user-set light level, the plant-level light assessment SHALL take precedence over the room's sunlight attribute for watering modifiers.
 
 #### Scenario: High light increases watering frequency
 - **WHEN** a plant is assigned to a room with light level `LightLevel.directSun` and the species has a high-light modifier
@@ -67,6 +67,14 @@ The system SHALL modulate watering and misting intervals based on the assigned r
 #### Scenario: Room environment multiplied with seasonal modifier
 - **WHEN** a plant is in a room with `LightLevel.bright` and the current month has a seasonal multiplier of 0.8×
 - **THEN** the effective interval applies both multipliers (room × season) sequentially
+
+#### Scenario: Plant light level overrides room sunlight
+- **WHEN** a plant has a user-set light level of `low` and is in a room configured with "full sun"
+- **THEN** the engine uses the `low` light-level modifier for watering, ignoring the room's sunlight attribute
+
+#### Scenario: Null plant light level falls back to room sunlight
+- **WHEN** a plant has no light level set (`null`) and is in a room with sunlight configured
+- **THEN** the engine uses the room's sunlight attribute as the light modifier (existing behavior)
 
 ### Requirement: Engine applies pot-type modifiers
 The engine SHALL adjust the watering interval based on the plant's pot type.

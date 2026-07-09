@@ -1,5 +1,36 @@
 import 'package:open_plant/pages/plant_photo_timeline/plant_photo_timeline_item_entity.dart';
 
+/// Light level assessment for a plant's location.
+enum LightLevel {
+  low,
+  medium,
+  brightIndirect,
+  direct,
+}
+
+/// Extension methods for LightLevel enum.
+extension LightLevelExtension on LightLevel {
+  /// Convert to JSON string.
+  String toJson() => name;
+
+  /// Convert from JSON string.
+  static LightLevel? fromJson(String? json) {
+    if (json == null) return null;
+    return LightLevel.values.firstWhere(
+      (e) => e.name == json,
+      orElse: () => LightLevel.medium,
+    );
+  }
+
+  /// Human-readable label.
+  String get label => switch (this) {
+        LightLevel.low => 'Low',
+        LightLevel.medium => 'Medium',
+        LightLevel.brightIndirect => 'Bright Indirect',
+        LightLevel.direct => 'Direct',
+      };
+}
+
 /// Care status for a plant.
 enum CareStatus {
   happy,
@@ -34,6 +65,7 @@ class PlantEntity {
   final CareStatus careStatus;
   final DateTime? lastWateredAt;
   final DateTime? lastFertilizedAt;
+  final LightLevel? lightLevel;
   final List<PlantPhoto> photos;
   final DateTime createdAt;
   final DateTime updatedAt;
@@ -47,6 +79,7 @@ class PlantEntity {
     this.roomId,
     this.notes,
     this.careStatus = CareStatus.happy,
+    this.lightLevel,
     this.lastWateredAt,
     this.lastFertilizedAt,
     this.photos = const [],
@@ -92,6 +125,8 @@ class PlantEntity {
     String? notes,
     bool clearNotes = false,
     CareStatus? careStatus,
+    LightLevel? lightLevel,
+    bool clearLightLevel = false,
     DateTime? lastWateredAt,
     bool clearLastWatered = false,
     DateTime? lastFertilizedAt,
@@ -109,6 +144,7 @@ class PlantEntity {
       roomId: clearRoomId ? null : (roomId ?? this.roomId),
       notes: clearNotes ? null : (notes ?? this.notes),
       careStatus: careStatus ?? this.careStatus,
+      lightLevel: clearLightLevel ? null : (lightLevel ?? this.lightLevel),
       lastWateredAt: clearLastWatered ? null : (lastWateredAt ?? this.lastWateredAt),
       lastFertilizedAt: clearLastFertilized ? null : (lastFertilizedAt ?? this.lastFertilizedAt),
       photos: photos ?? this.photos,
@@ -128,6 +164,7 @@ class PlantEntity {
       'roomId': roomId,
       'notes': notes,
       'careStatus': careStatus.toJson(),
+      'lightLevel': lightLevel?.toJson(),
       'lastWateredAt': lastWateredAt?.toIso8601String(),
       'lastFertilizedAt': lastFertilizedAt?.toIso8601String(),
       'photos': PlantPhoto.listToJson(photos),
@@ -147,6 +184,7 @@ class PlantEntity {
       roomId: json['roomId'] as String?,
       notes: json['notes'] as String?,
       careStatus: CareStatusExtension.fromJson(json['careStatus'] as String? ?? 'happy'),
+      lightLevel: LightLevelExtension.fromJson(json['lightLevel'] as String?),
       lastWateredAt: json['lastWateredAt'] != null ? DateTime.parse(json['lastWateredAt'] as String) : null,
       lastFertilizedAt: json['lastFertilizedAt'] != null ? DateTime.parse(json['lastFertilizedAt'] as String) : null,
       photos: json['photos'] != null ? PlantPhoto.listFromJson(json['photos'] as List<dynamic>) : const [],

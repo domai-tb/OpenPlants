@@ -62,6 +62,7 @@ class CareScheduleUsecases {
         profile: profile,
         completionHistory: completions,
         customCareRules: plantRules,
+        lightLevel: plant.lightLevel,
       );
     }).toList();
 

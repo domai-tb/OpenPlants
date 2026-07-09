@@ -2,6 +2,7 @@ import 'package:open_plant/pages/care_schedule/care_task.dart';
 import 'package:open_plant/pages/care_schedule/care_task_type.dart';
 import 'package:open_plant/pages/care_schedule/custom_care_rule.dart';
 import 'package:open_plant/pages/care_schedule/effective_interval_calculator.dart';
+import 'package:open_plant/pages/care_schedule/light_level_modifier.dart';
 import 'package:open_plant/pages/care_schedule/overdue_detector.dart';
 import 'package:open_plant/pages/care_schedule/pot_type_modifier.dart';
 import 'package:open_plant/pages/care_schedule/room_config.dart';
@@ -9,6 +10,7 @@ import 'package:open_plant/pages/care_schedule/room_modifier.dart';
 import 'package:open_plant/pages/care_schedule/schedule_config.dart';
 import 'package:open_plant/pages/care_schedule/species_care_profile.dart';
 import 'package:open_plant/pages/care_schedule/task_completion.dart';
+import 'package:open_plant/pages/plant_collection/plant_collection_item_entity.dart';
 import 'package:open_plant/pages/room_profiles/room_profiles_entity.dart';
 
 /// Input data for computing a schedule for a single plant.
@@ -22,6 +24,7 @@ class PlantScheduleInput {
   final List<TaskCompletion> completionHistory;
   final List<CareTaskType> customTaskTypes;
   final List<CustomCareRuleEntity> customCareRules;
+  final LightLevel? lightLevel;
 
   const PlantScheduleInput({
     required this.plantId,
@@ -33,6 +36,7 @@ class PlantScheduleInput {
     this.completionHistory = const [],
     this.customTaskTypes = const [],
     this.customCareRules = const [],
+    this.lightLevel,
   });
 }
 
@@ -99,8 +103,24 @@ class ScheduleEngine {
         );
 
         if (effectiveInterval != null && effectiveInterval > 0 && taskType.isBuiltIn) {
-          // Apply room modifier
-          final roomMod = RoomModifier.compute(
+          // Compute light modifier: plant light level takes precedence over room sunlight
+          double lightMod;
+          if (input.lightLevel != null) {
+            lightMod = LightLevelModifier.compute(
+              taskType: taskType.builtIn!,
+              lightLevel: input.lightLevel,
+            );
+          } else {
+            // Fall back to room's light modifier
+            lightMod = RoomModifier.computeLightModifier(
+              taskType: taskType.builtIn!,
+              room: input.roomConfig,
+              roomEntity: input.roomEntity,
+            );
+          }
+
+          // Compute humidity modifier from room
+          final humidityMod = RoomModifier.computeHumidityModifier(
             taskType: taskType.builtIn!,
             room: input.roomConfig,
             roomEntity: input.roomEntity,
@@ -112,7 +132,7 @@ class ScheduleEngine {
             potType: input.config.potType,
           );
 
-          effectiveInterval = (effectiveInterval * roomMod * potMod).round();
+          effectiveInterval = (effectiveInterval * lightMod * humidityMod * potMod).round();
         }
       }
 

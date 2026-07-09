@@ -17,6 +17,8 @@ import 'package:open_plant/pages/plant_photo_timeline/plant_photo_timeline_page.
 import 'package:open_plant/pages/plant_photo_timeline/plant_photo_timeline_usecases.dart';
 import 'package:open_plant/pages/care_schedule/custom_care_rule_usecases.dart';
 import 'package:open_plant/pages/care_schedule/widgets/care_rules_section.dart';
+import 'package:open_plant/pages/lightAssessment/light_assessment_page.dart';
+import 'package:open_plant/pages/lightAssessment/light_assessment_usecases.dart';
 import 'package:open_plant/pages/room_profiles/room_profiles_usecases.dart';
 import 'package:open_plant/pages/symptom_logger/symptom_logger_extensions.dart';
 import 'package:open_plant/pages/symptom_logger/symptom_logger_item_entity.dart';
@@ -40,6 +42,7 @@ class _PlantCollectionDetailPageState extends State<PlantCollectionDetailPage> {
   late PlantJournalUseCases _journalUsecases;
   late RoomProfilesUsecases _roomUsecases;
   late CustomCareRuleUsecases _careRuleUsecases;
+  late LightAssessmentUseCases _lightAssessmentUsecases;
   bool _wired = false;
   late PlantEntity _plant;
   List<SymptomLogEntry> _symptomHistory = const [];
@@ -65,6 +68,7 @@ class _PlantCollectionDetailPageState extends State<PlantCollectionDetailPage> {
     _journalUsecases = services.plantJournal;
     _roomUsecases = services.roomProfiles;
     _careRuleUsecases = services.customCareRules;
+    _lightAssessmentUsecases = services.lightAssessment;
     _wired = true;
     _loadSymptomHistory();
     _loadRoomName();
@@ -233,6 +237,25 @@ class _PlantCollectionDetailPageState extends State<PlantCollectionDetailPage> {
     );
   }
 
+  Future<void> _openLightAssessment() async {
+    await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => LightAssessmentPage(
+          plantId: _plant.id,
+          plantName: _plant.name,
+          usecases: _lightAssessmentUsecases,
+        ),
+      ),
+    );
+    // Reload plant to reflect updated light level
+    final updatedPlants = await _usecases.loadPlants();
+    final matching = updatedPlants.where((p) => p.id == _plant.id);
+    final updated = matching.isNotEmpty ? matching.first : null;
+    if (updated != null && mounted) {
+      setState(() => _plant = updated);
+    }
+  }
+
   Future<void> _markSymptomResolved(SymptomLogEntry entry) async {
     final confirmed = await showDialog<bool>(
       context: context,
@@ -329,6 +352,24 @@ class _PlantCollectionDetailPageState extends State<PlantCollectionDetailPage> {
             ),
             const Divider(height: 32),
           ],
+
+          // Light Level
+          _buildInfoRow(
+            theme,
+            icon: Icons.light_mode,
+            label: 'Light Level',
+            value: _plant.lightLevel?.label ?? 'Not set',
+          ),
+          const SizedBox(height: 8),
+          SizedBox(
+            width: double.infinity,
+            child: OutlinedButton.icon(
+              onPressed: _openLightAssessment,
+              icon: const Icon(Icons.edit, size: 18),
+              label: const Text('Assess Light Level'),
+            ),
+          ),
+          const Divider(height: 32),
 
           // Notes
           if (_plant.notes != null) ...[
