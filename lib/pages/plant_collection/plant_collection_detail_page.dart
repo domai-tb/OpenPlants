@@ -302,9 +302,9 @@ class _PlantCollectionDetailPageState extends State<PlantCollectionDetailPage> {
           _buildInfoRow(
             theme,
             icon: Icons.circle,
-            iconColor: _getCareStatusColor(_plant.careStatus),
+            iconColor: _getCareStatusColor(_plant.effectiveCareStatus),
             label: context.l10n.careStatus,
-            value: _getCareStatusText(_plant.careStatus),
+            value: _getCareStatusText(_plant.effectiveCareStatus),
           ),
           const Divider(height: 32),
 

@@ -59,7 +59,7 @@ class PlantCollectionUsecases {
     final plants = await repository.loadPlants();
     if (status == null) return plants;
 
-    return plants.where((p) => p.careStatus == status).toList();
+    return plants.where((p) => p.effectiveCareStatus == status).toList();
   }
 
   /// Mark a plant as watered.

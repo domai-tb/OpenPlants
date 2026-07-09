@@ -425,7 +425,7 @@ class _PlantCollectionPageState extends State<PlantCollectionPage>
                   width: 12,
                   height: 12,
                   decoration: BoxDecoration(
-                    color: _getCareStatusColor(plant.careStatus),
+                    color: _getCareStatusColor(plant.effectiveCareStatus),
                     shape: BoxShape.circle,
                   ),
                 ),

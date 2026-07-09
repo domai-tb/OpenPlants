@@ -54,6 +54,29 @@ class PlantEntity {
     required this.updatedAt,
   });
 
+  /// Returns the effective care status considering both the stored [careStatus]
+  /// and the care timestamps. Used for filtering and UI display.
+  ///
+  /// Priority (first match wins):
+  /// 1. Explicit override: if stored [careStatus] is [needsWater] or
+  ///    [needsFertilizer], use that value.
+  /// 2. Never watered: if [lastWateredAt] is `null`, status is [needsWater].
+  /// 3. Never fertilized: if [lastFertilizedAt] is `null`, status is
+  ///    [needsFertilizer].
+  /// 4. Otherwise, return the stored [careStatus] (typically [happy]).
+  CareStatus get effectiveCareStatus {
+    // 1. Explicit override — user-set needsWater/needsFertilizer always wins.
+    if (careStatus == CareStatus.needsWater || careStatus == CareStatus.needsFertilizer) {
+      return careStatus;
+    }
+    // 2. Never watered — water is more urgent than fertilizer.
+    if (lastWateredAt == null) return CareStatus.needsWater;
+    // 3. Never fertilized.
+    if (lastFertilizedAt == null) return CareStatus.needsFertilizer;
+    // 4. Happy (or other stored status).
+    return careStatus;
+  }
+
   /// Create a copy with optional field overrides.
   PlantEntity copyWith({
     String? id,
