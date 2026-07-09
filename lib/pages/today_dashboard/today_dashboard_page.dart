@@ -18,6 +18,10 @@ class TodayDashboardPage extends StatefulWidget {
   /// add-plant form.
   final VoidCallback? onNavigateToAddPlant;
 
+  /// Optional callback: navigate to a plant's detail page by ID.
+  /// The callback receives the plant ID and handles tab switching + navigation.
+  final ValueChanged<String>? onNavigateToPlantDetail;
+
   /// Notifies this page to reload data after a tab switch.
   final Listenable? tabSwitchNotifier;
 
@@ -27,6 +31,7 @@ class TodayDashboardPage extends StatefulWidget {
     required this.pageEntryAnimationKey,
     required this.pageExitAnimationKey,
     this.onNavigateToAddPlant,
+    this.onNavigateToPlantDetail,
     this.tabSwitchNotifier,
   });
 
@@ -148,12 +153,21 @@ class _TodayDashboardPageState extends State<TodayDashboardPage>
                   onNavigateToAddPlant: widget.onNavigateToAddPlant,
                 ),
                 const SizedBox(height: 24),
-                if (data.dueToday.isNotEmpty) _DueTasksSection(tasks: data.dueToday),
-                if (data.overdue.isNotEmpty) _OverdueTasksSection(tasks: data.overdue),
+                if (data.dueToday.isNotEmpty)
+                  _DueTasksSection(
+                    tasks: data.dueToday,
+                    onNavigateToPlantDetail: widget.onNavigateToPlantDetail,
+                  ),
+                if (data.overdue.isNotEmpty)
+                  _OverdueTasksSection(
+                    tasks: data.overdue,
+                    onNavigateToPlantDetail: widget.onNavigateToPlantDetail,
+                  ),
                 if (data.recentPlants.isNotEmpty)
                   _RecentPlantsCarousel(
                     plants: data.recentPlants,
                     mainNavigatorKey: widget.mainNavigatorKey,
+                    onNavigateToPlantDetail: widget.onNavigateToPlantDetail,
                   ),
                 const SizedBox(height: 32),
               ]),
@@ -395,8 +409,12 @@ class _ActionButton extends StatelessWidget {
 
 class _DueTasksSection extends StatelessWidget {
   final List<CareTask> tasks;
+  final ValueChanged<String>? onNavigateToPlantDetail;
 
-  const _DueTasksSection({required this.tasks});
+  const _DueTasksSection({
+    required this.tasks,
+    this.onNavigateToPlantDetail,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -419,6 +437,7 @@ class _DueTasksSection extends StatelessWidget {
               child: _CareTaskCard(
                 task: task,
                 isOverdue: false,
+                onNavigateToPlantDetail: onNavigateToPlantDetail,
               ),
             ),
           ),
@@ -432,8 +451,12 @@ class _DueTasksSection extends StatelessWidget {
 
 class _OverdueTasksSection extends StatelessWidget {
   final List<CareTask> tasks;
+  final ValueChanged<String>? onNavigateToPlantDetail;
 
-  const _OverdueTasksSection({required this.tasks});
+  const _OverdueTasksSection({
+    required this.tasks,
+    this.onNavigateToPlantDetail,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -459,6 +482,7 @@ class _OverdueTasksSection extends StatelessWidget {
               child: _CareTaskCard(
                 task: task,
                 isOverdue: true,
+                onNavigateToPlantDetail: onNavigateToPlantDetail,
               ),
             ),
           ),
@@ -473,8 +497,13 @@ class _OverdueTasksSection extends StatelessWidget {
 class _CareTaskCard extends StatelessWidget {
   final CareTask task;
   final bool isOverdue;
+  final ValueChanged<String>? onNavigateToPlantDetail;
 
-  const _CareTaskCard({required this.task, required this.isOverdue});
+  const _CareTaskCard({
+    required this.task,
+    required this.isOverdue,
+    this.onNavigateToPlantDetail,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -484,8 +513,11 @@ class _CareTaskCard extends StatelessWidget {
     return Material(
       color: isOverdue ? theme.colorScheme.errorContainer : theme.cardColor,
       borderRadius: BorderRadius.circular(12),
-      child: Padding(
-        padding: const EdgeInsets.all(14),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(12),
+        onTap: task.plantId != null ? () => onNavigateToPlantDetail?.call(task.plantId!) : null,
+        child: Padding(
+          padding: const EdgeInsets.all(14),
         child: Row(
           children: [
             Icon(
@@ -530,6 +562,7 @@ class _CareTaskCard extends StatelessWidget {
           ],
         ),
       ),
+      ),
     );
   }
 
@@ -565,10 +598,12 @@ class _CareTaskCard extends StatelessWidget {
 class _RecentPlantsCarousel extends StatelessWidget {
   final List<PlantSummary> plants;
   final GlobalKey<NavigatorState> mainNavigatorKey;
+  final ValueChanged<String>? onNavigateToPlantDetail;
 
   const _RecentPlantsCarousel({
     required this.plants,
     required this.mainNavigatorKey,
+    this.onNavigateToPlantDetail,
   });
 
   @override
@@ -596,7 +631,7 @@ class _RecentPlantsCarousel extends StatelessWidget {
                 final plant = plants[index];
                 return GestureDetector(
                   onTap: () {
-                    mainNavigatorKey.currentState?.pushNamed('/plant_collection/detail/${plant.id}');
+                    onNavigateToPlantDetail?.call(plant.id);
                   },
                   child: Column(
                     children: [

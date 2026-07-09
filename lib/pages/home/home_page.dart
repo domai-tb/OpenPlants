@@ -9,6 +9,7 @@ import 'package:open_plant/pages/home/page_navigator.dart';
 import 'package:open_plant/pages/home/widgets/page_navigation_animation.dart';
 import 'package:open_plant/pages/home/widgets/bottom_nav_bar.dart';
 import 'package:open_plant/pages/home/widgets/side_nav_bar.dart';
+import 'package:open_plant/pages/plant_collection/plant_collection_detail_page.dart';
 import 'package:open_plant/pages/plant_collection/plant_collection_form_page.dart';
 
 /// The [HomePage] displays all general UI elements like the bottom nav-menu and
@@ -163,6 +164,32 @@ class HomePageState extends State<HomePage> {
     );
   }
 
+  /// Switches to the Plant Collection tab and opens the detail page for the
+  /// given plant ID.
+  void _onNavigateToPlantDetail(String plantId) {
+    unawaited(
+      selectedPage(PageItem.plantCollection).then((_) {
+        if (!mounted) return;
+        final usecases = AppScope.of(context).services.plantCollection;
+        usecases.loadPlants().then((plants) {
+          final plant = plants.firstWhere(
+            (p) => p.id == plantId,
+            orElse: () => throw PlantNotFoundException(plantId),
+          );
+          navigatorKeys[PageItem.plantCollection]?.currentState?.push(
+                MaterialPageRoute(builder: (_) => PlantCollectionDetailPage(plant: plant)),
+              );
+        }).catchError((Object error) {
+          if (error is PlantNotFoundException && mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Plant not found')),
+            );
+          }
+        });
+      }),
+    );
+  }
+
   /// Switches to the Plant Collection tab.
   void _onNavigateToPlantCollection() {
     unawaited(selectedPage(PageItem.plantCollection));
@@ -179,6 +206,7 @@ class HomePageState extends State<HomePage> {
       onSwitchToSpeciesLibrary:
           tabItem == PageItem.plantIdentification ? () => selectedPage(PageItem.speciesLibrary) : null,
       onNavigateToAddPlant: tabItem == PageItem.todayDashboard ? _onNavigateToAddPlant : null,
+      onNavigateToPlantDetail: tabItem == PageItem.todayDashboard ? _onNavigateToPlantDetail : null,
       onNavigateToPlantCollection: tabItem == PageItem.careSchedule ? _onNavigateToPlantCollection : null,
       tabSwitchNotifier: tabSwitchNotifier,
     );
@@ -199,6 +227,7 @@ class HomePageState extends State<HomePage> {
         onSwitchToSpeciesLibrary:
             tabItem == PageItem.plantIdentification ? () => selectedPage(PageItem.speciesLibrary) : null,
         onNavigateToAddPlant: tabItem == PageItem.todayDashboard ? _onNavigateToAddPlant : null,
+        onNavigateToPlantDetail: tabItem == PageItem.todayDashboard ? _onNavigateToPlantDetail : null,
         onNavigateToPlantCollection: tabItem == PageItem.careSchedule ? _onNavigateToPlantCollection : null,
         tabSwitchNotifier: tabSwitchNotifier,
       ),
@@ -400,4 +429,13 @@ class HomePageState extends State<HomePage> {
       ),
     );
   }
+}
+
+/// Exception thrown when a plant is not found by ID.
+class PlantNotFoundException implements Exception {
+  final String plantId;
+  const PlantNotFoundException(this.plantId);
+
+  @override
+  String toString() => 'Plant not found: $plantId';
 }

@@ -13,12 +13,14 @@ enum CareTaskType {
 /// A single care task displayed on the dashboard.
 class CareTask {
   final String plantName;
+  final String? plantId;
   final CareTaskType taskType;
   final DateTime dueDate;
   final int daysOverdue;
 
   const CareTask({
     required this.plantName,
+    this.plantId,
     required this.taskType,
     required this.dueDate,
     this.daysOverdue = 0,

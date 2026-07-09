@@ -145,6 +145,9 @@ class NavBarNavigator extends StatelessWidget {
   /// add-plant form from the Today Dashboard.
   final VoidCallback? onNavigateToAddPlant;
 
+  /// Optional callback: navigate to a plant's detail page by ID.
+  final ValueChanged<String>? onNavigateToPlantDetail;
+
   /// Optional callback: navigate to the Plant Collection tab from the
   /// Care Schedule empty state.
   final VoidCallback? onNavigateToPlantCollection;
@@ -161,6 +164,7 @@ class NavBarNavigator extends StatelessWidget {
     required this.pageExitAnimationKey,
     this.onSwitchToSpeciesLibrary,
     this.onNavigateToAddPlant,
+    this.onNavigateToPlantDetail,
     this.onNavigateToPlantCollection,
     this.tabSwitchNotifier,
   });
@@ -175,6 +179,7 @@ class NavBarNavigator extends StatelessWidget {
           pageEntryAnimationKey: pageEntryAnimationKey,
           pageExitAnimationKey: pageExitAnimationKey,
           onNavigateToAddPlant: onNavigateToAddPlant,
+          onNavigateToPlantDetail: onNavigateToPlantDetail,
           tabSwitchNotifier: tabSwitchNotifier,
         );
         break;

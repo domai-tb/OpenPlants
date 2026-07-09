@@ -12,6 +12,17 @@ class PlantCollectionUsecases {
   /// Load all plants from storage.
   Future<List<PlantEntity>> loadPlants() => repository.loadPlants();
 
+  /// Get a single plant by ID.
+  ///
+  /// Returns `null` if the plant is not found.
+  Future<PlantEntity?> getPlantById(String id) async {
+    final plants = await repository.loadPlants();
+    for (final plant in plants) {
+      if (plant.id == id) return plant;
+    }
+    return null;
+  }
+
   /// Add a new plant to the collection.
   ///
   /// If [photoFile] is provided, it will be stored in the app's documents
