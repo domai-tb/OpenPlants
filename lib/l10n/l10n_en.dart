@@ -860,4 +860,92 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get growthPhotoGallery => 'Gallery';
+
+  @override
+  String get careRulesTitle => 'Care Rules';
+
+  @override
+  String get careRulesManage => 'Manage';
+
+  @override
+  String get careRulesEmpty => 'No custom rules';
+
+  @override
+  String get careRulesEmptyHint =>
+      'Add a rule to override the computed schedule';
+
+  @override
+  String careRulesActiveCount(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count active rules',
+      one: '1 active rule',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get careRulesDeleteTitle => 'Delete Rule';
+
+  @override
+  String careRulesDeleteConfirm(Object ruleType) {
+    return 'Delete \"$ruleType\" rule?';
+  }
+
+  @override
+  String get careRulesAdd => 'Add Rule';
+
+  @override
+  String get careRulesEdit => 'Edit Rule';
+
+  @override
+  String get careRulesTaskType => 'Task Type';
+
+  @override
+  String get careRulesBuiltIn => 'Built-in';
+
+  @override
+  String get careRulesCustom => 'Custom';
+
+  @override
+  String get careRulesSelectType => 'Select task type';
+
+  @override
+  String get careRulesCustomType => 'Custom task type';
+
+  @override
+  String get careRulesCustomTypeHint => 'e.g. Check for flowers';
+
+  @override
+  String get careRulesSelectTypeRequired => 'Please select a task type';
+
+  @override
+  String get careRulesCustomTypeRequired => 'Please enter a task type';
+
+  @override
+  String get careRulesInterval => 'Interval (days)';
+
+  @override
+  String get careRulesIntervalHint => 'Days between tasks';
+
+  @override
+  String get careRulesIntervalRequired => 'Please enter an interval';
+
+  @override
+  String get careRulesIntervalPositive => 'Please enter a positive number';
+
+  @override
+  String get careRulesEnableReminder => 'Enable Reminder';
+
+  @override
+  String get careRulesReminderTimeHint => '09:00';
+
+  @override
+  String get careRulesReminderDays => 'Reminder days';
+
+  @override
+  String careRulesSaveFailed(Object error) {
+    return 'Failed to save rule: $error';
+  }
 }

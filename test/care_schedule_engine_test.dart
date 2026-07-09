@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:open_plant/pages/care_schedule/care_task.dart';
 import 'package:open_plant/pages/care_schedule/care_task_type.dart';
+import 'package:open_plant/pages/care_schedule/custom_care_rule.dart';
 import 'package:open_plant/pages/care_schedule/overdue_detector.dart';
 import 'package:open_plant/pages/care_schedule/pot_type_modifier.dart';
 import 'package:open_plant/pages/care_schedule/room_config.dart';
@@ -297,6 +298,146 @@ void main() {
       );
       // 7 days (seasonal 1.0) * 0.8 (terracotta) = 5.6 → 6 days
       expect(watering.effectiveIntervalDays, 6);
+    });
+
+    test('custom care rule overrides species default', () {
+      final rule = CustomCareRuleEntity(
+        id: 'rule-1',
+        plantId: 'plant-1',
+        taskType: 'watering',
+        intervalDays: 10,
+        createdAt: DateTime(2025),
+      );
+
+      final tasks = ScheduleEngine.computeForPlant(
+        input: PlantScheduleInput(
+          plantId: 'plant-1',
+          plantName: 'My Pothos',
+          config: ScheduleConfig.defaults(),
+          profile: testProfile,
+          customCareRules: [rule],
+        ),
+        today: today,
+      );
+
+      final watering = tasks.firstWhere(
+        (t) => t.taskType.builtIn == BuiltInTaskType.watering,
+      );
+      // Rule says 10 days, no modifiers applied
+      expect(watering.effectiveIntervalDays, 10);
+    });
+
+    test('disabled custom care rule is ignored', () {
+      final rule = CustomCareRuleEntity(
+        id: 'rule-1',
+        plantId: 'plant-1',
+        taskType: 'watering',
+        intervalDays: 10,
+        isEnabled: false,
+        createdAt: DateTime(2025),
+      );
+
+      final tasks = ScheduleEngine.computeForPlant(
+        input: PlantScheduleInput(
+          plantId: 'plant-1',
+          plantName: 'My Pothos',
+          config: ScheduleConfig.defaults(),
+          profile: testProfile,
+          customCareRules: [rule],
+        ),
+        today: today,
+      );
+
+      final watering = tasks.firstWhere(
+        (t) => t.taskType.builtIn == BuiltInTaskType.watering,
+      );
+      // Disabled rule → species default (7 days)
+      expect(watering.effectiveIntervalDays, 7);
+    });
+
+    test('no matching rule uses fallback', () {
+      final rule = CustomCareRuleEntity(
+        id: 'rule-1',
+        plantId: 'plant-1',
+        taskType: 'fertilizing',
+        intervalDays: 20,
+        createdAt: DateTime(2025),
+      );
+
+      final tasks = ScheduleEngine.computeForPlant(
+        input: PlantScheduleInput(
+          plantId: 'plant-1',
+          plantName: 'My Pothos',
+          config: ScheduleConfig.defaults(),
+          profile: testProfile,
+          customCareRules: [rule],
+        ),
+        today: today,
+      );
+
+      final watering = tasks.firstWhere(
+        (t) => t.taskType.builtIn == BuiltInTaskType.watering,
+      );
+      // No watering rule → species default (7 days)
+      expect(watering.effectiveIntervalDays, 7);
+    });
+
+    test('custom rule for user-defined task type adds task', () {
+      final rule = CustomCareRuleEntity(
+        id: 'rule-1',
+        plantId: 'plant-1',
+        taskType: 'Check for flowers',
+        intervalDays: 7,
+        createdAt: DateTime(2025),
+      );
+
+      final tasks = ScheduleEngine.computeForPlant(
+        input: PlantScheduleInput(
+          plantId: 'plant-1',
+          plantName: 'My Pothos',
+          config: ScheduleConfig.defaults(),
+          profile: testProfile,
+          customCareRules: [rule],
+        ),
+        today: today,
+      );
+
+      // 8 built-in + 1 from rule
+      expect(tasks.length, 9);
+      final customTask = tasks.firstWhere((t) => t.taskType.isCustom);
+      expect(customTask.effectiveIntervalDays, 7);
+    });
+
+    test('custom rule bypasses room and pot modifiers', () {
+      final rule = CustomCareRuleEntity(
+        id: 'rule-1',
+        plantId: 'plant-1',
+        taskType: 'watering',
+        intervalDays: 10,
+        createdAt: DateTime(2025),
+      );
+
+      final march = DateTime(2025, 3, 1); // ignore: avoid_redundant_argument_values
+      final tasks = ScheduleEngine.computeForPlant(
+        input: PlantScheduleInput(
+          plantId: 'plant-1',
+          plantName: 'My Pothos',
+          config: const ScheduleConfig(potType: PotType.terracotta),
+          roomConfig: const RoomConfig(
+            roomName: 'Test',
+            sunlightLevel: SunlightLevel.fullSun,
+          ),
+          profile: testProfile,
+          customCareRules: [rule],
+        ),
+        today: march,
+      );
+
+      final watering = tasks.firstWhere(
+        (t) => t.taskType.builtIn == BuiltInTaskType.watering,
+      );
+      // Rule interval used directly, modifiers ignored
+      expect(watering.effectiveIntervalDays, 10);
     });
   });
 }

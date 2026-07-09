@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:open_plant/pages/care_schedule/custom_care_rule.dart';
 import 'package:open_plant/pages/care_schedule/room_config.dart';
 import 'package:open_plant/pages/care_schedule/schedule_config.dart';
 import 'package:open_plant/pages/care_schedule/task_completion.dart';
@@ -14,6 +15,7 @@ class CareScheduleDataSource {
   static const String _scheduleConfigsKey = 'care_schedule_configs_v1';
   static const String _roomConfigsKey = 'care_room_configs_v1';
   static const String _completionsKey = 'care_task_completions_v1';
+  static const String _customCareRulesKey = 'custom_care_rules_v1';
 
   // --- Schedule Configs (per-plant) ---
 
@@ -130,5 +132,29 @@ class CareScheduleDataSource {
           c.completedAt == completion.completedAt,
     );
     await saveCompletions(completions);
+  }
+
+  // --- Custom Care Rules ---
+
+  /// Load all custom care rules.
+  Future<List<CustomCareRuleEntity>> loadCustomCareRules() async {
+    final prefs = await SharedPreferences.getInstance();
+    final raw = prefs.getString(_customCareRulesKey);
+
+    if (raw == null || raw.trim().isEmpty) return [];
+
+    try {
+      final decoded = jsonDecode(raw) as List<dynamic>;
+      return decoded.map((item) => CustomCareRuleEntity.fromJson(item as Map<String, dynamic>)).toList();
+    } catch (_) {
+      return [];
+    }
+  }
+
+  /// Save the full list of custom care rules.
+  Future<void> saveCustomCareRules(List<CustomCareRuleEntity> rules) async {
+    final prefs = await SharedPreferences.getInstance();
+    final json = rules.map((r) => r.toJson()).toList();
+    await prefs.setString(_customCareRulesKey, jsonEncode(json));
   }
 }

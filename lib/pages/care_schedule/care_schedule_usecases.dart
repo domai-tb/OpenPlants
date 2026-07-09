@@ -28,6 +28,7 @@ class CareScheduleUsecases {
     final allConfigs = await repository.getAllScheduleConfigs();
     final allRoomConfigs = await repository.getAllRoomConfigs();
     final completions = await repository.getAllCompletions();
+    final allCustomRules = await repository.getAllCustomCareRules();
     final today = DateTime.now();
 
     // Load room entities if available
@@ -50,6 +51,7 @@ class CareScheduleUsecases {
       final roomConfig = plant.room != null ? allRoomConfigs[plant.room!] : null;
       final roomEntity = plant.roomId != null ? roomEntities[plant.roomId] : null;
       final profile = repository.getSpeciesProfile(plant.speciesName);
+      final plantRules = allCustomRules.where((r) => r.plantId == plant.id).toList();
 
       return PlantScheduleInput(
         plantId: plant.id,
@@ -59,6 +61,7 @@ class CareScheduleUsecases {
         roomEntity: roomEntity,
         profile: profile,
         completionHistory: completions,
+        customCareRules: plantRules,
       );
     }).toList();
 

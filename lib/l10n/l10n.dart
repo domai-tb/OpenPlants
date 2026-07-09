@@ -1741,6 +1741,156 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Gallery'**
   String get growthPhotoGallery;
+
+  /// No description provided for @careRulesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Care Rules'**
+  String get careRulesTitle;
+
+  /// No description provided for @careRulesManage.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage'**
+  String get careRulesManage;
+
+  /// No description provided for @careRulesEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No custom rules'**
+  String get careRulesEmpty;
+
+  /// No description provided for @careRulesEmptyHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a rule to override the computed schedule'**
+  String get careRulesEmptyHint;
+
+  /// No description provided for @careRulesActiveCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 active rule} other{{count} active rules}}'**
+  String careRulesActiveCount(num count);
+
+  /// No description provided for @careRulesDeleteTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Rule'**
+  String get careRulesDeleteTitle;
+
+  /// No description provided for @careRulesDeleteConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete \"{ruleType}\" rule?'**
+  String careRulesDeleteConfirm(Object ruleType);
+
+  /// No description provided for @careRulesAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Rule'**
+  String get careRulesAdd;
+
+  /// No description provided for @careRulesEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Rule'**
+  String get careRulesEdit;
+
+  /// No description provided for @careRulesTaskType.
+  ///
+  /// In en, this message translates to:
+  /// **'Task Type'**
+  String get careRulesTaskType;
+
+  /// No description provided for @careRulesBuiltIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Built-in'**
+  String get careRulesBuiltIn;
+
+  /// No description provided for @careRulesCustom.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom'**
+  String get careRulesCustom;
+
+  /// No description provided for @careRulesSelectType.
+  ///
+  /// In en, this message translates to:
+  /// **'Select task type'**
+  String get careRulesSelectType;
+
+  /// No description provided for @careRulesCustomType.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom task type'**
+  String get careRulesCustomType;
+
+  /// No description provided for @careRulesCustomTypeHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. Check for flowers'**
+  String get careRulesCustomTypeHint;
+
+  /// No description provided for @careRulesSelectTypeRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select a task type'**
+  String get careRulesSelectTypeRequired;
+
+  /// No description provided for @careRulesCustomTypeRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a task type'**
+  String get careRulesCustomTypeRequired;
+
+  /// No description provided for @careRulesInterval.
+  ///
+  /// In en, this message translates to:
+  /// **'Interval (days)'**
+  String get careRulesInterval;
+
+  /// No description provided for @careRulesIntervalHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Days between tasks'**
+  String get careRulesIntervalHint;
+
+  /// No description provided for @careRulesIntervalRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter an interval'**
+  String get careRulesIntervalRequired;
+
+  /// No description provided for @careRulesIntervalPositive.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a positive number'**
+  String get careRulesIntervalPositive;
+
+  /// No description provided for @careRulesEnableReminder.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable Reminder'**
+  String get careRulesEnableReminder;
+
+  /// No description provided for @careRulesReminderTimeHint.
+  ///
+  /// In en, this message translates to:
+  /// **'09:00'**
+  String get careRulesReminderTimeHint;
+
+  /// No description provided for @careRulesReminderDays.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminder days'**
+  String get careRulesReminderDays;
+
+  /// No description provided for @careRulesSaveFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to save rule: {error}'**
+  String careRulesSaveFailed(Object error);
 }
 
 class _AppLocalizationsDelegate

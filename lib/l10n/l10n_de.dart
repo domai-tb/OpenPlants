@@ -869,4 +869,92 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get growthPhotoGallery => 'Galerie';
+
+  @override
+  String get careRulesTitle => 'Pflegeregeln';
+
+  @override
+  String get careRulesManage => 'Verwalten';
+
+  @override
+  String get careRulesEmpty => 'Keine benutzerdefinierten Regeln';
+
+  @override
+  String get careRulesEmptyHint =>
+      'Füge eine Regel hinzu, um den berechneten Plan zu überschreiben';
+
+  @override
+  String careRulesActiveCount(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count aktive Regeln',
+      one: '1 aktive Regel',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get careRulesDeleteTitle => 'Regel löschen';
+
+  @override
+  String careRulesDeleteConfirm(Object ruleType) {
+    return 'Regel \"$ruleType\" löschen?';
+  }
+
+  @override
+  String get careRulesAdd => 'Regel hinzufügen';
+
+  @override
+  String get careRulesEdit => 'Regel bearbeiten';
+
+  @override
+  String get careRulesTaskType => 'Aufgabentyp';
+
+  @override
+  String get careRulesBuiltIn => 'Integriert';
+
+  @override
+  String get careRulesCustom => 'Benutzerdefiniert';
+
+  @override
+  String get careRulesSelectType => 'Aufgabentyp auswählen';
+
+  @override
+  String get careRulesCustomType => 'Benutzerdefinierter Typ';
+
+  @override
+  String get careRulesCustomTypeHint => 'z.B. Auf Blüten prüfen';
+
+  @override
+  String get careRulesSelectTypeRequired => 'Bitte wähle einen Aufgabentyp aus';
+
+  @override
+  String get careRulesCustomTypeRequired => 'Bitte gib einen Aufgabentyp ein';
+
+  @override
+  String get careRulesInterval => 'Intervall (Tage)';
+
+  @override
+  String get careRulesIntervalHint => 'Tage zwischen den Aufgaben';
+
+  @override
+  String get careRulesIntervalRequired => 'Bitte gib ein Intervall ein';
+
+  @override
+  String get careRulesIntervalPositive => 'Bitte gib eine positive Zahl ein';
+
+  @override
+  String get careRulesEnableReminder => 'Erinnerung aktivieren';
+
+  @override
+  String get careRulesReminderTimeHint => '09:00';
+
+  @override
+  String get careRulesReminderDays => 'Erinnerungstage';
+
+  @override
+  String careRulesSaveFailed(Object error) {
+    return 'Regel konnte nicht gespeichert werden: $error';
+  }
 }

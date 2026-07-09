@@ -8,6 +8,7 @@ import 'package:open_plant/pages/model_info/model_info_usecases.dart';
 import 'package:open_plant/pages/care_schedule/care_schedule_datasource.dart';
 import 'package:open_plant/pages/care_schedule/care_schedule_repository.dart';
 import 'package:open_plant/pages/care_schedule/care_schedule_usecases.dart';
+import 'package:open_plant/pages/care_schedule/custom_care_rule_usecases.dart';
 import 'package:open_plant/pages/plant_identification/classifier/plant_classifier_datasource.dart';
 import 'package:open_plant/pages/plant_identification/classifier/plant_classifier_repository.dart';
 import 'package:open_plant/pages/plant_identification/classifier/plant_classifier_usecases.dart';
@@ -127,6 +128,9 @@ Future<void> init() async {
       roomProfiles: sl(),
     ),
   );
+  sl.registerLazySingleton<CustomCareRuleUsecases>(
+    () => CustomCareRuleUsecases(repository: sl()),
+  );
 
   // Symptom Logger
   sl.registerLazySingleton<SymptomLoggerDataSource>(
@@ -183,6 +187,7 @@ Future<void> init() async {
       speciesLibrary: sl(),
       todayDashboard: sl(),
       careSchedule: sl(),
+      customCareRules: sl(),
       symptomLogger: sl(),
       plantJournal: sl(),
       roomProfiles: sl(),

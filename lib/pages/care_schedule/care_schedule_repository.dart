@@ -1,4 +1,5 @@
 import 'package:open_plant/pages/care_schedule/care_schedule_datasource.dart';
+import 'package:open_plant/pages/care_schedule/custom_care_rule.dart';
 import 'package:open_plant/pages/care_schedule/room_config.dart';
 import 'package:open_plant/pages/care_schedule/schedule_config.dart';
 import 'package:open_plant/pages/care_schedule/species_care_profile.dart';
@@ -99,6 +100,39 @@ class CareScheduleRepository {
     }
 
     return latest;
+  }
+
+  // --- Custom Care Rules ---
+
+  /// Get all custom care rules for a specific plant, ordered by creation date.
+  Future<List<CustomCareRuleEntity>> getCustomCareRules(String plantId) async {
+    final all = await dataSource.loadCustomCareRules();
+    return all.where((r) => r.plantId == plantId).toList()
+      ..sort((a, b) => a.createdAt.compareTo(b.createdAt));
+  }
+
+  /// Get all custom care rules across all plants.
+  Future<List<CustomCareRuleEntity>> getAllCustomCareRules() async {
+    return dataSource.loadCustomCareRules();
+  }
+
+  /// Save a custom care rule (create or update).
+  Future<void> saveCustomCareRule(CustomCareRuleEntity rule) async {
+    final all = await dataSource.loadCustomCareRules();
+    final index = all.indexWhere((r) => r.id == rule.id);
+    if (index >= 0) {
+      all[index] = rule;
+    } else {
+      all.add(rule);
+    }
+    await dataSource.saveCustomCareRules(all);
+  }
+
+  /// Delete a custom care rule by ID.
+  Future<void> deleteCustomCareRule(String ruleId) async {
+    final all = await dataSource.loadCustomCareRules();
+    all.removeWhere((r) => r.id == ruleId);
+    await dataSource.saveCustomCareRules(all);
   }
 
   // --- Species Profile ---

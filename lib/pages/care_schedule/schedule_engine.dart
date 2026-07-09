@@ -1,5 +1,6 @@
 import 'package:open_plant/pages/care_schedule/care_task.dart';
 import 'package:open_plant/pages/care_schedule/care_task_type.dart';
+import 'package:open_plant/pages/care_schedule/custom_care_rule.dart';
 import 'package:open_plant/pages/care_schedule/effective_interval_calculator.dart';
 import 'package:open_plant/pages/care_schedule/overdue_detector.dart';
 import 'package:open_plant/pages/care_schedule/pot_type_modifier.dart';
@@ -20,6 +21,7 @@ class PlantScheduleInput {
   final SpeciesCareProfile profile;
   final List<TaskCompletion> completionHistory;
   final List<CareTaskType> customTaskTypes;
+  final List<CustomCareRuleEntity> customCareRules;
 
   const PlantScheduleInput({
     required this.plantId,
@@ -30,6 +32,7 @@ class PlantScheduleInput {
     required this.profile,
     this.completionHistory = const [],
     this.customTaskTypes = const [],
+    this.customCareRules = const [],
   });
 }
 
@@ -45,62 +48,94 @@ class ScheduleEngine {
   }) {
     final tasks = <CareTask>[];
 
-    // All task types: 8 built-in + custom
+    // Build a map of enabled custom care rules keyed by task type string
+    final enabledRules = <String, CustomCareRuleEntity>{};
+    for (final rule in input.customCareRules) {
+      if (rule.isEnabled) {
+        enabledRules[rule.taskType] = rule;
+      }
+    }
+
+    // All task types: 8 built-in + custom from rules
     final allTypes = <CareTaskType>[
       ...BuiltInTaskType.values.map(CareTaskType.builtIn),
       ...input.customTaskTypes,
     ];
 
+    // Also add task types from enabled rules that aren't already in the list
+    for (final ruleEntry in enabledRules.entries) {
+      final ruleTypeName = ruleEntry.key;
+      // Check if this is a built-in type name
+      final isBuiltIn = BuiltInTaskType.values.any((b) => b.name == ruleTypeName);
+      final ruleType = isBuiltIn
+          ? CareTaskType.builtIn(BuiltInTaskType.values.firstWhere((b) => b.name == ruleTypeName))
+          : CareTaskType.custom(ruleTypeName);
+      if (!allTypes.contains(ruleType)) {
+        allTypes.add(ruleType);
+      }
+    }
+
     for (final taskType in allTypes) {
-      // 1. Compute effective interval (species default → user override → seasonal)
-      final effectiveInterval = EffectiveIntervalCalculator.compute(
-        taskType: taskType,
-        config: input.config,
-        profile: input.profile,
-        today: today,
-      );
+      // Check for a matching custom care rule first
+      // Match by label (for built-in) or customName (for custom)
+      CustomCareRuleEntity? matchingRule;
+      if (taskType.isBuiltIn) {
+        matchingRule = enabledRules[taskType.builtIn!.name];
+      } else {
+        matchingRule = enabledRules[taskType.customName];
+      }
+
+      int? effectiveInterval;
+      if (matchingRule != null) {
+        // Custom rule found: use rule interval directly, skip all modifiers
+        effectiveInterval = matchingRule.intervalDays;
+      } else {
+        // No custom rule: use existing computation pipeline
+        effectiveInterval = EffectiveIntervalCalculator.compute(
+          taskType: taskType,
+          config: input.config,
+          profile: input.profile,
+          today: today,
+        );
+
+        if (effectiveInterval != null && effectiveInterval > 0 && taskType.isBuiltIn) {
+          // Apply room modifier
+          final roomMod = RoomModifier.compute(
+            taskType: taskType.builtIn!,
+            room: input.roomConfig,
+            roomEntity: input.roomEntity,
+          );
+
+          // Apply pot-type modifier
+          final potMod = PotTypeModifier.compute(
+            taskType: taskType.builtIn!,
+            potType: input.config.potType,
+          );
+
+          effectiveInterval = (effectiveInterval * roomMod * potMod).round();
+        }
+      }
 
       if (effectiveInterval == null || effectiveInterval <= 0) continue;
 
-      // 2. Apply room modifier
-      double roomMod = 1;
-      if (taskType.isBuiltIn) {
-        roomMod = RoomModifier.compute(
-          taskType: taskType.builtIn!,
-          room: input.roomConfig,
-          roomEntity: input.roomEntity,
-        );
-      }
-
-      // 3. Apply pot-type modifier
-      double potMod = 1;
-      if (taskType.isBuiltIn) {
-        potMod = PotTypeModifier.compute(
-          taskType: taskType.builtIn!,
-          potType: input.config.potType,
-        );
-      }
-
-      // 4. Final effective interval
-      final finalInterval = (effectiveInterval * roomMod * potMod).round();
-      if (finalInterval <= 0) continue;
-
-      // 5. Find last completion for this task type
+      // Find last completion for this task type
       final lastCompletion = _findLastCompletion(
         input.completionHistory,
         taskType,
         input.plantId,
       );
 
-      // 6. Determine status
+      // Determine status
       final status = OverdueDetector.detect(
         today: today,
         lastCompletedAt: lastCompletion?.completedAt,
-        effectiveIntervalDays: finalInterval,
+        effectiveIntervalDays: effectiveInterval,
       );
 
-      // 7. Compute due date
-      final dueDate = lastCompletion != null ? lastCompletion.completedAt.add(Duration(days: finalInterval)) : today;
+      // Compute due date
+      final dueDate = lastCompletion != null
+          ? lastCompletion.completedAt.add(Duration(days: effectiveInterval))
+          : today;
 
       tasks.add(
         CareTask(
@@ -109,7 +144,7 @@ class ScheduleEngine {
           plantName: input.plantName,
           dueDate: dueDate,
           status: status,
-          effectiveIntervalDays: finalInterval,
+          effectiveIntervalDays: effectiveInterval,
         ),
       );
     }

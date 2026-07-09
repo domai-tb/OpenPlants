@@ -47,7 +47,7 @@ class _CareSchedulePageState extends State<CareSchedulePage> with AutomaticKeepA
   Map<String, ({String name, String environment})> _taskRoomContext = {};
   bool _loading = true;
   String? _selectedPlantId;
-  BuiltInTaskType? _selectedTaskType;
+  CareTaskType? _selectedTaskType;
 
   @override
   bool get wantKeepAlive => true;
@@ -107,7 +107,7 @@ class _CareSchedulePageState extends State<CareSchedulePage> with AutomaticKeepA
     }
 
     if (_selectedTaskType != null) {
-      tasks = tasks.where((t) => t.taskType.builtIn == _selectedTaskType).toList();
+      tasks = tasks.where((t) => t.taskType == _selectedTaskType).toList();
     }
 
     return tasks;
@@ -318,16 +318,16 @@ class _CareSchedulePageState extends State<CareSchedulePage> with AutomaticKeepA
           ),
           const SizedBox(width: 12),
           Expanded(
-            child: DropdownButton<BuiltInTaskType?>(
+            child: DropdownButton<CareTaskType?>(
               value: _selectedTaskType,
               isExpanded: true,
               hint: Text(context.l10n.careScheduleAllTypes),
               items: [
-                DropdownMenuItem<BuiltInTaskType?>(
+                DropdownMenuItem<CareTaskType?>(
                   child: Text(context.l10n.careScheduleAllTypes),
                 ),
-                ...BuiltInTaskType.values.map(
-                  (type) => DropdownMenuItem<BuiltInTaskType?>(
+                ..._tasks.map((t) => t.taskType).toSet().map(
+                  (type) => DropdownMenuItem<CareTaskType?>(
                     value: type,
                     child: Text(type.label),
                   ),

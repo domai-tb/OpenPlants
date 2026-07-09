@@ -15,6 +15,8 @@ import 'package:open_plant/pages/plant_journal/plant_journal_usecases.dart';
 import 'package:open_plant/pages/plant_photo_timeline/plant_photo_timeline_item_entity.dart';
 import 'package:open_plant/pages/plant_photo_timeline/plant_photo_timeline_page.dart';
 import 'package:open_plant/pages/plant_photo_timeline/plant_photo_timeline_usecases.dart';
+import 'package:open_plant/pages/care_schedule/custom_care_rule_usecases.dart';
+import 'package:open_plant/pages/care_schedule/widgets/care_rules_section.dart';
 import 'package:open_plant/pages/room_profiles/room_profiles_usecases.dart';
 import 'package:open_plant/pages/symptom_logger/symptom_logger_extensions.dart';
 import 'package:open_plant/pages/symptom_logger/symptom_logger_item_entity.dart';
@@ -37,6 +39,7 @@ class _PlantCollectionDetailPageState extends State<PlantCollectionDetailPage> {
   late SymptomLoggerUseCases _symptomUsecases;
   late PlantJournalUseCases _journalUsecases;
   late RoomProfilesUsecases _roomUsecases;
+  late CustomCareRuleUsecases _careRuleUsecases;
   bool _wired = false;
   late PlantEntity _plant;
   List<SymptomLogEntry> _symptomHistory = const [];
@@ -61,6 +64,7 @@ class _PlantCollectionDetailPageState extends State<PlantCollectionDetailPage> {
     _symptomUsecases = services.symptomLogger;
     _journalUsecases = services.plantJournal;
     _roomUsecases = services.roomProfiles;
+    _careRuleUsecases = services.customCareRules;
     _wired = true;
     _loadSymptomHistory();
     _loadRoomName();
@@ -353,7 +357,14 @@ class _PlantCollectionDetailPageState extends State<PlantCollectionDetailPage> {
             label: context.l10n.lastFertilized,
             value: _plant.lastFertilizedAt != null ? _formatDate(_plant.lastFertilizedAt!) : context.l10n.never,
           ),
-          const SizedBox(height: 32),
+          const SizedBox(height: 24),
+
+          // Care Rules
+          CareRulesSection(
+            plantId: _plant.id,
+            usecases: _careRuleUsecases,
+          ),
+          const SizedBox(height: 24),
 
           // Action buttons
           Row(

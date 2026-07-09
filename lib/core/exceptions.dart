@@ -21,3 +21,6 @@ class NoConnectionException implements Exception {}
 
 /// Too many requests to a remote dependency.
 class RateLimitException implements Exception {}
+
+/// A referenced custom care rule does not exist.
+class RuleNotFoundException implements Exception {}

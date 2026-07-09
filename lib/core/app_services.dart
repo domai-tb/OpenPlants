@@ -1,4 +1,5 @@
 import 'package:open_plant/pages/care_schedule/care_schedule_usecases.dart';
+import 'package:open_plant/pages/care_schedule/custom_care_rule_usecases.dart';
 import 'package:open_plant/pages/model_info/model_info_usecases.dart';
 import 'package:open_plant/pages/plant_identification/classifier/plant_classifier_usecases.dart';
 import 'package:open_plant/pages/more/more_usecases.dart';
@@ -22,6 +23,7 @@ class AppServices {
   final SpeciesLibraryUsecases speciesLibrary;
   final TodayDashboardUsecases todayDashboard;
   final CareScheduleUsecases careSchedule;
+  final CustomCareRuleUsecases customCareRules;
   final SymptomLoggerUseCases symptomLogger;
   final PlantJournalUseCases plantJournal;
   final RoomProfilesUsecases roomProfiles;
@@ -35,6 +37,7 @@ class AppServices {
     required this.speciesLibrary,
     required this.todayDashboard,
     required this.careSchedule,
+    required this.customCareRules,
     required this.symptomLogger,
     required this.plantJournal,
     required this.roomProfiles,
