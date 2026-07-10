@@ -1,58 +1,91 @@
 import 'package:flutter/material.dart';
 
 import 'package:open_plant/l10n/l10n_x.dart';
+import 'package:open_plant/pages/diagnosis/diagnosis_item_entity.dart';
 import 'package:open_plant/pages/symptom_logger/symptom_logger_item_entity.dart';
 
 // ---------------------------------------------------------------------------
-// SymptomType
+// PlantSymptom (unified enum)
 // ---------------------------------------------------------------------------
 
-/// UI helpers for [SymptomType].
-extension SymptomTypeX on SymptomType {
+/// UI helpers for [PlantSymptom].
+extension PlantSymptomX on PlantSymptom {
   IconData get icon {
     switch (this) {
-      case SymptomType.yellowLeaves:
+      case PlantSymptom.yellowingLeaves:
         return Icons.eco;
-      case SymptomType.brownTips:
+      case PlantSymptom.brownTips:
         return Icons.local_fire_department;
-      case SymptomType.drooping:
+      case PlantSymptom.droopingWilt:
         return Icons.arrow_downward;
-      case SymptomType.pests:
+      case PlantSymptom.visibleInsects:
         return Icons.bug_report;
-      case SymptomType.mold:
+      case PlantSymptom.moldOnSoil:
         return Icons.blur_on;
-      case SymptomType.softStems:
+      case PlantSymptom.softStems:
         return Icons.gesture;
-      case SymptomType.drySoil:
+      case PlantSymptom.drySoil:
         return Icons.water_drop_outlined;
-      case SymptomType.wetSoil:
+      case PlantSymptom.wetSoil:
         return Icons.water_drop;
-      case SymptomType.leafSpots:
+      case PlantSymptom.leafSpots:
         return Icons.circle_outlined;
+      case PlantSymptom.brownPatches:
+        return Icons.local_fire_department;
+      case PlantSymptom.paleLeaves:
+        return Icons.eco;
+      case PlantSymptom.leggyGrowth:
+        return Icons.trending_up;
+      case PlantSymptom.stickyResidue:
+        return Icons.water_drop;
+      case PlantSymptom.foulSmell:
+        return Icons.warning;
+      case PlantSymptom.stuntedGrowth:
+        return Icons.trending_down;
+      case PlantSymptom.leafCurling:
+        return Icons.autorenew;
+      case PlantSymptom.leafDrop:
+        return Icons.eco;
     }
   }
 
   String label(BuildContext context) {
     final l10n = context.l10n;
     switch (this) {
-      case SymptomType.yellowLeaves:
+      case PlantSymptom.yellowingLeaves:
         return l10n.symptomTypeYellowLeaves;
-      case SymptomType.brownTips:
+      case PlantSymptom.brownTips:
         return l10n.symptomTypeBrownTips;
-      case SymptomType.drooping:
+      case PlantSymptom.droopingWilt:
         return l10n.symptomTypeDrooping;
-      case SymptomType.pests:
+      case PlantSymptom.visibleInsects:
         return l10n.symptomTypePests;
-      case SymptomType.mold:
+      case PlantSymptom.moldOnSoil:
         return l10n.symptomTypeMold;
-      case SymptomType.softStems:
+      case PlantSymptom.softStems:
         return l10n.symptomTypeSoftStems;
-      case SymptomType.drySoil:
+      case PlantSymptom.drySoil:
         return l10n.symptomTypeDrySoil;
-      case SymptomType.wetSoil:
+      case PlantSymptom.wetSoil:
         return l10n.symptomTypeWetSoil;
-      case SymptomType.leafSpots:
+      case PlantSymptom.leafSpots:
         return l10n.symptomTypeLeafSpots;
+      case PlantSymptom.brownPatches:
+        return 'Brown Patches';
+      case PlantSymptom.paleLeaves:
+        return 'Pale Leaves';
+      case PlantSymptom.leggyGrowth:
+        return 'Leggy Growth';
+      case PlantSymptom.stickyResidue:
+        return 'Sticky Residue';
+      case PlantSymptom.foulSmell:
+        return 'Foul Smell';
+      case PlantSymptom.stuntedGrowth:
+        return 'Stunted Growth';
+      case PlantSymptom.leafCurling:
+        return 'Leaf Curling';
+      case PlantSymptom.leafDrop:
+        return 'Leaf Drop';
     }
   }
 }

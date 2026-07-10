@@ -349,7 +349,70 @@
   "diagnosisSymptomStuntedGrowth": "Gehemmtes Wachstum",
   "diagnosisSymptomLeafCurling": "Eingerollte Blätter",
   "diagnosisSymptomLeafDrop": "Blattfall",
+  "diagnosisSymptomSoftStems": "Weiche Stängel",
+  "diagnosisSymptomDrySoil": "Trockene Erde",
+  "diagnosisSymptomWetSoil": "Nasse Erde",
+  "diagnosisSymptomLeafSpots": "Blattflecken",
   "diagnosisDiagnoseThisPlant": "Diese Pflanze diagnostizieren",
+
+  "healthTimelineTitle": "Gesundheitsverlauf",
+  "healthTimelineFilterAll": "Alle",
+  "healthTimelineFilterActive": "Aktiv",
+  "healthTimelineEmpty": "Noch keine Gesundheitsereignisse",
+  "healthTimelineEmptyHint": "Symptomprotokolle und Diagnosen werden hier angezeigt.",
+  "healthTimelineSymptomEntry": "Symptom protokolliert",
+  "healthTimelineDiagnosisEntry": "Diagnoseergebnis",
+  "healthTimelineBadge": "Neueste Diagnose",
+  "healthTimelineLogSymptom": "Symptom protokollieren",
+  "healthTimelineDiagnose": "Diagnostizieren",
+  "healthTimelineMarkResolved": "Als gelöst markieren",
+  "healthTimelineResolved": "Gelöst",
+  "healthTimelineViewDiagnosis": "Diagnose anzeigen",
+  "healthTimelineViewLinkedSymptom": "Verknüpftes Symptom anzeigen",
+  "healthTimelineTodayAt": "Heute um {time}",
+  "@healthTimelineTodayAt": {
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "example": "14:30"
+      }
+    }
+  },
+  "healthTimelineYesterdayAt": "Gestern um {time}",
+  "@healthTimelineYesterdayAt": {
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "example": "14:30"
+      }
+    }
+  },
+  "healthTimelineDateAt": "{date} um {time}",
+  "@healthTimelineDateAt": {
+    "placeholders": {
+      "date": {
+        "type": "String",
+        "example": "10.07.2026"
+      },
+      "time": {
+        "type": "String",
+        "example": "14:30"
+      }
+    }
+  },
+  "diagnosisSaveToPlantHistory": "Im Pflanzenverlauf speichern",
+  "diagnosisSavedToPlantHistory": "Im Pflanzenverlauf gespeichert",
+  "diagnosisSourceAuto": "Automatische Diagnose",
+  "diagnosisSourceManual": "Manuelle Diagnose",
+  "diagnosisSourceLabel": "Quelle: {source}",
+  "@diagnosisSourceLabel": {
+    "placeholders": {
+      "source": {
+        "type": "String",
+        "example": "Automatische Diagnose"
+      }
+    }
+  },
 
   "diagnosisEvidenceReportedSymptoms": "Du hast {symptoms} angegeben.",
   "diagnosisEvidenceFrequentWateringTooWet": "Du gießt häufig, wodurch die Erde zu nass bleiben kann.",

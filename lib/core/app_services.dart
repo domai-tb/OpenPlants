@@ -14,7 +14,10 @@ import 'package:open_plant/pages/species_library/species_library_usecases.dart';
 import 'package:open_plant/pages/symptom_logger/symptom_logger_usecases.dart';
 import 'package:open_plant/pages/today_dashboard/today_dashboard_usecases.dart';
 import 'package:open_plant/pages/lightAssessment/light_assessment_usecases.dart';
+import 'package:open_plant/pages/diagnosis/auto_diagnosis_service.dart';
+import 'package:open_plant/pages/diagnosis/diagnosis_history_usecases.dart';
 import 'package:open_plant/pages/diagnosis/diagnosis_repository.dart';
+import 'package:open_plant/pages/plant_health_timeline/plant_health_timeline_usecases.dart';
 import 'package:open_plant/pages/plant_names/plant_names_usecases.dart';
 
 /// Aggregates feature use-cases for convenient access via `AppScope`.
@@ -36,6 +39,9 @@ class AppServices {
   final ModelInfoUseCase modelInfo;
   final LightAssessmentUseCases lightAssessment;
   final DiagnosisRepository diagnosis;
+  final AutoDiagnosisService autoDiagnosis;
+  final DiagnosisHistoryUseCases diagnosisHistory;
+  final PlantHealthTimelineUseCases plantHealthTimeline;
   final LocaleService localeService;
   final TemperatureFormatter temperatureFormatter;
   final DateFormatter dateFormatter;
@@ -56,6 +62,9 @@ class AppServices {
     required this.modelInfo,
     required this.lightAssessment,
     required this.diagnosis,
+    required this.autoDiagnosis,
+    required this.diagnosisHistory,
+    required this.plantHealthTimeline,
     required this.localeService,
     required this.temperatureFormatter,
     required this.dateFormatter,

@@ -489,5 +489,13 @@ String _symptomLabel(PlantSymptom symptom) {
       return 'leaf curling';
     case PlantSymptom.leafDrop:
       return 'leaf drop';
+    case PlantSymptom.softStems:
+      return 'soft stems';
+    case PlantSymptom.drySoil:
+      return 'dry soil';
+    case PlantSymptom.wetSoil:
+      return 'wet soil';
+    case PlantSymptom.leafSpots:
+      return 'leaf spots';
   }
 }

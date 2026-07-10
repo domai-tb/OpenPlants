@@ -8,6 +8,7 @@ import 'package:path_provider/path_provider.dart';
 
 import 'package:open_plant/core/app_scope.dart';
 import 'package:open_plant/l10n/l10n_x.dart';
+import 'package:open_plant/pages/diagnosis/diagnosis_item_entity.dart';
 import 'package:open_plant/pages/plant_identification/camera/image_capture_service.dart';
 import 'package:open_plant/pages/symptom_logger/symptom_logger_extensions.dart';
 import 'package:open_plant/pages/symptom_logger/symptom_logger_item_entity.dart';
@@ -21,10 +22,14 @@ class SymptomLoggerPage extends StatefulWidget {
   /// Optional plant name for display purposes.
   final String? plantName;
 
+  /// Existing symptom entry to edit instead of creating a new one.
+  final SymptomLogEntry? entry;
+
   const SymptomLoggerPage({
     super.key,
     required this.plantId,
     this.plantName,
+    this.entry,
   });
 
   @override
@@ -33,7 +38,7 @@ class SymptomLoggerPage extends StatefulWidget {
 
 /// Form data collected across all steps.
 class _SymptomFormData {
-  Set<SymptomType> symptomTypes = {};
+  Set<PlantSymptom> symptomTypes = {};
   Severity? severity;
   Set<AffectedPart> affectedParts = {};
   OnsetTiming? onsetTiming;
@@ -72,7 +77,24 @@ class _SymptomLoggerPageState extends State<SymptomLoggerPage> {
     if (_wired) return;
     _usecases = AppScope.of(context).services.symptomLogger;
     _wired = true;
-    _resumeDraft();
+    if (widget.entry != null) {
+      _loadEntry(widget.entry!);
+    } else {
+      _resumeDraft();
+    }
+  }
+
+  void _loadEntry(SymptomLogEntry entry) {
+    _formData.symptomTypes = entry.symptomTypes.toSet();
+    _formData.severity = entry.severity;
+    _formData.affectedParts = entry.affectedParts.toSet();
+    _formData.onsetTiming = entry.onsetTiming;
+    _formData.soilMoisture = entry.soilMoisture;
+    _formData.lightCondition = entry.lightConditions;
+    _formData.notes = entry.notes ?? '';
+    _formData.photoPath = entry.photoPath;
+    _notesController.text = _formData.notes;
+    _loaded = true;
   }
 
   Future<void> _resumeDraft() async {
@@ -81,7 +103,7 @@ class _SymptomLoggerPageState extends State<SymptomLoggerPage> {
       setState(() {
         if (draft['symptomTypes'] != null) {
           _formData.symptomTypes = (draft['symptomTypes'] as List<dynamic>)
-              .map((e) => SymptomType.values.firstWhere((s) => s.name == e as String))
+              .map((e) => PlantSymptom.values.firstWhere((s) => s.name == e as String))
               .toSet();
         }
         if (draft['severity'] != null) {
@@ -248,7 +270,7 @@ class _SymptomLoggerPageState extends State<SymptomLoggerPage> {
       _formData.notes = _notesController.text;
 
       final entry = SymptomLogEntry(
-        id: '', // Repository will assign a UUID
+        id: widget.entry?.id ?? '', // Repository assigns a UUID for new entries.
         plantId: widget.plantId,
         symptomTypes: _formData.symptomTypes.toList(),
         severity: _formData.severity!,
@@ -258,11 +280,18 @@ class _SymptomLoggerPageState extends State<SymptomLoggerPage> {
         lightConditions: _formData.lightCondition,
         notes: _formData.notes.isNotEmpty ? _formData.notes : null,
         photoPath: _formData.photoPath,
-        createdAt: DateTime.now(),
+        createdAt: widget.entry?.createdAt ?? DateTime.now(),
+        resolved: widget.entry?.resolved ?? false,
+        resolvedAt: widget.entry?.resolvedAt,
+        diagnosisResultId: widget.entry?.diagnosisResultId,
       );
 
-      await _usecases.logSymptom(entry);
-      await _usecases.deleteDraft(widget.plantId);
+      if (widget.entry == null) {
+        await _usecases.logSymptom(entry);
+        await _usecases.deleteDraft(widget.plantId);
+      } else {
+        await _usecases.updateSymptom(entry);
+      }
 
       if (!mounted) return;
 
@@ -301,6 +330,10 @@ class _SymptomLoggerPageState extends State<SymptomLoggerPage> {
         leading: IconButton(
           icon: const Icon(Icons.close),
           onPressed: () {
+            if (widget.entry != null) {
+              Navigator.of(context).pop();
+              return;
+            }
             _formData.notes = _notesController.text;
             final navigator = Navigator.of(context);
             unawaited(
@@ -315,6 +348,10 @@ class _SymptomLoggerPageState extends State<SymptomLoggerPage> {
         canPop: false,
         onPopInvokedWithResult: (didPop, _) async {
           if (didPop) return;
+          if (widget.entry != null) {
+            Navigator.of(context).pop();
+            return;
+          }
           _formData.notes = _notesController.text;
           final navigator = Navigator.of(context);
           await _autoSaveDraft();
@@ -418,7 +455,7 @@ class _SymptomLoggerPageState extends State<SymptomLoggerPage> {
           Wrap(
             spacing: 8,
             runSpacing: 8,
-            children: SymptomType.values.map((type) {
+            children: PlantSymptom.values.map((type) {
               final selected = _formData.symptomTypes.contains(type);
               return FilterChip(
                 selected: selected,

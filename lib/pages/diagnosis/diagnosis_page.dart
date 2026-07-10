@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
 
 import 'package:open_plant/core/app_scope.dart';
 import 'package:open_plant/l10n/l10n_x.dart';
 import 'package:open_plant/pages/diagnosis/diagnosis_item_entity.dart';
+import 'package:open_plant/pages/diagnosis/diagnosis_result_entity.dart';
 import 'package:open_plant/pages/diagnosis/diagnosis_result_page.dart';
 
 /// Multi-step questionnaire for collecting symptom and plant context information
@@ -149,11 +151,23 @@ class _DiagnosisPageState extends State<DiagnosisPage> {
       final repository = AppScope.of(context).services.diagnosis;
       final result = repository.evaluate(diagnosisContext);
 
+      final entity = DiagnosisResultEntity(
+        id: const Uuid().v4(),
+        plantId: '',
+        plantSymptoms: _selectedSymptoms.toList(),
+        causes: result.causes,
+        type: result.type,
+        context: diagnosisContext,
+        createdAt: DateTime.now(),
+      );
+
+      await repository.saveResult(entity);
+
       if (!mounted) return;
 
       await Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (_) => DiagnosisResultPage(result: result),
+          builder: (_) => DiagnosisResultPage(entity: entity),
         ),
       );
     } finally {
@@ -488,7 +502,6 @@ class _DiagnosisPageState extends State<DiagnosisPage> {
             style: theme.textTheme.titleMedium,
           ),
           const SizedBox(height: 16),
-
           _buildReviewSection(
             theme,
             icon: Icons.healing,
@@ -496,7 +509,6 @@ class _DiagnosisPageState extends State<DiagnosisPage> {
             value: _selectedSymptoms.map(_symptomLabel).join(', '),
           ),
           const SizedBox(height: 12),
-
           if (_wateringFrequency != null)
             _buildReviewSection(
               theme,
@@ -505,7 +517,6 @@ class _DiagnosisPageState extends State<DiagnosisPage> {
               value: _wateringLabel(_wateringFrequency!),
             ),
           const SizedBox(height: 12),
-
           if (_lightExposure != null)
             _buildReviewSection(
               theme,
@@ -514,7 +525,6 @@ class _DiagnosisPageState extends State<DiagnosisPage> {
               value: _lightLabel(_lightExposure!),
             ),
           const SizedBox(height: 12),
-
           if (_humidityLevel != null)
             _buildReviewSection(
               theme,
@@ -523,7 +533,6 @@ class _DiagnosisPageState extends State<DiagnosisPage> {
               value: _humidityLabel(_humidityLevel!),
             ),
           const SizedBox(height: 12),
-
           if (_potType != null)
             _buildReviewSection(
               theme,
@@ -532,7 +541,6 @@ class _DiagnosisPageState extends State<DiagnosisPage> {
               value: _potLabel(_potType!),
             ),
           const SizedBox(height: 12),
-
           if (_soilType != null)
             _buildReviewSection(
               theme,
@@ -541,7 +549,6 @@ class _DiagnosisPageState extends State<DiagnosisPage> {
               value: _soilLabel(_soilType!),
             ),
           const SizedBox(height: 12),
-
           if (_plantSpeciesController.text.trim().isNotEmpty)
             _buildReviewSection(
               theme,
@@ -550,7 +557,6 @@ class _DiagnosisPageState extends State<DiagnosisPage> {
               value: _plantSpeciesController.text.trim(),
             ),
           const SizedBox(height: 12),
-
           _buildReviewSection(
             theme,
             icon: Icons.science,
@@ -558,7 +564,6 @@ class _DiagnosisPageState extends State<DiagnosisPage> {
             value: _optionalBooleanLabel(_recentFertilizing),
           ),
           const SizedBox(height: 12),
-
           _buildReviewSection(
             theme,
             icon: Icons.bug_report,
@@ -673,6 +678,14 @@ class _DiagnosisPageState extends State<DiagnosisPage> {
         return context.l10n.diagnosisSymptomLeafCurling;
       case PlantSymptom.leafDrop:
         return context.l10n.diagnosisSymptomLeafDrop;
+      case PlantSymptom.softStems:
+        return 'Soft Stems';
+      case PlantSymptom.drySoil:
+        return 'Dry Soil';
+      case PlantSymptom.wetSoil:
+        return 'Wet Soil';
+      case PlantSymptom.leafSpots:
+        return 'Leaf Spots';
     }
   }
 

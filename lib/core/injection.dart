@@ -42,9 +42,14 @@ import 'package:open_plant/pages/today_dashboard/today_dashboard_usecases.dart';
 import 'package:open_plant/pages/lightAssessment/light_assessment_datasource.dart';
 import 'package:open_plant/pages/lightAssessment/light_assessment_repository.dart';
 import 'package:open_plant/pages/lightAssessment/light_assessment_usecases.dart';
+import 'package:open_plant/pages/diagnosis/auto_diagnosis_service.dart';
 import 'package:open_plant/pages/diagnosis/diagnosis_datasource.dart';
+import 'package:open_plant/pages/diagnosis/diagnosis_history_usecases.dart';
 import 'package:open_plant/pages/diagnosis/diagnosis_repository.dart';
 import 'package:open_plant/pages/diagnosis/diagnosis_usecases.dart';
+import 'package:open_plant/pages/plant_health_timeline/plant_health_timeline_datasource.dart';
+import 'package:open_plant/pages/plant_health_timeline/plant_health_timeline_repository.dart';
+import 'package:open_plant/pages/plant_health_timeline/plant_health_timeline_usecases.dart';
 import 'package:open_plant/pages/plant_names/plant_names_datasource.dart';
 import 'package:open_plant/pages/plant_names/plant_names_repository.dart';
 import 'package:open_plant/pages/plant_names/plant_names_usecases.dart';
@@ -171,6 +176,7 @@ Future<void> init() async {
     () => SymptomLoggerUseCases(
       repository: sl(),
       plantCollection: sl(),
+      autoDiagnosis: sl(),
     ),
   );
 
@@ -237,7 +243,33 @@ Future<void> init() async {
   sl.registerLazySingleton<DiagnosisRepository>(
     () => DiagnosisRepository(
       engine: sl(),
+      dataSource: sl(),
     ),
+  );
+  sl.registerLazySingleton<AutoDiagnosisService>(
+    () => AutoDiagnosisService(
+      repository: sl(),
+      engine: sl(),
+      plantCollection: sl(),
+      roomProfiles: sl(),
+    ),
+  );
+  sl.registerLazySingleton<DiagnosisHistoryUseCases>(
+    () => DiagnosisHistoryUseCases(repository: sl()),
+  );
+
+  // Plant Health Timeline
+  sl.registerLazySingleton<PlantHealthTimelineDataSource>(
+    () => PlantHealthTimelineDataSource(
+      symptomLoggerDataSource: sl(),
+      diagnosisDataSource: sl(),
+    ),
+  );
+  sl.registerLazySingleton<PlantHealthTimelineRepository>(
+    () => PlantHealthTimelineRepository(dataSource: sl()),
+  );
+  sl.registerLazySingleton<PlantHealthTimelineUseCases>(
+    () => PlantHealthTimelineUseCases(repository: sl()),
   );
 
   // Plant Names
@@ -268,6 +300,9 @@ Future<void> init() async {
       modelInfo: sl(),
       lightAssessment: sl(),
       diagnosis: sl(),
+      autoDiagnosis: sl(),
+      diagnosisHistory: sl(),
+      plantHealthTimeline: sl(),
       localeService: sl(),
       temperatureFormatter: sl(),
       dateFormatter: sl(),

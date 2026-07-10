@@ -1281,7 +1281,97 @@ class AppLocalizationsDe extends AppLocalizations {
   String get diagnosisSymptomLeafDrop => 'Blattfall';
 
   @override
+  String get diagnosisSymptomSoftStems => 'Weiche Stängel';
+
+  @override
+  String get diagnosisSymptomDrySoil => 'Trockene Erde';
+
+  @override
+  String get diagnosisSymptomWetSoil => 'Nasse Erde';
+
+  @override
+  String get diagnosisSymptomLeafSpots => 'Blattflecken';
+
+  @override
   String get diagnosisDiagnoseThisPlant => 'Diese Pflanze diagnostizieren';
+
+  @override
+  String get healthTimelineTitle => 'Gesundheitsverlauf';
+
+  @override
+  String get healthTimelineFilterAll => 'Alle';
+
+  @override
+  String get healthTimelineFilterActive => 'Aktiv';
+
+  @override
+  String get healthTimelineEmpty => 'Noch keine Gesundheitsereignisse';
+
+  @override
+  String get healthTimelineEmptyHint =>
+      'Symptomprotokolle und Diagnosen werden hier angezeigt.';
+
+  @override
+  String get healthTimelineSymptomEntry => 'Symptom protokolliert';
+
+  @override
+  String get healthTimelineDiagnosisEntry => 'Diagnoseergebnis';
+
+  @override
+  String get healthTimelineBadge => 'Neueste Diagnose';
+
+  @override
+  String get healthTimelineLogSymptom => 'Symptom protokollieren';
+
+  @override
+  String get healthTimelineDiagnose => 'Diagnostizieren';
+
+  @override
+  String get healthTimelineMarkResolved => 'Als gelöst markieren';
+
+  @override
+  String get healthTimelineResolved => 'Gelöst';
+
+  @override
+  String get healthTimelineViewDiagnosis => 'Diagnose anzeigen';
+
+  @override
+  String get healthTimelineViewLinkedSymptom => 'Verknüpftes Symptom anzeigen';
+
+  @override
+  String healthTimelineTodayAt(String time) {
+    return 'Heute um $time';
+  }
+
+  @override
+  String healthTimelineYesterdayAt(String time) {
+    return 'Gestern um $time';
+  }
+
+  @override
+  String healthTimelineDateAt(String date, String time) {
+    return '$date um $time';
+  }
+
+  @override
+  String get diagnosisSaveToPlantHistory => 'Im Pflanzenverlauf speichern';
+
+  @override
+  String get diagnosisSavedToPlantHistory => 'Im Pflanzenverlauf gespeichert';
+
+  @override
+  String get diagnosisSourceAuto => 'Automatische Diagnose';
+
+  @override
+  String get diagnosisSourceManual => 'Manuelle Diagnose';
+
+  @override
+  String diagnosisSourceLabel(String source) {
+    return 'Quelle: $source';
+  }
+
+  @override
+  String get viewHealthTimeline => 'View Health Timeline';
 
   @override
   String diagnosisEvidenceReportedSymptoms(String symptoms) {

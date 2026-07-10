@@ -1,18 +1,84 @@
 import 'package:flutter/material.dart';
 
+import 'package:open_plant/core/app_scope.dart';
 import 'package:open_plant/l10n/l10n.dart';
 import 'package:open_plant/l10n/l10n_x.dart';
 import 'package:open_plant/pages/diagnosis/diagnosis_item_entity.dart';
 import 'package:open_plant/pages/diagnosis/diagnosis_page.dart';
+import 'package:open_plant/pages/diagnosis/diagnosis_result_entity.dart';
+import 'package:open_plant/pages/symptom_logger/symptom_logger_item_entity.dart';
+import 'package:open_plant/pages/symptom_logger/symptom_logger_page.dart';
 
 /// Page that displays the semantic outcome returned by the diagnosis engine.
-class DiagnosisResultPage extends StatelessWidget {
+///
+/// Accepts either a transient [DiagnosisResult] or a persisted
+/// [DiagnosisResultEntity]. When [entity] is provided, its data is used
+/// for display — otherwise the transient [result] is shown.
+class DiagnosisResultPage extends StatefulWidget {
   static const double _maximumContentWidth = 760;
 
-  /// The evaluation result to display.
-  final DiagnosisResult result;
+  /// The evaluation result to display (transient, from live diagnosis).
+  final DiagnosisResult? result;
 
-  const DiagnosisResultPage({super.key, required this.result});
+  /// Optional persisted entity — takes precedence over [result] when provided.
+  final DiagnosisResultEntity? entity;
+
+  /// Optional loader used by widget tests. Production resolves entries through
+  /// [AppScope] services.
+  final Future<SymptomLogEntry?> Function(String symptomId)? linkedSymptomLoader;
+
+  const DiagnosisResultPage({
+    super.key,
+    this.result,
+    this.entity,
+    this.linkedSymptomLoader,
+  });
+
+  @override
+  State<DiagnosisResultPage> createState() => _DiagnosisResultPageState();
+
+  /// Creates a transient [DiagnosisResult] from a persisted entity.
+  static DiagnosisResult? resultFromEntity(DiagnosisResultEntity? entity) {
+    if (entity == null) return null;
+
+    return switch (entity.type) {
+      DiagnosisResultType.rankedCauses => DiagnosisResult.ranked(entity.causes),
+      DiagnosisResultType.emptyInput => const DiagnosisResult.emptyInput(),
+      DiagnosisResultType.noClearMatch => DiagnosisResult.noClearMatch(entity.causes.first),
+    };
+  }
+}
+
+class _DiagnosisResultPageState extends State<DiagnosisResultPage> {
+  SymptomLogEntry? _linkedSymptom;
+  bool _requestedLinkedSymptom = false;
+
+  /// Creates a transient [DiagnosisResult] from a persisted entity.
+  DiagnosisResult get _effectiveResult => DiagnosisResultPage.resultFromEntity(widget.entity) ?? widget.result!;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_requestedLinkedSymptom) return;
+    _requestedLinkedSymptom = true;
+    _loadLinkedSymptom();
+  }
+
+  Future<void> _loadLinkedSymptom() async {
+    final symptomId = widget.entity?.symptomLogEntryId;
+    if (symptomId == null) return;
+
+    final loader = widget.linkedSymptomLoader;
+    final symptomLogger = loader == null ? AppScope.of(context).services.symptomLogger : null;
+    final symptom = loader != null
+        ? await loader(symptomId)
+        : (await symptomLogger!.getSymptomHistory(widget.entity!.plantId))
+            .where((entry) => entry.id == symptomId)
+            .firstOrNull;
+    if (!mounted) return;
+
+    setState(() => _linkedSymptom = symptom);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +101,7 @@ class DiagnosisResultPage extends StatelessWidget {
             return Align(
               alignment: Alignment.topCenter,
               child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: _maximumContentWidth),
+                constraints: const BoxConstraints(maxWidth: DiagnosisResultPage._maximumContentWidth),
                 child: _buildOutcome(context, horizontalPadding),
               ),
             );
@@ -46,7 +112,7 @@ class DiagnosisResultPage extends StatelessWidget {
   }
 
   Widget _buildOutcome(BuildContext context, double horizontalPadding) {
-    switch (result.type) {
+    switch (_effectiveResult.type) {
       case DiagnosisResultType.rankedCauses:
         return _buildRankedResults(context, horizontalPadding);
       case DiagnosisResultType.emptyInput:
@@ -58,7 +124,7 @@ class DiagnosisResultPage extends StatelessWidget {
 
   Widget _buildRankedResults(BuildContext context, double horizontalPadding) {
     final theme = Theme.of(context);
-    final rankedCauses = List<ScoredCause>.of(result.causes)
+    final rankedCauses = List<ScoredCause>.of(_effectiveResult.causes)
       ..sort((first, second) {
         final scoreComparison = second.score.compareTo(first.score);
         return scoreComparison != 0 ? scoreComparison : first.causeId.compareTo(second.causeId);
@@ -69,6 +135,10 @@ class DiagnosisResultPage extends StatelessWidget {
       children: [
         _buildDisclaimer(context, theme),
         const SizedBox(height: 16),
+        if (_linkedSymptom != null) ...[
+          _buildLinkedSymptomButton(context, _linkedSymptom!),
+          const SizedBox(height: 16),
+        ],
         ...rankedCauses.map((cause) => _buildCauseCard(context, theme, cause)),
         const SizedBox(height: 8),
         _buildRestartButton(context, label: context.l10n.diagnosisStartOver),
@@ -85,6 +155,10 @@ class DiagnosisResultPage extends StatelessWidget {
       children: [
         _buildDisclaimer(context, theme),
         const SizedBox(height: 24),
+        if (_linkedSymptom != null) ...[
+          _buildLinkedSymptomButton(context, _linkedSymptom!),
+          const SizedBox(height: 24),
+        ],
         _buildMessageCard(
           theme: theme,
           icon: Icons.playlist_remove,
@@ -112,6 +186,10 @@ class DiagnosisResultPage extends StatelessWidget {
       children: [
         _buildDisclaimer(context, theme),
         const SizedBox(height: 24),
+        if (_linkedSymptom != null) ...[
+          _buildLinkedSymptomButton(context, _linkedSymptom!),
+          const SizedBox(height: 24),
+        ],
         Card(
           child: Padding(
             padding: const EdgeInsets.all(16),
@@ -174,6 +252,23 @@ class DiagnosisResultPage extends StatelessWidget {
       },
       icon: const Icon(Icons.refresh),
       label: Text(label),
+    );
+  }
+
+  Widget _buildLinkedSymptomButton(BuildContext context, SymptomLogEntry symptom) {
+    return OutlinedButton.icon(
+      onPressed: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) => SymptomLoggerPage(
+              plantId: symptom.plantId,
+              entry: symptom,
+            ),
+          ),
+        );
+      },
+      icon: const Icon(Icons.healing),
+      label: Text(context.l10n.healthTimelineViewLinkedSymptom),
     );
   }
 

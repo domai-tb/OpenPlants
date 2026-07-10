@@ -1271,7 +1271,97 @@ class AppLocalizationsEn extends AppLocalizations {
   String get diagnosisSymptomLeafDrop => 'Leaf Drop';
 
   @override
+  String get diagnosisSymptomSoftStems => 'Soft Stems';
+
+  @override
+  String get diagnosisSymptomDrySoil => 'Dry Soil';
+
+  @override
+  String get diagnosisSymptomWetSoil => 'Wet Soil';
+
+  @override
+  String get diagnosisSymptomLeafSpots => 'Leaf Spots';
+
+  @override
   String get diagnosisDiagnoseThisPlant => 'Diagnose this plant';
+
+  @override
+  String get healthTimelineTitle => 'Health Timeline';
+
+  @override
+  String get healthTimelineFilterAll => 'All';
+
+  @override
+  String get healthTimelineFilterActive => 'Active';
+
+  @override
+  String get healthTimelineEmpty => 'No health events yet';
+
+  @override
+  String get healthTimelineEmptyHint =>
+      'Symptom logs and diagnoses will appear here.';
+
+  @override
+  String get healthTimelineSymptomEntry => 'Symptom logged';
+
+  @override
+  String get healthTimelineDiagnosisEntry => 'Diagnosis result';
+
+  @override
+  String get healthTimelineBadge => 'Latest Diagnosis';
+
+  @override
+  String get healthTimelineLogSymptom => 'Log Symptom';
+
+  @override
+  String get healthTimelineDiagnose => 'Diagnose';
+
+  @override
+  String get healthTimelineMarkResolved => 'Mark Resolved';
+
+  @override
+  String get healthTimelineResolved => 'Resolved';
+
+  @override
+  String get healthTimelineViewDiagnosis => 'View Diagnosis';
+
+  @override
+  String get healthTimelineViewLinkedSymptom => 'View linked symptom';
+
+  @override
+  String healthTimelineTodayAt(String time) {
+    return 'Today at $time';
+  }
+
+  @override
+  String healthTimelineYesterdayAt(String time) {
+    return 'Yesterday at $time';
+  }
+
+  @override
+  String healthTimelineDateAt(String date, String time) {
+    return '$date at $time';
+  }
+
+  @override
+  String get diagnosisSaveToPlantHistory => 'Save to plant history';
+
+  @override
+  String get diagnosisSavedToPlantHistory => 'Saved to plant history';
+
+  @override
+  String get diagnosisSourceAuto => 'Auto-diagnosis';
+
+  @override
+  String get diagnosisSourceManual => 'Manual diagnosis';
+
+  @override
+  String diagnosisSourceLabel(String source) {
+    return 'Source: $source';
+  }
+
+  @override
+  String get viewHealthTimeline => 'View Health Timeline';
 
   @override
   String diagnosisEvidenceReportedSymptoms(String symptoms) {

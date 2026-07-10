@@ -19,8 +19,12 @@ import 'package:open_plant/pages/care_schedule/custom_care_rule_usecases.dart';
 import 'package:open_plant/pages/care_schedule/widgets/care_rules_section.dart';
 import 'package:open_plant/pages/lightAssessment/light_assessment_page.dart';
 import 'package:open_plant/pages/lightAssessment/light_assessment_usecases.dart';
+import 'package:open_plant/pages/diagnosis/diagnosis_history_usecases.dart';
 import 'package:open_plant/pages/diagnosis/diagnosis_item_entity.dart';
 import 'package:open_plant/pages/diagnosis/diagnosis_page.dart';
+import 'package:open_plant/pages/diagnosis/diagnosis_result_entity.dart';
+import 'package:open_plant/pages/diagnosis/diagnosis_result_page.dart';
+import 'package:open_plant/pages/plant_health_timeline/plant_health_timeline_page.dart';
 import 'package:open_plant/pages/room_profiles/room_profiles_usecases.dart';
 import 'package:open_plant/pages/symptom_logger/symptom_logger_extensions.dart';
 import 'package:open_plant/pages/symptom_logger/symptom_logger_item_entity.dart';
@@ -45,12 +49,14 @@ class _PlantCollectionDetailPageState extends State<PlantCollectionDetailPage> {
   late RoomProfilesUsecases _roomUsecases;
   late CustomCareRuleUsecases _careRuleUsecases;
   late LightAssessmentUseCases _lightAssessmentUsecases;
+  late DiagnosisHistoryUseCases _diagnosisHistoryUsecases;
   bool _wired = false;
   late PlantEntity _plant;
   List<SymptomLogEntry> _symptomHistory = const [];
   bool _loadingSymptoms = true;
   String? _roomName;
   List<PlantPhoto> _photos = [];
+  DiagnosisResultEntity? _latestDiagnosis;
   final ImagePicker _imagePicker = ImagePicker();
 
   @override
@@ -71,10 +77,12 @@ class _PlantCollectionDetailPageState extends State<PlantCollectionDetailPage> {
     _roomUsecases = services.roomProfiles;
     _careRuleUsecases = services.customCareRules;
     _lightAssessmentUsecases = services.lightAssessment;
+    _diagnosisHistoryUsecases = services.diagnosisHistory;
     _wired = true;
     _loadSymptomHistory();
     _loadRoomName();
     _loadPhotos();
+    _loadLatestDiagnosis();
   }
 
   Future<void> _loadRoomName() async {
@@ -92,6 +100,35 @@ class _PlantCollectionDetailPageState extends State<PlantCollectionDetailPage> {
     } catch (_) {
       // Silently handle — photos will remain empty
     }
+  }
+
+  Future<void> _loadLatestDiagnosis() async {
+    try {
+      final results = await _diagnosisHistoryUsecases.getResultsForPlant(_plant.id);
+      if (!mounted) return;
+      if (results.isNotEmpty) {
+        setState(() => _latestDiagnosis = results.first);
+      }
+    } catch (_) {
+      // Silently handle — badge will not be shown
+    }
+  }
+
+  void _openHealthTimeline() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => PlantHealthTimelinePage(plantId: _plant.id),
+      ),
+    );
+  }
+
+  void _openLatestDiagnosis() {
+    if (_latestDiagnosis == null) return;
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => DiagnosisResultPage(entity: _latestDiagnosis),
+      ),
+    );
   }
 
   Future<void> _addPhoto() async {
@@ -464,9 +501,20 @@ class _PlantCollectionDetailPageState extends State<PlantCollectionDetailPage> {
           OutlinedButton.icon(
             onPressed: _openDiagnosis,
             icon: const Icon(Icons.search),
-            label: const Text('Diagnose this plant'),
+            label: Text(context.l10n.diagnosisDiagnoseThisPlant),
+          ),
+          const SizedBox(height: 12),
+
+          // View Health Timeline button
+          OutlinedButton.icon(
+            onPressed: _openHealthTimeline,
+            icon: const Icon(Icons.timeline),
+            label: Text(context.l10n.viewHealthTimeline),
           ),
           const SizedBox(height: 24),
+
+          // Latest diagnosis badge
+          if (_latestDiagnosis != null) _buildDiagnosisBadge(theme),
 
           // === Symptom History Section ===
           Text(
@@ -495,6 +543,73 @@ class _PlantCollectionDetailPageState extends State<PlantCollectionDetailPage> {
         ],
       ),
     );
+  }
+
+  // --- Latest Diagnosis Badge ---
+
+  Widget _buildDiagnosisBadge(ThemeData theme) {
+    final entity = _latestDiagnosis!;
+    final topCause = entity.causes.isNotEmpty ? entity.causes.first : null;
+    final causeName = topCause != null ? _causeNameFromId(topCause.causeId) : 'No clear match';
+    final confidence = topCause?.confidence.name ?? 'unknown';
+
+    return GestureDetector(
+      onTap: _openLatestDiagnosis,
+      child: Card(
+        color: theme.colorScheme.primaryContainer,
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: Row(
+            children: [
+              Icon(
+                Icons.medical_information,
+                color: theme.colorScheme.onPrimaryContainer,
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      context.l10n.healthTimelineBadge,
+                      style: theme.textTheme.labelMedium?.copyWith(
+                        color: theme.colorScheme.onPrimaryContainer,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      '$causeName (${confidence[0].toUpperCase()}${confidence.substring(1)})',
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: theme.colorScheme.onPrimaryContainer,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Icon(
+                Icons.chevron_right,
+                color: theme.colorScheme.onPrimaryContainer,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  String _causeNameFromId(String causeId) {
+    return switch (causeId) {
+      'overwatering' => 'Overwatering',
+      'underwatering' => 'Underwatering',
+      'low_light' => 'Insufficient Light',
+      'sunburn' => 'Sunburn',
+      'low_humidity' => 'Low Humidity',
+      'nutrient_problem' => 'Nutrient Deficiency',
+      'root_issue' => 'Root Problems',
+      'pests' => 'Pest Infestation',
+      _ => 'Unknown',
+    };
   }
 
   // --- Symptom History Entry ---

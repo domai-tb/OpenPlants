@@ -465,7 +465,71 @@
   "diagnosisSymptomStuntedGrowth": "Stunted Growth",
   "diagnosisSymptomLeafCurling": "Leaf Curling",
   "diagnosisSymptomLeafDrop": "Leaf Drop",
+  "diagnosisSymptomSoftStems": "Soft Stems",
+  "diagnosisSymptomDrySoil": "Dry Soil",
+  "diagnosisSymptomWetSoil": "Wet Soil",
+  "diagnosisSymptomLeafSpots": "Leaf Spots",
   "diagnosisDiagnoseThisPlant": "Diagnose this plant",
+
+  "healthTimelineTitle": "Health Timeline",
+  "healthTimelineFilterAll": "All",
+  "healthTimelineFilterActive": "Active",
+  "healthTimelineEmpty": "No health events yet",
+  "healthTimelineEmptyHint": "Symptom logs and diagnoses will appear here.",
+  "healthTimelineSymptomEntry": "Symptom logged",
+  "healthTimelineDiagnosisEntry": "Diagnosis result",
+  "healthTimelineBadge": "Latest Diagnosis",
+  "healthTimelineLogSymptom": "Log Symptom",
+  "healthTimelineDiagnose": "Diagnose",
+  "healthTimelineMarkResolved": "Mark Resolved",
+  "healthTimelineResolved": "Resolved",
+  "healthTimelineViewDiagnosis": "View Diagnosis",
+  "healthTimelineViewLinkedSymptom": "View linked symptom",
+  "healthTimelineTodayAt": "Today at {time}",
+  "@healthTimelineTodayAt": {
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "example": "14:30"
+      }
+    }
+  },
+  "healthTimelineYesterdayAt": "Yesterday at {time}",
+  "@healthTimelineYesterdayAt": {
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "example": "14:30"
+      }
+    }
+  },
+  "healthTimelineDateAt": "{date} at {time}",
+  "@healthTimelineDateAt": {
+    "placeholders": {
+      "date": {
+        "type": "String",
+        "example": "7/10/2026"
+      },
+      "time": {
+        "type": "String",
+        "example": "14:30"
+      }
+    }
+  },
+  "diagnosisSaveToPlantHistory": "Save to plant history",
+  "diagnosisSavedToPlantHistory": "Saved to plant history",
+  "diagnosisSourceAuto": "Auto-diagnosis",
+  "diagnosisSourceManual": "Manual diagnosis",
+  "diagnosisSourceLabel": "Source: {source}",
+  "@diagnosisSourceLabel": {
+    "placeholders": {
+      "source": {
+        "type": "String",
+        "example": "Auto-diagnosis"
+      }
+    }
+  },
+  "viewHealthTimeline": "View Health Timeline",
 
   "diagnosisEvidenceReportedSymptoms": "You reported {symptoms}.",
   "@diagnosisEvidenceReportedSymptoms": {

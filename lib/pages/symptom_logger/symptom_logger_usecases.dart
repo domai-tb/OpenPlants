@@ -1,3 +1,5 @@
+import 'package:open_plant/pages/diagnosis/auto_diagnosis_service.dart';
+import 'package:open_plant/pages/diagnosis/diagnosis_result_entity.dart';
 import 'package:open_plant/pages/plant_collection/plant_collection_item_entity.dart';
 import 'package:open_plant/pages/plant_collection/plant_collection_usecases.dart';
 import 'package:open_plant/pages/symptom_logger/symptom_logger_item_entity.dart';
@@ -7,12 +9,15 @@ import 'package:open_plant/pages/symptom_logger/symptom_logger_repository.dart';
 class SymptomLoggerUseCases {
   final SymptomLoggerRepository _repository;
   final PlantCollectionUsecases _plantCollection;
+  final AutoDiagnosisService? _autoDiagnosis;
 
   const SymptomLoggerUseCases({
     required SymptomLoggerRepository repository,
     required PlantCollectionUsecases plantCollection,
+    AutoDiagnosisService? autoDiagnosis,
   })  : _repository = repository,
-        _plantCollection = plantCollection;
+        _plantCollection = plantCollection,
+        _autoDiagnosis = autoDiagnosis;
 
   /// Logs a new symptom entry for a plant.
   ///
@@ -32,7 +37,16 @@ class SymptomLoggerUseCases {
       }
     }
 
-    return savedEntry;
+    if (_autoDiagnosis == null) return savedEntry;
+
+    final diagnosisResultId = await _autoDiagnosis.diagnoseAndSave(savedEntry);
+    if (diagnosisResultId == null) return savedEntry;
+
+    final linkedEntry = savedEntry.copyWith(
+      diagnosisResultId: diagnosisResultId,
+    );
+    await _repository.updateEntry(linkedEntry);
+    return linkedEntry;
   }
 
   /// Returns symptom history for a plant, newest first.
@@ -44,6 +58,9 @@ class SymptomLoggerUseCases {
   /// Marks a symptom entry as resolved.
   Future<void> markResolved(String entryId) => _repository.markResolved(entryId);
 
+  /// Updates an existing symptom entry.
+  Future<void> updateSymptom(SymptomLogEntry entry) => _repository.updateEntry(entry);
+
   /// Saves the current form as a draft for later resumption.
   Future<void> saveDraft(String plantId, Map<String, dynamic> draft) => _repository.saveDraft(plantId, draft);
 
@@ -52,4 +69,11 @@ class SymptomLoggerUseCases {
 
   /// Deletes the draft for a plant.
   Future<void> deleteDraft(String plantId) => _repository.deleteDraft(plantId);
+
+  /// Returns the most recent diagnosis for [plantId], or `null` if no
+  /// diagnosis has been performed or auto-diagnosis is not configured.
+  Future<DiagnosisResultEntity?> getLatestDiagnosis(String plantId) async {
+    if (_autoDiagnosis == null) return null;
+    return _autoDiagnosis.getLatestDiagnosis(plantId);
+  }
 }

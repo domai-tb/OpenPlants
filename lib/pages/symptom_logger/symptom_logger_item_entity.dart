@@ -1,15 +1,6 @@
-/// Types of plant symptoms.
-enum SymptomType {
-  yellowLeaves,
-  brownTips,
-  drooping,
-  pests,
-  mold,
-  softStems,
-  drySoil,
-  wetSoil,
-  leafSpots,
-}
+import 'package:open_plant/pages/diagnosis/diagnosis_item_entity.dart';
+
+// SymptomType enum has been removed — use PlantSymptom from diagnosis_item_entity.dart instead.
 
 /// Severity level of a symptom.
 enum Severity {
@@ -104,7 +95,7 @@ extension LightConditionExtension on LightCondition {
 class SymptomLogEntry {
   final String id;
   final String plantId;
-  final List<SymptomType> symptomTypes;
+  final List<PlantSymptom> symptomTypes;
   final Severity severity;
   final List<AffectedPart> affectedParts;
   final OnsetTiming onsetTiming;
@@ -115,6 +106,7 @@ class SymptomLogEntry {
   final DateTime createdAt;
   final bool resolved;
   final DateTime? resolvedAt;
+  final String? diagnosisResultId;
 
   const SymptomLogEntry({
     required this.id,
@@ -130,13 +122,14 @@ class SymptomLogEntry {
     required this.createdAt,
     this.resolved = false,
     this.resolvedAt,
+    this.diagnosisResultId,
   });
 
   /// Creates a copy with optional field overrides.
   SymptomLogEntry copyWith({
     String? id,
     String? plantId,
-    List<SymptomType>? symptomTypes,
+    List<PlantSymptom>? symptomTypes,
     Severity? severity,
     List<AffectedPart>? affectedParts,
     OnsetTiming? onsetTiming,
@@ -152,6 +145,8 @@ class SymptomLogEntry {
     bool? resolved,
     DateTime? resolvedAt,
     bool clearResolvedAt = false,
+    String? diagnosisResultId,
+    bool clearDiagnosisResultId = false,
   }) {
     return SymptomLogEntry(
       id: id ?? this.id,
@@ -167,6 +162,7 @@ class SymptomLogEntry {
       createdAt: createdAt ?? this.createdAt,
       resolved: resolved ?? this.resolved,
       resolvedAt: clearResolvedAt ? null : (resolvedAt ?? this.resolvedAt),
+      diagnosisResultId: clearDiagnosisResultId ? null : (diagnosisResultId ?? this.diagnosisResultId),
     );
   }
 
@@ -186,6 +182,7 @@ class SymptomLogEntry {
       'createdAt': createdAt.toIso8601String(),
       'resolved': resolved,
       'resolvedAt': resolvedAt?.toIso8601String(),
+      if (diagnosisResultId != null) 'diagnosisResultId': diagnosisResultId,
     };
   }
 
@@ -194,9 +191,7 @@ class SymptomLogEntry {
     return SymptomLogEntry(
       id: json['id'] as String,
       plantId: json['plantId'] as String,
-      symptomTypes: (json['symptomTypes'] as List<dynamic>)
-          .map((e) => SymptomType.values.firstWhere((s) => s.name == e as String))
-          .toList(),
+      symptomTypes: (json['symptomTypes'] as List<dynamic>).map((e) => _migrateSymptomType(e as String)).toList(),
       severity: SeverityExtension.fromJson(json['severity'] as String),
       affectedParts: (json['affectedParts'] as List<dynamic>)
           .map((e) => AffectedPart.values.firstWhere((a) => a.name == e as String))
@@ -211,6 +206,23 @@ class SymptomLogEntry {
       createdAt: DateTime.parse(json['createdAt'] as String),
       resolved: json['resolved'] as bool? ?? false,
       resolvedAt: json['resolvedAt'] != null ? DateTime.parse(json['resolvedAt'] as String) : null,
+      diagnosisResultId: json['diagnosisResultId'] as String?,
+    );
+  }
+
+  /// Migrates old SymptomType names to the unified [PlantSymptom] names.
+  static PlantSymptom _migrateSymptomType(String name) {
+    // Map old SymptomType names to new PlantSymptom names
+    const migrationMap = <String, String>{
+      'yellowLeaves': 'yellowingLeaves',
+      'drooping': 'droopingWilt',
+      'pests': 'visibleInsects',
+      'mold': 'moldOnSoil',
+    };
+    final migratedName = migrationMap[name] ?? name;
+    return PlantSymptom.values.firstWhere(
+      (s) => s.name == migratedName,
+      orElse: () => PlantSymptom.yellowingLeaves,
     );
   }
 }

@@ -2498,11 +2498,173 @@ abstract class AppLocalizations {
   /// **'Leaf Drop'**
   String get diagnosisSymptomLeafDrop;
 
+  /// No description provided for @diagnosisSymptomSoftStems.
+  ///
+  /// In en, this message translates to:
+  /// **'Soft Stems'**
+  String get diagnosisSymptomSoftStems;
+
+  /// No description provided for @diagnosisSymptomDrySoil.
+  ///
+  /// In en, this message translates to:
+  /// **'Dry Soil'**
+  String get diagnosisSymptomDrySoil;
+
+  /// No description provided for @diagnosisSymptomWetSoil.
+  ///
+  /// In en, this message translates to:
+  /// **'Wet Soil'**
+  String get diagnosisSymptomWetSoil;
+
+  /// No description provided for @diagnosisSymptomLeafSpots.
+  ///
+  /// In en, this message translates to:
+  /// **'Leaf Spots'**
+  String get diagnosisSymptomLeafSpots;
+
   /// No description provided for @diagnosisDiagnoseThisPlant.
   ///
   /// In en, this message translates to:
   /// **'Diagnose this plant'**
   String get diagnosisDiagnoseThisPlant;
+
+  /// No description provided for @healthTimelineTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Health Timeline'**
+  String get healthTimelineTitle;
+
+  /// No description provided for @healthTimelineFilterAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get healthTimelineFilterAll;
+
+  /// No description provided for @healthTimelineFilterActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Active'**
+  String get healthTimelineFilterActive;
+
+  /// No description provided for @healthTimelineEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No health events yet'**
+  String get healthTimelineEmpty;
+
+  /// No description provided for @healthTimelineEmptyHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Symptom logs and diagnoses will appear here.'**
+  String get healthTimelineEmptyHint;
+
+  /// No description provided for @healthTimelineSymptomEntry.
+  ///
+  /// In en, this message translates to:
+  /// **'Symptom logged'**
+  String get healthTimelineSymptomEntry;
+
+  /// No description provided for @healthTimelineDiagnosisEntry.
+  ///
+  /// In en, this message translates to:
+  /// **'Diagnosis result'**
+  String get healthTimelineDiagnosisEntry;
+
+  /// No description provided for @healthTimelineBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'Latest Diagnosis'**
+  String get healthTimelineBadge;
+
+  /// No description provided for @healthTimelineLogSymptom.
+  ///
+  /// In en, this message translates to:
+  /// **'Log Symptom'**
+  String get healthTimelineLogSymptom;
+
+  /// No description provided for @healthTimelineDiagnose.
+  ///
+  /// In en, this message translates to:
+  /// **'Diagnose'**
+  String get healthTimelineDiagnose;
+
+  /// No description provided for @healthTimelineMarkResolved.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark Resolved'**
+  String get healthTimelineMarkResolved;
+
+  /// No description provided for @healthTimelineResolved.
+  ///
+  /// In en, this message translates to:
+  /// **'Resolved'**
+  String get healthTimelineResolved;
+
+  /// No description provided for @healthTimelineViewDiagnosis.
+  ///
+  /// In en, this message translates to:
+  /// **'View Diagnosis'**
+  String get healthTimelineViewDiagnosis;
+
+  /// No description provided for @healthTimelineViewLinkedSymptom.
+  ///
+  /// In en, this message translates to:
+  /// **'View linked symptom'**
+  String get healthTimelineViewLinkedSymptom;
+
+  /// No description provided for @healthTimelineTodayAt.
+  ///
+  /// In en, this message translates to:
+  /// **'Today at {time}'**
+  String healthTimelineTodayAt(String time);
+
+  /// No description provided for @healthTimelineYesterdayAt.
+  ///
+  /// In en, this message translates to:
+  /// **'Yesterday at {time}'**
+  String healthTimelineYesterdayAt(String time);
+
+  /// No description provided for @healthTimelineDateAt.
+  ///
+  /// In en, this message translates to:
+  /// **'{date} at {time}'**
+  String healthTimelineDateAt(String date, String time);
+
+  /// No description provided for @diagnosisSaveToPlantHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'Save to plant history'**
+  String get diagnosisSaveToPlantHistory;
+
+  /// No description provided for @diagnosisSavedToPlantHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved to plant history'**
+  String get diagnosisSavedToPlantHistory;
+
+  /// No description provided for @diagnosisSourceAuto.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto-diagnosis'**
+  String get diagnosisSourceAuto;
+
+  /// No description provided for @diagnosisSourceManual.
+  ///
+  /// In en, this message translates to:
+  /// **'Manual diagnosis'**
+  String get diagnosisSourceManual;
+
+  /// No description provided for @diagnosisSourceLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Source: {source}'**
+  String diagnosisSourceLabel(String source);
+
+  /// No description provided for @viewHealthTimeline.
+  ///
+  /// In en, this message translates to:
+  /// **'View Health Timeline'**
+  String get viewHealthTimeline;
 
   /// Introduces the symptoms that contributed to a diagnosis result
   ///
