@@ -45,12 +45,12 @@ class _OpenPlantAppState extends State<OpenPlantApp> {
     final scope = AppScope.of(context);
 
     return AnimatedBuilder(
-      animation: scope.settings,
+      animation: Listenable.merge([scope.settings, scope.services.localeService]),
       builder: (context, _) {
         final settings = scope.settings.settings;
         final themeMode =
             settings.useSystemDarkmode ? ThemeMode.system : (settings.useDarkmode ? ThemeMode.dark : ThemeMode.light);
-        final locale = settings.localeCode == null ? null : Locale(settings.localeCode!);
+        final locale = scope.services.localeService.activeLocale;
 
         return MaterialApp(
           debugShowCheckedModeBanner: false,

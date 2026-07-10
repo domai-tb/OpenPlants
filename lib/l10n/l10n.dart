@@ -416,6 +416,36 @@ abstract class AppLocalizations {
   /// **'Use system text scaling'**
   String get useSystemTextScaling;
 
+  /// No description provided for @temperatureUnitLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Temperature Unit'**
+  String get temperatureUnitLabel;
+
+  /// No description provided for @temperatureCelsius.
+  ///
+  /// In en, this message translates to:
+  /// **'Celsius'**
+  String get temperatureCelsius;
+
+  /// No description provided for @temperatureFahrenheit.
+  ///
+  /// In en, this message translates to:
+  /// **'Fahrenheit'**
+  String get temperatureFahrenheit;
+
+  /// No description provided for @plantNamesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Plant Names'**
+  String get plantNamesTitle;
+
+  /// No description provided for @plantNamesDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Localized plant name lookup service.'**
+  String get plantNamesDescription;
+
   /// No description provided for @navigationLabel.
   ///
   /// In en, this message translates to:

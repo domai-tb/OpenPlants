@@ -4,6 +4,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+enum TemperatureUnit { celsius, fahrenheit }
+
 class SettingsController with ChangeNotifier {
   static const String _prefsKey = 'app_settings_json_v1';
 
@@ -56,6 +58,7 @@ class Settings {
   final bool useSystemTextScaling;
   final bool didCompleteOnboarding;
   final String? localeCode;
+  final TemperatureUnit temperatureUnit;
   final List<String> navBarItemOrder;
   final List<String> hiddenNavBarItems;
 
@@ -65,6 +68,7 @@ class Settings {
     this.useSystemTextScaling = false,
     this.didCompleteOnboarding = false,
     this.localeCode,
+    this.temperatureUnit = TemperatureUnit.celsius,
     this.navBarItemOrder = _defaultNavBarOrder,
     this.hiddenNavBarItems = const [],
   });
@@ -75,6 +79,7 @@ class Settings {
     bool? useSystemTextScaling,
     bool? didCompleteOnboarding,
     Object? localeCode = _noChange,
+    TemperatureUnit? temperatureUnit,
     List<String>? navBarItemOrder,
     List<String>? hiddenNavBarItems,
   }) {
@@ -84,6 +89,7 @@ class Settings {
       useSystemTextScaling: useSystemTextScaling ?? this.useSystemTextScaling,
       didCompleteOnboarding: didCompleteOnboarding ?? this.didCompleteOnboarding,
       localeCode: identical(localeCode, _noChange) ? this.localeCode : localeCode as String?,
+      temperatureUnit: temperatureUnit ?? this.temperatureUnit,
       navBarItemOrder: navBarItemOrder ?? this.navBarItemOrder,
       hiddenNavBarItems: hiddenNavBarItems ?? this.hiddenNavBarItems,
     );
@@ -96,6 +102,9 @@ class Settings {
       useSystemTextScaling: json['useSystemTextScaling'] ?? false,
       didCompleteOnboarding: json['didCompleteOnboarding'] ?? false,
       localeCode: json['localeCode'],
+      temperatureUnit: json['temperatureUnit'] == 'fahrenheit'
+          ? TemperatureUnit.fahrenheit
+          : TemperatureUnit.celsius,
       navBarItemOrder: (json['navBarItemOrder'] as List<dynamic>?)?.whereType<String>().toList() ?? _defaultNavBarOrder,
       hiddenNavBarItems:
           (json['hiddenNavBarItems'] as List<dynamic>?)?.whereType<String>().where((item) => item != 'more').toList() ??
@@ -110,6 +119,7 @@ class Settings {
       'useSystemTextScaling': useSystemTextScaling,
       'didCompleteOnboarding': didCompleteOnboarding,
       'localeCode': localeCode,
+      'temperatureUnit': temperatureUnit == TemperatureUnit.fahrenheit ? 'fahrenheit' : 'celsius',
       'navBarItemOrder': navBarItemOrder,
       'hiddenNavBarItems': hiddenNavBarItems.where((item) => item != 'more').toList(),
     };

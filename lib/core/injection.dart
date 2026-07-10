@@ -1,7 +1,10 @@
 import 'package:get_it/get_it.dart';
 
 import 'package:open_plant/core/app_services.dart';
+import 'package:open_plant/core/date_formatter.dart';
+import 'package:open_plant/core/locale_service.dart';
 import 'package:open_plant/core/settings.dart';
+import 'package:open_plant/core/unit_preferences.dart';
 import 'package:open_plant/pages/model_info/model_info_datasource.dart';
 import 'package:open_plant/pages/model_info/model_info_repository.dart';
 import 'package:open_plant/pages/model_info/model_info_usecases.dart';
@@ -42,6 +45,9 @@ import 'package:open_plant/pages/lightAssessment/light_assessment_usecases.dart'
 import 'package:open_plant/pages/diagnosis/diagnosis_datasource.dart';
 import 'package:open_plant/pages/diagnosis/diagnosis_repository.dart';
 import 'package:open_plant/pages/diagnosis/diagnosis_usecases.dart';
+import 'package:open_plant/pages/plant_names/plant_names_datasource.dart';
+import 'package:open_plant/pages/plant_names/plant_names_repository.dart';
+import 'package:open_plant/pages/plant_names/plant_names_usecases.dart';
 
 /// Global service locator (GetIt).
 ///
@@ -52,6 +58,21 @@ final sl = GetIt.instance;
 Future<void> init() async {
   // Core
   sl.registerSingleton<SettingsController>(await SettingsController.load());
+
+  // Locale Service
+  sl.registerLazySingleton<LocaleService>(
+    () => LocaleService(sl<SettingsController>()),
+  );
+
+  // Unit Preferences
+  sl.registerLazySingleton<TemperatureFormatter>(
+    () => TemperatureFormatter(sl<SettingsController>()),
+  );
+
+  // Date Formatter
+  sl.registerLazySingleton<DateFormatter>(
+    () => DateFormatter(sl<LocaleService>()),
+  );
 
   // Plant Classifier
   sl.registerLazySingleton<PlantClassifierDatasource>(
@@ -219,6 +240,17 @@ Future<void> init() async {
     ),
   );
 
+  // Plant Names
+  sl.registerLazySingleton<PlantNamesDatasource>(
+    PlantNamesDatasource.new,
+  );
+  sl.registerLazySingleton<PlantNamesRepository>(
+    () => PlantNamesRepository(datasource: sl()),
+  );
+  sl.registerLazySingleton<PlantNamesUsecases>(
+    () => PlantNamesUsecases(repository: sl()),
+  );
+
   // Aggregate wiring
   sl.registerLazySingleton<AppServices>(
     () => AppServices(
@@ -236,6 +268,10 @@ Future<void> init() async {
       modelInfo: sl(),
       lightAssessment: sl(),
       diagnosis: sl(),
+      localeService: sl(),
+      temperatureFormatter: sl(),
+      dateFormatter: sl(),
+      plantNames: sl(),
     ),
   );
 }

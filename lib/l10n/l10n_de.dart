@@ -174,6 +174,21 @@ class AppLocalizationsDe extends AppLocalizations {
   String get useSystemTextScaling => 'System-Textskalierung verwenden';
 
   @override
+  String get temperatureUnitLabel => 'Temperatureinheit';
+
+  @override
+  String get temperatureCelsius => 'Celsius';
+
+  @override
+  String get temperatureFahrenheit => 'Fahrenheit';
+
+  @override
+  String get plantNamesTitle => 'Pflanzennamen';
+
+  @override
+  String get plantNamesDescription => 'Lokalisierter Dienst für Pflanzennamen.';
+
+  @override
   String get navigationLabel => 'Navigation';
 
   @override

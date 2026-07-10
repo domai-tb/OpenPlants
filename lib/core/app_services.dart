@@ -1,3 +1,6 @@
+import 'package:open_plant/core/date_formatter.dart';
+import 'package:open_plant/core/locale_service.dart';
+import 'package:open_plant/core/unit_preferences.dart';
 import 'package:open_plant/pages/care_schedule/care_schedule_usecases.dart';
 import 'package:open_plant/pages/care_schedule/custom_care_rule_usecases.dart';
 import 'package:open_plant/pages/model_info/model_info_usecases.dart';
@@ -12,6 +15,7 @@ import 'package:open_plant/pages/symptom_logger/symptom_logger_usecases.dart';
 import 'package:open_plant/pages/today_dashboard/today_dashboard_usecases.dart';
 import 'package:open_plant/pages/lightAssessment/light_assessment_usecases.dart';
 import 'package:open_plant/pages/diagnosis/diagnosis_repository.dart';
+import 'package:open_plant/pages/plant_names/plant_names_usecases.dart';
 
 /// Aggregates feature use-cases for convenient access via `AppScope`.
 ///
@@ -32,6 +36,10 @@ class AppServices {
   final ModelInfoUseCase modelInfo;
   final LightAssessmentUseCases lightAssessment;
   final DiagnosisRepository diagnosis;
+  final LocaleService localeService;
+  final TemperatureFormatter temperatureFormatter;
+  final DateFormatter dateFormatter;
+  final PlantNamesUsecases plantNames;
 
   const AppServices({
     required this.plantIdentification,
@@ -48,5 +56,9 @@ class AppServices {
     required this.modelInfo,
     required this.lightAssessment,
     required this.diagnosis,
+    required this.localeService,
+    required this.temperatureFormatter,
+    required this.dateFormatter,
+    required this.plantNames,
   });
 }

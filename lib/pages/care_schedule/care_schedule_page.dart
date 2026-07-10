@@ -255,7 +255,8 @@ class _CareSchedulePageState extends State<CareSchedulePage> with AutomaticKeepA
   }
 
   String _formatDate(DateTime date) {
-    return '${date.day}/${date.month}/${date.year}';
+    final services = AppScope.of(context).services;
+    return services.dateFormatter.formatShort(date);
   }
 
   Widget _buildSectionHeader(ThemeData theme, String title, Color color) {

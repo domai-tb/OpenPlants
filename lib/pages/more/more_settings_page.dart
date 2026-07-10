@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:open_plant/core/app_scope.dart';
+import 'package:open_plant/core/settings.dart';
 import 'package:open_plant/l10n/l10n_x.dart';
 import 'package:open_plant/pages/home/page_navigator.dart';
 import 'package:open_plant/pages/home/widgets/nav_bar_preferences_editor.dart';
@@ -13,6 +14,7 @@ class MoreSettingsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final settingsController = AppScope.of(context).settings;
+    final services = AppScope.of(context).services;
 
     return Scaffold(
       backgroundColor: theme.colorScheme.surface,
@@ -21,7 +23,7 @@ class MoreSettingsPage extends StatelessWidget {
         backgroundColor: theme.colorScheme.surface,
       ),
       body: AnimatedBuilder(
-        animation: settingsController,
+        animation: Listenable.merge([settingsController, services.localeService]),
         builder: (context, _) {
           final settings = settingsController.settings;
           final orderedItems = orderedPageItemsFromSettings(settings.navBarItemOrder);
@@ -87,10 +89,31 @@ class MoreSettingsPage extends StatelessWidget {
                 ],
                 onChanged: (val) {
                   if (val == null) return;
+                  services.localeService.setLocale(val == 'system' ? null : val);
+                },
+              ),
+              const SizedBox(height: 24),
+              Text(
+                context.l10n.temperatureUnitLabel,
+                style: theme.textTheme.headlineSmall,
+              ),
+              const SizedBox(height: 10),
+              SegmentedButton<TemperatureUnit>(
+                segments: [
+                  ButtonSegment(
+                    value: TemperatureUnit.celsius,
+                    label: Text(context.l10n.temperatureCelsius),
+                  ),
+                  ButtonSegment(
+                    value: TemperatureUnit.fahrenheit,
+                    label: Text(context.l10n.temperatureFahrenheit),
+                  ),
+                ],
+                selected: {settings.temperatureUnit},
+                onSelectionChanged: (selected) {
+                  if (selected.isEmpty) return;
                   settingsController.update(
-                    settings.copyWith(
-                      localeCode: val == 'system' ? null : val,
-                    ),
+                    settings.copyWith(temperatureUnit: selected.first),
                   );
                 },
               ),
