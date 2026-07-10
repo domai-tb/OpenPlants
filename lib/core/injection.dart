@@ -39,6 +39,9 @@ import 'package:open_plant/pages/today_dashboard/today_dashboard_usecases.dart';
 import 'package:open_plant/pages/lightAssessment/light_assessment_datasource.dart';
 import 'package:open_plant/pages/lightAssessment/light_assessment_repository.dart';
 import 'package:open_plant/pages/lightAssessment/light_assessment_usecases.dart';
+import 'package:open_plant/pages/diagnosis/diagnosis_datasource.dart';
+import 'package:open_plant/pages/diagnosis/diagnosis_repository.dart';
+import 'package:open_plant/pages/diagnosis/diagnosis_usecases.dart';
 
 /// Global service locator (GetIt).
 ///
@@ -202,6 +205,19 @@ Future<void> init() async {
     ),
   );
 
+  // Diagnosis
+  sl.registerLazySingleton<DiagnosisDataSource>(
+    DiagnosisDataSource.new,
+  );
+  sl.registerLazySingleton<DiagnosisEngine>(
+    DiagnosisEngine.new,
+  );
+  sl.registerLazySingleton<DiagnosisRepository>(
+    () => DiagnosisRepository(
+      engine: sl(),
+    ),
+  );
+
   // Aggregate wiring
   sl.registerLazySingleton<AppServices>(
     () => AppServices(
@@ -218,6 +234,7 @@ Future<void> init() async {
       roomProfiles: sl(),
       modelInfo: sl(),
       lightAssessment: sl(),
+      diagnosis: sl(),
     ),
   );
 }

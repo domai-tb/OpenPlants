@@ -19,6 +19,8 @@ import 'package:open_plant/pages/care_schedule/custom_care_rule_usecases.dart';
 import 'package:open_plant/pages/care_schedule/widgets/care_rules_section.dart';
 import 'package:open_plant/pages/lightAssessment/light_assessment_page.dart';
 import 'package:open_plant/pages/lightAssessment/light_assessment_usecases.dart';
+import 'package:open_plant/pages/diagnosis/diagnosis_item_entity.dart';
+import 'package:open_plant/pages/diagnosis/diagnosis_page.dart';
 import 'package:open_plant/pages/room_profiles/room_profiles_usecases.dart';
 import 'package:open_plant/pages/symptom_logger/symptom_logger_extensions.dart';
 import 'package:open_plant/pages/symptom_logger/symptom_logger_item_entity.dart';
@@ -256,6 +258,27 @@ class _PlantCollectionDetailPageState extends State<PlantCollectionDetailPage> {
     }
   }
 
+  void _openDiagnosis() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => DiagnosisPage(
+          plantSpecies: _plant.speciesName,
+          initialLightExposure: _mapLightLevelToExposure(_plant.lightLevel),
+        ),
+      ),
+    );
+  }
+
+  LightExposure? _mapLightLevelToExposure(LightLevel? level) {
+    if (level == null) return null;
+    return switch (level) {
+      LightLevel.low => LightExposure.low,
+      LightLevel.medium => LightExposure.indirect,
+      LightLevel.brightIndirect => LightExposure.indirect,
+      LightLevel.direct => LightExposure.direct,
+    };
+  }
+
   Future<void> _markSymptomResolved(SymptomLogEntry entry) async {
     final confirmed = await showDialog<bool>(
       context: context,
@@ -434,6 +457,14 @@ class _PlantCollectionDetailPageState extends State<PlantCollectionDetailPage> {
             onPressed: _logSymptom,
             icon: const Icon(Icons.healing),
             label: Text(context.l10n.symptomLoggerLogSymptom),
+          ),
+          const SizedBox(height: 12),
+
+          // Diagnose this plant button
+          OutlinedButton.icon(
+            onPressed: _openDiagnosis,
+            icon: const Icon(Icons.search),
+            label: const Text('Diagnose this plant'),
           ),
           const SizedBox(height: 24),
 

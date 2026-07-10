@@ -6,6 +6,7 @@ class MoreDataSource {
     return const [
       MoreItemEntity(id: 'rooms', title: 'Rooms', subtitle: 'Manage room locations'),
       MoreItemEntity(id: 'log_symptom', title: 'Log Symptom', subtitle: 'Record a plant health issue'),
+      MoreItemEntity(id: 'diagnosis', title: 'Plant Diagnosis', subtitle: 'Diagnose plant problems'),
       MoreItemEntity(id: 'settings', title: 'Settings', subtitle: 'OpenPlant settings'),
       MoreItemEntity(id: 'about', title: 'About', subtitle: 'About OpenPlant'),
     ];

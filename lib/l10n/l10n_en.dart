@@ -948,4 +948,580 @@ class AppLocalizationsEn extends AppLocalizations {
   String careRulesSaveFailed(Object error) {
     return 'Failed to save rule: $error';
   }
+
+  @override
+  String get diagnosisTitle => 'Plant Diagnosis';
+
+  @override
+  String get diagnosisSubtitle => 'Diagnose plant problems';
+
+  @override
+  String get diagnosisStep => 'Step';
+
+  @override
+  String diagnosisStepProgress(int currentStep, int totalSteps) {
+    return 'Step $currentStep/$totalSteps';
+  }
+
+  @override
+  String get diagnosisStepSymptoms => 'Symptoms';
+
+  @override
+  String get diagnosisStepContext => 'Environment';
+
+  @override
+  String get diagnosisStepDetails => 'Details';
+
+  @override
+  String get diagnosisStepReview => 'Review';
+
+  @override
+  String get diagnosisSelectSymptoms =>
+      'What symptoms do you see on your plant? (select at least one)';
+
+  @override
+  String get diagnosisSymptomRequired => 'Please select at least one symptom';
+
+  @override
+  String get diagnosisEnvironmentTitle =>
+      'Tell us about your plant\'s environment';
+
+  @override
+  String get diagnosisWateringFrequency => 'Watering Frequency';
+
+  @override
+  String get diagnosisLightExposure => 'Light Exposure';
+
+  @override
+  String get diagnosisHumidityLevel => 'Humidity Level';
+
+  @override
+  String get diagnosisPotType => 'Pot Type';
+
+  @override
+  String get diagnosisSoilType => 'Soil Type';
+
+  @override
+  String get diagnosisAdditionalInfo => 'Additional information';
+
+  @override
+  String get diagnosisPlantSpecies => 'Plant Species (optional)';
+
+  @override
+  String get diagnosisPlantSpeciesHint =>
+      'e.g. Monstera deliciosa, Snake Plant';
+
+  @override
+  String get diagnosisRecentFertilizing => 'Recent Fertilizing';
+
+  @override
+  String get diagnosisRecentFertilizingHint =>
+      'Have you fertilized in the last 3 months?';
+
+  @override
+  String get diagnosisPestSigns => 'Pest Signs';
+
+  @override
+  String get diagnosisPestSignsHint =>
+      'Have you noticed any insects, webs, or sticky residue?';
+
+  @override
+  String get diagnosisReviewTitle => 'Review your answers';
+
+  @override
+  String get diagnosisReviewSymptoms => 'Symptoms';
+
+  @override
+  String get diagnosisReviewWatering => 'Watering';
+
+  @override
+  String get diagnosisReviewLight => 'Light';
+
+  @override
+  String get diagnosisReviewHumidity => 'Humidity';
+
+  @override
+  String get diagnosisReviewPotType => 'Pot Type';
+
+  @override
+  String get diagnosisReviewSoil => 'Soil';
+
+  @override
+  String get diagnosisReviewSpecies => 'Species';
+
+  @override
+  String get diagnosisReviewRecentlyFertilized => 'Fertilized recently';
+
+  @override
+  String get diagnosisReviewPestSigns => 'Pest signs';
+
+  @override
+  String get diagnosisAnswerYes => 'Yes';
+
+  @override
+  String get diagnosisAnswerNo => 'No';
+
+  @override
+  String get diagnosisAnswerUnknown => 'Unknown';
+
+  @override
+  String get diagnosisStartDiagnosis => 'Start Diagnosis';
+
+  @override
+  String get diagnosisEvaluating => 'Evaluating...';
+
+  @override
+  String get diagnosisResultsTitle => 'Diagnosis Results';
+
+  @override
+  String get diagnosisNoClearMatch => 'No Clear Match';
+
+  @override
+  String get diagnosisNoClearMatchDesc =>
+      'Based on the information provided, we couldn\'t identify a specific cause. This doesn\'t mean your plant is fine — it may need attention for a reason not covered by this questionnaire.';
+
+  @override
+  String get diagnosisGeneralSuggestions => 'General Suggestions:';
+
+  @override
+  String get diagnosisSuggestionAppropriateLight =>
+      'Ensure your plant receives appropriate light for its species.';
+
+  @override
+  String get diagnosisSuggestionCheckSoilMoisture =>
+      'Check the soil moisture before watering — over- and under-watering are the most common issues.';
+
+  @override
+  String get diagnosisSuggestionInspectPlant =>
+      'Inspect the leaves and stems closely for any unusual spots, pests, or texture changes.';
+
+  @override
+  String get diagnosisSuggestionConsiderRepotting =>
+      'Consider repotting if the plant has been in the same soil for over a year.';
+
+  @override
+  String get diagnosisTryAgain => 'Try Again with More Details';
+
+  @override
+  String get diagnosisStartOver => 'Start Over';
+
+  @override
+  String get diagnosisEmptyInputTitle => 'No Symptoms Selected';
+
+  @override
+  String get diagnosisEmptyInputDesc =>
+      'Select at least one symptom before starting a diagnosis.';
+
+  @override
+  String get diagnosisDisclaimer =>
+      'This is a suggestion based on the information you provided. It is not a definitive diagnosis. Consult a plant care expert for serious concerns.';
+
+  @override
+  String get diagnosisRecommendedActions => 'Recommended Actions';
+
+  @override
+  String get diagnosisFollowUpChecks => 'Follow-up Checks';
+
+  @override
+  String get diagnosisCauseOverwatering => 'Overwatering';
+
+  @override
+  String get diagnosisCauseUnderwatering => 'Underwatering';
+
+  @override
+  String get diagnosisCauseLowLight => 'Insufficient Light';
+
+  @override
+  String get diagnosisCauseSunburn => 'Sunburn / Light Damage';
+
+  @override
+  String get diagnosisCauseLowHumidity => 'Low Humidity';
+
+  @override
+  String get diagnosisCauseNutrientProblem => 'Nutrient Deficiency';
+
+  @override
+  String get diagnosisCauseRootIssue => 'Root Problems';
+
+  @override
+  String get diagnosisCausePests => 'Pest Infestation';
+
+  @override
+  String get diagnosisCauseNoClearMatch => 'No Clear Match';
+
+  @override
+  String get diagnosisConfidenceHigh => 'High';
+
+  @override
+  String get diagnosisConfidenceMedium => 'Medium';
+
+  @override
+  String get diagnosisConfidenceLow => 'Low';
+
+  @override
+  String get diagnosisWateringFrequent => 'Frequent';
+
+  @override
+  String get diagnosisWateringNormal => 'Normal';
+
+  @override
+  String get diagnosisWateringInfrequent => 'Infrequent';
+
+  @override
+  String get diagnosisLightLow => 'Low Light';
+
+  @override
+  String get diagnosisLightIndirect => 'Indirect Light';
+
+  @override
+  String get diagnosisLightDirect => 'Direct Sun';
+
+  @override
+  String get diagnosisHumidityLow => 'Low';
+
+  @override
+  String get diagnosisHumidityModerate => 'Moderate';
+
+  @override
+  String get diagnosisHumidityHigh => 'High';
+
+  @override
+  String get diagnosisPotStandard => 'Standard';
+
+  @override
+  String get diagnosisPotSelfWatering => 'Self-Watering';
+
+  @override
+  String get diagnosisPotNoDrainage => 'No Drainage';
+
+  @override
+  String get diagnosisSoilStandard => 'Standard Potting Mix';
+
+  @override
+  String get diagnosisSoilSucculent => 'Succulent Mix';
+
+  @override
+  String get diagnosisSoilOrchid => 'Orchid Mix';
+
+  @override
+  String get diagnosisSoilCactus => 'Cactus Mix';
+
+  @override
+  String get diagnosisSymptomYellowingLeaves => 'Yellowing Leaves';
+
+  @override
+  String get diagnosisSymptomDroopingWilt => 'Drooping / Wilting';
+
+  @override
+  String get diagnosisSymptomBrownTips => 'Brown Tips / Crispy Edges';
+
+  @override
+  String get diagnosisSymptomBrownPatches => 'Brown Patches / Scorched Spots';
+
+  @override
+  String get diagnosisSymptomPaleLeaves => 'Pale Leaves';
+
+  @override
+  String get diagnosisSymptomLeggyGrowth => 'Leggy Growth';
+
+  @override
+  String get diagnosisSymptomVisibleInsects => 'Visible Insects / Webs';
+
+  @override
+  String get diagnosisSymptomStickyResidue => 'Sticky Residue';
+
+  @override
+  String get diagnosisSymptomMoldOnSoil => 'Mold on Soil';
+
+  @override
+  String get diagnosisSymptomFoulSmell => 'Foul Smell';
+
+  @override
+  String get diagnosisSymptomStuntedGrowth => 'Stunted Growth';
+
+  @override
+  String get diagnosisSymptomLeafCurling => 'Leaf Curling';
+
+  @override
+  String get diagnosisSymptomLeafDrop => 'Leaf Drop';
+
+  @override
+  String get diagnosisDiagnoseThisPlant => 'Diagnose this plant';
+
+  @override
+  String diagnosisEvidenceReportedSymptoms(String symptoms) {
+    return 'You reported $symptoms.';
+  }
+
+  @override
+  String get diagnosisEvidenceFrequentWateringTooWet =>
+      'You water frequently, which can keep the soil too wet.';
+
+  @override
+  String get diagnosisEvidenceNoDrainage =>
+      'Your pot has no drainage holes, which traps excess water.';
+
+  @override
+  String get diagnosisEvidenceOverwateringSigns =>
+      'These are common signs of overwatering.';
+
+  @override
+  String get diagnosisEvidenceInfrequentWateringTooDry =>
+      'You water infrequently, which may leave the soil too dry.';
+
+  @override
+  String get diagnosisEvidenceUnderwateringSigns =>
+      'These are common signs of underwatering.';
+
+  @override
+  String get diagnosisEvidenceLowLightExposure =>
+      'Your plant receives low light.';
+
+  @override
+  String get diagnosisEvidenceLowLightSigns =>
+      'Leggy growth and pale leaves are typical signs of insufficient light.';
+
+  @override
+  String get diagnosisEvidenceDirectSunlight =>
+      'Your plant receives direct sunlight.';
+
+  @override
+  String get diagnosisEvidenceSunburnSigns =>
+      'Brown scorched patches can indicate sun damage.';
+
+  @override
+  String get diagnosisEvidenceLowHumidityEnvironment =>
+      'The humidity in your environment is low.';
+
+  @override
+  String get diagnosisEvidenceLowHumiditySigns =>
+      'Brown leaf tips and curling are common in dry indoor air.';
+
+  @override
+  String get diagnosisEvidenceNotFertilizedRecently =>
+      'You haven\'t fertilized recently.';
+
+  @override
+  String get diagnosisEvidenceNutrientSigns =>
+      'Pale or yellowing growth can indicate nutrient deficiency.';
+
+  @override
+  String get diagnosisEvidenceFrequentWateringRootProblems =>
+      'Frequent watering can lead to root problems.';
+
+  @override
+  String get diagnosisEvidenceRootProblemSigns =>
+      'Wilting despite moist soil and foul smell are signs of root issues.';
+
+  @override
+  String get diagnosisEvidencePestSignsObserved =>
+      'You\'ve noticed signs of pests.';
+
+  @override
+  String get diagnosisEvidencePestInfestationSigns =>
+      'Visible insects, sticky residue, and leaf damage can indicate pest infestation.';
+
+  @override
+  String get diagnosisEvidenceDefault =>
+      'Based on your answers, this cause was identified as a possibility.';
+
+  @override
+  String get diagnosisFallbackEvidence =>
+      'No single cause stood out based on the information provided. This could mean the issue is caused by factors not covered by the questionnaire.';
+
+  @override
+  String get diagnosisActionOverwateringDrySoil =>
+      'Allow the top 2-3 inches of soil to dry before watering again.';
+
+  @override
+  String get diagnosisActionOverwateringDrainage =>
+      'Check that your pot has drainage holes and empty the saucer after watering.';
+
+  @override
+  String get diagnosisActionOverwateringTrimRoots =>
+      'If root rot is suspected, remove the plant and trim any brown, mushy roots.';
+
+  @override
+  String get diagnosisActionUnderwateringWaterThoroughly =>
+      'Water the plant thoroughly until water drains from the bottom.';
+
+  @override
+  String get diagnosisActionUnderwateringSchedule =>
+      'Establish a regular watering schedule based on the plant\'s needs.';
+
+  @override
+  String get diagnosisActionUnderwateringBottomWater =>
+      'Consider bottom-watering to encourage deeper root growth.';
+
+  @override
+  String get diagnosisActionLowLightMovePlant =>
+      'Move the plant closer to a window or to a brighter location.';
+
+  @override
+  String get diagnosisActionLowLightGrowLight =>
+      'Consider adding a grow light if natural light is limited.';
+
+  @override
+  String get diagnosisActionLowLightRotate =>
+      'Rotate the plant regularly so all sides receive light.';
+
+  @override
+  String get diagnosisActionSunburnIndirectLight =>
+      'Move the plant to a spot with indirect or filtered light.';
+
+  @override
+  String get diagnosisActionSunburnCurtain =>
+      'Use a sheer curtain to diffuse direct sunlight.';
+
+  @override
+  String get diagnosisActionSunburnRemoveLeaves =>
+      'Remove severely burned leaves once the plant has adjusted.';
+
+  @override
+  String get diagnosisActionLowHumidityMist =>
+      'Mist the plant regularly or place a humidifier nearby.';
+
+  @override
+  String get diagnosisActionLowHumidityGroupPlants =>
+      'Group humidity-loving plants together to create a microclimate.';
+
+  @override
+  String get diagnosisActionLowHumidityPebbleTray =>
+      'Place the pot on a pebble tray with water (pot sitting above the water line).';
+
+  @override
+  String get diagnosisActionNutrientsFertilize =>
+      'Apply a balanced liquid fertilizer at half strength during the growing season.';
+
+  @override
+  String get diagnosisActionNutrientsRepot =>
+      'Check if the plant is root-bound and needs repotting with fresh soil.';
+
+  @override
+  String get diagnosisActionNutrientsCheckPh =>
+      'Ensure the soil pH is appropriate for the plant species.';
+
+  @override
+  String get diagnosisActionRootsInspect =>
+      'Remove the plant from the pot and inspect the roots.';
+
+  @override
+  String get diagnosisActionRootsTrim =>
+      'Trim any brown, mushy, or foul-smelling roots with sterile scissors.';
+
+  @override
+  String get diagnosisActionRootsRepot =>
+      'Repot in fresh, well-draining soil and reduce watering frequency.';
+
+  @override
+  String get diagnosisActionPestsIsolate =>
+      'Isolate the affected plant to prevent spreading.';
+
+  @override
+  String get diagnosisActionPestsTreat =>
+      'Wipe leaves with a damp cloth or spray with neem oil solution.';
+
+  @override
+  String get diagnosisActionPestsInspect =>
+      'Check under leaves and in leaf joints where pests often hide.';
+
+  @override
+  String get diagnosisActionDefaultCare =>
+      'Ensure your plant receives appropriate light and water for its species.';
+
+  @override
+  String get diagnosisActionDefaultMoisture =>
+      'Check the soil moisture before watering.';
+
+  @override
+  String get diagnosisCheckOverwateringRoots =>
+      'Check the roots: healthy roots are firm and white, rotten roots are brown and mushy.';
+
+  @override
+  String get diagnosisCheckOverwateringMoisture =>
+      'Monitor soil moisture — it should dry out between waterings.';
+
+  @override
+  String get diagnosisCheckUnderwateringRootBall =>
+      'Check the root ball: if it has pulled away from the pot edges, the soil is too dry.';
+
+  @override
+  String get diagnosisCheckUnderwateringSoil =>
+      'Feel the soil 2 inches down — it should be slightly moist, not bone dry.';
+
+  @override
+  String get diagnosisCheckLowLightGrowth =>
+      'Observe if new growth is still leggy after moving to a brighter spot.';
+
+  @override
+  String get diagnosisCheckLowLightHours =>
+      'Note how many hours of light the plant receives daily.';
+
+  @override
+  String get diagnosisCheckSunburnPatches =>
+      'Check if the brown patches stop spreading after moving the plant.';
+
+  @override
+  String get diagnosisCheckSunburnNewLeaves =>
+      'Monitor for new leaves — they should grow without brown spots.';
+
+  @override
+  String get diagnosisCheckLowHumidityTips =>
+      'Check if brown tips stop appearing after increasing humidity.';
+
+  @override
+  String get diagnosisCheckLowHumidityMeasure =>
+      'Use a hygrometer to measure the actual humidity level near the plant.';
+
+  @override
+  String get diagnosisCheckNutrientsGrowth =>
+      'After fertilizing, observe if new growth appears healthier within 2-3 weeks.';
+
+  @override
+  String get diagnosisCheckNutrientsRoots =>
+      'Check if the soil is compacted or the plant is root-bound.';
+
+  @override
+  String get diagnosisCheckRootsHealthy =>
+      'Healthy roots are firm and white or light tan. Rotten roots are brown, black, or mushy.';
+
+  @override
+  String get diagnosisCheckRootsRecovery =>
+      'After repotting, wait a week before watering to let roots recover.';
+
+  @override
+  String get diagnosisCheckPestsWeekly =>
+      'Inspect the plant weekly for 3-4 weeks to ensure the pest problem is resolved.';
+
+  @override
+  String get diagnosisCheckPestsNearbyPlants =>
+      'Check nearby plants for signs of spreading.';
+
+  @override
+  String get diagnosisCheckDefaultMoreDetails =>
+      'Try the questionnaire again with more details.';
+
+  @override
+  String get diagnosisCheckDefaultExpert =>
+      'Consult a plant care expert for species-specific advice.';
+
+  @override
+  String get diagnosisFallbackActionLight =>
+      'Ensure your plant receives appropriate light for its species.';
+
+  @override
+  String get diagnosisFallbackActionMoisture =>
+      'Check the soil moisture before watering — over- and under-watering are the most common issues.';
+
+  @override
+  String get diagnosisFallbackActionInspect =>
+      'Inspect the leaves and stems closely for any unusual spots, pests, or texture changes.';
+
+  @override
+  String get diagnosisFallbackCheckMoreDetails =>
+      'Try the questionnaire again with more details about your plant\'s environment.';
+
+  @override
+  String get diagnosisFallbackCheckCommunity =>
+      'Consult a local plant shop or online community for species-specific advice.';
 }

@@ -957,4 +957,581 @@ class AppLocalizationsDe extends AppLocalizations {
   String careRulesSaveFailed(Object error) {
     return 'Regel konnte nicht gespeichert werden: $error';
   }
+
+  @override
+  String get diagnosisTitle => 'Pflanzendiagnose';
+
+  @override
+  String get diagnosisSubtitle => 'Pflanzenprobleme diagnostizieren';
+
+  @override
+  String get diagnosisStep => 'Schritt';
+
+  @override
+  String diagnosisStepProgress(int currentStep, int totalSteps) {
+    return 'Schritt $currentStep/$totalSteps';
+  }
+
+  @override
+  String get diagnosisStepSymptoms => 'Symptome';
+
+  @override
+  String get diagnosisStepContext => 'Umgebung';
+
+  @override
+  String get diagnosisStepDetails => 'Details';
+
+  @override
+  String get diagnosisStepReview => 'Überprüfung';
+
+  @override
+  String get diagnosisSelectSymptoms =>
+      'Welche Symptome siehst du an deiner Pflanze? (mindestens eines auswählen)';
+
+  @override
+  String get diagnosisSymptomRequired =>
+      'Bitte wähle mindestens ein Symptom aus';
+
+  @override
+  String get diagnosisEnvironmentTitle =>
+      'Erzähle uns von der Umgebung deiner Pflanze';
+
+  @override
+  String get diagnosisWateringFrequency => 'Gießhäufigkeit';
+
+  @override
+  String get diagnosisLightExposure => 'Lichtverhältnisse';
+
+  @override
+  String get diagnosisHumidityLevel => 'Luftfeuchtigkeit';
+
+  @override
+  String get diagnosisPotType => 'Topfart';
+
+  @override
+  String get diagnosisSoilType => 'Erdart';
+
+  @override
+  String get diagnosisAdditionalInfo => 'Zusätzliche Informationen';
+
+  @override
+  String get diagnosisPlantSpecies => 'Pflanzenart (optional)';
+
+  @override
+  String get diagnosisPlantSpeciesHint => 'z. B. Monstera deliciosa, Bogenhanf';
+
+  @override
+  String get diagnosisRecentFertilizing => 'Kürzlich gedüngt';
+
+  @override
+  String get diagnosisRecentFertilizingHint =>
+      'Hast du in den letzten 3 Monaten gedüngt?';
+
+  @override
+  String get diagnosisPestSigns => 'Anzeichen für Schädlinge';
+
+  @override
+  String get diagnosisPestSignsHint =>
+      'Hast du Insekten, Gespinste oder klebrige Rückstände bemerkt?';
+
+  @override
+  String get diagnosisReviewTitle => 'Überprüfe deine Antworten';
+
+  @override
+  String get diagnosisReviewSymptoms => 'Symptome';
+
+  @override
+  String get diagnosisReviewWatering => 'Gießen';
+
+  @override
+  String get diagnosisReviewLight => 'Licht';
+
+  @override
+  String get diagnosisReviewHumidity => 'Luftfeuchtigkeit';
+
+  @override
+  String get diagnosisReviewPotType => 'Topfart';
+
+  @override
+  String get diagnosisReviewSoil => 'Erde';
+
+  @override
+  String get diagnosisReviewSpecies => 'Art';
+
+  @override
+  String get diagnosisReviewRecentlyFertilized => 'Kürzlich gedüngt';
+
+  @override
+  String get diagnosisReviewPestSigns => 'Anzeichen für Schädlinge';
+
+  @override
+  String get diagnosisAnswerYes => 'Ja';
+
+  @override
+  String get diagnosisAnswerNo => 'Nein';
+
+  @override
+  String get diagnosisAnswerUnknown => 'Unbekannt';
+
+  @override
+  String get diagnosisStartDiagnosis => 'Diagnose starten';
+
+  @override
+  String get diagnosisEvaluating => 'Wird ausgewertet...';
+
+  @override
+  String get diagnosisResultsTitle => 'Diagnoseergebnisse';
+
+  @override
+  String get diagnosisNoClearMatch => 'Keine eindeutige Übereinstimmung';
+
+  @override
+  String get diagnosisNoClearMatchDesc =>
+      'Anhand der bereitgestellten Informationen konnten wir keine bestimmte Ursache ermitteln. Das bedeutet nicht, dass deine Pflanze gesund ist — möglicherweise benötigt sie aus einem Grund Aufmerksamkeit, den dieser Fragebogen nicht abdeckt.';
+
+  @override
+  String get diagnosisGeneralSuggestions => 'Allgemeine Empfehlungen:';
+
+  @override
+  String get diagnosisSuggestionAppropriateLight =>
+      'Stelle sicher, dass deine Pflanze für ihre Art geeignete Lichtverhältnisse erhält.';
+
+  @override
+  String get diagnosisSuggestionCheckSoilMoisture =>
+      'Prüfe die Bodenfeuchtigkeit vor dem Gießen — zu viel und zu wenig Wasser sind die häufigsten Probleme.';
+
+  @override
+  String get diagnosisSuggestionInspectPlant =>
+      'Untersuche Blätter und Stängel sorgfältig auf ungewöhnliche Flecken, Schädlinge oder Veränderungen der Oberfläche.';
+
+  @override
+  String get diagnosisSuggestionConsiderRepotting =>
+      'Ziehe ein Umtopfen in Betracht, wenn die Pflanze seit über einem Jahr in derselben Erde steht.';
+
+  @override
+  String get diagnosisTryAgain => 'Mit weiteren Details erneut versuchen';
+
+  @override
+  String get diagnosisStartOver => 'Neu beginnen';
+
+  @override
+  String get diagnosisEmptyInputTitle => 'Keine Symptome ausgewählt';
+
+  @override
+  String get diagnosisEmptyInputDesc =>
+      'Wähle mindestens ein Symptom aus, bevor du eine Diagnose startest.';
+
+  @override
+  String get diagnosisDisclaimer =>
+      'Dies ist eine Empfehlung auf Grundlage deiner Angaben und keine endgültige Diagnose. Wende dich bei ernsthaften Problemen an eine Fachperson für Pflanzenpflege.';
+
+  @override
+  String get diagnosisRecommendedActions => 'Empfohlene Maßnahmen';
+
+  @override
+  String get diagnosisFollowUpChecks => 'Weitere Prüfungen';
+
+  @override
+  String get diagnosisCauseOverwatering => 'Überwässerung';
+
+  @override
+  String get diagnosisCauseUnderwatering => 'Wassermangel';
+
+  @override
+  String get diagnosisCauseLowLight => 'Zu wenig Licht';
+
+  @override
+  String get diagnosisCauseSunburn => 'Sonnenbrand / Lichtschaden';
+
+  @override
+  String get diagnosisCauseLowHumidity => 'Niedrige Luftfeuchtigkeit';
+
+  @override
+  String get diagnosisCauseNutrientProblem => 'Nährstoffmangel';
+
+  @override
+  String get diagnosisCauseRootIssue => 'Wurzelprobleme';
+
+  @override
+  String get diagnosisCausePests => 'Schädlingsbefall';
+
+  @override
+  String get diagnosisCauseNoClearMatch => 'Keine eindeutige Übereinstimmung';
+
+  @override
+  String get diagnosisConfidenceHigh => 'Hoch';
+
+  @override
+  String get diagnosisConfidenceMedium => 'Mittel';
+
+  @override
+  String get diagnosisConfidenceLow => 'Niedrig';
+
+  @override
+  String get diagnosisWateringFrequent => 'Häufig';
+
+  @override
+  String get diagnosisWateringNormal => 'Normal';
+
+  @override
+  String get diagnosisWateringInfrequent => 'Selten';
+
+  @override
+  String get diagnosisLightLow => 'Wenig Licht';
+
+  @override
+  String get diagnosisLightIndirect => 'Indirektes Licht';
+
+  @override
+  String get diagnosisLightDirect => 'Direkte Sonne';
+
+  @override
+  String get diagnosisHumidityLow => 'Niedrig';
+
+  @override
+  String get diagnosisHumidityModerate => 'Mittel';
+
+  @override
+  String get diagnosisHumidityHigh => 'Hoch';
+
+  @override
+  String get diagnosisPotStandard => 'Standardtopf';
+
+  @override
+  String get diagnosisPotSelfWatering => 'Selbstbewässerungstopf';
+
+  @override
+  String get diagnosisPotNoDrainage => 'Ohne Abfluss';
+
+  @override
+  String get diagnosisSoilStandard => 'Standard-Blumenerde';
+
+  @override
+  String get diagnosisSoilSucculent => 'Sukkulentenerde';
+
+  @override
+  String get diagnosisSoilOrchid => 'Orchideenerde';
+
+  @override
+  String get diagnosisSoilCactus => 'Kakteenerde';
+
+  @override
+  String get diagnosisSymptomYellowingLeaves => 'Vergilbende Blätter';
+
+  @override
+  String get diagnosisSymptomDroopingWilt => 'Hängende / welkende Blätter';
+
+  @override
+  String get diagnosisSymptomBrownTips => 'Braune Spitzen / trockene Ränder';
+
+  @override
+  String get diagnosisSymptomBrownPatches =>
+      'Braune Flecken / verbrannte Stellen';
+
+  @override
+  String get diagnosisSymptomPaleLeaves => 'Blasse Blätter';
+
+  @override
+  String get diagnosisSymptomLeggyGrowth => 'Vergeiltes Wachstum';
+
+  @override
+  String get diagnosisSymptomVisibleInsects => 'Sichtbare Insekten / Gespinste';
+
+  @override
+  String get diagnosisSymptomStickyResidue => 'Klebrige Rückstände';
+
+  @override
+  String get diagnosisSymptomMoldOnSoil => 'Schimmel auf der Erde';
+
+  @override
+  String get diagnosisSymptomFoulSmell => 'Fauliger Geruch';
+
+  @override
+  String get diagnosisSymptomStuntedGrowth => 'Gehemmtes Wachstum';
+
+  @override
+  String get diagnosisSymptomLeafCurling => 'Eingerollte Blätter';
+
+  @override
+  String get diagnosisSymptomLeafDrop => 'Blattfall';
+
+  @override
+  String get diagnosisDiagnoseThisPlant => 'Diese Pflanze diagnostizieren';
+
+  @override
+  String diagnosisEvidenceReportedSymptoms(String symptoms) {
+    return 'Du hast $symptoms angegeben.';
+  }
+
+  @override
+  String get diagnosisEvidenceFrequentWateringTooWet =>
+      'Du gießt häufig, wodurch die Erde zu nass bleiben kann.';
+
+  @override
+  String get diagnosisEvidenceNoDrainage =>
+      'Dein Topf hat keine Abflusslöcher, sodass überschüssiges Wasser nicht ablaufen kann.';
+
+  @override
+  String get diagnosisEvidenceOverwateringSigns =>
+      'Dies sind häufige Anzeichen für Überwässerung.';
+
+  @override
+  String get diagnosisEvidenceInfrequentWateringTooDry =>
+      'Du gießt selten, wodurch die Erde zu trocken werden kann.';
+
+  @override
+  String get diagnosisEvidenceUnderwateringSigns =>
+      'Dies sind häufige Anzeichen für Wassermangel.';
+
+  @override
+  String get diagnosisEvidenceLowLightExposure =>
+      'Deine Pflanze erhält wenig Licht.';
+
+  @override
+  String get diagnosisEvidenceLowLightSigns =>
+      'Vergeiltes Wachstum und blasse Blätter sind typische Anzeichen für Lichtmangel.';
+
+  @override
+  String get diagnosisEvidenceDirectSunlight =>
+      'Deine Pflanze erhält direktes Sonnenlicht.';
+
+  @override
+  String get diagnosisEvidenceSunburnSigns =>
+      'Braune, verbrannte Flecken können auf Sonnenschäden hinweisen.';
+
+  @override
+  String get diagnosisEvidenceLowHumidityEnvironment =>
+      'Die Luftfeuchtigkeit in der Umgebung ist niedrig.';
+
+  @override
+  String get diagnosisEvidenceLowHumiditySigns =>
+      'Braune Blattspitzen und eingerollte Blätter treten häufig bei trockener Raumluft auf.';
+
+  @override
+  String get diagnosisEvidenceNotFertilizedRecently =>
+      'Du hast in letzter Zeit nicht gedüngt.';
+
+  @override
+  String get diagnosisEvidenceNutrientSigns =>
+      'Blasses oder vergilbendes Wachstum kann auf einen Nährstoffmangel hinweisen.';
+
+  @override
+  String get diagnosisEvidenceFrequentWateringRootProblems =>
+      'Häufiges Gießen kann zu Wurzelproblemen führen.';
+
+  @override
+  String get diagnosisEvidenceRootProblemSigns =>
+      'Welken trotz feuchter Erde und fauliger Geruch sind Anzeichen für Wurzelprobleme.';
+
+  @override
+  String get diagnosisEvidencePestSignsObserved =>
+      'Du hast Anzeichen für Schädlinge bemerkt.';
+
+  @override
+  String get diagnosisEvidencePestInfestationSigns =>
+      'Sichtbare Insekten, klebrige Rückstände und Blattschäden können auf Schädlingsbefall hinweisen.';
+
+  @override
+  String get diagnosisEvidenceDefault =>
+      'Auf Grundlage deiner Antworten wurde diese Ursache als Möglichkeit erkannt.';
+
+  @override
+  String get diagnosisFallbackEvidence =>
+      'Anhand der bereitgestellten Informationen stach keine einzelne Ursache hervor. Das Problem könnte durch Faktoren verursacht werden, die der Fragebogen nicht abdeckt.';
+
+  @override
+  String get diagnosisActionOverwateringDrySoil =>
+      'Lass die oberen 5–8 cm der Erde trocknen, bevor du erneut gießt.';
+
+  @override
+  String get diagnosisActionOverwateringDrainage =>
+      'Prüfe, ob der Topf Abflusslöcher hat, und leere den Untersetzer nach dem Gießen.';
+
+  @override
+  String get diagnosisActionOverwateringTrimRoots =>
+      'Nimm die Pflanze bei Verdacht auf Wurzelfäule heraus und entferne braune, weiche Wurzeln.';
+
+  @override
+  String get diagnosisActionUnderwateringWaterThoroughly =>
+      'Gieße die Pflanze gründlich, bis Wasser unten aus dem Topf läuft.';
+
+  @override
+  String get diagnosisActionUnderwateringSchedule =>
+      'Lege einen regelmäßigen, an den Bedarf der Pflanze angepassten Gießplan fest.';
+
+  @override
+  String get diagnosisActionUnderwateringBottomWater =>
+      'Ziehe eine Bewässerung von unten in Betracht, um tieferes Wurzelwachstum zu fördern.';
+
+  @override
+  String get diagnosisActionLowLightMovePlant =>
+      'Stelle die Pflanze näher an ein Fenster oder an einen helleren Standort.';
+
+  @override
+  String get diagnosisActionLowLightGrowLight =>
+      'Erwäge eine Pflanzenlampe, wenn nur wenig natürliches Licht vorhanden ist.';
+
+  @override
+  String get diagnosisActionLowLightRotate =>
+      'Drehe die Pflanze regelmäßig, damit alle Seiten Licht erhalten.';
+
+  @override
+  String get diagnosisActionSunburnIndirectLight =>
+      'Stelle die Pflanze an einen Ort mit indirektem oder gefiltertem Licht.';
+
+  @override
+  String get diagnosisActionSunburnCurtain =>
+      'Verwende einen lichtdurchlässigen Vorhang, um direktes Sonnenlicht abzumildern.';
+
+  @override
+  String get diagnosisActionSunburnRemoveLeaves =>
+      'Entferne stark verbrannte Blätter, sobald sich die Pflanze angepasst hat.';
+
+  @override
+  String get diagnosisActionLowHumidityMist =>
+      'Besprühe die Pflanze regelmäßig oder stelle einen Luftbefeuchter in die Nähe.';
+
+  @override
+  String get diagnosisActionLowHumidityGroupPlants =>
+      'Gruppiere Pflanzen mit hohem Feuchtigkeitsbedarf, um ein Mikroklima zu schaffen.';
+
+  @override
+  String get diagnosisActionLowHumidityPebbleTray =>
+      'Stelle den Topf auf eine mit Wasser gefüllte Kieselschale; der Topf darf nicht im Wasser stehen.';
+
+  @override
+  String get diagnosisActionNutrientsFertilize =>
+      'Verwende während der Wachstumszeit einen ausgewogenen Flüssigdünger in halber Konzentration.';
+
+  @override
+  String get diagnosisActionNutrientsRepot =>
+      'Prüfe, ob die Pflanze stark durchwurzelt ist und in frische Erde umgetopft werden muss.';
+
+  @override
+  String get diagnosisActionNutrientsCheckPh =>
+      'Stelle sicher, dass der pH-Wert der Erde für die Pflanzenart geeignet ist.';
+
+  @override
+  String get diagnosisActionRootsInspect =>
+      'Nimm die Pflanze aus dem Topf und untersuche die Wurzeln.';
+
+  @override
+  String get diagnosisActionRootsTrim =>
+      'Entferne braune, weiche oder übel riechende Wurzeln mit einer sterilen Schere.';
+
+  @override
+  String get diagnosisActionRootsRepot =>
+      'Topfe die Pflanze in frische, gut durchlässige Erde um und gieße seltener.';
+
+  @override
+  String get diagnosisActionPestsIsolate =>
+      'Isoliere die betroffene Pflanze, damit sich die Schädlinge nicht ausbreiten.';
+
+  @override
+  String get diagnosisActionPestsTreat =>
+      'Wische die Blätter mit einem feuchten Tuch ab oder besprühe sie mit einer Neemöllösung.';
+
+  @override
+  String get diagnosisActionPestsInspect =>
+      'Prüfe Blattunterseiten und Blattachseln, wo sich Schädlinge häufig verstecken.';
+
+  @override
+  String get diagnosisActionDefaultCare =>
+      'Stelle sicher, dass deine Pflanze für ihre Art geeignete Licht- und Wassermengen erhält.';
+
+  @override
+  String get diagnosisActionDefaultMoisture =>
+      'Prüfe die Bodenfeuchtigkeit vor dem Gießen.';
+
+  @override
+  String get diagnosisCheckOverwateringRoots =>
+      'Prüfe die Wurzeln: Gesunde Wurzeln sind fest und weiß, faule Wurzeln braun und weich.';
+
+  @override
+  String get diagnosisCheckOverwateringMoisture =>
+      'Beobachte die Bodenfeuchtigkeit — die Erde sollte zwischen dem Gießen trocknen.';
+
+  @override
+  String get diagnosisCheckUnderwateringRootBall =>
+      'Prüfe den Wurzelballen: Hat er sich vom Topfrand gelöst, ist die Erde zu trocken.';
+
+  @override
+  String get diagnosisCheckUnderwateringSoil =>
+      'Fühle etwa 5 cm tief in die Erde — sie sollte leicht feucht und nicht völlig trocken sein.';
+
+  @override
+  String get diagnosisCheckLowLightGrowth =>
+      'Beobachte, ob neues Wachstum nach dem Umstellen an einen helleren Ort weiterhin vergeilt.';
+
+  @override
+  String get diagnosisCheckLowLightHours =>
+      'Notiere, wie viele Stunden Licht die Pflanze täglich erhält.';
+
+  @override
+  String get diagnosisCheckSunburnPatches =>
+      'Prüfe, ob sich die braunen Flecken nach dem Umstellen nicht weiter ausbreiten.';
+
+  @override
+  String get diagnosisCheckSunburnNewLeaves =>
+      'Beobachte neue Blätter — sie sollten ohne braune Flecken wachsen.';
+
+  @override
+  String get diagnosisCheckLowHumidityTips =>
+      'Prüfe, ob nach dem Erhöhen der Luftfeuchtigkeit keine neuen braunen Spitzen entstehen.';
+
+  @override
+  String get diagnosisCheckLowHumidityMeasure =>
+      'Miss die tatsächliche Luftfeuchtigkeit in Pflanzennähe mit einem Hygrometer.';
+
+  @override
+  String get diagnosisCheckNutrientsGrowth =>
+      'Beobachte nach dem Düngen, ob neues Wachstum innerhalb von 2–3 Wochen gesünder aussieht.';
+
+  @override
+  String get diagnosisCheckNutrientsRoots =>
+      'Prüfe, ob die Erde verdichtet oder die Pflanze stark durchwurzelt ist.';
+
+  @override
+  String get diagnosisCheckRootsHealthy =>
+      'Gesunde Wurzeln sind fest und weiß oder hellbraun. Faule Wurzeln sind braun, schwarz oder weich.';
+
+  @override
+  String get diagnosisCheckRootsRecovery =>
+      'Warte nach dem Umtopfen eine Woche mit dem Gießen, damit sich die Wurzeln erholen können.';
+
+  @override
+  String get diagnosisCheckPestsWeekly =>
+      'Untersuche die Pflanze 3–4 Wochen lang wöchentlich, um sicherzustellen, dass der Befall beseitigt ist.';
+
+  @override
+  String get diagnosisCheckPestsNearbyPlants =>
+      'Prüfe Pflanzen in der Nähe auf Anzeichen einer Ausbreitung.';
+
+  @override
+  String get diagnosisCheckDefaultMoreDetails =>
+      'Fülle den Fragebogen erneut mit weiteren Details aus.';
+
+  @override
+  String get diagnosisCheckDefaultExpert =>
+      'Wende dich für artspezifische Beratung an eine Fachperson für Pflanzenpflege.';
+
+  @override
+  String get diagnosisFallbackActionLight =>
+      'Stelle sicher, dass deine Pflanze für ihre Art geeignete Lichtverhältnisse erhält.';
+
+  @override
+  String get diagnosisFallbackActionMoisture =>
+      'Prüfe die Bodenfeuchtigkeit vor dem Gießen — zu viel und zu wenig Wasser sind die häufigsten Probleme.';
+
+  @override
+  String get diagnosisFallbackActionInspect =>
+      'Untersuche Blätter und Stängel sorgfältig auf ungewöhnliche Flecken, Schädlinge oder Veränderungen der Oberfläche.';
+
+  @override
+  String get diagnosisFallbackCheckMoreDetails =>
+      'Fülle den Fragebogen erneut mit weiteren Angaben zur Umgebung deiner Pflanze aus.';
+
+  @override
+  String get diagnosisFallbackCheckCommunity =>
+      'Wende dich für artspezifische Beratung an ein Pflanzengeschäft vor Ort oder eine Online-Community.';
 }

@@ -1891,6 +1891,990 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Failed to save rule: {error}'**
   String careRulesSaveFailed(Object error);
+
+  /// No description provided for @diagnosisTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Plant Diagnosis'**
+  String get diagnosisTitle;
+
+  /// No description provided for @diagnosisSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Diagnose plant problems'**
+  String get diagnosisSubtitle;
+
+  /// No description provided for @diagnosisStep.
+  ///
+  /// In en, this message translates to:
+  /// **'Step'**
+  String get diagnosisStep;
+
+  /// Current position in the diagnosis questionnaire
+  ///
+  /// In en, this message translates to:
+  /// **'Step {currentStep}/{totalSteps}'**
+  String diagnosisStepProgress(int currentStep, int totalSteps);
+
+  /// No description provided for @diagnosisStepSymptoms.
+  ///
+  /// In en, this message translates to:
+  /// **'Symptoms'**
+  String get diagnosisStepSymptoms;
+
+  /// No description provided for @diagnosisStepContext.
+  ///
+  /// In en, this message translates to:
+  /// **'Environment'**
+  String get diagnosisStepContext;
+
+  /// No description provided for @diagnosisStepDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Details'**
+  String get diagnosisStepDetails;
+
+  /// No description provided for @diagnosisStepReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Review'**
+  String get diagnosisStepReview;
+
+  /// No description provided for @diagnosisSelectSymptoms.
+  ///
+  /// In en, this message translates to:
+  /// **'What symptoms do you see on your plant? (select at least one)'**
+  String get diagnosisSelectSymptoms;
+
+  /// No description provided for @diagnosisSymptomRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select at least one symptom'**
+  String get diagnosisSymptomRequired;
+
+  /// No description provided for @diagnosisEnvironmentTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Tell us about your plant\'s environment'**
+  String get diagnosisEnvironmentTitle;
+
+  /// No description provided for @diagnosisWateringFrequency.
+  ///
+  /// In en, this message translates to:
+  /// **'Watering Frequency'**
+  String get diagnosisWateringFrequency;
+
+  /// No description provided for @diagnosisLightExposure.
+  ///
+  /// In en, this message translates to:
+  /// **'Light Exposure'**
+  String get diagnosisLightExposure;
+
+  /// No description provided for @diagnosisHumidityLevel.
+  ///
+  /// In en, this message translates to:
+  /// **'Humidity Level'**
+  String get diagnosisHumidityLevel;
+
+  /// No description provided for @diagnosisPotType.
+  ///
+  /// In en, this message translates to:
+  /// **'Pot Type'**
+  String get diagnosisPotType;
+
+  /// No description provided for @diagnosisSoilType.
+  ///
+  /// In en, this message translates to:
+  /// **'Soil Type'**
+  String get diagnosisSoilType;
+
+  /// No description provided for @diagnosisAdditionalInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Additional information'**
+  String get diagnosisAdditionalInfo;
+
+  /// No description provided for @diagnosisPlantSpecies.
+  ///
+  /// In en, this message translates to:
+  /// **'Plant Species (optional)'**
+  String get diagnosisPlantSpecies;
+
+  /// No description provided for @diagnosisPlantSpeciesHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. Monstera deliciosa, Snake Plant'**
+  String get diagnosisPlantSpeciesHint;
+
+  /// No description provided for @diagnosisRecentFertilizing.
+  ///
+  /// In en, this message translates to:
+  /// **'Recent Fertilizing'**
+  String get diagnosisRecentFertilizing;
+
+  /// No description provided for @diagnosisRecentFertilizingHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Have you fertilized in the last 3 months?'**
+  String get diagnosisRecentFertilizingHint;
+
+  /// No description provided for @diagnosisPestSigns.
+  ///
+  /// In en, this message translates to:
+  /// **'Pest Signs'**
+  String get diagnosisPestSigns;
+
+  /// No description provided for @diagnosisPestSignsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Have you noticed any insects, webs, or sticky residue?'**
+  String get diagnosisPestSignsHint;
+
+  /// No description provided for @diagnosisReviewTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Review your answers'**
+  String get diagnosisReviewTitle;
+
+  /// No description provided for @diagnosisReviewSymptoms.
+  ///
+  /// In en, this message translates to:
+  /// **'Symptoms'**
+  String get diagnosisReviewSymptoms;
+
+  /// No description provided for @diagnosisReviewWatering.
+  ///
+  /// In en, this message translates to:
+  /// **'Watering'**
+  String get diagnosisReviewWatering;
+
+  /// No description provided for @diagnosisReviewLight.
+  ///
+  /// In en, this message translates to:
+  /// **'Light'**
+  String get diagnosisReviewLight;
+
+  /// No description provided for @diagnosisReviewHumidity.
+  ///
+  /// In en, this message translates to:
+  /// **'Humidity'**
+  String get diagnosisReviewHumidity;
+
+  /// No description provided for @diagnosisReviewPotType.
+  ///
+  /// In en, this message translates to:
+  /// **'Pot Type'**
+  String get diagnosisReviewPotType;
+
+  /// No description provided for @diagnosisReviewSoil.
+  ///
+  /// In en, this message translates to:
+  /// **'Soil'**
+  String get diagnosisReviewSoil;
+
+  /// No description provided for @diagnosisReviewSpecies.
+  ///
+  /// In en, this message translates to:
+  /// **'Species'**
+  String get diagnosisReviewSpecies;
+
+  /// No description provided for @diagnosisReviewRecentlyFertilized.
+  ///
+  /// In en, this message translates to:
+  /// **'Fertilized recently'**
+  String get diagnosisReviewRecentlyFertilized;
+
+  /// No description provided for @diagnosisReviewPestSigns.
+  ///
+  /// In en, this message translates to:
+  /// **'Pest signs'**
+  String get diagnosisReviewPestSigns;
+
+  /// No description provided for @diagnosisAnswerYes.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes'**
+  String get diagnosisAnswerYes;
+
+  /// No description provided for @diagnosisAnswerNo.
+  ///
+  /// In en, this message translates to:
+  /// **'No'**
+  String get diagnosisAnswerNo;
+
+  /// No description provided for @diagnosisAnswerUnknown.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown'**
+  String get diagnosisAnswerUnknown;
+
+  /// No description provided for @diagnosisStartDiagnosis.
+  ///
+  /// In en, this message translates to:
+  /// **'Start Diagnosis'**
+  String get diagnosisStartDiagnosis;
+
+  /// No description provided for @diagnosisEvaluating.
+  ///
+  /// In en, this message translates to:
+  /// **'Evaluating...'**
+  String get diagnosisEvaluating;
+
+  /// No description provided for @diagnosisResultsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Diagnosis Results'**
+  String get diagnosisResultsTitle;
+
+  /// No description provided for @diagnosisNoClearMatch.
+  ///
+  /// In en, this message translates to:
+  /// **'No Clear Match'**
+  String get diagnosisNoClearMatch;
+
+  /// No description provided for @diagnosisNoClearMatchDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Based on the information provided, we couldn\'t identify a specific cause. This doesn\'t mean your plant is fine — it may need attention for a reason not covered by this questionnaire.'**
+  String get diagnosisNoClearMatchDesc;
+
+  /// No description provided for @diagnosisGeneralSuggestions.
+  ///
+  /// In en, this message translates to:
+  /// **'General Suggestions:'**
+  String get diagnosisGeneralSuggestions;
+
+  /// No description provided for @diagnosisSuggestionAppropriateLight.
+  ///
+  /// In en, this message translates to:
+  /// **'Ensure your plant receives appropriate light for its species.'**
+  String get diagnosisSuggestionAppropriateLight;
+
+  /// No description provided for @diagnosisSuggestionCheckSoilMoisture.
+  ///
+  /// In en, this message translates to:
+  /// **'Check the soil moisture before watering — over- and under-watering are the most common issues.'**
+  String get diagnosisSuggestionCheckSoilMoisture;
+
+  /// No description provided for @diagnosisSuggestionInspectPlant.
+  ///
+  /// In en, this message translates to:
+  /// **'Inspect the leaves and stems closely for any unusual spots, pests, or texture changes.'**
+  String get diagnosisSuggestionInspectPlant;
+
+  /// No description provided for @diagnosisSuggestionConsiderRepotting.
+  ///
+  /// In en, this message translates to:
+  /// **'Consider repotting if the plant has been in the same soil for over a year.'**
+  String get diagnosisSuggestionConsiderRepotting;
+
+  /// No description provided for @diagnosisTryAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Try Again with More Details'**
+  String get diagnosisTryAgain;
+
+  /// No description provided for @diagnosisStartOver.
+  ///
+  /// In en, this message translates to:
+  /// **'Start Over'**
+  String get diagnosisStartOver;
+
+  /// No description provided for @diagnosisEmptyInputTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No Symptoms Selected'**
+  String get diagnosisEmptyInputTitle;
+
+  /// No description provided for @diagnosisEmptyInputDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Select at least one symptom before starting a diagnosis.'**
+  String get diagnosisEmptyInputDesc;
+
+  /// No description provided for @diagnosisDisclaimer.
+  ///
+  /// In en, this message translates to:
+  /// **'This is a suggestion based on the information you provided. It is not a definitive diagnosis. Consult a plant care expert for serious concerns.'**
+  String get diagnosisDisclaimer;
+
+  /// No description provided for @diagnosisRecommendedActions.
+  ///
+  /// In en, this message translates to:
+  /// **'Recommended Actions'**
+  String get diagnosisRecommendedActions;
+
+  /// No description provided for @diagnosisFollowUpChecks.
+  ///
+  /// In en, this message translates to:
+  /// **'Follow-up Checks'**
+  String get diagnosisFollowUpChecks;
+
+  /// No description provided for @diagnosisCauseOverwatering.
+  ///
+  /// In en, this message translates to:
+  /// **'Overwatering'**
+  String get diagnosisCauseOverwatering;
+
+  /// No description provided for @diagnosisCauseUnderwatering.
+  ///
+  /// In en, this message translates to:
+  /// **'Underwatering'**
+  String get diagnosisCauseUnderwatering;
+
+  /// No description provided for @diagnosisCauseLowLight.
+  ///
+  /// In en, this message translates to:
+  /// **'Insufficient Light'**
+  String get diagnosisCauseLowLight;
+
+  /// No description provided for @diagnosisCauseSunburn.
+  ///
+  /// In en, this message translates to:
+  /// **'Sunburn / Light Damage'**
+  String get diagnosisCauseSunburn;
+
+  /// No description provided for @diagnosisCauseLowHumidity.
+  ///
+  /// In en, this message translates to:
+  /// **'Low Humidity'**
+  String get diagnosisCauseLowHumidity;
+
+  /// No description provided for @diagnosisCauseNutrientProblem.
+  ///
+  /// In en, this message translates to:
+  /// **'Nutrient Deficiency'**
+  String get diagnosisCauseNutrientProblem;
+
+  /// No description provided for @diagnosisCauseRootIssue.
+  ///
+  /// In en, this message translates to:
+  /// **'Root Problems'**
+  String get diagnosisCauseRootIssue;
+
+  /// No description provided for @diagnosisCausePests.
+  ///
+  /// In en, this message translates to:
+  /// **'Pest Infestation'**
+  String get diagnosisCausePests;
+
+  /// No description provided for @diagnosisCauseNoClearMatch.
+  ///
+  /// In en, this message translates to:
+  /// **'No Clear Match'**
+  String get diagnosisCauseNoClearMatch;
+
+  /// No description provided for @diagnosisConfidenceHigh.
+  ///
+  /// In en, this message translates to:
+  /// **'High'**
+  String get diagnosisConfidenceHigh;
+
+  /// No description provided for @diagnosisConfidenceMedium.
+  ///
+  /// In en, this message translates to:
+  /// **'Medium'**
+  String get diagnosisConfidenceMedium;
+
+  /// No description provided for @diagnosisConfidenceLow.
+  ///
+  /// In en, this message translates to:
+  /// **'Low'**
+  String get diagnosisConfidenceLow;
+
+  /// No description provided for @diagnosisWateringFrequent.
+  ///
+  /// In en, this message translates to:
+  /// **'Frequent'**
+  String get diagnosisWateringFrequent;
+
+  /// No description provided for @diagnosisWateringNormal.
+  ///
+  /// In en, this message translates to:
+  /// **'Normal'**
+  String get diagnosisWateringNormal;
+
+  /// No description provided for @diagnosisWateringInfrequent.
+  ///
+  /// In en, this message translates to:
+  /// **'Infrequent'**
+  String get diagnosisWateringInfrequent;
+
+  /// No description provided for @diagnosisLightLow.
+  ///
+  /// In en, this message translates to:
+  /// **'Low Light'**
+  String get diagnosisLightLow;
+
+  /// No description provided for @diagnosisLightIndirect.
+  ///
+  /// In en, this message translates to:
+  /// **'Indirect Light'**
+  String get diagnosisLightIndirect;
+
+  /// No description provided for @diagnosisLightDirect.
+  ///
+  /// In en, this message translates to:
+  /// **'Direct Sun'**
+  String get diagnosisLightDirect;
+
+  /// No description provided for @diagnosisHumidityLow.
+  ///
+  /// In en, this message translates to:
+  /// **'Low'**
+  String get diagnosisHumidityLow;
+
+  /// No description provided for @diagnosisHumidityModerate.
+  ///
+  /// In en, this message translates to:
+  /// **'Moderate'**
+  String get diagnosisHumidityModerate;
+
+  /// No description provided for @diagnosisHumidityHigh.
+  ///
+  /// In en, this message translates to:
+  /// **'High'**
+  String get diagnosisHumidityHigh;
+
+  /// No description provided for @diagnosisPotStandard.
+  ///
+  /// In en, this message translates to:
+  /// **'Standard'**
+  String get diagnosisPotStandard;
+
+  /// No description provided for @diagnosisPotSelfWatering.
+  ///
+  /// In en, this message translates to:
+  /// **'Self-Watering'**
+  String get diagnosisPotSelfWatering;
+
+  /// No description provided for @diagnosisPotNoDrainage.
+  ///
+  /// In en, this message translates to:
+  /// **'No Drainage'**
+  String get diagnosisPotNoDrainage;
+
+  /// No description provided for @diagnosisSoilStandard.
+  ///
+  /// In en, this message translates to:
+  /// **'Standard Potting Mix'**
+  String get diagnosisSoilStandard;
+
+  /// No description provided for @diagnosisSoilSucculent.
+  ///
+  /// In en, this message translates to:
+  /// **'Succulent Mix'**
+  String get diagnosisSoilSucculent;
+
+  /// No description provided for @diagnosisSoilOrchid.
+  ///
+  /// In en, this message translates to:
+  /// **'Orchid Mix'**
+  String get diagnosisSoilOrchid;
+
+  /// No description provided for @diagnosisSoilCactus.
+  ///
+  /// In en, this message translates to:
+  /// **'Cactus Mix'**
+  String get diagnosisSoilCactus;
+
+  /// No description provided for @diagnosisSymptomYellowingLeaves.
+  ///
+  /// In en, this message translates to:
+  /// **'Yellowing Leaves'**
+  String get diagnosisSymptomYellowingLeaves;
+
+  /// No description provided for @diagnosisSymptomDroopingWilt.
+  ///
+  /// In en, this message translates to:
+  /// **'Drooping / Wilting'**
+  String get diagnosisSymptomDroopingWilt;
+
+  /// No description provided for @diagnosisSymptomBrownTips.
+  ///
+  /// In en, this message translates to:
+  /// **'Brown Tips / Crispy Edges'**
+  String get diagnosisSymptomBrownTips;
+
+  /// No description provided for @diagnosisSymptomBrownPatches.
+  ///
+  /// In en, this message translates to:
+  /// **'Brown Patches / Scorched Spots'**
+  String get diagnosisSymptomBrownPatches;
+
+  /// No description provided for @diagnosisSymptomPaleLeaves.
+  ///
+  /// In en, this message translates to:
+  /// **'Pale Leaves'**
+  String get diagnosisSymptomPaleLeaves;
+
+  /// No description provided for @diagnosisSymptomLeggyGrowth.
+  ///
+  /// In en, this message translates to:
+  /// **'Leggy Growth'**
+  String get diagnosisSymptomLeggyGrowth;
+
+  /// No description provided for @diagnosisSymptomVisibleInsects.
+  ///
+  /// In en, this message translates to:
+  /// **'Visible Insects / Webs'**
+  String get diagnosisSymptomVisibleInsects;
+
+  /// No description provided for @diagnosisSymptomStickyResidue.
+  ///
+  /// In en, this message translates to:
+  /// **'Sticky Residue'**
+  String get diagnosisSymptomStickyResidue;
+
+  /// No description provided for @diagnosisSymptomMoldOnSoil.
+  ///
+  /// In en, this message translates to:
+  /// **'Mold on Soil'**
+  String get diagnosisSymptomMoldOnSoil;
+
+  /// No description provided for @diagnosisSymptomFoulSmell.
+  ///
+  /// In en, this message translates to:
+  /// **'Foul Smell'**
+  String get diagnosisSymptomFoulSmell;
+
+  /// No description provided for @diagnosisSymptomStuntedGrowth.
+  ///
+  /// In en, this message translates to:
+  /// **'Stunted Growth'**
+  String get diagnosisSymptomStuntedGrowth;
+
+  /// No description provided for @diagnosisSymptomLeafCurling.
+  ///
+  /// In en, this message translates to:
+  /// **'Leaf Curling'**
+  String get diagnosisSymptomLeafCurling;
+
+  /// No description provided for @diagnosisSymptomLeafDrop.
+  ///
+  /// In en, this message translates to:
+  /// **'Leaf Drop'**
+  String get diagnosisSymptomLeafDrop;
+
+  /// No description provided for @diagnosisDiagnoseThisPlant.
+  ///
+  /// In en, this message translates to:
+  /// **'Diagnose this plant'**
+  String get diagnosisDiagnoseThisPlant;
+
+  /// Introduces the symptoms that contributed to a diagnosis result
+  ///
+  /// In en, this message translates to:
+  /// **'You reported {symptoms}.'**
+  String diagnosisEvidenceReportedSymptoms(String symptoms);
+
+  /// No description provided for @diagnosisEvidenceFrequentWateringTooWet.
+  ///
+  /// In en, this message translates to:
+  /// **'You water frequently, which can keep the soil too wet.'**
+  String get diagnosisEvidenceFrequentWateringTooWet;
+
+  /// No description provided for @diagnosisEvidenceNoDrainage.
+  ///
+  /// In en, this message translates to:
+  /// **'Your pot has no drainage holes, which traps excess water.'**
+  String get diagnosisEvidenceNoDrainage;
+
+  /// No description provided for @diagnosisEvidenceOverwateringSigns.
+  ///
+  /// In en, this message translates to:
+  /// **'These are common signs of overwatering.'**
+  String get diagnosisEvidenceOverwateringSigns;
+
+  /// No description provided for @diagnosisEvidenceInfrequentWateringTooDry.
+  ///
+  /// In en, this message translates to:
+  /// **'You water infrequently, which may leave the soil too dry.'**
+  String get diagnosisEvidenceInfrequentWateringTooDry;
+
+  /// No description provided for @diagnosisEvidenceUnderwateringSigns.
+  ///
+  /// In en, this message translates to:
+  /// **'These are common signs of underwatering.'**
+  String get diagnosisEvidenceUnderwateringSigns;
+
+  /// No description provided for @diagnosisEvidenceLowLightExposure.
+  ///
+  /// In en, this message translates to:
+  /// **'Your plant receives low light.'**
+  String get diagnosisEvidenceLowLightExposure;
+
+  /// No description provided for @diagnosisEvidenceLowLightSigns.
+  ///
+  /// In en, this message translates to:
+  /// **'Leggy growth and pale leaves are typical signs of insufficient light.'**
+  String get diagnosisEvidenceLowLightSigns;
+
+  /// No description provided for @diagnosisEvidenceDirectSunlight.
+  ///
+  /// In en, this message translates to:
+  /// **'Your plant receives direct sunlight.'**
+  String get diagnosisEvidenceDirectSunlight;
+
+  /// No description provided for @diagnosisEvidenceSunburnSigns.
+  ///
+  /// In en, this message translates to:
+  /// **'Brown scorched patches can indicate sun damage.'**
+  String get diagnosisEvidenceSunburnSigns;
+
+  /// No description provided for @diagnosisEvidenceLowHumidityEnvironment.
+  ///
+  /// In en, this message translates to:
+  /// **'The humidity in your environment is low.'**
+  String get diagnosisEvidenceLowHumidityEnvironment;
+
+  /// No description provided for @diagnosisEvidenceLowHumiditySigns.
+  ///
+  /// In en, this message translates to:
+  /// **'Brown leaf tips and curling are common in dry indoor air.'**
+  String get diagnosisEvidenceLowHumiditySigns;
+
+  /// No description provided for @diagnosisEvidenceNotFertilizedRecently.
+  ///
+  /// In en, this message translates to:
+  /// **'You haven\'t fertilized recently.'**
+  String get diagnosisEvidenceNotFertilizedRecently;
+
+  /// No description provided for @diagnosisEvidenceNutrientSigns.
+  ///
+  /// In en, this message translates to:
+  /// **'Pale or yellowing growth can indicate nutrient deficiency.'**
+  String get diagnosisEvidenceNutrientSigns;
+
+  /// No description provided for @diagnosisEvidenceFrequentWateringRootProblems.
+  ///
+  /// In en, this message translates to:
+  /// **'Frequent watering can lead to root problems.'**
+  String get diagnosisEvidenceFrequentWateringRootProblems;
+
+  /// No description provided for @diagnosisEvidenceRootProblemSigns.
+  ///
+  /// In en, this message translates to:
+  /// **'Wilting despite moist soil and foul smell are signs of root issues.'**
+  String get diagnosisEvidenceRootProblemSigns;
+
+  /// No description provided for @diagnosisEvidencePestSignsObserved.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ve noticed signs of pests.'**
+  String get diagnosisEvidencePestSignsObserved;
+
+  /// No description provided for @diagnosisEvidencePestInfestationSigns.
+  ///
+  /// In en, this message translates to:
+  /// **'Visible insects, sticky residue, and leaf damage can indicate pest infestation.'**
+  String get diagnosisEvidencePestInfestationSigns;
+
+  /// No description provided for @diagnosisEvidenceDefault.
+  ///
+  /// In en, this message translates to:
+  /// **'Based on your answers, this cause was identified as a possibility.'**
+  String get diagnosisEvidenceDefault;
+
+  /// No description provided for @diagnosisFallbackEvidence.
+  ///
+  /// In en, this message translates to:
+  /// **'No single cause stood out based on the information provided. This could mean the issue is caused by factors not covered by the questionnaire.'**
+  String get diagnosisFallbackEvidence;
+
+  /// No description provided for @diagnosisActionOverwateringDrySoil.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow the top 2-3 inches of soil to dry before watering again.'**
+  String get diagnosisActionOverwateringDrySoil;
+
+  /// No description provided for @diagnosisActionOverwateringDrainage.
+  ///
+  /// In en, this message translates to:
+  /// **'Check that your pot has drainage holes and empty the saucer after watering.'**
+  String get diagnosisActionOverwateringDrainage;
+
+  /// No description provided for @diagnosisActionOverwateringTrimRoots.
+  ///
+  /// In en, this message translates to:
+  /// **'If root rot is suspected, remove the plant and trim any brown, mushy roots.'**
+  String get diagnosisActionOverwateringTrimRoots;
+
+  /// No description provided for @diagnosisActionUnderwateringWaterThoroughly.
+  ///
+  /// In en, this message translates to:
+  /// **'Water the plant thoroughly until water drains from the bottom.'**
+  String get diagnosisActionUnderwateringWaterThoroughly;
+
+  /// No description provided for @diagnosisActionUnderwateringSchedule.
+  ///
+  /// In en, this message translates to:
+  /// **'Establish a regular watering schedule based on the plant\'s needs.'**
+  String get diagnosisActionUnderwateringSchedule;
+
+  /// No description provided for @diagnosisActionUnderwateringBottomWater.
+  ///
+  /// In en, this message translates to:
+  /// **'Consider bottom-watering to encourage deeper root growth.'**
+  String get diagnosisActionUnderwateringBottomWater;
+
+  /// No description provided for @diagnosisActionLowLightMovePlant.
+  ///
+  /// In en, this message translates to:
+  /// **'Move the plant closer to a window or to a brighter location.'**
+  String get diagnosisActionLowLightMovePlant;
+
+  /// No description provided for @diagnosisActionLowLightGrowLight.
+  ///
+  /// In en, this message translates to:
+  /// **'Consider adding a grow light if natural light is limited.'**
+  String get diagnosisActionLowLightGrowLight;
+
+  /// No description provided for @diagnosisActionLowLightRotate.
+  ///
+  /// In en, this message translates to:
+  /// **'Rotate the plant regularly so all sides receive light.'**
+  String get diagnosisActionLowLightRotate;
+
+  /// No description provided for @diagnosisActionSunburnIndirectLight.
+  ///
+  /// In en, this message translates to:
+  /// **'Move the plant to a spot with indirect or filtered light.'**
+  String get diagnosisActionSunburnIndirectLight;
+
+  /// No description provided for @diagnosisActionSunburnCurtain.
+  ///
+  /// In en, this message translates to:
+  /// **'Use a sheer curtain to diffuse direct sunlight.'**
+  String get diagnosisActionSunburnCurtain;
+
+  /// No description provided for @diagnosisActionSunburnRemoveLeaves.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove severely burned leaves once the plant has adjusted.'**
+  String get diagnosisActionSunburnRemoveLeaves;
+
+  /// No description provided for @diagnosisActionLowHumidityMist.
+  ///
+  /// In en, this message translates to:
+  /// **'Mist the plant regularly or place a humidifier nearby.'**
+  String get diagnosisActionLowHumidityMist;
+
+  /// No description provided for @diagnosisActionLowHumidityGroupPlants.
+  ///
+  /// In en, this message translates to:
+  /// **'Group humidity-loving plants together to create a microclimate.'**
+  String get diagnosisActionLowHumidityGroupPlants;
+
+  /// No description provided for @diagnosisActionLowHumidityPebbleTray.
+  ///
+  /// In en, this message translates to:
+  /// **'Place the pot on a pebble tray with water (pot sitting above the water line).'**
+  String get diagnosisActionLowHumidityPebbleTray;
+
+  /// No description provided for @diagnosisActionNutrientsFertilize.
+  ///
+  /// In en, this message translates to:
+  /// **'Apply a balanced liquid fertilizer at half strength during the growing season.'**
+  String get diagnosisActionNutrientsFertilize;
+
+  /// No description provided for @diagnosisActionNutrientsRepot.
+  ///
+  /// In en, this message translates to:
+  /// **'Check if the plant is root-bound and needs repotting with fresh soil.'**
+  String get diagnosisActionNutrientsRepot;
+
+  /// No description provided for @diagnosisActionNutrientsCheckPh.
+  ///
+  /// In en, this message translates to:
+  /// **'Ensure the soil pH is appropriate for the plant species.'**
+  String get diagnosisActionNutrientsCheckPh;
+
+  /// No description provided for @diagnosisActionRootsInspect.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove the plant from the pot and inspect the roots.'**
+  String get diagnosisActionRootsInspect;
+
+  /// No description provided for @diagnosisActionRootsTrim.
+  ///
+  /// In en, this message translates to:
+  /// **'Trim any brown, mushy, or foul-smelling roots with sterile scissors.'**
+  String get diagnosisActionRootsTrim;
+
+  /// No description provided for @diagnosisActionRootsRepot.
+  ///
+  /// In en, this message translates to:
+  /// **'Repot in fresh, well-draining soil and reduce watering frequency.'**
+  String get diagnosisActionRootsRepot;
+
+  /// No description provided for @diagnosisActionPestsIsolate.
+  ///
+  /// In en, this message translates to:
+  /// **'Isolate the affected plant to prevent spreading.'**
+  String get diagnosisActionPestsIsolate;
+
+  /// No description provided for @diagnosisActionPestsTreat.
+  ///
+  /// In en, this message translates to:
+  /// **'Wipe leaves with a damp cloth or spray with neem oil solution.'**
+  String get diagnosisActionPestsTreat;
+
+  /// No description provided for @diagnosisActionPestsInspect.
+  ///
+  /// In en, this message translates to:
+  /// **'Check under leaves and in leaf joints where pests often hide.'**
+  String get diagnosisActionPestsInspect;
+
+  /// No description provided for @diagnosisActionDefaultCare.
+  ///
+  /// In en, this message translates to:
+  /// **'Ensure your plant receives appropriate light and water for its species.'**
+  String get diagnosisActionDefaultCare;
+
+  /// No description provided for @diagnosisActionDefaultMoisture.
+  ///
+  /// In en, this message translates to:
+  /// **'Check the soil moisture before watering.'**
+  String get diagnosisActionDefaultMoisture;
+
+  /// No description provided for @diagnosisCheckOverwateringRoots.
+  ///
+  /// In en, this message translates to:
+  /// **'Check the roots: healthy roots are firm and white, rotten roots are brown and mushy.'**
+  String get diagnosisCheckOverwateringRoots;
+
+  /// No description provided for @diagnosisCheckOverwateringMoisture.
+  ///
+  /// In en, this message translates to:
+  /// **'Monitor soil moisture — it should dry out between waterings.'**
+  String get diagnosisCheckOverwateringMoisture;
+
+  /// No description provided for @diagnosisCheckUnderwateringRootBall.
+  ///
+  /// In en, this message translates to:
+  /// **'Check the root ball: if it has pulled away from the pot edges, the soil is too dry.'**
+  String get diagnosisCheckUnderwateringRootBall;
+
+  /// No description provided for @diagnosisCheckUnderwateringSoil.
+  ///
+  /// In en, this message translates to:
+  /// **'Feel the soil 2 inches down — it should be slightly moist, not bone dry.'**
+  String get diagnosisCheckUnderwateringSoil;
+
+  /// No description provided for @diagnosisCheckLowLightGrowth.
+  ///
+  /// In en, this message translates to:
+  /// **'Observe if new growth is still leggy after moving to a brighter spot.'**
+  String get diagnosisCheckLowLightGrowth;
+
+  /// No description provided for @diagnosisCheckLowLightHours.
+  ///
+  /// In en, this message translates to:
+  /// **'Note how many hours of light the plant receives daily.'**
+  String get diagnosisCheckLowLightHours;
+
+  /// No description provided for @diagnosisCheckSunburnPatches.
+  ///
+  /// In en, this message translates to:
+  /// **'Check if the brown patches stop spreading after moving the plant.'**
+  String get diagnosisCheckSunburnPatches;
+
+  /// No description provided for @diagnosisCheckSunburnNewLeaves.
+  ///
+  /// In en, this message translates to:
+  /// **'Monitor for new leaves — they should grow without brown spots.'**
+  String get diagnosisCheckSunburnNewLeaves;
+
+  /// No description provided for @diagnosisCheckLowHumidityTips.
+  ///
+  /// In en, this message translates to:
+  /// **'Check if brown tips stop appearing after increasing humidity.'**
+  String get diagnosisCheckLowHumidityTips;
+
+  /// No description provided for @diagnosisCheckLowHumidityMeasure.
+  ///
+  /// In en, this message translates to:
+  /// **'Use a hygrometer to measure the actual humidity level near the plant.'**
+  String get diagnosisCheckLowHumidityMeasure;
+
+  /// No description provided for @diagnosisCheckNutrientsGrowth.
+  ///
+  /// In en, this message translates to:
+  /// **'After fertilizing, observe if new growth appears healthier within 2-3 weeks.'**
+  String get diagnosisCheckNutrientsGrowth;
+
+  /// No description provided for @diagnosisCheckNutrientsRoots.
+  ///
+  /// In en, this message translates to:
+  /// **'Check if the soil is compacted or the plant is root-bound.'**
+  String get diagnosisCheckNutrientsRoots;
+
+  /// No description provided for @diagnosisCheckRootsHealthy.
+  ///
+  /// In en, this message translates to:
+  /// **'Healthy roots are firm and white or light tan. Rotten roots are brown, black, or mushy.'**
+  String get diagnosisCheckRootsHealthy;
+
+  /// No description provided for @diagnosisCheckRootsRecovery.
+  ///
+  /// In en, this message translates to:
+  /// **'After repotting, wait a week before watering to let roots recover.'**
+  String get diagnosisCheckRootsRecovery;
+
+  /// No description provided for @diagnosisCheckPestsWeekly.
+  ///
+  /// In en, this message translates to:
+  /// **'Inspect the plant weekly for 3-4 weeks to ensure the pest problem is resolved.'**
+  String get diagnosisCheckPestsWeekly;
+
+  /// No description provided for @diagnosisCheckPestsNearbyPlants.
+  ///
+  /// In en, this message translates to:
+  /// **'Check nearby plants for signs of spreading.'**
+  String get diagnosisCheckPestsNearbyPlants;
+
+  /// No description provided for @diagnosisCheckDefaultMoreDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Try the questionnaire again with more details.'**
+  String get diagnosisCheckDefaultMoreDetails;
+
+  /// No description provided for @diagnosisCheckDefaultExpert.
+  ///
+  /// In en, this message translates to:
+  /// **'Consult a plant care expert for species-specific advice.'**
+  String get diagnosisCheckDefaultExpert;
+
+  /// No description provided for @diagnosisFallbackActionLight.
+  ///
+  /// In en, this message translates to:
+  /// **'Ensure your plant receives appropriate light for its species.'**
+  String get diagnosisFallbackActionLight;
+
+  /// No description provided for @diagnosisFallbackActionMoisture.
+  ///
+  /// In en, this message translates to:
+  /// **'Check the soil moisture before watering — over- and under-watering are the most common issues.'**
+  String get diagnosisFallbackActionMoisture;
+
+  /// No description provided for @diagnosisFallbackActionInspect.
+  ///
+  /// In en, this message translates to:
+  /// **'Inspect the leaves and stems closely for any unusual spots, pests, or texture changes.'**
+  String get diagnosisFallbackActionInspect;
+
+  /// No description provided for @diagnosisFallbackCheckMoreDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Try the questionnaire again with more details about your plant\'s environment.'**
+  String get diagnosisFallbackCheckMoreDetails;
+
+  /// No description provided for @diagnosisFallbackCheckCommunity.
+  ///
+  /// In en, this message translates to:
+  /// **'Consult a local plant shop or online community for species-specific advice.'**
+  String get diagnosisFallbackCheckCommunity;
 }
 
 class _AppLocalizationsDelegate
