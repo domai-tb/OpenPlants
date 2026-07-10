@@ -560,6 +560,16 @@ class AppLocalizationsDe extends AppLocalizations {
   String get careScheduleGoToCollection => 'Zur Pflanzensammlung';
 
   @override
+  String careTaskCompleted(String taskType) {
+    return '$taskType abgeschlossen';
+  }
+
+  @override
+  String careTaskCompletedWithNote(String taskType, String note) {
+    return '$taskType abgeschlossen — $note';
+  }
+
+  @override
   String get symptomLoggerTitle => 'Log Symptom';
 
   @override

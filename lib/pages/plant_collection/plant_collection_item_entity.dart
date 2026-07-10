@@ -91,12 +91,12 @@ class PlantEntity {
   /// and the care timestamps. Used for filtering and UI display.
   ///
   /// Priority (first match wins):
-  /// 1. Explicit override: if stored [careStatus] is [needsWater] or
-  ///    [needsFertilizer], use that value.
-  /// 2. Never watered: if [lastWateredAt] is `null`, status is [needsWater].
+  /// 1. Explicit override: if stored [careStatus] is `CareStatus.needsWater` or
+  ///    `CareStatus.needsFertilizer`, use that value.
+  /// 2. Never watered: if [lastWateredAt] is `null`, status is `CareStatus.needsWater`.
   /// 3. Never fertilized: if [lastFertilizedAt] is `null`, status is
-  ///    [needsFertilizer].
-  /// 4. Otherwise, return the stored [careStatus] (typically [happy]).
+  ///    `CareStatus.needsFertilizer`.
+  /// 4. Otherwise, return the stored [careStatus] (typically `CareStatus.happy`).
   CareStatus get effectiveCareStatus {
     // 1. Explicit override — user-set needsWater/needsFertilizer always wins.
     if (careStatus == CareStatus.needsWater || careStatus == CareStatus.needsFertilizer) {

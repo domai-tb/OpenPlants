@@ -1148,6 +1148,18 @@ abstract class AppLocalizations {
   /// **'Go to Plant Collection'**
   String get careScheduleGoToCollection;
 
+  /// Auto-generated journal entry when a care task is completed
+  ///
+  /// In en, this message translates to:
+  /// **'{taskType} completed'**
+  String careTaskCompleted(String taskType);
+
+  /// Auto-generated journal entry with user note when a care task is completed
+  ///
+  /// In en, this message translates to:
+  /// **'{taskType} completed — {note}'**
+  String careTaskCompletedWithNote(String taskType, String note);
+
   /// No description provided for @symptomLoggerTitle.
   ///
   /// In en, this message translates to:

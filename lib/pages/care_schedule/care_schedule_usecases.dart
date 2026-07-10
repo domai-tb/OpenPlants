@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 import 'package:open_plant/pages/care_schedule/care_task.dart';
 import 'package:open_plant/pages/care_schedule/room_config.dart';
 import 'package:open_plant/pages/care_schedule/schedule_config.dart';
@@ -5,6 +7,8 @@ import 'package:open_plant/pages/care_schedule/schedule_engine.dart';
 import 'package:open_plant/pages/care_schedule/care_schedule_repository.dart';
 import 'package:open_plant/pages/care_schedule/task_completion.dart';
 import 'package:open_plant/pages/plant_collection/plant_collection_usecases.dart';
+import 'package:open_plant/pages/plant_journal/plant_journal_item_entity.dart';
+import 'package:open_plant/pages/plant_journal/plant_journal_usecases.dart';
 import 'package:open_plant/pages/room_profiles/room_profiles_entity.dart';
 import 'package:open_plant/pages/room_profiles/room_profiles_usecases.dart';
 
@@ -12,11 +16,13 @@ import 'package:open_plant/pages/room_profiles/room_profiles_usecases.dart';
 class CareScheduleUsecases {
   final CareScheduleRepository repository;
   final PlantCollectionUsecases plantCollection;
+  final PlantJournalUseCases plantJournal;
   final RoomProfilesUsecases? roomProfiles;
 
   const CareScheduleUsecases({
     required this.repository,
     required this.plantCollection,
+    required this.plantJournal,
     this.roomProfiles,
   });
 
@@ -83,7 +89,7 @@ class CareScheduleUsecases {
     return (tasks: tasks, roomContext: taskRoomContext);
   }
 
-  /// Complete a task — records the completion event.
+  /// Complete a task — records the completion event and auto-journals it.
   Future<List<CareTask>> completeTask({
     required CareTask task,
     String? note,
@@ -96,7 +102,31 @@ class CareScheduleUsecases {
     );
 
     await repository.recordCompletion(completion);
+
+    // Auto-journal the completed task (graceful degradation on failure)
+    try {
+      final notes = _buildJournalNotes(task.taskType.label, note);
+      final entry = JournalEntry(
+        id: '',
+        plantId: task.plantId,
+        type: JournalEntryType.task,
+        timestamp: completion.completedAt,
+        notes: notes,
+      );
+      await plantJournal.addEntry(entry);
+    } catch (e) {
+      debugPrint('Failed to auto-journal care task completion: $e');
+    }
+
     return (await getSchedule()).tasks;
+  }
+
+  /// Build the journal entry notes from task type label and optional user note.
+  String _buildJournalNotes(String taskTypeLabel, String? userNote) {
+    if (userNote != null && userNote.isNotEmpty) {
+      return '$taskTypeLabel completed — $userNote';
+    }
+    return '$taskTypeLabel completed';
   }
 
   /// Snooze a task by deferring it for [days] days.

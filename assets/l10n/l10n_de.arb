@@ -186,6 +186,9 @@
   "careScheduleEmpty": "Fügen Sie Pflanzen hinzu, um Pflegeaufgaben zu sehen",
   "careScheduleGoToCollection": "Zur Pflanzensammlung",
 
+  "careTaskCompleted": "{taskType} abgeschlossen",
+  "careTaskCompletedWithNote": "{taskType} abgeschlossen — {note}",
+
   "journalTitle": "Tagebuch",
   "journalPageTitle": "{plantName} — Tagebuch",
   "journalEmpty": "Noch keine Tagebucheinträge",

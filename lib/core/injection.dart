@@ -131,6 +131,7 @@ Future<void> init() async {
     () => CareScheduleUsecases(
       repository: sl(),
       plantCollection: sl(),
+      plantJournal: sl(),
       roomProfiles: sl(),
     ),
   );

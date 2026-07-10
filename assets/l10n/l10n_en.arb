@@ -192,6 +192,31 @@
   "careScheduleEmpty": "Add plants to see care tasks",
   "careScheduleGoToCollection": "Go to Plant Collection",
 
+  "careTaskCompleted": "{taskType} completed",
+  "@careTaskCompleted": {
+    "description": "Auto-generated journal entry when a care task is completed",
+    "placeholders": {
+      "taskType": {
+        "type": "String",
+        "example": "Watering"
+      }
+    }
+  },
+  "careTaskCompletedWithNote": "{taskType} completed — {note}",
+  "@careTaskCompletedWithNote": {
+    "description": "Auto-generated journal entry with user note when a care task is completed",
+    "placeholders": {
+      "taskType": {
+        "type": "String",
+        "example": "Watering"
+      },
+      "note": {
+        "type": "String",
+        "example": "gave extra due to heat wave"
+      }
+    }
+  },
+
   "symptomLoggerTitle": "Log Symptom",
   "symptomLoggerLogSymptom": "Log Symptom",
   "symptomLoggerSaved": "Symptom logged successfully!",
