@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 
 import 'package:open_plant/core/app_scope.dart';
 import 'package:open_plant/l10n/l10n_x.dart';
-import 'package:open_plant/pages/home/widgets/page_navigation_animation.dart';
 import 'package:open_plant/pages/plant_identification/camera/image_capture_service.dart';
 import 'package:open_plant/pages/plant_identification/classifier/classification_result.dart';
 import 'package:open_plant/pages/plant_identification/classifier/plant_classifier_usecases.dart';
@@ -18,21 +17,22 @@ import 'package:open_plant/pages/species_library/species_library_usecases.dart';
 import 'package:open_plant/pages/species_library/species_detail_page.dart';
 
 class PlantIdentificationPage extends StatefulWidget {
-  final GlobalKey<AnimatedEntryState> pageEntryAnimationKey;
-  final GlobalKey<AnimatedExitState> pageExitAnimationKey;
-  final GlobalKey<NavigatorState> mainNavigatorKey;
-  final VoidCallback? onViewSpeciesLibrary;
-
   const PlantIdentificationPage({
     super.key,
-    required this.pageEntryAnimationKey,
-    required this.pageExitAnimationKey,
-    required this.mainNavigatorKey,
-    this.onViewSpeciesLibrary,
   });
 
   @override
   State<PlantIdentificationPage> createState() => _PlantIdentificationPageState();
+
+  /// Opens the plant identification flow as a full-screen modal bottom sheet.
+  static Future<void> showAsModal(BuildContext context) {
+    return showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      useSafeArea: true,
+      builder: (_) => const PlantIdentificationPage(),
+    );
+  }
 }
 
 class _PlantIdentificationPageState extends State<PlantIdentificationPage> {
@@ -118,31 +118,36 @@ class _PlantIdentificationPageState extends State<PlantIdentificationPage> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return AnimatedExit(
-      key: widget.pageExitAnimationKey,
-      child: AnimatedEntry(
-        key: widget.pageEntryAnimationKey,
-        child: Scaffold(
-          backgroundColor: theme.colorScheme.surface,
-          body: SafeArea(
-            bottom: false,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 20, right: 20, top: 10),
-                  child: Text(
-                    context.l10n.plantIdentificationTitle,
-                    style: theme.textTheme.displayMedium,
+    return Scaffold(
+      backgroundColor: theme.colorScheme.surface,
+      body: SafeArea(
+        bottom: false,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 20, right: 20, top: 10),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      context.l10n.plantIdentificationTitle,
+                      style: theme.textTheme.displayMedium,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 10),
-                Expanded(
-                  child: _buildContent(theme),
-                ),
-              ],
+                  IconButton(
+                    icon: const Icon(Icons.close),
+                    onPressed: () => Navigator.of(context).pop(),
+                    tooltip: MaterialLocalizations.of(context).closeButtonTooltip,
+                  ),
+                ],
+              ),
             ),
-          ),
+            const SizedBox(height: 10),
+            Expanded(
+              child: _buildContent(theme),
+            ),
+          ],
         ),
       ),
     );
@@ -327,8 +332,7 @@ class _PlantIdentificationPageState extends State<PlantIdentificationPage> {
   }
 
   void _openSpeciesDetail(SpeciesEntity species) {
-    widget.onViewSpeciesLibrary?.call();
-    widget.mainNavigatorKey.currentState?.push(
+    Navigator.of(context).push(
       MaterialPageRoute(
         builder: (_) => SpeciesDetailPage(
           species: species,

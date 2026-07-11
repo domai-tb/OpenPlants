@@ -45,13 +45,6 @@ class SettingsController with ChangeNotifier {
 
 class Settings {
   static const Object _noChange = Object();
-  static const List<String> _defaultNavBarOrder = [
-    'todayDashboard',
-    'careSchedule',
-    'plantIdentification',
-    'speciesLibrary',
-    'plantCollection',
-  ];
 
   final bool useSystemDarkmode;
   final bool useDarkmode;
@@ -59,8 +52,6 @@ class Settings {
   final bool didCompleteOnboarding;
   final String? localeCode;
   final TemperatureUnit temperatureUnit;
-  final List<String> navBarItemOrder;
-  final List<String> hiddenNavBarItems;
 
   const Settings({
     this.useSystemDarkmode = true,
@@ -69,8 +60,6 @@ class Settings {
     this.didCompleteOnboarding = false,
     this.localeCode,
     this.temperatureUnit = TemperatureUnit.celsius,
-    this.navBarItemOrder = _defaultNavBarOrder,
-    this.hiddenNavBarItems = const [],
   });
 
   Settings copyWith({
@@ -80,8 +69,6 @@ class Settings {
     bool? didCompleteOnboarding,
     Object? localeCode = _noChange,
     TemperatureUnit? temperatureUnit,
-    List<String>? navBarItemOrder,
-    List<String>? hiddenNavBarItems,
   }) {
     return Settings(
       useSystemDarkmode: useSystemDarkmode ?? this.useSystemDarkmode,
@@ -90,8 +77,6 @@ class Settings {
       didCompleteOnboarding: didCompleteOnboarding ?? this.didCompleteOnboarding,
       localeCode: identical(localeCode, _noChange) ? this.localeCode : localeCode as String?,
       temperatureUnit: temperatureUnit ?? this.temperatureUnit,
-      navBarItemOrder: navBarItemOrder ?? this.navBarItemOrder,
-      hiddenNavBarItems: hiddenNavBarItems ?? this.hiddenNavBarItems,
     );
   }
 
@@ -105,10 +90,6 @@ class Settings {
       temperatureUnit: json['temperatureUnit'] == 'fahrenheit'
           ? TemperatureUnit.fahrenheit
           : TemperatureUnit.celsius,
-      navBarItemOrder: (json['navBarItemOrder'] as List<dynamic>?)?.whereType<String>().toList() ?? _defaultNavBarOrder,
-      hiddenNavBarItems:
-          (json['hiddenNavBarItems'] as List<dynamic>?)?.whereType<String>().where((item) => item != 'more').toList() ??
-              const [],
     );
   }
 
@@ -120,8 +101,6 @@ class Settings {
       'didCompleteOnboarding': didCompleteOnboarding,
       'localeCode': localeCode,
       'temperatureUnit': temperatureUnit == TemperatureUnit.fahrenheit ? 'fahrenheit' : 'celsius',
-      'navBarItemOrder': navBarItemOrder,
-      'hiddenNavBarItems': hiddenNavBarItems.where((item) => item != 'more').toList(),
     };
   }
 }

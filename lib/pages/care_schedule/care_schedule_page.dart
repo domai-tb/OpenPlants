@@ -16,9 +16,6 @@ class CareSchedulePage extends StatefulWidget {
   final GlobalKey<AnimatedEntryState> pageEntryAnimationKey;
   final GlobalKey<AnimatedExitState> pageExitAnimationKey;
 
-  /// Optional callback: navigate to the Plant Collection tab from the empty state.
-  final VoidCallback? onNavigateToPlantCollection;
-
   /// Notifies this page to reload data after a tab switch.
   final Listenable? tabSwitchNotifier;
 
@@ -26,7 +23,6 @@ class CareSchedulePage extends StatefulWidget {
     super.key,
     required this.pageEntryAnimationKey,
     required this.pageExitAnimationKey,
-    this.onNavigateToPlantCollection,
     this.tabSwitchNotifier,
   });
 
@@ -129,9 +125,7 @@ class _CareSchedulePageState extends State<CareSchedulePage> with AutomaticKeepA
           body: _loading
               ? const Center(child: CircularProgressIndicator())
               : _tasks.isEmpty && _recentSymptoms.isEmpty
-                  ? EmptyScheduleState(
-                      onNavigateToPlantCollection: widget.onNavigateToPlantCollection,
-                    )
+                  ? const EmptyScheduleState()
                   : RefreshIndicator(
                       key: _refreshIndicatorKey,
                       onRefresh: _load,

@@ -1,10 +1,7 @@
 {
   "@@locale": "de",
-
   "helloWorld": "Hallo Welt!",
-
   "appTitle": "OpenPlant",
-
   "todayDashboardTitle": "Heute",
   "dueToday": "Heute fällig",
   "overdue": "Überfällig",
@@ -24,22 +21,16 @@
   "taskTypeRepot": "Umtopfen",
   "taskTypeClean": "Reinigen",
   "taskTypeInspect": "Untersuchen",
-  "plantIdentificationTitle": "Pflanzen-ID",
   "moreTitle": "Mehr",
-
   "settingsTitle": "Einstellungen",
   "aboutTitle": "Ueber",
   "detailTitle": "Details",
-
   "searchLabel": "Suchen",
-
   "back": "Zurueck",
   "next": "Weiter",
   "finish": "Fertig",
-
   "onboardingIntroBody": "Willkommen bei OpenPlant — deine Open-Source & datenschutzfreundliche Pflanzen-App.",
   "onboardingIntroHint": "Erfasse deine Pflanzen, setze Erinnerungen und beobachte ihr Wachstum.",
-
   "onboardingPrivacyTitle": "Dein Datenschutz ist uns wichtig",
   "onboardingPrivacyWorksLocally": "Lokal",
   "onboardingPrivacyWorksLocallyBody": "Alle Daten und Verarbeitungen finden auf dem Gerät statt. Keine Internetverbindung nötig.",
@@ -49,12 +40,10 @@
   "onboardingPrivacyPhotosPrivateBody": "Pflanzenfotos werden auf dem Gerät verarbeitet und nie hochgeladen.",
   "onboardingPrivacyNoThirdParties": "Keine Drittanbieter",
   "onboardingPrivacyNoThirdPartiesBody": "Keine Analytics-SDKs, keine Werbe-Tracker, keine externen Dienste.",
-
   "onboardingPrivacyBadgeLocal": "Lokal",
   "onboardingPrivacyBadgeNoAccount": "Kein Konto",
   "onboardingPrivacyBadgePhotos": "Private Fotos",
   "onboardingPrivacyBadgeNoTrackers": "Keine Tracker",
-
   "onboardingPreferencesTitle": "Einstellungen",
   "themeLabel": "Theme",
   "languageLabel": "Sprache",
@@ -68,21 +57,14 @@
   "temperatureFahrenheit": "Fahrenheit",
   "plantNamesTitle": "Pflanzennamen",
   "plantNamesDescription": "Lokalisierter Dienst für Pflanzennamen.",
-  "navigationLabel": "Navigation",
-  "navigationOrderHint": "Menuepunkte per Drag-and-drop neu anordnen.",
-  "navigationVisibilityLabel": "In der Navigation anzeigen",
-  "navigationSettingsAlwaysVisibleHint": "Mehr bleibt sichtbar, damit Einstellungen erreichbar bleiben.",
-
   "walletPlaceholderBody": "Platzhalter fuer eine Wallet-aehnliche Funktion.",
   "primaryAction": "Primaere Aktion",
   "secondaryAction": "Sekundaere Aktion",
   "primaryActionSnack": "Ersetze das durch deine echte Aktion",
   "secondaryActionSnack": "Noch eine Platzhalter-Aktion",
-
   "menuSettingsSubtitle": "OpenPlant-Einstellungen",
   "menuAboutSubtitle": "Ueber OpenPlant",
   "aboutBody": "OpenPlant ist eine Open-Source & datenschutzfreundliche Begleiter-App fuer deine Pflanzen.\n\nErfasse deine Pflanzenpflege, setze Giesserinnerungen und halte deinen Garten gesund — alles ohne dein Privatschutz zu kompromittieren.",
-
   "serverFailureMessage": "Serverdaten konnten nicht geladen werden.",
   "generalFailureMessage": "Ein Fehler ist aufgetreten.",
   "errorMessage": "Fehler.",
@@ -99,7 +81,6 @@
   "login_success": "Erfolgreich angemeldet!",
   "login_already": "Du bist bereits angemeldet.",
   "enter_totp": "Bitte gib deinen Einmalcode (TOTP) ein.",
-
   "plantIdCapturePrompt": "Mache ein Foto einer Pflanze, um sie zu erkennen",
   "plantIdCamera": "Kamera",
   "plantIdGallery": "Galerie",
@@ -111,7 +92,6 @@
   "plantIdFailedToPick": "Auswahl fehlgeschlagen",
   "plantIdIdentificationFailed": "Erkennung fehlgeschlagen",
   "plantIdTryAgain": "Erneut versuchen",
-
   "plantCollectionTitle": "Pflanzensammlung",
   "plantCollectionEmpty": "Noch keine Pflanzen",
   "plantCollectionTapToAdd": "Tippe auf + um deine erste Pflanze hinzuzufuegen",
@@ -144,41 +124,6 @@
   "nameIsRequired": "Name ist erforderlich",
   "errorSavingPlant": "Fehler beim Speichern der Pflanze: {error}",
   "never": "Nie",
-
-  "speciesLibraryTitle": "Artenbibliothek",
-  "speciesLibrarySearchHint": "Arten suchen...",
-  "speciesLibraryEasy": "Einfach",
-  "speciesLibraryModerate": "Mäßig",
-  "speciesLibraryChallenging": "Anspruchsvoll",
-  "speciesLibraryToxicOnly": "Giftig",
-  "speciesLibraryEmpty": "Keine Arten gefunden",
-  "speciesLibraryCarePlan": "Pflegeplan",
-  "speciesLibraryWatering": "Bewässerung",
-  "speciesLibraryLight": "Licht",
-  "speciesLibraryHumidity": "Luftfeuchtigkeit",
-  "speciesLibrarySoil": "Erde",
-  "speciesLibraryRepotting": "Umtopfen",
-  "speciesLibraryQuickFacts": "Kurzinfos",
-  "speciesLibraryLightNeeds": "Lichtbedarf",
-  "speciesLibraryWaterNeeds": "Wasserbedarf",
-  "speciesLibraryHumidityPref": "Luftfeuchtigkeit",
-  "speciesLibrarySoilType": "Erdart",
-  "speciesLibraryRepottingInterval": "Umtopfen",
-  "speciesLibraryMonths": "{months} Monate",
-  "speciesLibraryLightLow": "Wenig Licht",
-  "speciesLibraryLightMedium": "Mittel indirekt",
-  "speciesLibraryLightBright": "Hell indirekt",
-  "speciesLibraryLightDirect": "Direkte Sonne",
-  "speciesLibraryWaterLow": "Wenig (trockenheitsresistent)",
-  "speciesLibraryWaterModerate": "Mäßig",
-  "speciesLibraryWaterFrequent": "Häufig",
-  "speciesLibraryHumidityLow": "Niedrig (30-40%)",
-  "speciesLibraryHumidityModerate": "Mäßig (40-60%)",
-  "speciesLibraryHumidityHigh": "Hoch (60%+)",
-  "speciesLibraryToxicToHumans": "Giftig für Menschen",
-  "speciesLibraryToxicToPets": "Giftig für Haustiere",
-  "speciesLibraryToxicityWarning": "Giftigkeitswarnung",
-  "speciesLibraryViewDetails": "Arten-Details anzeigen",
   "careScheduleTitle": "Pflegeplan",
   "careScheduleOverdue": "Überfällig",
   "careScheduleDueToday": "Heute fällig",
@@ -189,11 +134,8 @@
   "careScheduleAllPlants": "Alle Pflanzen",
   "careScheduleAllTypes": "Alle Typen",
   "careScheduleEmpty": "Fügen Sie Pflanzen hinzu, um Pflegeaufgaben zu sehen",
-  "careScheduleGoToCollection": "Zur Pflanzensammlung",
-
   "careTaskCompleted": "{taskType} abgeschlossen",
   "careTaskCompletedWithNote": "{taskType} abgeschlossen — {note}",
-
   "journalTitle": "Tagebuch",
   "journalPageTitle": "{plantName} — Tagebuch",
   "journalEmpty": "Noch keine Tagebucheinträge",
@@ -216,7 +158,6 @@
   "journalAddPhoto": "Foto hinzufügen",
   "journalTakePhoto": "Foto aufnehmen",
   "journalChooseFromGallery": "Aus Galerie auswählen",
-
   "growthPhotosTitle": "Wachstumsfotos",
   "growthPhotosAdd": "Hinzufügen",
   "growthPhotosEmpty": "Füge dein erstes Wachstumsfoto hinzu",
@@ -228,7 +169,6 @@
   "growthPhotoNotFound": "Foto nicht gefunden",
   "growthPhotoCamera": "Kamera",
   "growthPhotoGallery": "Galerie",
-
   "careRulesTitle": "Pflegeregeln",
   "careRulesManage": "Verwalten",
   "careRulesEmpty": "Keine benutzerdefinierten Regeln",
@@ -254,7 +194,6 @@
   "careRulesReminderTimeHint": "09:00",
   "careRulesReminderDays": "Erinnerungstage",
   "careRulesSaveFailed": "Regel konnte nicht gespeichert werden: {error}",
-
   "diagnosisTitle": "Pflanzendiagnose",
   "diagnosisSubtitle": "Pflanzenprobleme diagnostizieren",
   "diagnosisStep": "Schritt",
@@ -354,7 +293,6 @@
   "diagnosisSymptomWetSoil": "Nasse Erde",
   "diagnosisSymptomLeafSpots": "Blattflecken",
   "diagnosisDiagnoseThisPlant": "Diese Pflanze diagnostizieren",
-
   "healthTimelineTitle": "Gesundheitsverlauf",
   "healthTimelineFilterAll": "Alle",
   "healthTimelineFilterActive": "Aktiv",
@@ -413,7 +351,6 @@
       }
     }
   },
-
   "diagnosisEvidenceReportedSymptoms": "Du hast {symptoms} angegeben.",
   "diagnosisEvidenceFrequentWateringTooWet": "Du gießt häufig, wodurch die Erde zu nass bleiben kann.",
   "diagnosisEvidenceNoDrainage": "Dein Topf hat keine Abflusslöcher, sodass überschüssiges Wasser nicht ablaufen kann.",
@@ -434,7 +371,6 @@
   "diagnosisEvidencePestInfestationSigns": "Sichtbare Insekten, klebrige Rückstände und Blattschäden können auf Schädlingsbefall hinweisen.",
   "diagnosisEvidenceDefault": "Auf Grundlage deiner Antworten wurde diese Ursache als Möglichkeit erkannt.",
   "diagnosisFallbackEvidence": "Anhand der bereitgestellten Informationen stach keine einzelne Ursache hervor. Das Problem könnte durch Faktoren verursacht werden, die der Fragebogen nicht abdeckt.",
-
   "diagnosisActionOverwateringDrySoil": "Lass die oberen 5–8 cm der Erde trocknen, bevor du erneut gießt.",
   "diagnosisActionOverwateringDrainage": "Prüfe, ob der Topf Abflusslöcher hat, und leere den Untersetzer nach dem Gießen.",
   "diagnosisActionOverwateringTrimRoots": "Nimm die Pflanze bei Verdacht auf Wurzelfäule heraus und entferne braune, weiche Wurzeln.",
@@ -461,7 +397,6 @@
   "diagnosisActionPestsInspect": "Prüfe Blattunterseiten und Blattachseln, wo sich Schädlinge häufig verstecken.",
   "diagnosisActionDefaultCare": "Stelle sicher, dass deine Pflanze für ihre Art geeignete Licht- und Wassermengen erhält.",
   "diagnosisActionDefaultMoisture": "Prüfe die Bodenfeuchtigkeit vor dem Gießen.",
-
   "diagnosisCheckOverwateringRoots": "Prüfe die Wurzeln: Gesunde Wurzeln sind fest und weiß, faule Wurzeln braun und weich.",
   "diagnosisCheckOverwateringMoisture": "Beobachte die Bodenfeuchtigkeit — die Erde sollte zwischen dem Gießen trocknen.",
   "diagnosisCheckUnderwateringRootBall": "Prüfe den Wurzelballen: Hat er sich vom Topfrand gelöst, ist die Erde zu trocken.",
@@ -484,5 +419,39 @@
   "diagnosisFallbackActionMoisture": "Prüfe die Bodenfeuchtigkeit vor dem Gießen — zu viel und zu wenig Wasser sind die häufigsten Probleme.",
   "diagnosisFallbackActionInspect": "Untersuche Blätter und Stängel sorgfältig auf ungewöhnliche Flecken, Schädlinge oder Veränderungen der Oberfläche.",
   "diagnosisFallbackCheckMoreDetails": "Fülle den Fragebogen erneut mit weiteren Angaben zur Umgebung deiner Pflanze aus.",
-  "diagnosisFallbackCheckCommunity": "Wende dich für artspezifische Beratung an ein Pflanzengeschäft vor Ort oder eine Online-Community."
+  "diagnosisFallbackCheckCommunity": "Wende dich für artspezifische Beratung an ein Pflanzengeschäft vor Ort oder eine Online-Community.",
+  "plantIdentificationTitle": "Pflanzen-ID",
+  "speciesLibrarySearchHint": "Arten suchen...",
+  "speciesLibraryEasy": "Einfach",
+  "speciesLibraryModerate": "Mäßig",
+  "speciesLibraryChallenging": "Anspruchsvoll",
+  "speciesLibraryToxicOnly": "Giftig",
+  "speciesLibraryEmpty": "Keine Arten gefunden",
+  "speciesLibraryCarePlan": "Pflegeplan",
+  "speciesLibraryWatering": "Bewässerung",
+  "speciesLibraryLight": "Licht",
+  "speciesLibraryHumidity": "Luftfeuchtigkeit",
+  "speciesLibrarySoil": "Erde",
+  "speciesLibraryRepotting": "Umtopfen",
+  "speciesLibraryQuickFacts": "Kurzinfos",
+  "speciesLibraryLightNeeds": "Lichtbedarf",
+  "speciesLibraryWaterNeeds": "Wasserbedarf",
+  "speciesLibraryHumidityPref": "Luftfeuchtigkeit",
+  "speciesLibrarySoilType": "Erdart",
+  "speciesLibraryRepottingInterval": "Umtopfen",
+  "speciesLibraryMonths": "{months} Monate",
+  "speciesLibraryLightLow": "Wenig Licht",
+  "speciesLibraryLightMedium": "Mittel indirekt",
+  "speciesLibraryLightBright": "Hell indirekt",
+  "speciesLibraryLightDirect": "Direkte Sonne",
+  "speciesLibraryWaterLow": "Wenig (trockenheitsresistent)",
+  "speciesLibraryWaterModerate": "Mäßig",
+  "speciesLibraryWaterFrequent": "Häufig",
+  "speciesLibraryHumidityLow": "Niedrig (30-40%)",
+  "speciesLibraryHumidityModerate": "Mäßig (40-60%)",
+  "speciesLibraryHumidityHigh": "Hoch (60%+)",
+  "speciesLibraryToxicToHumans": "Giftig für Menschen",
+  "speciesLibraryToxicToPets": "Giftig für Haustiere",
+  "speciesLibraryToxicityWarning": "Giftigkeitswarnung",
+  "speciesLibraryViewDetails": "Arten-Details anzeigen"
 }

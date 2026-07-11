@@ -224,12 +224,6 @@ abstract class AppLocalizations {
   /// **'Inspect'**
   String get taskTypeInspect;
 
-  /// No description provided for @plantIdentificationTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Plant ID'**
-  String get plantIdentificationTitle;
-
   /// No description provided for @moreTitle.
   ///
   /// In en, this message translates to:
@@ -445,30 +439,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Localized plant name lookup service.'**
   String get plantNamesDescription;
-
-  /// No description provided for @navigationLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Navigation'**
-  String get navigationLabel;
-
-  /// No description provided for @navigationOrderHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Drag to reorder menu items.'**
-  String get navigationOrderHint;
-
-  /// No description provided for @navigationVisibilityLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Show in navigation'**
-  String get navigationVisibilityLabel;
-
-  /// No description provided for @navigationSettingsAlwaysVisibleHint.
-  ///
-  /// In en, this message translates to:
-  /// **'More stays visible so settings remain reachable.'**
-  String get navigationSettingsAlwaysVisibleHint;
 
   /// No description provided for @walletPlaceholderBody.
   ///
@@ -908,210 +878,6 @@ abstract class AppLocalizations {
   /// **'Never'**
   String get never;
 
-  /// No description provided for @speciesLibraryTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Species Library'**
-  String get speciesLibraryTitle;
-
-  /// No description provided for @speciesLibrarySearchHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Search species...'**
-  String get speciesLibrarySearchHint;
-
-  /// No description provided for @speciesLibraryEasy.
-  ///
-  /// In en, this message translates to:
-  /// **'Easy'**
-  String get speciesLibraryEasy;
-
-  /// No description provided for @speciesLibraryModerate.
-  ///
-  /// In en, this message translates to:
-  /// **'Moderate'**
-  String get speciesLibraryModerate;
-
-  /// No description provided for @speciesLibraryChallenging.
-  ///
-  /// In en, this message translates to:
-  /// **'Challenging'**
-  String get speciesLibraryChallenging;
-
-  /// No description provided for @speciesLibraryToxicOnly.
-  ///
-  /// In en, this message translates to:
-  /// **'Toxic'**
-  String get speciesLibraryToxicOnly;
-
-  /// No description provided for @speciesLibraryEmpty.
-  ///
-  /// In en, this message translates to:
-  /// **'No species found'**
-  String get speciesLibraryEmpty;
-
-  /// No description provided for @speciesLibraryCarePlan.
-  ///
-  /// In en, this message translates to:
-  /// **'Care Plan'**
-  String get speciesLibraryCarePlan;
-
-  /// No description provided for @speciesLibraryWatering.
-  ///
-  /// In en, this message translates to:
-  /// **'Watering'**
-  String get speciesLibraryWatering;
-
-  /// No description provided for @speciesLibraryLight.
-  ///
-  /// In en, this message translates to:
-  /// **'Light'**
-  String get speciesLibraryLight;
-
-  /// No description provided for @speciesLibraryHumidity.
-  ///
-  /// In en, this message translates to:
-  /// **'Humidity'**
-  String get speciesLibraryHumidity;
-
-  /// No description provided for @speciesLibrarySoil.
-  ///
-  /// In en, this message translates to:
-  /// **'Soil'**
-  String get speciesLibrarySoil;
-
-  /// No description provided for @speciesLibraryRepotting.
-  ///
-  /// In en, this message translates to:
-  /// **'Repotting'**
-  String get speciesLibraryRepotting;
-
-  /// No description provided for @speciesLibraryQuickFacts.
-  ///
-  /// In en, this message translates to:
-  /// **'Quick Facts'**
-  String get speciesLibraryQuickFacts;
-
-  /// No description provided for @speciesLibraryLightNeeds.
-  ///
-  /// In en, this message translates to:
-  /// **'Light Needs'**
-  String get speciesLibraryLightNeeds;
-
-  /// No description provided for @speciesLibraryWaterNeeds.
-  ///
-  /// In en, this message translates to:
-  /// **'Water Needs'**
-  String get speciesLibraryWaterNeeds;
-
-  /// No description provided for @speciesLibraryHumidityPref.
-  ///
-  /// In en, this message translates to:
-  /// **'Humidity'**
-  String get speciesLibraryHumidityPref;
-
-  /// No description provided for @speciesLibrarySoilType.
-  ///
-  /// In en, this message translates to:
-  /// **'Soil Type'**
-  String get speciesLibrarySoilType;
-
-  /// No description provided for @speciesLibraryRepottingInterval.
-  ///
-  /// In en, this message translates to:
-  /// **'Repotting'**
-  String get speciesLibraryRepottingInterval;
-
-  /// No description provided for @speciesLibraryMonths.
-  ///
-  /// In en, this message translates to:
-  /// **'{months} months'**
-  String speciesLibraryMonths(Object months);
-
-  /// No description provided for @speciesLibraryLightLow.
-  ///
-  /// In en, this message translates to:
-  /// **'Low light'**
-  String get speciesLibraryLightLow;
-
-  /// No description provided for @speciesLibraryLightMedium.
-  ///
-  /// In en, this message translates to:
-  /// **'Medium indirect'**
-  String get speciesLibraryLightMedium;
-
-  /// No description provided for @speciesLibraryLightBright.
-  ///
-  /// In en, this message translates to:
-  /// **'Bright indirect'**
-  String get speciesLibraryLightBright;
-
-  /// No description provided for @speciesLibraryLightDirect.
-  ///
-  /// In en, this message translates to:
-  /// **'Direct sun'**
-  String get speciesLibraryLightDirect;
-
-  /// No description provided for @speciesLibraryWaterLow.
-  ///
-  /// In en, this message translates to:
-  /// **'Low (drought-tolerant)'**
-  String get speciesLibraryWaterLow;
-
-  /// No description provided for @speciesLibraryWaterModerate.
-  ///
-  /// In en, this message translates to:
-  /// **'Moderate'**
-  String get speciesLibraryWaterModerate;
-
-  /// No description provided for @speciesLibraryWaterFrequent.
-  ///
-  /// In en, this message translates to:
-  /// **'Frequent'**
-  String get speciesLibraryWaterFrequent;
-
-  /// No description provided for @speciesLibraryHumidityLow.
-  ///
-  /// In en, this message translates to:
-  /// **'Low (30-40%)'**
-  String get speciesLibraryHumidityLow;
-
-  /// No description provided for @speciesLibraryHumidityModerate.
-  ///
-  /// In en, this message translates to:
-  /// **'Moderate (40-60%)'**
-  String get speciesLibraryHumidityModerate;
-
-  /// No description provided for @speciesLibraryHumidityHigh.
-  ///
-  /// In en, this message translates to:
-  /// **'High (60%+)'**
-  String get speciesLibraryHumidityHigh;
-
-  /// No description provided for @speciesLibraryToxicToHumans.
-  ///
-  /// In en, this message translates to:
-  /// **'Toxic to humans'**
-  String get speciesLibraryToxicToHumans;
-
-  /// No description provided for @speciesLibraryToxicToPets.
-  ///
-  /// In en, this message translates to:
-  /// **'Toxic to pets'**
-  String get speciesLibraryToxicToPets;
-
-  /// No description provided for @speciesLibraryToxicityWarning.
-  ///
-  /// In en, this message translates to:
-  /// **'Toxicity Warning'**
-  String get speciesLibraryToxicityWarning;
-
-  /// No description provided for @speciesLibraryViewDetails.
-  ///
-  /// In en, this message translates to:
-  /// **'View Species Details'**
-  String get speciesLibraryViewDetails;
-
   /// No description provided for @careScheduleTitle.
   ///
   /// In en, this message translates to:
@@ -1171,12 +937,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Add plants to see care tasks'**
   String get careScheduleEmpty;
-
-  /// No description provided for @careScheduleGoToCollection.
-  ///
-  /// In en, this message translates to:
-  /// **'Go to Plant Collection'**
-  String get careScheduleGoToCollection;
 
   /// Auto-generated journal entry when a care task is completed
   ///
@@ -3079,6 +2839,210 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Consult a local plant shop or online community for species-specific advice.'**
   String get diagnosisFallbackCheckCommunity;
+
+  /// No description provided for @plantIdentificationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Plant ID'**
+  String get plantIdentificationTitle;
+
+  /// No description provided for @speciesLibrarySearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search species...'**
+  String get speciesLibrarySearchHint;
+
+  /// No description provided for @speciesLibraryEasy.
+  ///
+  /// In en, this message translates to:
+  /// **'Easy'**
+  String get speciesLibraryEasy;
+
+  /// No description provided for @speciesLibraryModerate.
+  ///
+  /// In en, this message translates to:
+  /// **'Moderate'**
+  String get speciesLibraryModerate;
+
+  /// No description provided for @speciesLibraryChallenging.
+  ///
+  /// In en, this message translates to:
+  /// **'Challenging'**
+  String get speciesLibraryChallenging;
+
+  /// No description provided for @speciesLibraryToxicOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Toxic'**
+  String get speciesLibraryToxicOnly;
+
+  /// No description provided for @speciesLibraryEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No species found'**
+  String get speciesLibraryEmpty;
+
+  /// No description provided for @speciesLibraryCarePlan.
+  ///
+  /// In en, this message translates to:
+  /// **'Care Plan'**
+  String get speciesLibraryCarePlan;
+
+  /// No description provided for @speciesLibraryWatering.
+  ///
+  /// In en, this message translates to:
+  /// **'Watering'**
+  String get speciesLibraryWatering;
+
+  /// No description provided for @speciesLibraryLight.
+  ///
+  /// In en, this message translates to:
+  /// **'Light'**
+  String get speciesLibraryLight;
+
+  /// No description provided for @speciesLibraryHumidity.
+  ///
+  /// In en, this message translates to:
+  /// **'Humidity'**
+  String get speciesLibraryHumidity;
+
+  /// No description provided for @speciesLibrarySoil.
+  ///
+  /// In en, this message translates to:
+  /// **'Soil'**
+  String get speciesLibrarySoil;
+
+  /// No description provided for @speciesLibraryRepotting.
+  ///
+  /// In en, this message translates to:
+  /// **'Repotting'**
+  String get speciesLibraryRepotting;
+
+  /// No description provided for @speciesLibraryQuickFacts.
+  ///
+  /// In en, this message translates to:
+  /// **'Quick Facts'**
+  String get speciesLibraryQuickFacts;
+
+  /// No description provided for @speciesLibraryLightNeeds.
+  ///
+  /// In en, this message translates to:
+  /// **'Light Needs'**
+  String get speciesLibraryLightNeeds;
+
+  /// No description provided for @speciesLibraryWaterNeeds.
+  ///
+  /// In en, this message translates to:
+  /// **'Water Needs'**
+  String get speciesLibraryWaterNeeds;
+
+  /// No description provided for @speciesLibraryHumidityPref.
+  ///
+  /// In en, this message translates to:
+  /// **'Humidity'**
+  String get speciesLibraryHumidityPref;
+
+  /// No description provided for @speciesLibrarySoilType.
+  ///
+  /// In en, this message translates to:
+  /// **'Soil Type'**
+  String get speciesLibrarySoilType;
+
+  /// No description provided for @speciesLibraryRepottingInterval.
+  ///
+  /// In en, this message translates to:
+  /// **'Repotting'**
+  String get speciesLibraryRepottingInterval;
+
+  /// No description provided for @speciesLibraryMonths.
+  ///
+  /// In en, this message translates to:
+  /// **'{months} months'**
+  String speciesLibraryMonths(Object months);
+
+  /// No description provided for @speciesLibraryLightLow.
+  ///
+  /// In en, this message translates to:
+  /// **'Low light'**
+  String get speciesLibraryLightLow;
+
+  /// No description provided for @speciesLibraryLightMedium.
+  ///
+  /// In en, this message translates to:
+  /// **'Medium indirect'**
+  String get speciesLibraryLightMedium;
+
+  /// No description provided for @speciesLibraryLightBright.
+  ///
+  /// In en, this message translates to:
+  /// **'Bright indirect'**
+  String get speciesLibraryLightBright;
+
+  /// No description provided for @speciesLibraryLightDirect.
+  ///
+  /// In en, this message translates to:
+  /// **'Direct sun'**
+  String get speciesLibraryLightDirect;
+
+  /// No description provided for @speciesLibraryWaterLow.
+  ///
+  /// In en, this message translates to:
+  /// **'Low (drought-tolerant)'**
+  String get speciesLibraryWaterLow;
+
+  /// No description provided for @speciesLibraryWaterModerate.
+  ///
+  /// In en, this message translates to:
+  /// **'Moderate'**
+  String get speciesLibraryWaterModerate;
+
+  /// No description provided for @speciesLibraryWaterFrequent.
+  ///
+  /// In en, this message translates to:
+  /// **'Frequent'**
+  String get speciesLibraryWaterFrequent;
+
+  /// No description provided for @speciesLibraryHumidityLow.
+  ///
+  /// In en, this message translates to:
+  /// **'Low (30-40%)'**
+  String get speciesLibraryHumidityLow;
+
+  /// No description provided for @speciesLibraryHumidityModerate.
+  ///
+  /// In en, this message translates to:
+  /// **'Moderate (40-60%)'**
+  String get speciesLibraryHumidityModerate;
+
+  /// No description provided for @speciesLibraryHumidityHigh.
+  ///
+  /// In en, this message translates to:
+  /// **'High (60%+)'**
+  String get speciesLibraryHumidityHigh;
+
+  /// No description provided for @speciesLibraryToxicToHumans.
+  ///
+  /// In en, this message translates to:
+  /// **'Toxic to humans'**
+  String get speciesLibraryToxicToHumans;
+
+  /// No description provided for @speciesLibraryToxicToPets.
+  ///
+  /// In en, this message translates to:
+  /// **'Toxic to pets'**
+  String get speciesLibraryToxicToPets;
+
+  /// No description provided for @speciesLibraryToxicityWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'Toxicity Warning'**
+  String get speciesLibraryToxicityWarning;
+
+  /// No description provided for @speciesLibraryViewDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'View Species Details'**
+  String get speciesLibraryViewDetails;
 }
 
 class _AppLocalizationsDelegate

@@ -2,15 +2,11 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'package:open_plant/core/app_scope.dart';
 import 'package:open_plant/core/constants.dart';
-import 'package:open_plant/core/settings.dart';
 import 'package:open_plant/pages/home/page_navigator.dart';
 import 'package:open_plant/pages/home/widgets/page_navigation_animation.dart';
 import 'package:open_plant/pages/home/widgets/bottom_nav_bar.dart';
 import 'package:open_plant/pages/home/widgets/side_nav_bar.dart';
-import 'package:open_plant/pages/plant_collection/plant_collection_detail_page.dart';
-import 'package:open_plant/pages/plant_collection/plant_collection_form_page.dart';
 
 /// The [HomePage] displays all general UI elements like the bottom nav-menu and
 /// handles the switching between the different pages.
@@ -26,31 +22,22 @@ class HomePage extends StatefulWidget {
 class HomePageState extends State<HomePage> {
   /// Creates a [GlobalKey] for each page that should be accessable within the bottom nav-menu
   Map<PageItem, GlobalKey<NavigatorState>> navigatorKeys = {
-    PageItem.todayDashboard: GlobalKey<NavigatorState>(),
+    PageItem.dashboard: GlobalKey<NavigatorState>(),
     PageItem.careSchedule: GlobalKey<NavigatorState>(),
-    PageItem.plantIdentification: GlobalKey<NavigatorState>(),
     PageItem.more: GlobalKey<NavigatorState>(),
-    PageItem.plantCollection: GlobalKey<NavigatorState>(),
-    PageItem.speciesLibrary: GlobalKey<NavigatorState>(),
   };
 
   /// Creates two [GlobalKey] for each page in order to control the exit- and
   /// entry-animation from outside the page
   Map<PageItem, GlobalKey<AnimatedExitState>> exitAnimationKeys = {
-    PageItem.todayDashboard: GlobalKey<AnimatedExitState>(),
+    PageItem.dashboard: GlobalKey<AnimatedExitState>(),
     PageItem.careSchedule: GlobalKey<AnimatedExitState>(),
-    PageItem.plantIdentification: GlobalKey<AnimatedExitState>(),
     PageItem.more: GlobalKey<AnimatedExitState>(),
-    PageItem.plantCollection: GlobalKey<AnimatedExitState>(),
-    PageItem.speciesLibrary: GlobalKey<AnimatedExitState>(),
   };
   Map<PageItem, GlobalKey<AnimatedEntryState>> entryAnimationKeys = {
-    PageItem.todayDashboard: GlobalKey<AnimatedEntryState>(),
+    PageItem.dashboard: GlobalKey<AnimatedEntryState>(),
     PageItem.careSchedule: GlobalKey<AnimatedEntryState>(),
-    PageItem.plantIdentification: GlobalKey<AnimatedEntryState>(),
     PageItem.more: GlobalKey<AnimatedEntryState>(),
-    PageItem.plantCollection: GlobalKey<AnimatedEntryState>(),
-    PageItem.speciesLibrary: GlobalKey<AnimatedEntryState>(),
   };
 
   final SystemUiOverlayStyle lightSystemUiStyle = const SystemUiOverlayStyle(
@@ -83,12 +70,10 @@ class HomePageState extends State<HomePage> {
   );
 
   /// Holds the currently active page.
-  PageItem currentPage = PageItem.todayDashboard;
+  PageItem currentPage = PageItem.dashboard;
 
   /// Notifies child pages when a tab switch completes so they can reload data.
   final ValueNotifier<int> tabSwitchNotifier = ValueNotifier<int>(0);
-  late SettingsController _settingsController;
-  bool _settingsWired = false;
 
   /// Controls the Page View
   final PageController pageController = PageController();
@@ -97,15 +82,8 @@ class HomePageState extends State<HomePage> {
   /// Indicates whether swiping is disabled
   bool swipeDisabled = false;
 
-  List<PageItem> get _orderedPages => orderedPageItemsFromSettings(
-        _settingsController.settings.navBarItemOrder,
-      );
-
-  Set<PageItem> get _hiddenPages => hiddenPageItemsFromSettings(
-        _settingsController.settings.hiddenNavBarItems,
-      );
-
-  List<PageItem> get _visiblePages => _orderedPages.where((page) => !_hiddenPages.contains(page)).toList();
+  /// With 3 fixed tabs, all pages are always visible.
+  List<PageItem> get _visiblePages => orderedPageItems();
 
   /// Temporarily disable swiping for certain pages e.g. in app web view
   void setSwipeDisabled({bool disableSwipe = false}) {
@@ -153,48 +131,6 @@ class HomePageState extends State<HomePage> {
     return true;
   }
 
-  /// Switches to the Plant Collection tab and opens the add-plant form.
-  void _onNavigateToAddPlant() {
-    unawaited(
-      selectedPage(PageItem.plantCollection).then((_) {
-        navigatorKeys[PageItem.plantCollection]?.currentState?.push(
-              MaterialPageRoute(builder: (_) => const PlantCollectionFormPage()),
-            );
-      }),
-    );
-  }
-
-  /// Switches to the Plant Collection tab and opens the detail page for the
-  /// given plant ID.
-  void _onNavigateToPlantDetail(String plantId) {
-    unawaited(
-      selectedPage(PageItem.plantCollection).then((_) {
-        if (!mounted) return;
-        final usecases = AppScope.of(context).services.plantCollection;
-        usecases.loadPlants().then((plants) {
-          final plant = plants.firstWhere(
-            (p) => p.id == plantId,
-            orElse: () => throw PlantNotFoundException(plantId),
-          );
-          navigatorKeys[PageItem.plantCollection]?.currentState?.push(
-                MaterialPageRoute(builder: (_) => PlantCollectionDetailPage(plant: plant)),
-              );
-        }).catchError((Object error) {
-          if (error is PlantNotFoundException && mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Plant not found')),
-            );
-          }
-        });
-      }),
-    );
-  }
-
-  /// Switches to the Plant Collection tab.
-  void _onNavigateToPlantCollection() {
-    unawaited(selectedPage(PageItem.plantCollection));
-  }
-
   /// Returns the [NavBarNavigator] for the specified PageItem on phones
   Widget buildNavigator(PageItem tabItem) {
     return NavBarNavigator(
@@ -203,11 +139,6 @@ class HomePageState extends State<HomePage> {
       pageItem: tabItem,
       pageEntryAnimationKey: entryAnimationKeys[tabItem]!,
       pageExitAnimationKey: exitAnimationKeys[tabItem]!,
-      onSwitchToSpeciesLibrary:
-          tabItem == PageItem.plantIdentification ? () => selectedPage(PageItem.speciesLibrary) : null,
-      onNavigateToAddPlant: tabItem == PageItem.todayDashboard ? _onNavigateToAddPlant : null,
-      onNavigateToPlantDetail: tabItem == PageItem.todayDashboard ? _onNavigateToPlantDetail : null,
-      onNavigateToPlantCollection: tabItem == PageItem.careSchedule ? _onNavigateToPlantCollection : null,
       tabSwitchNotifier: tabSwitchNotifier,
     );
   }
@@ -224,38 +155,9 @@ class HomePageState extends State<HomePage> {
         pageItem: tabItem,
         pageEntryAnimationKey: entryAnimationKeys[tabItem]!,
         pageExitAnimationKey: exitAnimationKeys[tabItem]!,
-        onSwitchToSpeciesLibrary:
-            tabItem == PageItem.plantIdentification ? () => selectedPage(PageItem.speciesLibrary) : null,
-        onNavigateToAddPlant: tabItem == PageItem.todayDashboard ? _onNavigateToAddPlant : null,
-        onNavigateToPlantDetail: tabItem == PageItem.todayDashboard ? _onNavigateToPlantDetail : null,
-        onNavigateToPlantCollection: tabItem == PageItem.careSchedule ? _onNavigateToPlantCollection : null,
         tabSwitchNotifier: tabSwitchNotifier,
       ),
     );
-  }
-
-  void _handleSettingsChanged() {
-    if (!mounted) return;
-
-    final visiblePages = _visiblePages;
-    if (visiblePages.isEmpty) return;
-
-    final nextPage = visiblePages.contains(currentPage) ? currentPage : visiblePages.first;
-    final nextIndex = visiblePages.indexOf(nextPage);
-
-    if (pageController.hasClients) {
-      final currentIndex = pageController.page?.round() ?? pageController.initialPage;
-      if (currentIndex != nextIndex) {
-        pageController.jumpToPage(nextIndex);
-      }
-    }
-
-    if (currentPage != nextPage) {
-      setState(() => currentPage = nextPage);
-      return;
-    }
-
-    setState(() {});
   }
 
   @override
@@ -265,31 +167,6 @@ class HomePageState extends State<HomePage> {
     pageController.addListener(() {
       setState(() => pagePosition = pageController.page ?? 0);
     });
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (_settingsWired) return;
-
-    _settingsController = AppScope.of(context).settings;
-    _settingsController.addListener(_handleSettingsChanged);
-
-    final visiblePages = _visiblePages;
-    if (visiblePages.isNotEmpty) {
-      currentPage = visiblePages.first;
-    }
-
-    _settingsWired = true;
-  }
-
-  @override
-  void dispose() {
-    if (_settingsWired) {
-      _settingsController.removeListener(_handleSettingsChanged);
-    }
-    pageController.dispose();
-    super.dispose();
   }
 
   @override
@@ -401,7 +278,7 @@ class HomePageState extends State<HomePage> {
                                   ),
                                   child: Center(
                                     child: SizedBox(
-                                      width: currentPage != PageItem.plantIdentification ? 550 : null,
+                                      width: 550,
                                       child: Stack(
                                         children: visiblePages.map(buildOffstateNavigator).toList(),
                                       ),

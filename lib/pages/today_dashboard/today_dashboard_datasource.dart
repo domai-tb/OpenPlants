@@ -1,4 +1,3 @@
-import 'package:open_plant/pages/plant_collection/plant_collection_item_entity.dart';
 import 'package:open_plant/pages/plant_collection/plant_collection_usecases.dart';
 import 'package:open_plant/pages/today_dashboard/today_dashboard_entity.dart';
 
@@ -21,27 +20,12 @@ class TodayDashboardDataSource {
   /// Fetches dashboard data by orchestrating parallel calls to downstream
   /// data sources and composing the results into [DashboardData].
   Future<DashboardData> fetchDashboardData() async {
-    final plantsFuture = plantCollection.loadPlants();
-
-    final plants = await plantsFuture;
-
-    plants.sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
-    final recentPlants = plants.take(10).map(_toPlantSummary).toList();
+    final plants = await plantCollection.loadPlants();
 
     return DashboardData(
       dueToday: const [],
       overdue: const [],
-      recentPlants: recentPlants,
       totalPlantCount: plants.length,
-    );
-  }
-
-  PlantSummary _toPlantSummary(PlantEntity plant) {
-    return PlantSummary(
-      id: plant.id,
-      name: plant.name,
-      photoPath: plant.photoPath,
-      updatedAt: plant.updatedAt,
     );
   }
 }

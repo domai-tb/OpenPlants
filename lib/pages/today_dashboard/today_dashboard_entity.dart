@@ -27,32 +27,15 @@ class CareTask {
   });
 }
 
-/// A lightweight summary of a plant for the dashboard carousel.
-class PlantSummary {
-  final String id;
-  final String name;
-  final String? photoPath;
-  final DateTime updatedAt;
-
-  const PlantSummary({
-    required this.id,
-    required this.name,
-    this.photoPath,
-    required this.updatedAt,
-  });
-}
-
 /// Aggregate data for the today dashboard.
 class DashboardData {
   final List<CareTask> dueToday;
   final List<CareTask> overdue;
-  final List<PlantSummary> recentPlants;
   final int totalPlantCount;
 
   const DashboardData({
     required this.dueToday,
     required this.overdue,
-    required this.recentPlants,
     required this.totalPlantCount,
   });
 

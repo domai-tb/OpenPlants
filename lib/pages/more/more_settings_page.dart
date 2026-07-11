@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:open_plant/core/app_scope.dart';
 import 'package:open_plant/core/settings.dart';
 import 'package:open_plant/l10n/l10n_x.dart';
-import 'package:open_plant/pages/home/page_navigator.dart';
-import 'package:open_plant/pages/home/widgets/nav_bar_preferences_editor.dart';
 import 'package:open_plant/widgets/app_segmented_triple_control.dart';
 
 class MoreSettingsPage extends StatelessWidget {
@@ -26,8 +24,6 @@ class MoreSettingsPage extends StatelessWidget {
         animation: Listenable.merge([settingsController, services.localeService]),
         builder: (context, _) {
           final settings = settingsController.settings;
-          final orderedItems = orderedPageItemsFromSettings(settings.navBarItemOrder);
-          final hiddenItems = hiddenPageItemsFromSettings(settings.hiddenNavBarItems);
 
           // 0 = system, 1 = light, 2 = dark
           final initialSelection = settings.useSystemDarkmode
@@ -129,21 +125,6 @@ class MoreSettingsPage extends StatelessWidget {
                 value: settings.useSystemTextScaling,
                 onChanged: (val) {
                   settingsController.update(settings.copyWith(useSystemTextScaling: val));
-                },
-              ),
-              const SizedBox(height: 24),
-              NavBarPreferencesEditor(
-                orderedItems: orderedItems,
-                hiddenItems: hiddenItems,
-                onOrderChanged: (items) {
-                  settingsController.update(
-                    settings.copyWith(navBarItemOrder: pageItemIds(items)),
-                  );
-                },
-                onHiddenItemsChanged: (items) {
-                  settingsController.update(
-                    settings.copyWith(hiddenNavBarItems: pageItemIds(items)),
-                  );
                 },
               ),
             ],

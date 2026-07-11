@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'package:open_plant/core/app_scope.dart';
 import 'package:open_plant/l10n/l10n_x.dart';
-import 'package:open_plant/pages/home/page_navigator.dart';
-import 'package:open_plant/pages/home/widgets/nav_bar_preferences_editor.dart';
 import 'package:open_plant/widgets/app_segmented_triple_control.dart';
 
 class OnboardingPage extends StatefulWidget {
@@ -23,8 +21,6 @@ class _OnboardingPageState extends State<OnboardingPage> {
   // 0 = system, 1 = light, 2 = dark
   int _selectedTheme = 0;
   bool _useSystemTextScaling = false;
-  List<PageItem> _navBarOrder = PageItem.values.toList();
-  Set<PageItem> _hiddenNavBarItems = <PageItem>{};
 
   void _applySettings() {
     final settingsController = AppScope.of(context).settings;
@@ -38,8 +34,6 @@ class _OnboardingPageState extends State<OnboardingPage> {
         useSystemDarkmode: useSystemDarkmode,
         useDarkmode: useDarkmode,
         useSystemTextScaling: _useSystemTextScaling,
-        navBarItemOrder: pageItemIds(_navBarOrder),
-        hiddenNavBarItems: pageItemIds(_hiddenNavBarItems),
         didCompleteOnboarding: true,
       ),
     );
@@ -79,8 +73,6 @@ class _OnboardingPageState extends State<OnboardingPage> {
               ? 2
               : 1;
       _useSystemTextScaling = settings.useSystemTextScaling;
-      _navBarOrder = orderedPageItemsFromSettings(settings.navBarItemOrder);
-      _hiddenNavBarItems = hiddenPageItemsFromSettings(settings.hiddenNavBarItems);
       _hydrated = true;
     }
 
@@ -164,17 +156,6 @@ class _OnboardingPageState extends State<OnboardingPage> {
                                 onChanged: (val) {
                                   setState(() => _useSystemTextScaling = val);
                                   _applyPreviewSettings();
-                                },
-                              ),
-                              const SizedBox(height: 24),
-                              NavBarPreferencesEditor(
-                                orderedItems: _navBarOrder,
-                                hiddenItems: _hiddenNavBarItems,
-                                onOrderChanged: (items) {
-                                  setState(() => _navBarOrder = items);
-                                },
-                                onHiddenItemsChanged: (items) {
-                                  setState(() => _hiddenNavBarItems = items);
                                 },
                               ),
                             ],

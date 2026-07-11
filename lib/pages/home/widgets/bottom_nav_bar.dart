@@ -7,6 +7,7 @@ import 'package:open_plant/pages/home/page_navigator.dart';
 import 'package:open_plant/pages/home/widgets/bottom_nav_bar_item.dart';
 
 /// Creates the bottom navigation bar that lets the user switch between different pages.
+/// With 3 fixed tabs, the items fit without scrolling.
 class BottomNavBar extends StatefulWidget {
   /// Needs the currently active page in order to highlight it
   final PageItem currentPage;
@@ -27,59 +28,6 @@ class BottomNavBar extends StatefulWidget {
 }
 
 class _BottomNavBarState extends State<BottomNavBar> {
-  final ScrollController _scrollController = ScrollController();
-
-  /// All pages — the viewport width (~360px) naturally shows ~4-5 items.
-  /// Scroll position is animated to center the active item.
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _scrollToActive(animated: false);
-    });
-  }
-
-  @override
-  void didUpdateWidget(BottomNavBar oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (widget.currentPage != oldWidget.currentPage) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _scrollToActive(animated: true);
-      });
-    }
-  }
-
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
-  }
-
-  void _scrollToActive({required bool animated}) {
-    if (!_scrollController.hasClients) return;
-
-    final index = widget.pages.indexOf(widget.currentPage);
-    if (index < 0) return;
-
-    final viewportWidth = _scrollController.position.viewportDimension;
-    final targetOffset = (index * kNavBarItemWidth) - (viewportWidth / 2) + (kNavBarItemWidth / 2);
-    final clampedOffset = targetOffset.clamp(
-      _scrollController.position.minScrollExtent,
-      _scrollController.position.maxScrollExtent,
-    );
-
-    if (animated) {
-      _scrollController.animateTo(
-        clampedOffset,
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
-      );
-    } else {
-      _scrollController.jumpTo(clampedOffset);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -101,27 +49,20 @@ class _BottomNavBarState extends State<BottomNavBar> {
           ),
         ],
       ),
-      child: SingleChildScrollView(
-        controller: _scrollController,
-        scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 12),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: widget.pages.map((page) {
-            final presentation = pageItemPresentation(context, page);
+      child: Row(
+        children: widget.pages.map((page) {
+          final presentation = pageItemPresentation(context, page);
 
-            return SizedBox(
-              width: kNavBarItemWidth,
-              child: BottomNavBarItem(
-                title: presentation.title,
-                activeIcon: presentation.activeIcon,
-                inactiveIcon: presentation.inactiveIcon,
-                onTap: () => widget.onSelectedPage(page),
-                isActive: widget.currentPage == page,
-              ),
-            );
-          }).toList(),
-        ),
+          return Expanded(
+            child: BottomNavBarItem(
+              title: presentation.title,
+              activeIcon: presentation.activeIcon,
+              inactiveIcon: presentation.inactiveIcon,
+              onTap: () => widget.onSelectedPage(page),
+              isActive: widget.currentPage == page,
+            ),
+          );
+        }).toList(),
       ),
     );
   }

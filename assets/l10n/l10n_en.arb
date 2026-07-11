@@ -1,10 +1,7 @@
 {
   "@@locale": "en",
-  
   "helloWorld": "Hello World!",
-
   "appTitle": "OpenPlant",
-
   "todayDashboardTitle": "Today",
   "dueToday": "Due Today",
   "overdue": "Overdue",
@@ -24,22 +21,16 @@
   "taskTypeRepot": "Repot",
   "taskTypeClean": "Clean",
   "taskTypeInspect": "Inspect",
-  "plantIdentificationTitle": "Plant ID",
   "moreTitle": "More",
-
   "settingsTitle": "Settings",
   "aboutTitle": "About",
   "detailTitle": "Detail",
-
   "searchLabel": "Search",
-
   "back": "Back",
   "next": "Next",
   "finish": "Finish",
-
   "onboardingIntroBody": "Welcome to OpenPlant — your open-source & privacy-friendly plant companion.",
   "onboardingIntroHint": "Track your plants, set reminders, and watch them thrive.",
-
   "onboardingPrivacyTitle": "Your Privacy Matters",
   "onboardingPrivacyWorksLocally": "Works Locally",
   "onboardingPrivacyWorksLocallyBody": "All data and processing happen on-device. No internet connection needed.",
@@ -49,12 +40,10 @@
   "onboardingPrivacyPhotosPrivateBody": "Plant photos are processed on-device and never uploaded.",
   "onboardingPrivacyNoThirdParties": "No Third Parties",
   "onboardingPrivacyNoThirdPartiesBody": "No analytics SDKs, no ad trackers, no external services.",
-
   "onboardingPrivacyBadgeLocal": "Local",
   "onboardingPrivacyBadgeNoAccount": "No account",
   "onboardingPrivacyBadgePhotos": "Private photos",
   "onboardingPrivacyBadgeNoTrackers": "No trackers",
-
   "onboardingPreferencesTitle": "Preferences",
   "themeLabel": "Theme",
   "languageLabel": "Language",
@@ -68,21 +57,14 @@
   "temperatureFahrenheit": "Fahrenheit",
   "plantNamesTitle": "Plant Names",
   "plantNamesDescription": "Localized plant name lookup service.",
-  "navigationLabel": "Navigation",
-  "navigationOrderHint": "Drag to reorder menu items.",
-  "navigationVisibilityLabel": "Show in navigation",
-  "navigationSettingsAlwaysVisibleHint": "More stays visible so settings remain reachable.",
-
   "walletPlaceholderBody": "Placeholder for a wallet-style feature.",
   "primaryAction": "Primary Action",
   "secondaryAction": "Secondary Action",
   "primaryActionSnack": "Replace this with your real action",
   "secondaryActionSnack": "Another placeholder action",
-
   "menuSettingsSubtitle": "OpenPlant settings",
   "menuAboutSubtitle": "About OpenPlant",
   "aboutBody": "OpenPlant is an open-source & privacy-friendly companion app for your plants.\n\nTrack your plant care, set watering reminders, and keep your garden healthy — all without compromising your privacy.",
-  
   "serverFailureMessage": "Could not load server data.",
   "generalFailureMessage": "An error has occurred.",
   "errorMessage": "Error.",
@@ -99,7 +81,6 @@
   "login_success": "Successfully logged in!",
   "login_already": "Allready logged in.",
   "enter_totp": "Please enter your TOTP.",
-
   "plantIdCapturePrompt": "Take a photo of a plant to identify it",
   "plantIdCamera": "Camera",
   "plantIdGallery": "Gallery",
@@ -117,7 +98,6 @@
   "plantIdEnterSpeciesManually": "Enter species manually",
   "plantIdSkipIdentification": "Skip identification / enter manually",
   "plantIdIdentificationErrorWithManual": "Identification failed. You can still enter the species manually.",
-
   "plantCollectionTitle": "Plant Collection",
   "plantCollectionEmpty": "No plants yet",
   "plantCollectionTapToAdd": "Tap + to add your first plant",
@@ -150,41 +130,6 @@
   "nameIsRequired": "Name is required",
   "errorSavingPlant": "Error saving plant: {error}",
   "never": "Never",
-
-  "speciesLibraryTitle": "Species Library",
-  "speciesLibrarySearchHint": "Search species...",
-  "speciesLibraryEasy": "Easy",
-  "speciesLibraryModerate": "Moderate",
-  "speciesLibraryChallenging": "Challenging",
-  "speciesLibraryToxicOnly": "Toxic",
-  "speciesLibraryEmpty": "No species found",
-  "speciesLibraryCarePlan": "Care Plan",
-  "speciesLibraryWatering": "Watering",
-  "speciesLibraryLight": "Light",
-  "speciesLibraryHumidity": "Humidity",
-  "speciesLibrarySoil": "Soil",
-  "speciesLibraryRepotting": "Repotting",
-  "speciesLibraryQuickFacts": "Quick Facts",
-  "speciesLibraryLightNeeds": "Light Needs",
-  "speciesLibraryWaterNeeds": "Water Needs",
-  "speciesLibraryHumidityPref": "Humidity",
-  "speciesLibrarySoilType": "Soil Type",
-  "speciesLibraryRepottingInterval": "Repotting",
-  "speciesLibraryMonths": "{months} months",
-  "speciesLibraryLightLow": "Low light",
-  "speciesLibraryLightMedium": "Medium indirect",
-  "speciesLibraryLightBright": "Bright indirect",
-  "speciesLibraryLightDirect": "Direct sun",
-  "speciesLibraryWaterLow": "Low (drought-tolerant)",
-  "speciesLibraryWaterModerate": "Moderate",
-  "speciesLibraryWaterFrequent": "Frequent",
-  "speciesLibraryHumidityLow": "Low (30-40%)",
-  "speciesLibraryHumidityModerate": "Moderate (40-60%)",
-  "speciesLibraryHumidityHigh": "High (60%+)",
-  "speciesLibraryToxicToHumans": "Toxic to humans",
-  "speciesLibraryToxicToPets": "Toxic to pets",
-  "speciesLibraryToxicityWarning": "Toxicity Warning",
-  "speciesLibraryViewDetails": "View Species Details",
   "careScheduleTitle": "Care Schedule",
   "careScheduleOverdue": "Overdue",
   "careScheduleDueToday": "Due Today",
@@ -195,8 +140,6 @@
   "careScheduleAllPlants": "All plants",
   "careScheduleAllTypes": "All types",
   "careScheduleEmpty": "Add plants to see care tasks",
-  "careScheduleGoToCollection": "Go to Plant Collection",
-
   "careTaskCompleted": "{taskType} completed",
   "@careTaskCompleted": {
     "description": "Auto-generated journal entry when a care task is completed",
@@ -221,7 +164,6 @@
       }
     }
   },
-
   "symptomLoggerTitle": "Log Symptom",
   "symptomLoggerLogSymptom": "Log Symptom",
   "symptomLoggerSaved": "Symptom logged successfully!",
@@ -249,7 +191,6 @@
   "symptomLoggerSave": "Save Entry",
   "symptomLoggerSelectRequired": "Please make a selection before proceeding",
   "symptomLoggerSelectPlant": "Select a plant",
-
   "symptomTypeYellowLeaves": "Yellow Leaves",
   "symptomTypeBrownTips": "Brown Tips",
   "symptomTypeDrooping": "Drooping",
@@ -259,44 +200,36 @@
   "symptomTypeDrySoil": "Dry Soil",
   "symptomTypeWetSoil": "Wet Soil",
   "symptomTypeLeafSpots": "Leaf Spots",
-
   "symptomSeverityMild": "Mild",
   "symptomSeverityMildDesc": "Minor issue, plant looks mostly healthy",
   "symptomSeverityModerate": "Moderate",
   "symptomSeverityModerateDesc": "Noticeable problem, needs attention soon",
   "symptomSeveritySevere": "Severe",
   "symptomSeveritySevereDesc": "Serious issue, requires immediate action",
-
   "symptomPartLeaves": "Leaves",
   "symptomPartStems": "Stems",
   "symptomPartRoots": "Roots",
   "symptomPartSoil": "Soil",
   "symptomPartFlowers": "Flowers",
   "symptomPartMultiple": "Multiple Areas",
-
   "symptomOnsetToday": "Today",
   "symptomOnsetFewDays": "A few days ago",
   "symptomOnsetAboutWeek": "About a week ago",
   "symptomOnsetMoreThanWeek": "More than a week ago",
-
   "symptomSoilDry": "Dry",
   "symptomSoilMoist": "Moist",
   "symptomSoilWet": "Wet",
   "symptomSoilSoggy": "Soggy",
-
   "symptomLightFullSun": "Full Sun",
   "symptomLightPartialShade": "Partial Shade",
   "symptomLightLowLight": "Low Light",
   "symptomLightUnknown": "Unknown",
-
   "symptomLoggerHistory": "Symptom History",
   "symptomLoggerNoEntries": "No symptoms logged yet",
   "symptomLoggerMarkResolved": "Mark Resolved",
   "symptomLoggerMarkResolvedConfirm": "Mark this symptom as resolved?",
   "symptomLoggerRecentEvents": "Recent Health Events",
-
   "careStatusNeedsAttention": "Needs Attention",
-
   "journalTitle": "Journal",
   "journalPageTitle": "{plantName} — Journal",
   "journalEmpty": "No journal entries yet",
@@ -319,7 +252,6 @@
   "journalAddPhoto": "Add Photo",
   "journalTakePhoto": "Take Photo",
   "journalChooseFromGallery": "Choose from Gallery",
-
   "growthPhotosTitle": "Growth Photos",
   "growthPhotosAdd": "Add",
   "growthPhotosEmpty": "Add your first growth photo",
@@ -331,7 +263,6 @@
   "growthPhotoNotFound": "Photo not found",
   "growthPhotoCamera": "Camera",
   "growthPhotoGallery": "Gallery",
-
   "careRulesTitle": "Care Rules",
   "careRulesManage": "Manage",
   "careRulesEmpty": "No custom rules",
@@ -357,7 +288,6 @@
   "careRulesReminderTimeHint": "09:00",
   "careRulesReminderDays": "Reminder days",
   "careRulesSaveFailed": "Failed to save rule: {error}",
-
   "diagnosisTitle": "Plant Diagnosis",
   "diagnosisSubtitle": "Diagnose plant problems",
   "diagnosisStep": "Step",
@@ -470,7 +400,6 @@
   "diagnosisSymptomWetSoil": "Wet Soil",
   "diagnosisSymptomLeafSpots": "Leaf Spots",
   "diagnosisDiagnoseThisPlant": "Diagnose this plant",
-
   "healthTimelineTitle": "Health Timeline",
   "healthTimelineFilterAll": "All",
   "healthTimelineFilterActive": "Active",
@@ -530,7 +459,6 @@
     }
   },
   "viewHealthTimeline": "View Health Timeline",
-
   "diagnosisEvidenceReportedSymptoms": "You reported {symptoms}.",
   "@diagnosisEvidenceReportedSymptoms": {
     "description": "Introduces the symptoms that contributed to a diagnosis result",
@@ -560,7 +488,6 @@
   "diagnosisEvidencePestInfestationSigns": "Visible insects, sticky residue, and leaf damage can indicate pest infestation.",
   "diagnosisEvidenceDefault": "Based on your answers, this cause was identified as a possibility.",
   "diagnosisFallbackEvidence": "No single cause stood out based on the information provided. This could mean the issue is caused by factors not covered by the questionnaire.",
-
   "diagnosisActionOverwateringDrySoil": "Allow the top 2-3 inches of soil to dry before watering again.",
   "diagnosisActionOverwateringDrainage": "Check that your pot has drainage holes and empty the saucer after watering.",
   "diagnosisActionOverwateringTrimRoots": "If root rot is suspected, remove the plant and trim any brown, mushy roots.",
@@ -587,7 +514,6 @@
   "diagnosisActionPestsInspect": "Check under leaves and in leaf joints where pests often hide.",
   "diagnosisActionDefaultCare": "Ensure your plant receives appropriate light and water for its species.",
   "diagnosisActionDefaultMoisture": "Check the soil moisture before watering.",
-
   "diagnosisCheckOverwateringRoots": "Check the roots: healthy roots are firm and white, rotten roots are brown and mushy.",
   "diagnosisCheckOverwateringMoisture": "Monitor soil moisture — it should dry out between waterings.",
   "diagnosisCheckUnderwateringRootBall": "Check the root ball: if it has pulled away from the pot edges, the soil is too dry.",
@@ -610,5 +536,39 @@
   "diagnosisFallbackActionMoisture": "Check the soil moisture before watering — over- and under-watering are the most common issues.",
   "diagnosisFallbackActionInspect": "Inspect the leaves and stems closely for any unusual spots, pests, or texture changes.",
   "diagnosisFallbackCheckMoreDetails": "Try the questionnaire again with more details about your plant's environment.",
-  "diagnosisFallbackCheckCommunity": "Consult a local plant shop or online community for species-specific advice."
+  "diagnosisFallbackCheckCommunity": "Consult a local plant shop or online community for species-specific advice.",
+  "plantIdentificationTitle": "Plant ID",
+  "speciesLibrarySearchHint": "Search species...",
+  "speciesLibraryEasy": "Easy",
+  "speciesLibraryModerate": "Moderate",
+  "speciesLibraryChallenging": "Challenging",
+  "speciesLibraryToxicOnly": "Toxic",
+  "speciesLibraryEmpty": "No species found",
+  "speciesLibraryCarePlan": "Care Plan",
+  "speciesLibraryWatering": "Watering",
+  "speciesLibraryLight": "Light",
+  "speciesLibraryHumidity": "Humidity",
+  "speciesLibrarySoil": "Soil",
+  "speciesLibraryRepotting": "Repotting",
+  "speciesLibraryQuickFacts": "Quick Facts",
+  "speciesLibraryLightNeeds": "Light Needs",
+  "speciesLibraryWaterNeeds": "Water Needs",
+  "speciesLibraryHumidityPref": "Humidity",
+  "speciesLibrarySoilType": "Soil Type",
+  "speciesLibraryRepottingInterval": "Repotting",
+  "speciesLibraryMonths": "{months} months",
+  "speciesLibraryLightLow": "Low light",
+  "speciesLibraryLightMedium": "Medium indirect",
+  "speciesLibraryLightBright": "Bright indirect",
+  "speciesLibraryLightDirect": "Direct sun",
+  "speciesLibraryWaterLow": "Low (drought-tolerant)",
+  "speciesLibraryWaterModerate": "Moderate",
+  "speciesLibraryWaterFrequent": "Frequent",
+  "speciesLibraryHumidityLow": "Low (30-40%)",
+  "speciesLibraryHumidityModerate": "Moderate (40-60%)",
+  "speciesLibraryHumidityHigh": "High (60%+)",
+  "speciesLibraryToxicToHumans": "Toxic to humans",
+  "speciesLibraryToxicToPets": "Toxic to pets",
+  "speciesLibraryToxicityWarning": "Toxicity Warning",
+  "speciesLibraryViewDetails": "View Species Details"
 }

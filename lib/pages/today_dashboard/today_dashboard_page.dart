@@ -1,26 +1,22 @@
-import 'dart:io' show File;
-
 import 'package:flutter/material.dart';
 
 import 'package:open_plant/core/app_scope.dart';
 import 'package:open_plant/l10n/l10n.dart';
 import 'package:open_plant/l10n/l10n_x.dart';
+import 'package:open_plant/pages/diagnosis/diagnosis_page.dart';
+import 'package:open_plant/pages/home/home_page.dart';
 import 'package:open_plant/pages/home/widgets/page_navigation_animation.dart';
+import 'package:open_plant/pages/today_dashboard/plant_grid_section.dart';
 import 'package:open_plant/pages/today_dashboard/today_dashboard_entity.dart';
+import 'package:open_plant/pages/plant_collection/plant_collection_detail_page.dart';
+import 'package:open_plant/pages/plant_collection/plant_collection_form_page.dart';
+import 'package:open_plant/pages/plant_identification/plant_identification_page.dart';
 import 'package:open_plant/pages/today_dashboard/today_dashboard_usecases.dart';
 
 class TodayDashboardPage extends StatefulWidget {
   final GlobalKey<NavigatorState> mainNavigatorKey;
   final GlobalKey<AnimatedEntryState> pageEntryAnimationKey;
   final GlobalKey<AnimatedExitState> pageExitAnimationKey;
-
-  /// Optional callback: navigate to the Plant Collection tab and open the
-  /// add-plant form.
-  final VoidCallback? onNavigateToAddPlant;
-
-  /// Optional callback: navigate to a plant's detail page by ID.
-  /// The callback receives the plant ID and handles tab switching + navigation.
-  final ValueChanged<String>? onNavigateToPlantDetail;
 
   /// Notifies this page to reload data after a tab switch.
   final Listenable? tabSwitchNotifier;
@@ -30,8 +26,6 @@ class TodayDashboardPage extends StatefulWidget {
     required this.mainNavigatorKey,
     required this.pageEntryAnimationKey,
     required this.pageExitAnimationKey,
-    this.onNavigateToAddPlant,
-    this.onNavigateToPlantDetail,
     this.tabSwitchNotifier,
   });
 
@@ -42,6 +36,7 @@ class TodayDashboardPage extends StatefulWidget {
 class _TodayDashboardPageState extends State<TodayDashboardPage>
     with AutomaticKeepAliveClientMixin<TodayDashboardPage> {
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
+  final GlobalKey<PlantGridSectionState> _plantGridKey = GlobalKey<PlantGridSectionState>();
   final ScrollController _scrollController = ScrollController();
 
   late TodayDashboardUsecases _usecases;
@@ -118,6 +113,40 @@ class _TodayDashboardPageState extends State<TodayDashboardPage>
     );
   }
 
+  Future<void> _openAddPlant() async {
+    await Navigator.of(context).push(
+      MaterialPageRoute(builder: (_) => const PlantCollectionFormPage()),
+    );
+    if (mounted) {
+      await _load();
+      await _plantGridKey.currentState?.reload();
+    }
+  }
+
+  Future<void> _openPlantDetail(String plantId) async {
+    final usecases = AppScope.of(context).services.plantCollection;
+    try {
+      final plants = await usecases.loadPlants();
+      if (!mounted) return;
+      final plant = plants.firstWhere(
+        (p) => p.id == plantId,
+        orElse: () => throw PlantNotFoundException(plantId),
+      );
+      await Navigator.of(context).push(
+        MaterialPageRoute(builder: (_) => PlantCollectionDetailPage(plant: plant)),
+      );
+      if (mounted) {
+        await _load();
+        await _plantGridKey.currentState?.reload();
+      }
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Plant not found')),
+      );
+    }
+  }
+
   Widget _buildBody(ThemeData theme, AppLocalizations l10n) {
     if (_loading) {
       return _buildLoadingState(theme);
@@ -130,7 +159,7 @@ class _TodayDashboardPageState extends State<TodayDashboardPage>
     final data = _data;
     if (data == null || data.isEmpty) {
       return _OnboardingEmptyState(
-        onNavigateToAddPlant: widget.onNavigateToAddPlant,
+        onNavigateToAddPlant: _openAddPlant,
       );
     }
 
@@ -149,26 +178,24 @@ class _TodayDashboardPageState extends State<TodayDashboardPage>
                 _buildHeader(theme, l10n),
                 const SizedBox(height: 8),
                 _QuickActionStrip(
-                  mainNavigatorKey: widget.mainNavigatorKey,
-                  onNavigateToAddPlant: widget.onNavigateToAddPlant,
+                  onNavigateToAddPlant: _openAddPlant,
                 ),
                 const SizedBox(height: 24),
                 if (data.dueToday.isNotEmpty)
                   _DueTasksSection(
                     tasks: data.dueToday,
-                    onNavigateToPlantDetail: widget.onNavigateToPlantDetail,
+                    onNavigateToPlantDetail: _openPlantDetail,
                   ),
                 if (data.overdue.isNotEmpty)
                   _OverdueTasksSection(
                     tasks: data.overdue,
-                    onNavigateToPlantDetail: widget.onNavigateToPlantDetail,
+                    onNavigateToPlantDetail: _openPlantDetail,
                   ),
-                if (data.recentPlants.isNotEmpty)
-                  _RecentPlantsCarousel(
-                    plants: data.recentPlants,
-                    mainNavigatorKey: widget.mainNavigatorKey,
-                    onNavigateToPlantDetail: widget.onNavigateToPlantDetail,
-                  ),
+                // Plant grid replaces the recent plants carousel.
+                PlantGridSection(
+                  key: _plantGridKey,
+                  onNavigateToPlantDetail: _openPlantDetail,
+                ),
                 const SizedBox(height: 32),
               ]),
             ),
@@ -305,11 +332,9 @@ class _ShimmerPlaceholderState extends State<_ShimmerPlaceholder> with SingleTic
 // ─── Quick Action Strip ─────────────────────────────────────────────────────
 
 class _QuickActionStrip extends StatelessWidget {
-  final GlobalKey<NavigatorState> mainNavigatorKey;
   final VoidCallback? onNavigateToAddPlant;
 
   const _QuickActionStrip({
-    required this.mainNavigatorKey,
     this.onNavigateToAddPlant,
   });
 
@@ -333,27 +358,29 @@ class _QuickActionStrip extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 12),
-          Expanded(
-            child: _ActionButton(
-              icon: Icons.camera_alt_outlined,
-              label: l10n.quickIdentify,
-              color: theme.colorScheme.secondary,
-              onTap: () {
-                mainNavigatorKey.currentState?.pushNamed('/identify');
-              },
+            Expanded(
+              child: _ActionButton(
+                icon: Icons.camera_alt_outlined,
+                label: l10n.quickIdentify,
+                color: theme.colorScheme.secondary,
+                onTap: () {
+                  PlantIdentificationPage.showAsModal(context);
+                },
+              ),
             ),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: _ActionButton(
-              icon: Icons.healing_outlined,
-              label: l10n.quickDiagnose,
-              color: theme.colorScheme.tertiary,
-              onTap: () {
-                mainNavigatorKey.currentState?.pushNamed('/care_schedule');
-              },
+            const SizedBox(width: 12),
+            Expanded(
+              child: _ActionButton(
+                icon: Icons.healing_outlined,
+                label: l10n.quickDiagnose,
+                color: theme.colorScheme.tertiary,
+                onTap: () {
+                  Navigator.of(context, rootNavigator: true).push(
+                    MaterialPageRoute(builder: (_) => const DiagnosisPage()),
+                  );
+                },
+              ),
             ),
-          ),
         ],
       ),
     );
@@ -590,108 +617,6 @@ class _CareTaskCard extends StatelessWidget {
       CareTaskType.clean => l10n.taskTypeClean,
       CareTaskType.inspect => l10n.taskTypeInspect,
     };
-  }
-}
-
-// ─── Recent Plants Carousel ─────────────────────────────────────────────────
-
-class _RecentPlantsCarousel extends StatelessWidget {
-  final List<PlantSummary> plants;
-  final GlobalKey<NavigatorState> mainNavigatorKey;
-  final ValueChanged<String>? onNavigateToPlantDetail;
-
-  const _RecentPlantsCarousel({
-    required this.plants,
-    required this.mainNavigatorKey,
-    this.onNavigateToPlantDetail,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(height: 16),
-          Text(
-            context.l10n.recentPlants,
-            style: theme.textTheme.titleMedium,
-          ),
-          const SizedBox(height: 8),
-          SizedBox(
-            height: 120,
-            child: ListView.separated(
-              scrollDirection: Axis.horizontal,
-              itemCount: plants.length,
-              separatorBuilder: (_, __) => const SizedBox(width: 12),
-              itemBuilder: (context, index) {
-                final plant = plants[index];
-                return GestureDetector(
-                  onTap: () {
-                    onNavigateToPlantDetail?.call(plant.id);
-                  },
-                  child: Column(
-                    children: [
-                      _PlantThumbnail(photoPath: plant.photoPath),
-                      const SizedBox(height: 4),
-                      SizedBox(
-                        width: 80,
-                        child: Text(
-                          plant.name,
-                          style: theme.textTheme.labelSmall,
-                          textAlign: TextAlign.center,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              },
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _PlantThumbnail extends StatelessWidget {
-  final String? photoPath;
-
-  const _PlantThumbnail({this.photoPath});
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    return Container(
-      width: 80,
-      height: 80,
-      decoration: BoxDecoration(
-        color: theme.colorScheme.surfaceContainerHighest,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      clipBehavior: Clip.antiAlias,
-      child: photoPath != null
-          ? Image.file(
-              File(photoPath!),
-              fit: BoxFit.cover,
-              errorBuilder: (_, __, ___) => _plantIcon(theme),
-            )
-          : _plantIcon(theme),
-    );
-  }
-
-  Widget _plantIcon(ThemeData theme) {
-    return Icon(
-      Icons.yard_outlined,
-      color: theme.colorScheme.primary.withValues(alpha: 0.5),
-      size: 36,
-    );
   }
 }
 
