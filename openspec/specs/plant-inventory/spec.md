@@ -1,15 +1,10 @@
-## ADDED Requirements
+# Plant Inventory
 
-### Requirement: User can view plant collection as a list
-The system SHALL display all plants in the user's collection as a scrollable list showing name, species label (if set), room (if set), and care status indicator.
+## Purpose
 
-#### Scenario: Empty collection shows placeholder
-- **WHEN** user navigates to the collection page and there are no plants
-- **THEN** the system displays an empty-state message "No plants yet" with a button to add the first plant
+Manage the user's plant collection: add, edit, delete, and view plants with photos, species, room assignment, and journal entry associations.
 
-#### Scenario: Collection shows all plants
-- **WHEN** user navigates to the collection page and there are plants saved
-- **THEN** the system displays a list with each plant's name, species label, room badge, and care status icon
+## Requirements
 
 ### Requirement: Photo capture triggers auto-identification on add-plant form
 When the user captures or selects a photo on the add-plant form, the system SHALL automatically run the plant identification pipeline on that photo. While identification runs, the system SHALL display a loading indicator on the photo. After identification completes, the results SHALL be shown as selectable options below the photo.
@@ -54,27 +49,12 @@ The system SHALL allow users to create a new plant entry with name (required), o
 - **THEN** the system uses the manually entered species instead of the identification result
 
 #### Scenario: Add plant with room from picker
-- **WHEN** user taps "Add plant", fills in name, and selects "Living Room" from the room picker dropdown
-- **THEN** the system creates the plant with roomId referencing the "Living Room" entity
+- **WHEN** user taps "Add plant", fills in name, and selects a room from the room picker dropdown
+- **THEN** the system creates the plant with roomId referencing that room entity
 
 #### Scenario: Add plant with all optional fields
 - **WHEN** user taps "Add plant" and provides name, photo, species, room selection, and notes
 - **THEN** the system creates a plant with all provided fields persisted and the photo added to its timeline
-
-### Requirement: User can filter plants by room
-The system SHALL provide filter chips on the plant collection page to filter plants by assigned room.
-
-#### Scenario: Filter by room shows only matching plants
-- **WHEN** user taps the "Kitchen" filter chip on the collection page
-- **THEN** the system displays only plants assigned to the "Kitchen" room
-
-#### Scenario: Clear filter shows all plants
-- **WHEN** user taps the "All" filter chip or deselects the active room filter
-- **THEN** the system displays all plants in the collection
-
-#### Scenario: Room filter chips reflect defined rooms
-- **WHEN** user navigates to the collection page
-- **THEN** the system displays filter chips for each defined room plus an "All" chip
 
 ### Requirement: Plant form shows room picker
 The system SHALL display a dropdown picker in the plant form that lists all defined rooms, with an option to create a new room.
@@ -116,17 +96,6 @@ The system SHALL allow users to permanently remove a plant from their collection
 #### Scenario: Cancel delete
 - **WHEN** user taps delete on a plant and cancels the confirmation dialog
 - **THEN** the system does not modify the plant, its photos, or any metadata
-
-### Requirement: User can search plants by name
-The system SHALL provide a search bar that filters the plant list by name substring match.
-
-#### Scenario: Search by full name
-- **WHEN** user types a plant's full name in the search bar
-- **THEN** the system displays only that plant in the filtered list
-
-#### Scenario: Search by partial name
-- **WHEN** user types a partial substring of a plant's name
-- **THEN** the system displays all plants whose names contain that substring
 
 ### Requirement: Plant entity references journal entries
 The system SHALL associate each plant with its journal entries via a plant identifier reference.
