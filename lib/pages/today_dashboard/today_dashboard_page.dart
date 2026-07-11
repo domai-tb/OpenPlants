@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
 
 import 'package:open_plant/core/app_scope.dart';
+import 'package:open_plant/core/constants.dart';
 import 'package:open_plant/l10n/l10n.dart';
 import 'package:open_plant/l10n/l10n_x.dart';
 import 'package:open_plant/pages/diagnosis/diagnosis_page.dart';
 import 'package:open_plant/pages/home/home_page.dart';
 import 'package:open_plant/pages/home/widgets/page_navigation_animation.dart';
-import 'package:open_plant/pages/today_dashboard/plant_grid_section.dart';
-import 'package:open_plant/pages/today_dashboard/today_dashboard_entity.dart';
 import 'package:open_plant/pages/plant_collection/plant_collection_detail_page.dart';
 import 'package:open_plant/pages/plant_collection/plant_collection_form_page.dart';
+import 'package:open_plant/pages/plant_collection/plant_collection_item_entity.dart';
 import 'package:open_plant/pages/plant_identification/plant_identification_page.dart';
+import 'package:open_plant/pages/today_dashboard/plant_grid_section.dart';
+import 'package:open_plant/pages/today_dashboard/today_dashboard_entity.dart';
 import 'package:open_plant/pages/today_dashboard/today_dashboard_usecases.dart';
+import 'package:open_plant/widgets/app_search_bar.dart';
 
 class TodayDashboardPage extends StatefulWidget {
   final GlobalKey<NavigatorState> mainNavigatorKey;
@@ -45,6 +48,13 @@ class _TodayDashboardPageState extends State<TodayDashboardPage>
   DashboardData? _data;
   bool _loading = true;
   String? _error;
+
+  // ── Filter-state for the plant grid (lifted from PlantGridSection) ──
+  bool _showSearch = false;
+  String _query = '';
+  CareStatus? _filterStatus;
+  String? _filterRoomId;
+  Map<String, String> _roomNames = {};
 
   @override
   bool get wantKeepAlive => true;
@@ -163,45 +173,56 @@ class _TodayDashboardPageState extends State<TodayDashboardPage>
       );
     }
 
-    return RefreshIndicator(
-      key: _refreshIndicatorKey,
-      onRefresh: _load,
-      child: CustomScrollView(
-        controller: _scrollController,
-        slivers: [
-          SliverPadding(
-            padding: const EdgeInsets.only(
-              top: 10,
-            ),
-            sliver: SliverList(
-              delegate: SliverChildListDelegate([
-                _buildHeader(theme, l10n),
-                const SizedBox(height: 8),
-                _QuickActionStrip(
-                  onNavigateToAddPlant: _openAddPlant,
-                ),
-                const SizedBox(height: 24),
-                if (data.dueToday.isNotEmpty)
-                  _DueTasksSection(
-                    tasks: data.dueToday,
-                    onNavigateToPlantDetail: _openPlantDetail,
+    return Column(
+      children: [
+        // ── Fixed section (header, actions, filters) ────────────────
+        _buildHeader(theme, l10n),
+        const SizedBox(height: 8),
+        _QuickActionStrip(
+          onNavigateToAddPlant: _openAddPlant,
+        ),
+        const SizedBox(height: 24),
+        _buildFilterControls(theme, l10n),
+        const SizedBox(height: 12),
+        // ── Scrollable section (tasks + plant grid) ─────────────────
+        Expanded(
+          child: RefreshIndicator(
+            key: _refreshIndicatorKey,
+            onRefresh: _load,
+            child: CustomScrollView(
+              controller: _scrollController,
+              slivers: [
+                SliverPadding(
+                  padding: EdgeInsets.zero,
+                  sliver: SliverList(
+                    delegate: SliverChildListDelegate([
+                      if (data.dueToday.isNotEmpty)
+                        _DueTasksSection(
+                          tasks: data.dueToday,
+                          onNavigateToPlantDetail: _openPlantDetail,
+                        ),
+                      if (data.overdue.isNotEmpty)
+                        _OverdueTasksSection(
+                          tasks: data.overdue,
+                          onNavigateToPlantDetail: _openPlantDetail,
+                        ),
+                      PlantGridSection(
+                        key: _plantGridKey,
+                        onNavigateToPlantDetail: _openPlantDetail,
+                        query: _query,
+                        filterStatus: _filterStatus,
+                        filterRoomId: _filterRoomId,
+                        onRoomNamesChanged: _onRoomNamesChanged,
+                      ),
+                      const SizedBox(height: 32),
+                    ]),
                   ),
-                if (data.overdue.isNotEmpty)
-                  _OverdueTasksSection(
-                    tasks: data.overdue,
-                    onNavigateToPlantDetail: _openPlantDetail,
-                  ),
-                // Plant grid replaces the recent plants carousel.
-                PlantGridSection(
-                  key: _plantGridKey,
-                  onNavigateToPlantDetail: _openPlantDetail,
                 ),
-                const SizedBox(height: 32),
-              ]),
+              ],
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -213,6 +234,143 @@ class _TodayDashboardPageState extends State<TodayDashboardPage>
         style: theme.textTheme.displayMedium,
       ),
     );
+  }
+
+  /// Filters and search controls for the plant grid — rendered in the
+  /// fixed (non-scrolling) section of the page layout.
+  Widget _buildFilterControls(ThemeData theme, AppLocalizations l10n) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Section header with search toggle.
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Row(
+            children: [
+              Expanded(
+                child: Text(
+                  l10n.plantCollectionTitle,
+                  style: theme.textTheme.titleMedium,
+                ),
+              ),
+              IconButton(
+                icon: Icon(_showSearch ? Icons.close : Icons.search),
+                onPressed: _onToggleSearch,
+              ),
+            ],
+          ),
+        ),
+        // Search bar (toggled).
+        if (_showSearch) ...[
+          const SizedBox(height: 8),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: AppSearchBar(
+              arrowHidden: true,
+              onBack: () {},
+              onChange: _onSearchChanged,
+            ),
+          ),
+        ],
+        const SizedBox(height: 8),
+        // Care status filter chips.
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Wrap(
+            spacing: 8,
+            runSpacing: 6,
+            children: [
+              _FilterChipWidget(
+                label: l10n.filterAll,
+                selected: _filterStatus == null,
+                onTap: () => _onFilterStatusChanged(null),
+              ),
+              _FilterChipWidget(
+                label: l10n.careStatusNeedsWater,
+                selected: _filterStatus == CareStatus.needsWater,
+                onTap: () => _onFilterStatusChanged(CareStatus.needsWater),
+              ),
+              _FilterChipWidget(
+                label: l10n.careStatusNeedsFertilizer,
+                selected: _filterStatus == CareStatus.needsFertilizer,
+                onTap: () => _onFilterStatusChanged(CareStatus.needsFertilizer),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 8),
+        // Room filter chips (horizontal scroll).
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: SizedBox(
+            height: 32,
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              children: [
+                _FilterChipWidget(
+                  label: 'All Rooms',
+                  selected: _filterRoomId == null,
+                  onTap: () => _onFilterRoomChanged(null),
+                ),
+                const SizedBox(width: 8),
+                ..._roomNames.entries.map(
+                  (entry) => Padding(
+                    padding: const EdgeInsets.only(right: 8),
+                    child: _FilterChipWidget(
+                      label: entry.value,
+                      selected: _filterRoomId == entry.key,
+                      onTap: () => _onFilterRoomChanged(entry.key),
+                    ),
+                  ),
+                ),
+                if (_roomNames.isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.only(right: 8),
+                    child: _FilterChipWidget(
+                      label: 'Unassigned',
+                      selected: _filterRoomId == kUnassignedSentinel,
+                      onTap: () => _onFilterRoomChanged(kUnassignedSentinel),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  // ── Filter state callbacks ──────────────────────────────────────────
+
+  void _onToggleSearch() {
+    setState(() {
+      _showSearch = !_showSearch;
+      if (!_showSearch && _query.isNotEmpty) {
+        _query = '';
+      }
+    });
+  }
+
+  void _onSearchChanged(String q) {
+    setState(() => _query = q);
+  }
+
+  void _onFilterStatusChanged(CareStatus? status) {
+    setState(() {
+      _filterStatus = _filterStatus == status ? null : status;
+    });
+  }
+
+  void _onFilterRoomChanged(String? roomId) {
+    setState(() {
+      _filterRoomId = _filterRoomId == roomId ? null : roomId;
+    });
+  }
+
+  void _onRoomNamesChanged(Map<String, String> roomNames) {
+    if (mounted) {
+      setState(() => _roomNames = roomNames);
+    }
   }
 
   Widget _buildErrorState(ThemeData theme, AppLocalizations l10n) {
@@ -664,6 +822,41 @@ class _OnboardingEmptyState extends StatelessWidget {
               label: Text(l10n.quickAddPlant),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+// ─── Filter Chip Widget ──────────────────────────────────────────────────
+
+class _FilterChipWidget extends StatelessWidget {
+  final String label;
+  final bool selected;
+  final VoidCallback onTap;
+
+  const _FilterChipWidget({
+    required this.label,
+    required this.selected,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+        decoration: BoxDecoration(
+          color: selected ? theme.colorScheme.primary : theme.colorScheme.surfaceContainerHighest,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Text(
+          label,
+          style: theme.textTheme.labelMedium?.copyWith(
+            color: selected ? theme.colorScheme.onPrimary : theme.colorScheme.onSurface,
+          ),
         ),
       ),
     );

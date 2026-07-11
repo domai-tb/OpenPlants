@@ -1610,4 +1610,19 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get speciesLibraryViewDetails => 'Arten-Details anzeigen';
+
+  @override
+  String get speciesListTitle => 'Species Library';
+
+  @override
+  String get speciesListSearchHint => 'Search species...';
+
+  @override
+  String get speciesListEmptyState => 'No species found';
+
+  @override
+  String get moreSpeciesListTitle => 'Species List';
+
+  @override
+  String get moreSpeciesListSubtitle => 'Browse all plant species';
 }

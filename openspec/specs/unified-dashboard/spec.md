@@ -10,11 +10,11 @@ Serves as the primary navigation hub, replacing the standalone today dashboard a
 The system SHALL consolidate the today dashboard and plant collection into a single unified dashboard page accessible from the bottom nav bar. The standalone plant collection page SHALL be removed from the nav bar.
 
 ### Requirement: Dashboard shows quick-action strip
-The system SHALL display a persistent row of action buttons at the top of the dashboard: "Add Plant", "Identify", and "Diagnose".
+The system SHALL display a persistent row of action buttons at the top of the dashboard: "Add Plant", "Identify", and "Diagnose". These buttons SHALL remain fixed at the top of the viewport and SHALL NOT scroll off-screen when the user scrolls through the plant collection.
 
 #### Scenario: Quick actions available
 - **WHEN** the user has one or more plants
-- **THEN** the quick-action strip is visible at the top of the dashboard content
+- **THEN** the quick-action strip is visible at the top of the dashboard content and remains fixed during scroll
 
 #### Scenario: Quick actions in empty state
 - **WHEN** the user has no plants
@@ -36,11 +36,11 @@ The system SHALL query the care schedule engine and display care tasks that are 
 - **THEN** the dashboard hides both task sections
 
 ### Requirement: Dashboard shows full plant grid with search
-The system SHALL display all the user's plants in a scrollable grid below the task sections. A search bar SHALL filter the grid by plant name.
+The system SHALL display all the user's plants in a scrollable grid below the task sections. A search bar SHALL filter the grid by plant name. The search bar and filter controls SHALL be fixed at the top and SHALL NOT scroll with the grid.
 
 #### Scenario: Grid shows all plants
 - **WHEN** the user has plants in their collection
-- **THEN** the dashboard displays all plants in a grid layout with photo and name
+- **THEN** the dashboard displays all plants in a grid layout with photo and name in the scrollable area
 
 #### Scenario: Search filters the grid
 - **WHEN** the user types a plant name in the search bar
@@ -51,7 +51,7 @@ The system SHALL display all the user's plants in a scrollable grid below the ta
 - **THEN** the dashboard displays an empty search state message
 
 ### Requirement: Dashboard provides filter chips for care status and room
-The system SHALL display filter chips above the plant grid to filter by care status (happy, needs attention, critical) and by room.
+The system SHALL display filter chips above the plant grid to filter by care status (happy, needs attention, critical) and by room. The filter chips SHALL be fixed at the top and SHALL NOT scroll with the grid.
 
 #### Scenario: Filter by care status
 - **WHEN** the user taps a care status filter chip

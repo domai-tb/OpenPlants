@@ -9,17 +9,37 @@ import 'package:open_plant/l10n/l10n_x.dart';
 import 'package:open_plant/pages/plant_collection/plant_collection_item_entity.dart';
 import 'package:open_plant/pages/plant_collection/plant_collection_usecases.dart';
 import 'package:open_plant/pages/room_profiles/room_profiles_usecases.dart';
-import 'package:open_plant/widgets/app_search_bar.dart';
 
 /// Section widget that displays the plant collection as a searchable,
 /// filterable grid within the today dashboard.
+///
+/// Filter state (search query, care-status filter, room filter) is
+/// managed externally by the parent and passed via constructor — the
+/// state reacts to changes through `didUpdateWidget`.
 class PlantGridSection extends StatefulWidget {
   /// Called when a plant card is tapped with the plant's ID.
   final ValueChanged<String> onNavigateToPlantDetail;
 
+  /// Current search query (empty string = no search).
+  final String query;
+
+  /// Active care-status filter, or `null` for "All".
+  final CareStatus? filterStatus;
+
+  /// Active room-id filter, or `null` for "All".
+  final String? filterRoomId;
+
+  /// Called after room names are loaded so the parent can render room
+  /// filter chips in the fixed section of the page layout.
+  final ValueChanged<Map<String, String>>? onRoomNamesChanged;
+
   const PlantGridSection({
     super.key,
     required this.onNavigateToPlantDetail,
+    this.query = '',
+    this.filterStatus,
+    this.filterRoomId,
+    this.onRoomNamesChanged,
   });
 
   @override
@@ -34,10 +54,6 @@ class PlantGridSectionState extends State<PlantGridSection> {
   List<PlantEntity> _plants = [];
   Map<String, String> _roomNames = {};
   bool _loading = true;
-  bool _showSearch = false;
-  String _query = '';
-  CareStatus? _filterStatus;
-  String? _filterRoomId;
 
   /// Reloads plants and room data. Called externally after navigation.
   Future<void> reload() => _load();
@@ -52,6 +68,16 @@ class PlantGridSectionState extends State<PlantGridSection> {
     _load();
   }
 
+  @override
+  void didUpdateWidget(PlantGridSection oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.query != widget.query ||
+        oldWidget.filterStatus != widget.filterStatus ||
+        oldWidget.filterRoomId != widget.filterRoomId) {
+      _load();
+    }
+  }
+
   Future<void> _load() async {
     setState(() => _loading = true);
 
@@ -63,20 +89,20 @@ class PlantGridSectionState extends State<PlantGridSection> {
       }
 
       List<PlantEntity> plants;
-      if (_query.isNotEmpty) {
-        plants = await _usecases.searchPlants(_query);
-      } else if (_filterStatus != null) {
-        plants = await _usecases.filterByCareStatus(_filterStatus);
+      if (widget.query.isNotEmpty) {
+        plants = await _usecases.searchPlants(widget.query);
+      } else if (widget.filterStatus != null) {
+        plants = await _usecases.filterByCareStatus(widget.filterStatus);
       } else {
         plants = await _usecases.loadPlants();
       }
 
       // Apply room filter.
-      if (_filterRoomId != null) {
-        if (_filterRoomId == kUnassignedSentinel) {
+      if (widget.filterRoomId != null) {
+        if (widget.filterRoomId == kUnassignedSentinel) {
           plants = plants.where((p) => p.roomId == null).toList();
         } else {
-          plants = plants.where((p) => p.roomId == _filterRoomId).toList();
+          plants = plants.where((p) => p.roomId == widget.filterRoomId).toList();
         }
       }
 
@@ -86,6 +112,7 @@ class PlantGridSectionState extends State<PlantGridSection> {
         _roomNames = roomNames;
         _loading = false;
       });
+      widget.onRoomNamesChanged?.call(roomNames);
     } catch (_) {
       if (!mounted) return;
       setState(() => _loading = false);
@@ -97,152 +124,15 @@ class PlantGridSectionState extends State<PlantGridSection> {
     final theme = Theme.of(context);
     final l10n = context.l10n;
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SizedBox(height: 24),
-        // Section header with search toggle.
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Row(
-            children: [
-              Expanded(
-                child: Text(
-                  l10n.plantCollectionTitle,
-                  style: theme.textTheme.titleMedium,
-                ),
-              ),
-              IconButton(
-                icon: Icon(_showSearch ? Icons.close : Icons.search),
-                onPressed: () {
-                  setState(() {
-                    _showSearch = !_showSearch;
-                    if (!_showSearch && _query.isNotEmpty) {
-                      _query = '';
-                      _load();
-                    }
-                  });
-                },
-              ),
-            ],
-          ),
-        ),
-        // Search bar (toggled).
-        if (_showSearch) ...[
-          const SizedBox(height: 8),
-          AppSearchBar(
-            arrowHidden: true,
-            onBack: () {},
-            onChange: (q) {
-              setState(() => _query = q);
-              _load();
-            },
-          ),
-        ],
-        const SizedBox(height: 8),
-        // Care status filter chips.
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Wrap(
-            spacing: 8,
-            runSpacing: 6,
-            children: [
-              _FilterChip(
-                label: l10n.filterAll,
-                selected: _filterStatus == null,
-                onTap: () {
-                  setState(() => _filterStatus = null);
-                  _load();
-                },
-              ),
-              _FilterChip(
-                label: l10n.careStatusNeedsWater,
-                selected: _filterStatus == CareStatus.needsWater,
-                onTap: () {
-                  setState(() {
-                    _filterStatus =
-                        _filterStatus == CareStatus.needsWater ? null : CareStatus.needsWater;
-                  });
-                  _load();
-                },
-              ),
-              _FilterChip(
-                label: l10n.careStatusNeedsFertilizer,
-                selected: _filterStatus == CareStatus.needsFertilizer,
-                onTap: () {
-                  setState(() {
-                    _filterStatus =
-                        _filterStatus == CareStatus.needsFertilizer ? null : CareStatus.needsFertilizer;
-                  });
-                  _load();
-                },
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 8),
-        // Room filter chips (horizontal scroll).
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: SizedBox(
-            height: 32,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: [
-                _FilterChip(
-                  label: 'All Rooms',
-                  selected: _filterRoomId == null,
-                  onTap: () {
-                    setState(() => _filterRoomId = null);
-                    _load();
-                  },
-                ),
-                const SizedBox(width: 8),
-                ..._roomNames.entries.map(
-                  (entry) => Padding(
-                    padding: const EdgeInsets.only(right: 8),
-                    child: _FilterChip(
-                      label: entry.value,
-                      selected: _filterRoomId == entry.key,
-                      onTap: () {
-                        setState(() {
-                          _filterRoomId = _filterRoomId == entry.key ? null : entry.key;
-                        });
-                        _load();
-                      },
-                    ),
-                  ),
-                ),
-                if (_roomNames.isNotEmpty)
-                  Padding(
-                    padding: const EdgeInsets.only(right: 8),
-                    child: _FilterChip(
-                      label: 'Unassigned',
-                      selected: _filterRoomId == kUnassignedSentinel,
-                      onTap: () {
-                        setState(() {
-                          _filterRoomId =
-                              _filterRoomId == kUnassignedSentinel ? null : kUnassignedSentinel;
-                        });
-                        _load();
-                      },
-                    ),
-                  ),
-              ],
-            ),
-          ),
-        ),
-        const SizedBox(height: 12),
-        // Grid or empty / loading state.
-        if (_loading) ...[
-          _buildLoadingGrid(theme, l10n),
-        ] else if (_plants.isEmpty) ...[
-          _buildEmptyState(theme, l10n),
-        ] else ...[
-          _buildPlantGrid(theme, l10n),
-        ],
-      ],
-    );
+    // Grid or empty / loading state — filter controls are rendered
+    // by the parent in the fixed section of the page layout.
+    if (_loading) {
+      return _buildLoadingGrid(theme, l10n);
+    } else if (_plants.isEmpty) {
+      return _buildEmptyState(theme, l10n);
+    } else {
+      return _buildPlantGrid(theme, l10n);
+    }
   }
 
   Widget _buildPlantGrid(ThemeData theme, AppLocalizations l10n) {
@@ -403,41 +293,6 @@ class PlantGridSectionState extends State<PlantGridSection> {
               style: theme.textTheme.bodyMedium,
             ),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-// ─── Filter Chip ─────────────────────────────────────────────────────────────────
-
-class _FilterChip extends StatelessWidget {
-  final String label;
-  final bool selected;
-  final VoidCallback onTap;
-
-  const _FilterChip({
-    required this.label,
-    required this.selected,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-        decoration: BoxDecoration(
-          color: selected ? theme.colorScheme.primary : theme.colorScheme.surfaceContainerHighest,
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: Text(
-          label,
-          style: theme.textTheme.labelMedium?.copyWith(
-            color: selected ? theme.colorScheme.onPrimary : theme.colorScheme.onSurface,
-          ),
         ),
       ),
     );

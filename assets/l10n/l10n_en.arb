@@ -564,5 +564,10 @@
   "speciesLibraryToxicToHumans": "Toxic to humans",
   "speciesLibraryToxicToPets": "Toxic to pets",
   "speciesLibraryToxicityWarning": "Toxicity Warning",
-  "speciesLibraryViewDetails": "View Species Details"
+  "speciesLibraryViewDetails": "View Species Details",
+  "speciesListTitle": "Species Library",
+  "speciesListSearchHint": "Search species...",
+  "speciesListEmptyState": "No species found",
+  "moreSpeciesListTitle": "Species List",
+  "moreSpeciesListSubtitle": "Browse all plant species"
 }

@@ -3007,6 +3007,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'View Species Details'**
   String get speciesLibraryViewDetails;
+
+  /// No description provided for @speciesListTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Species Library'**
+  String get speciesListTitle;
+
+  /// No description provided for @speciesListSearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search species...'**
+  String get speciesListSearchHint;
+
+  /// No description provided for @speciesListEmptyState.
+  ///
+  /// In en, this message translates to:
+  /// **'No species found'**
+  String get speciesListEmptyState;
+
+  /// No description provided for @moreSpeciesListTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Species List'**
+  String get moreSpeciesListTitle;
+
+  /// No description provided for @moreSpeciesListSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Browse all plant species'**
+  String get moreSpeciesListSubtitle;
 }
 
 class _AppLocalizationsDelegate
