@@ -11,6 +11,7 @@ import 'package:open_plant/pages/more/more_settings_page.dart';
 import 'package:open_plant/pages/more/more_usecases.dart';
 import 'package:open_plant/pages/plant_collection/plant_collection_item_entity.dart';
 import 'package:open_plant/pages/room_profiles/room_profiles_page.dart';
+import 'package:open_plant/pages/species_library/species_library_page.dart';
 import 'package:open_plant/pages/symptom_logger/symptom_logger_page.dart';
 import 'package:open_plant/pages/diagnosis/diagnosis_page.dart';
 import 'package:open_plant/widgets/scroll_to_top_button.dart';
@@ -68,6 +69,9 @@ class _MorePageState extends State<MorePage> with AutomaticKeepAliveClientMixin<
 
   void _open(MoreItemEntity item) {
     switch (item.id) {
+      case 'species_list':
+        Navigator.of(context).push(MaterialPageRoute(builder: (_) => const SpeciesLibraryPage()));
+        break;
       case 'rooms':
         Navigator.of(context).push(MaterialPageRoute(builder: (_) => const RoomProfilesPage()));
         break;
@@ -173,6 +177,8 @@ class _MorePageState extends State<MorePage> with AutomaticKeepAliveClientMixin<
 
     String itemTitle(MoreItemEntity item) {
       switch (item.id) {
+        case 'species_list':
+          return context.l10n.moreSpeciesListTitle;
         case 'settings':
           return context.l10n.settingsTitle;
         case 'about':
@@ -184,6 +190,8 @@ class _MorePageState extends State<MorePage> with AutomaticKeepAliveClientMixin<
 
     String itemSubtitle(MoreItemEntity item) {
       switch (item.id) {
+        case 'species_list':
+          return context.l10n.moreSpeciesListSubtitle;
         case 'settings':
           return context.l10n.menuSettingsSubtitle;
         case 'about':
