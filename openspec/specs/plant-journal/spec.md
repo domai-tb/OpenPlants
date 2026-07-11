@@ -31,15 +31,11 @@ The system SHALL allow users to create timestamped journal entries for a specifi
 - **WHEN** user taps "Add journal entry" and selects "Pest observation"
 - **THEN** the system creates a journal entry with type "pest" and the pest description
 
-#### Scenario: Create diagnosis result entry
-- **WHEN** user taps "Add journal entry" and selects "Diagnosis result"
-- **THEN** the system creates a journal entry with type "diagnosis" and the diagnosis notes
-
 ### Requirement: User can view journal timeline
-The system SHALL display all journal entries for a plant in reverse chronological order (newest first).
+The system SHALL display all journal entries, symptom logs, and diagnosis results for a plant merged into a single reverse-chronological timeline (newest first). The system SHALL load entries from the journal store, symptom logger datasource, and diagnosis datasource and merge them at query time.
 
 #### Scenario: Empty journal shows placeholder
-- **WHEN** user navigates to a plant's journal and there are no entries
+- **WHEN** user navigates to a plant's journal and there are no entries, symptom logs, or diagnosis results
 - **THEN** the system displays an empty-state message "No journal entries yet"
 
 #### Scenario: Journal shows entries in order
@@ -49,6 +45,14 @@ The system SHALL display all journal entries for a plant in reverse chronologica
 #### Scenario: Journal shows photo thumbnails
 - **WHEN** a journal entry has a photo
 - **THEN** the system displays a thumbnail of the photo in the entry card
+
+#### Scenario: Journal shows symptom log entries
+- **WHEN** a plant has symptom log entries
+- **THEN** they appear in the journal timeline with symptom-specific rendering (symptom type icons, severity badge, onset timing, affected parts, resolved/unresolved status)
+
+#### Scenario: Journal shows diagnosis result entries
+- **WHEN** a plant has diagnosis results
+- **THEN** they appear in the journal timeline with diagnosis-specific rendering (top cause name, confidence badge, summary evidence, date evaluated)
 
 ### Requirement: User can edit a journal entry
 The system SHALL allow users to modify the notes and photo of an existing journal entry.
@@ -82,6 +86,22 @@ The system SHALL persist all journal entries in local storage.
 #### Scenario: Entries are plant-specific
 - **WHEN** user views journal for plant A and journal for plant B
 - **THEN** each plant shows only its own journal entries
+
+### Requirement: JournalEntry supports symptom and diagnosis types
+The `JournalEntryType` enum SHALL be extended with `symptom` and `diagnosis` values. The `JournalEntry` entity SHALL support optional structured data fields (`referenceId`, `structuredData`) to carry symptom and diagnosis rendering data when projected from health event stores.
+
+#### Scenario: Symptom entry projected at query time
+- **WHEN** the journal datasource loads the timeline
+- **THEN** each symptom log entry SHALL be projected into a `JournalEntry` with type `symptom` and the symptom's structured data (symptom types, severity, affected parts, onset timing, resolved status) populated in the entry
+
+#### Scenario: Diagnosis entry projected at query time
+- **WHEN** the journal datasource loads the timeline
+- **THEN** each diagnosis result SHALL be projected into a `JournalEntry` with type `diagnosis` and the diagnosis's structured data (top cause, confidence, evidence summary) populated in the entry
+
+#### Scenario: Linked symptom-diagnosis entries carry reference IDs
+- **WHEN** a symptom log has a `diagnosisResultId`
+- **THEN** the projected symptom `JournalEntry` SHALL store the diagnosis result ID in `referenceId`
+- **AND** the projected diagnosis `JournalEntry` SHALL store the symptom log ID in `referenceId`
 
 ### Requirement: Journal entries of type "task" can be auto-created by care system
 

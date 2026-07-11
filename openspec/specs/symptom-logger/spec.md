@@ -13,8 +13,8 @@ The system SHALL provide a structured form to record a symptom entry for any pla
 - **WHEN** user navigates to a plant's detail page and taps "Log Symptom"
 - **THEN** the system opens the symptom logger form pre-associated with that plant
 
-#### Scenario: Open symptom logger from health timeline
-- **WHEN** user taps "Log Symptom" from the plant's health timeline section
+#### Scenario: Open symptom logger from journal timeline
+- **WHEN** user taps "Log Symptom" from the plant's journal timeline section
 - **THEN** the system opens the symptom logger form pre-associated with that plant
 
 #### Scenario: Open symptom logger from quick action
@@ -91,8 +91,8 @@ The system SHALL save each symptom entry as a JSON record associated with the pl
 - **THEN** the system persists the entry to local storage, triggers the diagnosis engine, and persists the diagnosis result with the symptom entry's ID linked
 
 #### Scenario: View symptom history for a plant
-- **WHEN** user opens a plant's detail page and navigates to "Symptom History" or the health timeline
-- **THEN** the system displays all symptom entries for that plant in reverse chronological order
+- **WHEN** user opens a plant's detail page and navigates to the journal timeline
+- **THEN** the system displays all symptom entries for that plant in reverse chronological order within the unified journal timeline
 
 ### Requirement: Symptom entries can be marked as resolved
 The system SHALL allow the user to mark a symptom entry as resolved. Resolved entries SHALL remain in the history with the resolved flag set to true and a resolved timestamp.

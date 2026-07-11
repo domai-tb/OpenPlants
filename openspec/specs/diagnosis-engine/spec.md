@@ -154,5 +154,5 @@ The system SHALL provide a persisted `DiagnosisResult` entity that records the o
 - **THEN** the system SHALL create a `DiagnosisResult` entity with: id, plantId, optional symptomLogEntryId, createdAt, the full `DiagnosisContext` snapshot, and the full `DiagnosisResult` output
 
 #### Scenario: Load diagnosis results for a plant
-- **WHEN** viewing a plant's health timeline
-- **THEN** the system SHALL load all `DiagnosisResult` entities for that plant in reverse chronological order
+- **WHEN** viewing a plant's journal timeline
+- **THEN** the system SHALL load all `DiagnosisResult` entities for that plant in reverse chronological order for display within the unified timeline
