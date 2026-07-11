@@ -2288,36 +2288,6 @@ abstract class AppLocalizations {
   /// **'Diagnose this plant'**
   String get diagnosisDiagnoseThisPlant;
 
-  /// No description provided for @healthTimelineTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Health Timeline'**
-  String get healthTimelineTitle;
-
-  /// No description provided for @healthTimelineFilterAll.
-  ///
-  /// In en, this message translates to:
-  /// **'All'**
-  String get healthTimelineFilterAll;
-
-  /// No description provided for @healthTimelineFilterActive.
-  ///
-  /// In en, this message translates to:
-  /// **'Active'**
-  String get healthTimelineFilterActive;
-
-  /// No description provided for @healthTimelineEmpty.
-  ///
-  /// In en, this message translates to:
-  /// **'No health events yet'**
-  String get healthTimelineEmpty;
-
-  /// No description provided for @healthTimelineEmptyHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Symptom logs and diagnoses will appear here.'**
-  String get healthTimelineEmptyHint;
-
   /// No description provided for @healthTimelineSymptomEntry.
   ///
   /// In en, this message translates to:
@@ -2359,12 +2329,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Resolved'**
   String get healthTimelineResolved;
-
-  /// No description provided for @healthTimelineViewDiagnosis.
-  ///
-  /// In en, this message translates to:
-  /// **'View Diagnosis'**
-  String get healthTimelineViewDiagnosis;
 
   /// No description provided for @healthTimelineViewLinkedSymptom.
   ///

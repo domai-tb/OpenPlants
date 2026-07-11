@@ -36,4 +36,23 @@ class PlantJournalUseCases {
 
   /// Count entries for a specific plant.
   Future<int> countEntries(String plantId) => repository.countEntries(plantId);
+
+  // ---------------------------------------------------------------------------
+  // Unified timeline (journal entries + symptom logs + diagnosis results)
+  // ---------------------------------------------------------------------------
+
+  /// Returns the full unified timeline for [plantId], merging journal entries,
+  /// symptom logs, and diagnosis results sorted newest first.
+  Future<List<JournalEntry>> getUnifiedTimeline(String plantId) =>
+      repository.getUnifiedTimeline(plantId);
+
+  /// Returns the most recent entry across all types for [plantId], or null.
+  Future<JournalEntry?> getLatestUnifiedEntry(String plantId) async {
+    final entries = await getUnifiedTimeline(plantId);
+    return entries.isEmpty ? null : entries.first;
+  }
+
+  /// Returns the unified timeline across all plants.
+  Future<List<JournalEntry>> getAllUnifiedTimeline() =>
+      repository.getAllUnifiedTimeline();
 }

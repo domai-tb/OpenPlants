@@ -6,6 +6,7 @@ enum JournalEntryType {
   growth,
   repotting,
   pest,
+  symptom,
   diagnosis,
 }
 
@@ -31,6 +32,8 @@ class JournalEntry {
   final DateTime timestamp;
   final String? notes;
   final String? photoPath;
+  final String? referenceId;
+  final Map<String, dynamic>? structuredData;
 
   const JournalEntry({
     required this.id,
@@ -39,6 +42,8 @@ class JournalEntry {
     required this.timestamp,
     this.notes,
     this.photoPath,
+    this.referenceId,
+    this.structuredData,
   });
 
   /// Create a copy with optional field overrides.
@@ -51,6 +56,10 @@ class JournalEntry {
     bool clearNotes = false,
     String? photoPath,
     bool clearPhoto = false,
+    String? referenceId,
+    bool clearReferenceId = false,
+    Map<String, dynamic>? structuredData,
+    bool clearStructuredData = false,
   }) {
     return JournalEntry(
       id: id ?? this.id,
@@ -59,6 +68,8 @@ class JournalEntry {
       timestamp: timestamp ?? this.timestamp,
       notes: clearNotes ? null : (notes ?? this.notes),
       photoPath: clearPhoto ? null : (photoPath ?? this.photoPath),
+      referenceId: clearReferenceId ? null : (referenceId ?? this.referenceId),
+      structuredData: clearStructuredData ? null : (structuredData ?? this.structuredData),
     );
   }
 
@@ -71,6 +82,8 @@ class JournalEntry {
       'timestamp': timestamp.toIso8601String(),
       'notes': notes,
       'photoPath': photoPath,
+      if (referenceId != null) 'referenceId': referenceId,
+      if (structuredData != null) 'structuredData': structuredData,
     };
   }
 
@@ -83,6 +96,8 @@ class JournalEntry {
       timestamp: DateTime.parse(json['timestamp'] as String),
       notes: json['notes'] as String?,
       photoPath: json['photoPath'] as String?,
+      referenceId: json['referenceId'] as String?,
+      structuredData: json['structuredData'] as Map<String, dynamic>?,
     );
   }
 }

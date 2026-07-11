@@ -103,4 +103,19 @@ class PlantJournalRepository {
     final entries = await dataSource.loadByPlant(plantId);
     return entries.length;
   }
+
+  /// Returns all journal entries across all plants.
+  Future<List<JournalEntry>> getAllEntries() => dataSource.loadAll();
+
+  // ---------------------------------------------------------------------------
+  // Unified timeline (journal entries + symptom logs + diagnosis results)
+  // ---------------------------------------------------------------------------
+
+  /// Returns a merged timeline for [plantId] sorted newest first.
+  Future<List<JournalEntry>> getUnifiedTimeline(String plantId) =>
+      dataSource.getUnifiedTimeline(plantId);
+
+  /// Returns the merged timeline across all plants, newest first.
+  Future<List<JournalEntry>> getAllUnifiedTimeline() =>
+      dataSource.getAllUnifiedTimeline();
 }

@@ -1172,22 +1172,6 @@ class AppLocalizationsDe extends AppLocalizations {
   String get diagnosisDiagnoseThisPlant => 'Diese Pflanze diagnostizieren';
 
   @override
-  String get healthTimelineTitle => 'Gesundheitsverlauf';
-
-  @override
-  String get healthTimelineFilterAll => 'Alle';
-
-  @override
-  String get healthTimelineFilterActive => 'Aktiv';
-
-  @override
-  String get healthTimelineEmpty => 'Noch keine Gesundheitsereignisse';
-
-  @override
-  String get healthTimelineEmptyHint =>
-      'Symptomprotokolle und Diagnosen werden hier angezeigt.';
-
-  @override
   String get healthTimelineSymptomEntry => 'Symptom protokolliert';
 
   @override
@@ -1207,9 +1191,6 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get healthTimelineResolved => 'Gelöst';
-
-  @override
-  String get healthTimelineViewDiagnosis => 'Diagnose anzeigen';
 
   @override
   String get healthTimelineViewLinkedSymptom => 'Verknüpftes Symptom anzeigen';

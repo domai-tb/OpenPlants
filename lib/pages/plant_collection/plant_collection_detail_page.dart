@@ -24,7 +24,6 @@ import 'package:open_plant/pages/diagnosis/diagnosis_item_entity.dart';
 import 'package:open_plant/pages/diagnosis/diagnosis_page.dart';
 import 'package:open_plant/pages/diagnosis/diagnosis_result_entity.dart';
 import 'package:open_plant/pages/diagnosis/diagnosis_result_page.dart';
-import 'package:open_plant/pages/plant_health_timeline/plant_health_timeline_page.dart';
 import 'package:open_plant/pages/room_profiles/room_profiles_usecases.dart';
 import 'package:open_plant/pages/symptom_logger/symptom_logger_extensions.dart';
 import 'package:open_plant/pages/symptom_logger/symptom_logger_item_entity.dart';
@@ -112,14 +111,6 @@ class _PlantCollectionDetailPageState extends State<PlantCollectionDetailPage> {
     } catch (_) {
       // Silently handle — badge will not be shown
     }
-  }
-
-  void _openHealthTimeline() {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (_) => PlantHealthTimelinePage(plantId: _plant.id),
-      ),
-    );
   }
 
   void _openLatestDiagnosis() {
@@ -505,11 +496,11 @@ class _PlantCollectionDetailPageState extends State<PlantCollectionDetailPage> {
           ),
           const SizedBox(height: 12),
 
-          // View Health Timeline button
+          // View Journal / Timeline button
           OutlinedButton.icon(
-            onPressed: _openHealthTimeline,
-            icon: const Icon(Icons.timeline),
-            label: Text(context.l10n.viewHealthTimeline),
+            onPressed: _openJournal,
+            icon: const Icon(Icons.book_outlined),
+            label: Text(context.l10n.journalTitle),
           ),
           const SizedBox(height: 24),
 

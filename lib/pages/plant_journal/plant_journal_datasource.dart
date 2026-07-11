@@ -4,15 +4,29 @@ import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:open_plant/pages/diagnosis/diagnosis_datasource.dart';
+import 'package:open_plant/pages/diagnosis/diagnosis_result_entity.dart';
 import 'package:open_plant/pages/plant_journal/plant_journal_item_entity.dart';
+import 'package:open_plant/pages/symptom_logger/symptom_logger_datasource.dart';
+import 'package:open_plant/pages/symptom_logger/symptom_logger_item_entity.dart';
 
 /// Data source for plant journal persistence.
 ///
 /// Stores journal entries as JSON in SharedPreferences and
 /// manages photo files in the app's documents directory.
+/// Also loads symptom logs and diagnosis results for a merged timeline.
 class PlantJournalDataSource {
   static const String _prefsKey = 'plant_journal_v1';
   static const String _photoSubdir = 'journal_photos';
+
+  final SymptomLoggerDataSource _symptomLoggerDataSource;
+  final DiagnosisDataSource _diagnosisDataSource;
+
+  PlantJournalDataSource({
+    SymptomLoggerDataSource? symptomLoggerDataSource,
+    DiagnosisDataSource? diagnosisDataSource,
+  })  : _symptomLoggerDataSource = symptomLoggerDataSource ?? SymptomLoggerDataSource(),
+        _diagnosisDataSource = diagnosisDataSource ?? DiagnosisDataSource();
 
   /// Load all journal entries from SharedPreferences.
   Future<List<JournalEntry>> loadAll() async {
@@ -94,5 +108,107 @@ class PlantJournalDataSource {
     if (file.existsSync()) {
       await file.delete();
     }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Unified timeline (merges journal entries + symptom logs + diagnosis results)
+  // ---------------------------------------------------------------------------
+
+  /// Loads unified timeline across all plants.
+  Future<List<JournalEntry>> getAllUnifiedTimeline() async {
+    final allJournal = await loadAll();
+    final allSymptoms = await _symptomLoggerDataSource.loadAllEntries();
+    final allDiagnoses = await _diagnosisDataSource.getAll();
+
+    final all = <JournalEntry>[
+      ...allJournal,
+      ...allSymptoms.map(_symptomToJournalEntry),
+      ...allDiagnoses.map(_diagnosisToJournalEntry),
+    ];
+    all.sort((a, b) => b.timestamp.compareTo(a.timestamp));
+    return all;
+  }
+
+  /// Loads journal entries, symptom logs, and diagnosis results for [plantId]
+  /// and merges them into a single list sorted by timestamp descending.
+  Future<List<JournalEntry>> getUnifiedTimeline(String plantId) async {
+    final journalEntries = await loadByPlant(plantId);
+    final symptoms = await _symptomLoggerDataSource.getAllByPlant(plantId);
+    final diagnoses = await _diagnosisDataSource.getAllByPlant(plantId);
+
+    final mappedSymptoms = symptoms.map(_symptomToJournalEntry);
+    final mappedDiagnoses = diagnoses.map(_diagnosisToJournalEntry);
+
+    final all = <JournalEntry>[
+      ...journalEntries,
+      ...mappedSymptoms,
+      ...mappedDiagnoses,
+    ];
+    all.sort((a, b) => b.timestamp.compareTo(a.timestamp));
+    return all;
+  }
+
+  /// Projects a [SymptomLogEntry] into a [JournalEntry] with type `symptom`.
+  JournalEntry _symptomToJournalEntry(SymptomLogEntry s) {
+    final symptomTypeNames = s.symptomTypes.map((e) => e.name).toList();
+    final affectedPartNames = s.affectedParts.map((e) => e.name).toList();
+
+    return JournalEntry(
+      id: 'symptom_${s.id}',
+      plantId: s.plantId,
+      type: JournalEntryType.symptom,
+      timestamp: s.createdAt,
+      referenceId: s.diagnosisResultId,
+      notes: s.notes,
+      photoPath: s.photoPath,
+      structuredData: <String, dynamic>{
+        'symptomTypes': symptomTypeNames,
+        'severity': s.severity.name,
+        'affectedParts': affectedPartNames,
+        'onsetTiming': s.onsetTiming.name,
+        'resolved': s.resolved,
+        if (s.resolvedAt != null) 'resolvedAt': s.resolvedAt!.toIso8601String(),
+        if (s.diagnosisResultId != null) 'diagnosisResultId': s.diagnosisResultId,
+      },
+    );
+  }
+
+  /// Projects a [DiagnosisResultEntity] into a [JournalEntry] with type `diagnosis`.
+  JournalEntry _diagnosisToJournalEntry(DiagnosisResultEntity d) {
+    String? topCauseName;
+    double? topConfidence;
+    if (d.causes.isNotEmpty) {
+      topCauseName = d.causes.first.causeId;
+      topConfidence = d.causes.first.score;
+    }
+
+    return JournalEntry(
+      id: 'diagnosis_${d.id}',
+      plantId: d.plantId,
+      type: JournalEntryType.diagnosis,
+      timestamp: d.createdAt,
+      referenceId: d.symptomLogEntryId,
+      notes: '${d.type.name}: ${topCauseName ?? 'No cause identified'}',
+      structuredData: <String, dynamic>{
+        'topCause': topCauseName,
+        'topConfidence': topConfidence,
+        'causeCount': d.causes.length,
+        'type': d.type.name,
+        if (d.symptomLogEntryId != null) 'symptomLogEntryId': d.symptomLogEntryId,
+        'evidenceSummary': _buildEvidenceSummary(d),
+      },
+    );
+  }
+
+  /// Builds a summary of the evidence reported during diagnosis.
+  String _buildEvidenceSummary(DiagnosisResultEntity d) {
+    final parts = <String>[];
+    if (d.context.wateringFrequency != null) {
+      parts.add('Watering: ${d.context.wateringFrequency!.name}');
+    }
+    if (d.context.lightExposure != null) {
+      parts.add('Light: ${d.context.lightExposure!.name}');
+    }
+    return parts.isNotEmpty ? parts.join(', ') : '';
   }
 }

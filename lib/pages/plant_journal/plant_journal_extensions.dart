@@ -21,6 +21,8 @@ extension JournalEntryTypeUI on JournalEntryType {
         return context.l10n.journalTypeRepotting;
       case JournalEntryType.pest:
         return context.l10n.journalTypePest;
+      case JournalEntryType.symptom:
+        return context.l10n.healthTimelineSymptomEntry;
       case JournalEntryType.diagnosis:
         return context.l10n.journalTypeDiagnosis;
     }
@@ -41,6 +43,8 @@ extension JournalEntryTypeUI on JournalEntryType {
         return Icons.transfer_within_a_station;
       case JournalEntryType.pest:
         return Icons.bug_report;
+      case JournalEntryType.symptom:
+        return Icons.bug_report_outlined;
       case JournalEntryType.diagnosis:
         return Icons.medical_services;
     }
