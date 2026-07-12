@@ -74,6 +74,8 @@ The system SHALL indicate which plants need attention in the collection list vie
 
 When a care task is marked as done via the schedule view (the `completeTask` operation), the system SHALL automatically create a `JournalEntry` of type `task` in the plant journal for the associated plant. The journal entry SHALL record what task type was completed and at what time.
 
+In addition, when the completed task is a watering or fertilizing task, the system SHALL update the plant's care status timestamps (`lastWateredAt` or `lastFertilizedAt`) and reset the stored `careStatus` to `happy` if it was the corresponding needs-status. This ensures the plant's effective care status reflects the completed care action.
+
 #### Scenario: Journal entry created on task completion
 
 - **WHEN** user marks a care task as done for a plant (e.g., watering, fertilizing, pruning)
@@ -87,17 +89,43 @@ When a care task is marked as done via the schedule view (the `completeTask` ope
 - **WHEN** user marks a care task as done and provides a note (e.g., "gave extra water")
 - **THEN** the journal entry's notes SHALL include both the task description and the user's note (e.g., "Watering completed — gave extra water")
 
+#### Scenario: Watering task completion updates plant status
+
+- **WHEN** user marks a watering task as done for a plant
+- **THEN** the system sets `lastWateredAt` to the current timestamp
+- **AND** if the plant's stored `careStatus` was `needsWater`, the system sets it to `happy`
+
+#### Scenario: Fertilizing task completion updates plant status
+
+- **WHEN** user marks a fertilizing task as done for a plant
+- **THEN** the system sets `lastFertilizedAt` to the current timestamp
+- **AND** if the plant's stored `careStatus` was `needsFertilizer`, the system sets it to `happy`
+
+#### Scenario: Non-watering/fertilizing task does not update plant status
+
+- **WHEN** user marks a task of type misting, pruning, rotating, repotting, leaf cleaning, or pest inspection as done
+- **THEN** the system does NOT modify the plant's `lastWateredAt`, `lastFertilizedAt`, or `careStatus` fields
+
+#### Scenario: Plant status update failure does not block task completion
+
+- **WHEN** an error occurs while updating the plant's care status (e.g., plant not found, storage failure)
+- **THEN** the task completion is still persisted
+- **AND** the journal entry is still created (if applicable)
+- **AND** the error is logged but not surfaced to the user
+
 #### Scenario: Journal entry not created on snooze
 
 - **WHEN** user snoozes a care task (defers it)
 - **THEN** the system records the `TaskCompletion` for schedule anchoring
 - **AND** the system does NOT create a journal entry
+- **AND** the system does NOT update the plant's care status
 
 #### Scenario: Journal entry not created on skip
 
 - **WHEN** user skips a care task
 - **THEN** the system records the `TaskCompletion` for schedule anchoring
 - **AND** the system does NOT create a journal entry
+- **AND** the system does NOT update the plant's care status
 
 #### Scenario: Journal failure does not block task completion
 

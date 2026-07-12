@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 
 import 'package:open_plant/pages/care_schedule/care_task.dart';
+import 'package:open_plant/pages/care_schedule/care_task_type.dart';
 import 'package:open_plant/pages/care_schedule/overdue_detector.dart';
 import 'package:open_plant/pages/care_schedule/room_config.dart';
 import 'package:open_plant/pages/care_schedule/schedule_config.dart';
@@ -147,6 +148,20 @@ class CareScheduleUsecases {
       await plantJournal.addEntry(entry);
     } catch (e) {
       debugPrint('Failed to auto-journal care task completion: $e');
+    }
+
+    // Update plant care status for watering/fertilizing tasks (graceful degradation)
+    try {
+      final plant = await plantCollection.getPlantById(task.plantId);
+      if (plant != null) {
+        if (task.taskType.builtIn == BuiltInTaskType.watering) {
+          await plantCollection.markAsWatered(plant);
+        } else if (task.taskType.builtIn == BuiltInTaskType.fertilizing) {
+          await plantCollection.markAsFertilized(plant);
+        }
+      }
+    } catch (e) {
+      debugPrint('Failed to update plant care status on task completion: $e');
     }
 
     return (await getSchedule()).tasks;
