@@ -1,18 +1,13 @@
 # Shared Widgets
 
-Shared widgets live in:
+Shared widgets live in `lib/widgets/`. They keep feature modules focused on their own behaviour and prevent UI duplication.
 
-- `lib/widgets/`
+## Shared Components
 
-The goal is to keep page modules small and avoid duplicating UI components across features.
+- Buttons: `app_button.dart`, `custom_button.dart`, and `app_icon_button.dart`
+- Search: `app_search_bar.dart`
+- Controls: `app_segmented_triple_control.dart` and `scroll_to_top_button.dart`
+- Feedback: `confirm_dialog.dart` and `error_message.dart`
+- Camera preview: `inline_camera_preview.dart`
 
-## Included Examples
-
-- Buttons: `app_button.dart`
-- Icon button: `app_icon_button.dart`
-- Search bar: `app_search_bar.dart`
-- Segmented control: `app_segmented_triple_control.dart`
-- Scroll-to-top FAB: `scroll_to_top_button.dart`
-
-If a widget is only used by a single feature, keep it inside that feature folder instead.
-
+Keep a widget inside its feature module when it is used only by that feature; move it to `lib/widgets/` only once it represents a reusable app-wide component.
