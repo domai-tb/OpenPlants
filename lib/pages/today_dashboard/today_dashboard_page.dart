@@ -228,10 +228,11 @@ class _TodayDashboardPageState extends State<TodayDashboardPage>
 
   Widget _buildHeader(ThemeData theme, AppLocalizations l10n) {
     return Padding(
-      padding: const EdgeInsets.only(left: 20, right: 20, top: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       child: Text(
         l10n.todayDashboardTitle,
         style: theme.textTheme.displayMedium,
+        textAlign: TextAlign.center,
       ),
     );
   }

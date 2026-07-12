@@ -120,9 +120,6 @@ class _CareSchedulePageState extends State<CareSchedulePage> with AutomaticKeepA
       child: AnimatedEntry(
         key: widget.pageEntryAnimationKey,
         child: Scaffold(
-          appBar: AppBar(
-            title: Text(context.l10n.careScheduleTitle),
-          ),
           body: _loading
               ? const Center(child: CircularProgressIndicator())
               : _tasks.isEmpty && _recentSymptoms.isEmpty
@@ -147,6 +144,14 @@ class _CareSchedulePageState extends State<CareSchedulePage> with AutomaticKeepA
 
     return Column(
       children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          child: Text(
+            context.l10n.careScheduleTitle,
+            style: theme.textTheme.displayMedium,
+            textAlign: TextAlign.center,
+          ),
+        ),
         _buildFilters(theme),
         Expanded(
           child: ListView(

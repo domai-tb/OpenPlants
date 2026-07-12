@@ -210,11 +210,14 @@ class _MorePageState extends State<MorePage> with AutomaticKeepAliveClientMixin<
           body: SafeArea(
             bottom: false,
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(left: 20, right: 20, top: 10),
-                  child: Text(context.l10n.moreTitle, style: theme.textTheme.displayMedium),
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  child: Text(
+                    context.l10n.moreTitle,
+                    style: theme.textTheme.displayMedium,
+                    textAlign: TextAlign.center,
+                  ),
                 ),
                 const SizedBox(height: 10),
                 Expanded(
