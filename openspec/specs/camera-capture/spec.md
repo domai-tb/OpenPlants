@@ -7,25 +7,25 @@ Provides image acquisition from the device camera or photo gallery for plant ide
 ## Requirements
 
 ### Requirement: Camera capture
-The system SHALL allow the user to take a photo using the device camera for plant identification.
+The system SHALL display an inline camera preview within the plant identification page, allowing the user to take a photo without leaving the app.
 
-#### Scenario: User opens camera
+#### Scenario: User opens identification page
 - **WHEN** the user taps the camera capture button on the identification page
-- **THEN** the device camera interface opens
+- **THEN** an inline camera preview opens within the page showing a live viewfinder from the back camera
 
-#### Scenario: User captures photo
-- **WHEN** the user confirms a captured photo
-- **THEN** the image bytes are returned to the identification pipeline
+#### Scenario: User captures photo from inline preview
+- **WHEN** the user taps the capture button on the inline camera preview
+- **THEN** a single frame is captured and the image bytes are returned to the identification pipeline
 
 #### Scenario: Camera permission denied
 - **WHEN** the user denies camera permission
-- **THEN** the system shows a rationale explaining why camera access is needed and offers gallery-only fallback
+- **THEN** the system shows an in-page rationale explaining why camera access is needed and offers gallery-only fallback
 
 ### Requirement: Gallery selection
-The system SHALL allow the user to pick an existing photo from the device gallery for plant identification.
+The system SHALL allow the user to pick an existing photo from the device gallery via a gallery button accessible from the inline camera preview.
 
-#### Scenario: User opens gallery
-- **WHEN** the user taps the gallery button on the identification page
+#### Scenario: User opens gallery from camera preview
+- **WHEN** the user taps the gallery button on the inline camera preview
 - **THEN** the device photo picker opens
 
 #### Scenario: User selects photo
@@ -33,10 +33,10 @@ The system SHALL allow the user to pick an existing photo from the device galler
 - **THEN** the image bytes are returned to the identification pipeline
 
 ### Requirement: Image handoff to classifier
-The system SHALL pass the captured/selected image to the plant classifier preprocessing pipeline without requiring the UI to know about tensor shapes or ONNX details.
+The system SHALL pass the captured/selected image from the inline camera preview to the plant classifier preprocessing pipeline without requiring the UI to know about tensor shapes or ONNX details.
 
 #### Scenario: Successful handoff
-- **WHEN** an image is acquired from camera or gallery
+- **WHEN** an image is acquired from inline camera capture or gallery
 - **THEN** the system passes image bytes to the classifier usecase and transitions the UI to the "identifying" state
 
 #### Scenario: Invalid image handling

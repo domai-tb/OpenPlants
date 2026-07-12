@@ -7,6 +7,7 @@ import 'package:open_plant/core/injection.dart';
 import 'package:open_plant/core/settings.dart';
 import 'package:open_plant/l10n/l10n.dart';
 import 'package:open_plant/pages/plant_identification/plant_identification_page.dart';
+import 'package:open_plant/shared/widgets/inline_camera_preview.dart';
 
 void main() {
   setUpAll(() async {
@@ -48,40 +49,36 @@ void main() {
 
       // Tap the button to trigger showAsModal.
       await tester.tap(find.text('Open ID'));
-      await tester.pumpAndSettle();
+      await tester.pump(const Duration(seconds: 1));
 
       // Modal title should now be on screen.
       expect(find.text('Plant ID'), findsOneWidget);
     });
 
-    testWidgets('Shows initial capture prompt', (tester) async {
+    testWidgets('Shows inline camera preview by default', (tester) async {
       await tester.pumpWidget(buildPage());
       await tester.pumpAndSettle();
 
       await tester.tap(find.text('Open ID'));
-      await tester.pumpAndSettle();
+      await tester.pump(const Duration(seconds: 1));
 
-      // The prompt instructing the user to take a photo.
-      expect(
-        find.text('Take a photo of a plant to identify it'),
-        findsOneWidget,
-      );
+      // The inline camera preview should be shown.
+      expect(find.byType(InlineCameraPreview), findsOneWidget);
     });
 
-    testWidgets('Shows camera and gallery buttons', (tester) async {
+    testWidgets('Shows permission request UI when camera not available', (tester) async {
       await tester.pumpWidget(buildPage());
       await tester.pumpAndSettle();
 
       await tester.tap(find.text('Open ID'));
-      await tester.pumpAndSettle();
+      await tester.pump(const Duration(seconds: 2));
 
-      // Both action buttons are labeled.
-      expect(find.text('Camera'), findsOneWidget);
-      expect(find.text('Gallery'), findsOneWidget);
-
-      // Icons are present for each.
-      expect(find.byIcon(Icons.camera_alt), findsOneWidget);
-      expect(find.byIcon(Icons.photo_library), findsOneWidget);
+      // In test environment, camera permission is not available,
+      // so we should see either the permission request UI or the loading state.
+      // The widget will show loading while checking permission, then show the UI.
+      final hasGrantAccess = find.text('Grant access').evaluate().isNotEmpty;
+      final hasLoading = find.text('Initializing camera...').evaluate().isNotEmpty;
+      expect(hasGrantAccess || hasLoading, isTrue);
     });
 
     testWidgets('Modal can be dismissed via Navigator.pop', (tester) async {
@@ -89,7 +86,7 @@ void main() {
       await tester.pumpAndSettle();
 
       await tester.tap(find.text('Open ID'));
-      await tester.pumpAndSettle();
+      await tester.pump(const Duration(seconds: 1));
 
       // Confirm modal is open.
       expect(find.text('Plant ID'), findsOneWidget);

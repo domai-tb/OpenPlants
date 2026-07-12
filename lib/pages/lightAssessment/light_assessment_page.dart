@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 
 import 'package:open_plant/pages/lightAssessment/brightness_mapper.dart';
 import 'package:open_plant/pages/lightAssessment/camera_estimation_service.dart';
@@ -10,6 +12,7 @@ import 'package:open_plant/pages/lightAssessment/light_assessment_item_entity.da
 import 'package:open_plant/pages/lightAssessment/light_assessment_usecases.dart';
 import 'package:open_plant/pages/plant_collection/plant_collection_item_entity.dart';
 import 'package:open_plant/pages/plant_photo_timeline/plant_photo_timeline_item_entity.dart';
+import 'package:open_plant/shared/widgets/inline_camera_preview.dart';
 
 /// Page for assessing and setting a plant's light level.
 ///
@@ -41,6 +44,8 @@ class _LightAssessmentPageState extends State<LightAssessmentPage> {
   double? _estimatedBrightness;
   bool _estimating = false;
   String? _estimationError;
+
+  bool _showCamera = false;
 
   final CameraEstimationService _cameraService = CameraEstimationService();
   final ImagePicker _imagePicker = ImagePicker();
@@ -140,10 +145,12 @@ class _LightAssessmentPageState extends State<LightAssessmentPage> {
     }
   }
 
-  /// Open camera to take a photo, save it to timeline, and analyze it.
-  Future<void> _takePhotoAndEstimate() async {
+  /// Handle photo captured from inline camera or gallery.
+  Future<void> _onCaptured(Uint8List imageBytes) async {
     if (!mounted) return;
+
     setState(() {
+      _showCamera = false;
       _estimating = true;
       _estimationError = null;
       _estimatedLevel = null;
@@ -151,13 +158,11 @@ class _LightAssessmentPageState extends State<LightAssessmentPage> {
     });
 
     try {
-      final xFile = await _imagePicker.pickImage(source: ImageSource.camera);
-      if (xFile == null || !mounted) {
-        setState(() => _estimating = false);
-        return;
-      }
-
-      final file = File(xFile.path);
+      // Save bytes to a temporary file
+      final dir = await getTemporaryDirectory();
+      final photoPath = '${dir.path}/${DateTime.now().millisecondsSinceEpoch}.jpg';
+      final file = File(photoPath);
+      await file.writeAsBytes(imageBytes);
 
       // Save photo to plant timeline
       final photo = await widget.usecases.addPhoto(widget.plantId, file);
@@ -173,7 +178,7 @@ class _LightAssessmentPageState extends State<LightAssessmentPage> {
       if (!mounted) return;
       setState(() {
         _estimating = false;
-        _estimationError = 'Failed to take photo: $e';
+        _estimationError = 'Failed to process photo: $e';
       });
     }
   }
@@ -446,12 +451,21 @@ class _LightAssessmentPageState extends State<LightAssessmentPage> {
                           const Center(
                             child: CircularProgressIndicator(),
                           ),
+                        ] else if (_showCamera) ...[
+                          // Show inline camera preview
+                          const SizedBox(height: 8),
+                          SizedBox(
+                            height: 300,
+                            child: InlineCameraPreview(
+                              onCaptured: _onCaptured,
+                            ),
+                          ),
                         ] else if (_hasPhoto) ...[
                           // Has photo: show retake options
                           SizedBox(
                             width: double.infinity,
                             child: OutlinedButton.icon(
-                              onPressed: _takePhotoAndEstimate,
+                              onPressed: () => setState(() => _showCamera = true),
                               icon: const Icon(Icons.camera_alt),
                               label: const Text('Take new photo'),
                             ),
@@ -478,7 +492,7 @@ class _LightAssessmentPageState extends State<LightAssessmentPage> {
                           SizedBox(
                             width: double.infinity,
                             child: FilledButton.icon(
-                              onPressed: _takePhotoAndEstimate,
+                              onPressed: () => setState(() => _showCamera = true),
                               icon: const Icon(Icons.camera_alt),
                               label: const Text('Take photo'),
                             ),

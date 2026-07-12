@@ -24,11 +24,11 @@ The system SHALL allow the user to select one of four light levels for any plant
 - **THEN** the stored value updates to `direct` and the previous value is overwritten
 
 ### Requirement: Camera-based light estimation provides a guidance hint
-The system SHALL optionally read ambient brightness from the device camera viewfinder and map it to one of the four light levels. The result SHALL be displayed as a suggestion, not auto-applied.
+The system SHALL display an inline camera preview within the light assessment page, allowing the user to capture a photo for brightness estimation without leaving the app. The result SHALL be displayed as a suggestion, not auto-applied.
 
 #### Scenario: Camera estimation suggests a light level
-- **WHEN** the user activates the camera estimation feature and points the camera at the plant's location
-- **THEN** the system displays an estimated light level (e.g., "Looks like bright indirect light") with an option to accept or dismiss
+- **WHEN** the user opens the light assessment page and the inline camera preview is active
+- **THEN** the system captures a frame, estimates brightness, and displays an estimated light level (e.g., "Looks like bright indirect light") with an option to accept or dismiss
 
 #### Scenario: User accepts camera suggestion
 - **WHEN** the camera estimates "medium" and the user taps "Use this"

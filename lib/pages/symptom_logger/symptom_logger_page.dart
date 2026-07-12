@@ -3,16 +3,15 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'package:open_plant/core/app_scope.dart';
 import 'package:open_plant/l10n/l10n_x.dart';
 import 'package:open_plant/pages/diagnosis/diagnosis_item_entity.dart';
-import 'package:open_plant/pages/plant_identification/camera/image_capture_service.dart';
 import 'package:open_plant/pages/symptom_logger/symptom_logger_extensions.dart';
 import 'package:open_plant/pages/symptom_logger/symptom_logger_item_entity.dart';
 import 'package:open_plant/pages/symptom_logger/symptom_logger_usecases.dart';
+import 'package:open_plant/shared/widgets/inline_camera_preview.dart';
 
 /// Multi-step symptom logging form for recording plant health issues.
 class SymptomLoggerPage extends StatefulWidget {
@@ -58,7 +57,7 @@ class _SymptomLoggerPageState extends State<SymptomLoggerPage> {
   int _currentStep = 0;
   static const int _totalSteps = 7;
 
-  final _imageCaptureService = ImageCaptureService();
+  bool _showCamera = false;
   bool _submitting = false;
 
   /// Controller for the notes field; kept as a field to avoid recreating it
@@ -155,38 +154,10 @@ class _SymptomLoggerPageState extends State<SymptomLoggerPage> {
     await _usecases.saveDraft(widget.plantId, draft);
   }
 
-  Future<void> _pickPhoto() async {
-    final source = await showModalBottomSheet<ImageSource>(
-      context: context,
-      builder: (context) => SafeArea(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ListTile(
-              leading: const Icon(Icons.camera_alt),
-              title: Text(context.l10n.plantIdCamera),
-              onTap: () => Navigator.of(context).pop(ImageSource.camera),
-            ),
-            ListTile(
-              leading: const Icon(Icons.photo_library),
-              title: Text(context.l10n.plantIdGallery),
-              onTap: () => Navigator.of(context).pop(ImageSource.gallery),
-            ),
-          ],
-        ),
-      ),
-    );
+  Future<void> _onCaptured(Uint8List imageBytes) async {
+    if (!mounted) return;
 
-    if (source == null || !mounted) return;
-
-    Uint8List? imageBytes;
-    if (source == ImageSource.camera) {
-      imageBytes = await _imageCaptureService.captureFromCamera(context);
-    } else {
-      imageBytes = await _imageCaptureService.pickFromGallery(context);
-    }
-
-    if (imageBytes == null || !mounted) return;
+    setState(() => _showCamera = false);
 
     // Save photo to app documents
     final dir = await getApplicationDocumentsDirectory();
@@ -728,7 +699,15 @@ class _SymptomLoggerPageState extends State<SymptomLoggerPage> {
             style: theme.textTheme.titleSmall,
           ),
           const SizedBox(height: 8),
-          if (_formData.photoPath != null) ...[
+          if (_showCamera) ...[
+            // Show inline camera preview
+            SizedBox(
+              height: 300,
+              child: InlineCameraPreview(
+                onCaptured: _onCaptured,
+              ),
+            ),
+          ] else if (_formData.photoPath != null) ...[
             ClipRRect(
               borderRadius: BorderRadius.circular(12),
               child: Image.file(
@@ -746,7 +725,7 @@ class _SymptomLoggerPageState extends State<SymptomLoggerPage> {
             ),
           ] else ...[
             OutlinedButton.icon(
-              onPressed: _pickPhoto,
+              onPressed: () => setState(() => _showCamera = true),
               icon: const Icon(Icons.camera_alt),
               label: Text(context.l10n.symptomLoggerAddPhoto),
             ),

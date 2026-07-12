@@ -5,16 +5,15 @@ import 'package:flutter/material.dart';
 
 import 'package:open_plant/core/app_scope.dart';
 import 'package:open_plant/l10n/l10n_x.dart';
-import 'package:open_plant/pages/plant_identification/camera/image_capture_service.dart';
 import 'package:open_plant/pages/plant_identification/classifier/classification_result.dart';
 import 'package:open_plant/pages/plant_identification/classifier/plant_classifier_usecases.dart';
 import 'package:open_plant/pages/plant_identification/identification_state.dart';
-import 'package:open_plant/pages/plant_identification/widgets/capture_prompt.dart';
 import 'package:open_plant/pages/plant_identification/widgets/green_dot_lattice_overlay.dart';
 import 'package:open_plant/pages/plant_identification/widgets/species_result_card.dart';
 import 'package:open_plant/pages/species_library/species_library_item_entity.dart';
 import 'package:open_plant/pages/species_library/species_library_usecases.dart';
 import 'package:open_plant/pages/species_library/species_detail_page.dart';
+import 'package:open_plant/shared/widgets/inline_camera_preview.dart';
 
 class PlantIdentificationPage extends StatefulWidget {
   const PlantIdentificationPage({
@@ -38,7 +37,6 @@ class PlantIdentificationPage extends StatefulWidget {
 class _PlantIdentificationPageState extends State<PlantIdentificationPage> {
   late PlantClassifierUsecases _usecases;
   late SpeciesLibraryUsecases _speciesUsecases;
-  late ImageCaptureService _captureService;
   bool _wired = false;
 
   IdentificationState _state = const IdentificationIdle();
@@ -50,38 +48,12 @@ class _PlantIdentificationPageState extends State<PlantIdentificationPage> {
     final services = AppScope.of(context).services;
     _usecases = services.plantIdentification;
     _speciesUsecases = services.speciesLibrary;
-    _captureService = ImageCaptureService();
     _wired = true;
   }
 
-  Future<void> _captureFromCamera() async {
-    try {
-      final bytes = await _captureService.captureFromCamera(context);
-      if (bytes == null || !mounted) return;
-      await _startIdentification(bytes);
-    } catch (e) {
-      if (!mounted) return;
-      setState(() {
-        _state = IdentificationError(
-          message: '${context.l10n.plantIdFailedToCapture}: $e',
-        );
-      });
-    }
-  }
-
-  Future<void> _pickFromGallery() async {
-    try {
-      final bytes = await _captureService.pickFromGallery(context);
-      if (bytes == null || !mounted) return;
-      await _startIdentification(bytes);
-    } catch (e) {
-      if (!mounted) return;
-      setState(() {
-        _state = IdentificationError(
-          message: '${context.l10n.plantIdFailedToPick}: $e',
-        );
-      });
-    }
+  Future<void> _onCaptured(Uint8List imageBytes) async {
+    if (!mounted) return;
+    await _startIdentification(imageBytes);
   }
 
   Future<void> _startIdentification(Uint8List imageBytes) async {
@@ -155,12 +127,8 @@ class _PlantIdentificationPageState extends State<PlantIdentificationPage> {
 
   Widget _buildContent(ThemeData theme) {
     return switch (_state) {
-      IdentificationIdle() => CapturePrompt(
-          onCameraTap: _captureFromCamera,
-          onGalleryTap: _pickFromGallery,
-          promptText: context.l10n.plantIdCapturePrompt,
-          cameraLabel: context.l10n.plantIdCamera,
-          galleryLabel: context.l10n.plantIdGallery,
+      IdentificationIdle() => InlineCameraPreview(
+          onCaptured: _onCaptured,
         ),
       IdentificationIdentifying(:final imageBytes) => _buildImageWithOverlay(
           theme,

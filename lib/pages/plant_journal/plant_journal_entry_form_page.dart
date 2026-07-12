@@ -1,14 +1,16 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 
 import 'package:open_plant/core/app_scope.dart';
 import 'package:open_plant/l10n/l10n_x.dart';
 import 'package:open_plant/pages/plant_journal/plant_journal_extensions.dart';
 import 'package:open_plant/pages/plant_journal/plant_journal_item_entity.dart';
 import 'package:open_plant/pages/plant_journal/plant_journal_usecases.dart';
+import 'package:open_plant/shared/widgets/inline_camera_preview.dart';
 
 /// Form page for creating or editing a journal entry.
 class PlantJournalEntryFormPage extends StatefulWidget {
@@ -34,6 +36,7 @@ class _PlantJournalEntryFormPageState extends State<PlantJournalEntryFormPage> {
   File? _selectedPhoto;
   String? _existingPhotoPath;
   bool _saving = false;
+  bool _showCamera = false;
 
   bool get _isEditing => widget.existingEntry != null;
 
@@ -63,79 +66,20 @@ class _PlantJournalEntryFormPageState extends State<PlantJournalEntryFormPage> {
     super.dispose();
   }
 
-  Future<void> _pickPhoto() async {
-    try {
-      final picker = ImagePicker();
-      final image = await picker.pickImage(
-        source: ImageSource.gallery,
-        maxWidth: 1920,
-        maxHeight: 1920,
-        imageQuality: 85,
-      );
-      if (image != null && mounted) {
-        setState(() {
-          _selectedPhoto = File(image.path);
-        });
-      }
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(context.l10n.generalFailureMessage)),
-        );
-      }
-    }
-  }
+  Future<void> _onCaptured(Uint8List imageBytes) async {
+    if (!mounted) return;
 
-  Future<void> _takePhoto() async {
-    try {
-      final picker = ImagePicker();
-      final image = await picker.pickImage(
-        source: ImageSource.camera,
-        maxWidth: 1920,
-        maxHeight: 1920,
-        imageQuality: 85,
-      );
-      if (image != null && mounted) {
-        setState(() {
-          _selectedPhoto = File(image.path);
-        });
-      }
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(context.l10n.generalFailureMessage)),
-        );
-      }
-    }
-  }
+    setState(() => _showCamera = false);
 
-  Future<void> _showPhotoPicker() async {
-    await showModalBottomSheet<void>(
-      context: context,
-      builder: (context) => SafeArea(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ListTile(
-              leading: const Icon(Icons.camera_alt),
-              title: Text(context.l10n.journalTakePhoto),
-              onTap: () {
-                Navigator.of(context).pop();
-                _takePhoto();
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.photo_library),
-              title: Text(context.l10n.journalChooseFromGallery),
-              onTap: () {
-                Navigator.of(context).pop();
-                _pickPhoto();
-              },
-            ),
-          ],
-        ),
-      ),
-    );
+    // Save bytes to a temporary file
+    final dir = await getTemporaryDirectory();
+    final photoPath = '${dir.path}/${DateTime.now().millisecondsSinceEpoch}.jpg';
+    final file = File(photoPath);
+    await file.writeAsBytes(imageBytes);
+
+    if (mounted) {
+      setState(() => _selectedPhoto = file);
+    }
   }
 
   Future<void> _save() async {
@@ -248,7 +192,15 @@ class _PlantJournalEntryFormPageState extends State<PlantJournalEntryFormPage> {
             style: theme.textTheme.titleMedium,
           ),
           const SizedBox(height: 8),
-          if (_selectedPhoto != null)
+          if (_showCamera) ...[
+            // Show inline camera preview
+            SizedBox(
+              height: 300,
+              child: InlineCameraPreview(
+                onCaptured: _onCaptured,
+              ),
+            ),
+          ] else if (_selectedPhoto != null)
             Stack(
               children: [
                 ClipRRect(
@@ -285,7 +237,7 @@ class _PlantJournalEntryFormPageState extends State<PlantJournalEntryFormPage> {
             )
           else
             OutlinedButton.icon(
-              onPressed: _showPhotoPicker,
+              onPressed: () => setState(() => _showCamera = true),
               icon: const Icon(Icons.add_a_photo),
               label: Text(context.l10n.journalAddPhoto),
             ),
