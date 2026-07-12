@@ -1,10 +1,14 @@
 # Security Policy
 
-This repository is a template. If you are using it to build a real app, define your own security reporting process and contact channels.
+We treat security reports at highest priority level. This means that we attempt to fix them as quickly as possible. We will release a beta or hotfix for any major security report found in the most recent stable version of OpenPlants.
 
 ## Reporting a Vulnerability
 
-Use GitHub Security Advisories for private disclosure in the repository where your app is developed.
+To report a vulnerability, please use the [GitHub Security Advisories](https://github.com/domai-tb/OpenPlants/security) with a description of the problem, the steps you took to reproduce the problem, affected versions and any known mitigations.
+
+We should reply within seven working days, probably much sooner.
+
+We use GitHub's Security Advisory feature to track open security reports. You should expect a close collaboration as we work to resolve the security vulnerability you have reported. Please reach out to `openplants+security@domai-tb.com` if you do not receive prompt attention and regular updates.
 
 ## Flagging Existing Issues as Security-related
 
@@ -12,4 +16,4 @@ If you believe that an existing GitHub issue is security-related, use your organ
 
 ## Prefered Language
 
-Define the preferred language(s) for your team.
+We prefer all communications to be in English or German.
