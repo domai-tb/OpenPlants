@@ -107,8 +107,7 @@ class CareScheduleRepository {
   /// Get all custom care rules for a specific plant, ordered by creation date.
   Future<List<CustomCareRuleEntity>> getCustomCareRules(String plantId) async {
     final all = await dataSource.loadCustomCareRules();
-    return all.where((r) => r.plantId == plantId).toList()
-      ..sort((a, b) => a.createdAt.compareTo(b.createdAt));
+    return all.where((r) => r.plantId == plantId).toList()..sort((a, b) => a.createdAt.compareTo(b.createdAt));
   }
 
   /// Get all custom care rules across all plants.

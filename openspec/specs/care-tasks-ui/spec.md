@@ -9,11 +9,19 @@ Present the care schedule to users in a dashboard format with actionable task ca
 ## Requirements
 
 ### Requirement: Care schedule page displays a dashboard
-The system SHALL display a new page (care_schedule) that shows the user's care tasks grouped into three sections: Overdue, Due Today, and Upcoming. Each section is ordered by due date (closest first).
+The system SHALL display a new page (care_schedule) that shows the user's care tasks grouped into four sections: Overdue, Due Today, Upcoming, and Completed Early. The Completed Early section SHALL be collapsible and rendered below the Upcoming section with subdued styling. Each section is ordered by due date (closest first).
 
-#### Scenario: Dashboard shows all three sections
-- **WHEN** user navigates to the care schedule page and there are overdue, due-today, and upcoming tasks
-- **THEN** the page displays all three sections with appropriate section headers
+#### Scenario: Dashboard shows all four sections
+- **WHEN** user navigates to the care schedule page and there are overdue, due-today, upcoming, and completed-early tasks
+- **THEN** the page displays all four sections with appropriate section headers
+
+#### Scenario: Empty completed-early section is hidden
+- **WHEN** there are no completed-early tasks
+- **THEN** the Completed Early section is not displayed
+
+#### Scenario: Completed Early section is collapsible
+- **WHEN** user taps the Completed Early section header
+- **THEN** the section expands or collapses, toggling visibility of its task cards
 
 #### Scenario: Empty section is hidden
 - **WHEN** there are no overdue tasks
@@ -62,11 +70,15 @@ The system SHALL provide a task-type filter (dropdown or chip row) to narrow by 
 - **THEN** only watering tasks are displayed
 
 ### Requirement: User can complete a task
-Each task card SHALL have a "Mark done" button that records the completion and immediately recalculates the schedule.
+Each task card SHALL have a "Mark done" button that records the completion, immediately recalculates the schedule, and displays a SnackBar confirming the action with the next due date.
 
-#### Scenario: Complete task updates schedule
-- **WHEN** user taps "Mark done" on a watering task
-- **THEN** the task is recorded as completed, the schedule recalculates, and the UI updates to reflect the new next-due date
+#### Scenario: Complete task updates schedule and shows SnackBar
+- **WHEN** user taps "Mark done" on a watering task that is due today
+- **THEN** the task is recorded as completed, the schedule recalculates, the UI updates, and a SnackBar displays "Watering marked done — next due [date]"
+
+#### Scenario: Complete overdue task shows confirmation
+- **WHEN** user taps "Mark done" on an overdue task
+- **THEN** a SnackBar displays "Task completed — next due [date]" and the task moves to Completed Early
 
 ### Requirement: User can snooze a task
 Each task card SHALL support a "Snooze" action that defers the task by a user-chosen duration (1 day, 3 days, 7 days, or custom).
@@ -81,6 +93,28 @@ Each task card SHALL support a "Skip" action that acknowledges the task without 
 #### Scenario: Skip recalculates from today
 - **WHEN** user skips a watering task
 - **THEN** the next watering due date is calculated as today + effective interval (without recording a "completed" event)
+
+### Requirement: Completed-early tasks have distinct visual treatment
+Task cards in the Completed Early section SHALL have a distinct visual appearance: reduced opacity (0.6), a checkmark icon, and a label "Completed early — next due in N days" instead of the standard upcoming label.
+
+#### Scenario: Completed-early card shows subdued styling
+- **WHEN** a task is in the Completed Early section
+- **THEN** the card is rendered at 60% opacity with a checkmark icon and the label "Completed early — next due in 7 days"
+
+#### Scenario: Completed-early card shows "Due today" if next occurrence is today
+- **WHEN** a task completed early has its next due date falling on the same day (edge case with very short intervals)
+- **THEN** the card shows "Completed — due again today" label (not suppressed as early)
+
+### Requirement: SnackBar confirms completion with next-due info
+After a task is completed, a SnackBar SHALL appear at the bottom of the screen for 4 seconds, confirming the action and stating when the next occurrence is due.
+
+#### Scenario: SnackBar shows for completed task
+- **WHEN** user completes a watering task
+- **THEN** a SnackBar displays "Watering marked done — next due in 7 days"
+
+#### Scenario: SnackBar uses correct l10n key
+- **WHEN** a completion SnackBar renders
+- **THEN** all text comes from `AppLocalizations` keys, not string literals
 
 ### Requirement: Plant detail page shows custom care rules section
 The system SHALL display a "Care Rules" section on the plant detail page showing a summary of custom care rules for that plant (count of active rules and a tap target to manage them).

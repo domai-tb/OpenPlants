@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 
 import 'package:open_plant/pages/care_schedule/care_task.dart';
+import 'package:open_plant/pages/care_schedule/overdue_detector.dart';
 import 'package:open_plant/pages/care_schedule/room_config.dart';
 import 'package:open_plant/pages/care_schedule/schedule_config.dart';
 import 'package:open_plant/pages/care_schedule/schedule_engine.dart';
@@ -28,8 +29,14 @@ class CareScheduleUsecases {
 
   /// Get the full schedule for all plants, sorted by urgency.
   ///
-  /// Returns a record with the tasks and a map of plantId to room context.
-  Future<({List<CareTask> tasks, Map<String, ({String name, String environment})> roomContext})> getSchedule() async {
+  /// Returns a record with the tasks, a map of plantId to room context,
+  /// and a list of tasks completed early within the grace window.
+  Future<
+      ({
+        List<CareTask> tasks,
+        List<CareTask> completedEarly,
+        Map<String, ({String name, String environment})> roomContext,
+      })> getSchedule() async {
     final plants = await plantCollection.loadPlants();
     final allConfigs = await repository.getAllScheduleConfigs();
     final allRoomConfigs = await repository.getAllRoomConfigs();
@@ -85,8 +92,32 @@ class CareScheduleUsecases {
       }
     }
 
-    final tasks = ScheduleEngine.computeUnified(inputs: inputs, today: today);
-    return (tasks: tasks, roomContext: taskRoomContext);
+    var tasks = ScheduleEngine.computeUnified(inputs: inputs, today: today);
+
+    // Apply grace-window detection: upgrade `upcoming` tasks that were
+    // completed today (within the grace window) to `justCompleted`
+    tasks = tasks.map((task) {
+      if (task.status != CareTaskStatus.upcoming) return task;
+      final inGrace = GraceWindowDetector.isWithinGraceWindow(
+        completedAt: task.completedAt,
+        today: today,
+        effectiveIntervalDays: task.effectiveIntervalDays,
+      );
+      if (!inGrace) return task;
+      return CareTask(
+        taskType: task.taskType,
+        plantId: task.plantId,
+        plantName: task.plantName,
+        dueDate: task.dueDate,
+        status: CareTaskStatus.justCompleted,
+        effectiveIntervalDays: task.effectiveIntervalDays,
+        completedAt: task.completedAt,
+      );
+    }).toList();
+
+    final completedEarly = tasks.where((t) => t.status == CareTaskStatus.justCompleted).toList();
+
+    return (tasks: tasks, completedEarly: completedEarly, roomContext: taskRoomContext);
   }
 
   /// Complete a task — records the completion event and auto-journals it.

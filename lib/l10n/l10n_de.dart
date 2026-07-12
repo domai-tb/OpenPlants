@@ -1625,4 +1625,24 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get moreSpeciesListSubtitle => 'Browse all plant species';
+
+  @override
+  String get careScheduleCompletedEarly => 'Completed early';
+
+  @override
+  String careScheduleCompletedEarlyNextDue(int days) {
+    return 'Completed early — next due in $days days';
+  }
+
+  @override
+  String get careScheduleCompletedSection => 'Completed Early';
+
+  @override
+  String get careScheduleCompletedDueAgainToday =>
+      'Completed — due again today';
+
+  @override
+  String careScheduleCompletionSnackbar(String taskType, int days) {
+    return '$taskType marked done — next due in $days days';
+  }
 }

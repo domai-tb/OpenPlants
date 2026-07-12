@@ -43,8 +43,7 @@ class PlantJournalUseCases {
 
   /// Returns the full unified timeline for [plantId], merging journal entries,
   /// symptom logs, and diagnosis results sorted newest first.
-  Future<List<JournalEntry>> getUnifiedTimeline(String plantId) =>
-      repository.getUnifiedTimeline(plantId);
+  Future<List<JournalEntry>> getUnifiedTimeline(String plantId) => repository.getUnifiedTimeline(plantId);
 
   /// Returns the most recent entry across all types for [plantId], or null.
   Future<JournalEntry?> getLatestUnifiedEntry(String plantId) async {
@@ -53,6 +52,5 @@ class PlantJournalUseCases {
   }
 
   /// Returns the unified timeline across all plants.
-  Future<List<JournalEntry>> getAllUnifiedTimeline() =>
-      repository.getAllUnifiedTimeline();
+  Future<List<JournalEntry>> getAllUnifiedTimeline() => repository.getAllUnifiedTimeline();
 }

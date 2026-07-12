@@ -516,29 +516,29 @@ class _QuickActionStrip extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 12),
-            Expanded(
-              child: _ActionButton(
-                icon: Icons.camera_alt_outlined,
-                label: l10n.quickIdentify,
-                color: theme.colorScheme.secondary,
-                onTap: () {
-                  PlantIdentificationPage.showAsModal(context);
-                },
-              ),
+          Expanded(
+            child: _ActionButton(
+              icon: Icons.camera_alt_outlined,
+              label: l10n.quickIdentify,
+              color: theme.colorScheme.secondary,
+              onTap: () {
+                PlantIdentificationPage.showAsModal(context);
+              },
             ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: _ActionButton(
-                icon: Icons.healing_outlined,
-                label: l10n.quickDiagnose,
-                color: theme.colorScheme.tertiary,
-                onTap: () {
-                  Navigator.of(context, rootNavigator: true).push(
-                    MaterialPageRoute(builder: (_) => const DiagnosisPage()),
-                  );
-                },
-              ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: _ActionButton(
+              icon: Icons.healing_outlined,
+              label: l10n.quickDiagnose,
+              color: theme.colorScheme.tertiary,
+              onTap: () {
+                Navigator.of(context, rootNavigator: true).push(
+                  MaterialPageRoute(builder: (_) => const DiagnosisPage()),
+                );
+              },
             ),
+          ),
         ],
       ),
     );
@@ -703,50 +703,50 @@ class _CareTaskCard extends StatelessWidget {
         onTap: task.plantId != null ? () => onNavigateToPlantDetail?.call(task.plantId!) : null,
         child: Padding(
           padding: const EdgeInsets.all(14),
-        child: Row(
-          children: [
-            Icon(
-              _iconForTaskType(task.taskType),
-              size: 24,
-              color: isOverdue ? theme.colorScheme.error : theme.colorScheme.primary,
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    task.plantName,
-                    style: theme.textTheme.headlineSmall,
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    _taskTypeLabel(l10n, task.taskType),
-                    style: theme.textTheme.bodyMedium,
-                  ),
-                ],
+          child: Row(
+            children: [
+              Icon(
+                _iconForTaskType(task.taskType),
+                size: 24,
+                color: isOverdue ? theme.colorScheme.error : theme.colorScheme.primary,
               ),
-            ),
-            if (isOverdue && task.daysOverdue > 0)
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 8,
-                  vertical: 4,
-                ),
-                decoration: BoxDecoration(
-                  color: theme.colorScheme.error,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Text(
-                  '${task.daysOverdue}${l10n.daysOverdue}',
-                  style: theme.textTheme.labelSmall?.copyWith(
-                    color: theme.colorScheme.onError,
-                  ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      task.plantName,
+                      style: theme.textTheme.headlineSmall,
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      _taskTypeLabel(l10n, task.taskType),
+                      style: theme.textTheme.bodyMedium,
+                    ),
+                  ],
                 ),
               ),
-          ],
+              if (isOverdue && task.daysOverdue > 0)
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.error,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Text(
+                    '${task.daysOverdue}${l10n.daysOverdue}',
+                    style: theme.textTheme.labelSmall?.copyWith(
+                      color: theme.colorScheme.onError,
+                    ),
+                  ),
+                ),
+            ],
+          ),
         ),
-      ),
       ),
     );
   }

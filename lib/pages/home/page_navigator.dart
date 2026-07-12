@@ -26,20 +26,20 @@ class PageItemPresentation {
 PageItemPresentation pageItemPresentation(BuildContext context, PageItem item) {
   return switch (item) {
     PageItem.dashboard => PageItemPresentation(
-      title: context.l10n.todayDashboardTitle,
-      activeIcon: Icons.today,
-      inactiveIcon: Icons.today_outlined,
-    ),
+        title: context.l10n.todayDashboardTitle,
+        activeIcon: Icons.today,
+        inactiveIcon: Icons.today_outlined,
+      ),
     PageItem.careSchedule => PageItemPresentation(
-      title: context.l10n.careScheduleTitle,
-      activeIcon: Icons.event_note,
-      inactiveIcon: Icons.event_note_outlined,
-    ),
+        title: context.l10n.careScheduleTitle,
+        activeIcon: Icons.event_note,
+        inactiveIcon: Icons.event_note_outlined,
+      ),
     PageItem.more => PageItemPresentation(
-      title: context.l10n.moreTitle,
-      activeIcon: Icons.more_horiz,
-      inactiveIcon: Icons.more_horiz,
-    ),
+        title: context.l10n.moreTitle,
+        activeIcon: Icons.more_horiz,
+        inactiveIcon: Icons.more_horiz,
+      ),
   };
 }
 

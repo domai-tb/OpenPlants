@@ -5,6 +5,7 @@ enum CareTaskStatus {
   overdue,
   dueToday,
   upcoming,
+  justCompleted,
 }
 
 /// A computed care task ready for display in the UI.
@@ -15,6 +16,7 @@ class CareTask {
   final DateTime dueDate;
   final CareTaskStatus status;
   final int effectiveIntervalDays;
+  final DateTime? completedAt;
 
   const CareTask({
     required this.taskType,
@@ -23,6 +25,7 @@ class CareTask {
     required this.dueDate,
     required this.status,
     required this.effectiveIntervalDays,
+    this.completedAt,
   });
 
   /// Days until due (negative = overdue).
@@ -33,6 +36,10 @@ class CareTask {
   /// Human-readable due label.
   String dueLabel(DateTime today) {
     final days = daysUntilDue(today);
+    if (status == CareTaskStatus.justCompleted) {
+      if (days <= 0) return 'Completed — due again today';
+      return 'Completed early — next due in $days days';
+    }
     if (days < 0) return 'Overdue by ${-days} days';
     if (days == 0) return 'Due today';
     return 'Due in $days days';

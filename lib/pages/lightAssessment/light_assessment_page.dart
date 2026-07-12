@@ -279,15 +279,11 @@ class _LightAssessmentPageState extends State<LightAssessmentPage> {
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 8),
                     child: Card(
-                      color: isSelected
-                          ? theme.colorScheme.primaryContainer
-                          : null,
+                      color: isSelected ? theme.colorScheme.primaryContainer : null,
                       child: ListTile(
                         leading: Icon(
                           option.icon,
-                          color: isSelected
-                              ? theme.colorScheme.onPrimaryContainer
-                              : theme.colorScheme.onSurfaceVariant,
+                          color: isSelected ? theme.colorScheme.onPrimaryContainer : theme.colorScheme.onSurfaceVariant,
                         ),
                         title: Text(
                           option.label,

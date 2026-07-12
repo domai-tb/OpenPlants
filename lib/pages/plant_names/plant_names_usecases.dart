@@ -4,8 +4,7 @@ import 'package:open_plant/pages/plant_names/plant_names_repository.dart';
 class PlantNamesUsecases {
   final PlantNamesRepository _repository;
 
-  const PlantNamesUsecases({required PlantNamesRepository repository})
-      : _repository = repository;
+  const PlantNamesUsecases({required PlantNamesRepository repository}) : _repository = repository;
 
   /// Returns the localized display name for [speciesId].
   ///

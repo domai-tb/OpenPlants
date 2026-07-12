@@ -7,8 +7,7 @@ import 'package:open_plant/pages/plant_names/plant_names_datasource.dart';
 class PlantNamesRepository {
   final PlantNamesDatasource _datasource;
 
-  const PlantNamesRepository({required PlantNamesDatasource datasource})
-      : _datasource = datasource;
+  const PlantNamesRepository({required PlantNamesDatasource datasource}) : _datasource = datasource;
 
   /// Returns the localized display name for [speciesId] in the given [localeCode].
   ///

@@ -569,5 +569,32 @@
   "speciesListSearchHint": "Search species...",
   "speciesListEmptyState": "No species found",
   "moreSpeciesListTitle": "Species List",
-  "moreSpeciesListSubtitle": "Browse all plant species"
+  "moreSpeciesListSubtitle": "Browse all plant species",
+  "careScheduleCompletedEarly": "Completed early",
+  "careScheduleCompletedEarlyNextDue": "Completed early — next due in {days} days",
+  "@careScheduleCompletedEarlyNextDue": {
+    "description": "Label for a task completed early, showing days until next due",
+    "placeholders": {
+      "days": {
+        "type": "int",
+        "example": "7"
+      }
+    }
+  },
+  "careScheduleCompletedSection": "Completed Early",
+  "careScheduleCompletedDueAgainToday": "Completed — due again today",
+  "careScheduleCompletionSnackbar": "{taskType} marked done — next due in {days} days",
+  "@careScheduleCompletionSnackbar": {
+    "description": "Snackbar shown after completing a care task, showing task type and days until next due",
+    "placeholders": {
+      "taskType": {
+        "type": "String",
+        "example": "Watering"
+      },
+      "days": {
+        "type": "int",
+        "example": "7"
+      }
+    }
+  }
 }

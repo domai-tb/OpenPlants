@@ -111,8 +111,7 @@ void main() {
       expect(find.text('Needs Fertilizer'), findsOneWidget);
     });
 
-    testWidgets('plant grid renders with pre-populated plants',
-        (tester) async {
+    testWidgets('plant grid renders with pre-populated plants', (tester) async {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString(
         'plant_collection_v1',

@@ -112,10 +112,8 @@ class PlantJournalRepository {
   // ---------------------------------------------------------------------------
 
   /// Returns a merged timeline for [plantId] sorted newest first.
-  Future<List<JournalEntry>> getUnifiedTimeline(String plantId) =>
-      dataSource.getUnifiedTimeline(plantId);
+  Future<List<JournalEntry>> getUnifiedTimeline(String plantId) => dataSource.getUnifiedTimeline(plantId);
 
   /// Returns the merged timeline across all plants, newest first.
-  Future<List<JournalEntry>> getAllUnifiedTimeline() =>
-      dataSource.getAllUnifiedTimeline();
+  Future<List<JournalEntry>> getAllUnifiedTimeline() => dataSource.getAllUnifiedTimeline();
 }

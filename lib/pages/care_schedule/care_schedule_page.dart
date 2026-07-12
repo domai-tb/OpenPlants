@@ -44,6 +44,7 @@ class _CareSchedulePageState extends State<CareSchedulePage> with AutomaticKeepA
   bool _loading = true;
   String? _selectedPlantId;
   CareTaskType? _selectedTaskType;
+  bool _completedEarlyExpanded = false;
 
   @override
   bool get wantKeepAlive => true;
@@ -141,6 +142,8 @@ class _CareSchedulePageState extends State<CareSchedulePage> with AutomaticKeepA
     final overdue = filtered.where((t) => t.status == CareTaskStatus.overdue).toList();
     final dueToday = filtered.where((t) => t.status == CareTaskStatus.dueToday).toList();
     final upcoming = filtered.where((t) => t.status == CareTaskStatus.upcoming).toList();
+    final completedEarly = filtered.where((t) => t.status == CareTaskStatus.justCompleted).toList();
+    final hasContent = overdue.isNotEmpty || dueToday.isNotEmpty || upcoming.isNotEmpty || completedEarly.isNotEmpty;
 
     return Column(
       children: [
@@ -200,7 +203,11 @@ class _CareSchedulePageState extends State<CareSchedulePage> with AutomaticKeepA
                   },
                 ),
               ],
-              if (overdue.isEmpty && dueToday.isEmpty && upcoming.isEmpty)
+              if (completedEarly.isNotEmpty) ...[
+                const SizedBox(height: 16),
+                _buildCollapsibleCompletedEarlySection(theme, completedEarly),
+              ],
+              if (!hasContent)
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   child: Center(
@@ -279,6 +286,66 @@ class _CareSchedulePageState extends State<CareSchedulePage> with AutomaticKeepA
     );
   }
 
+  Widget _buildCollapsibleCompletedEarlySection(
+    ThemeData theme,
+    List<CareTask> tasks,
+  ) {
+    return Column(
+      children: [
+        InkWell(
+          borderRadius: BorderRadius.circular(4),
+          onTap: () => setState(() => _completedEarlyExpanded = !_completedEarlyExpanded),
+          child: Padding(
+            padding: const EdgeInsets.only(top: 8, bottom: 4),
+            child: Row(
+              children: [
+                Container(
+                  width: 4,
+                  height: 20,
+                  decoration: BoxDecoration(
+                    color: Colors.grey,
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    context.l10n.careScheduleCompletedSection,
+                    style: theme.textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey,
+                    ),
+                  ),
+                ),
+                Icon(
+                  _completedEarlyExpanded ? Icons.expand_less : Icons.expand_more,
+                  color: Colors.grey,
+                ),
+              ],
+            ),
+          ),
+        ),
+        if (_completedEarlyExpanded) ...[
+          const SizedBox(height: 4),
+          ...tasks.map(
+            (task) {
+              final roomCtx = _taskRoomContext[task.plantId];
+              return CareTaskCard(
+                task: task,
+                roomName: roomCtx?.name,
+                roomEnvironmentSummary: roomCtx?.environment,
+                onDone: () => _completeTask(task),
+                onSnooze: (days) => _snoozeTask(task, days),
+                onSkip: () => _skipTask(task),
+              );
+            },
+          ),
+        ],
+        const SizedBox(height: 16),
+      ],
+    );
+  }
+
   Widget _buildFilters(ThemeData theme) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -322,11 +389,11 @@ class _CareSchedulePageState extends State<CareSchedulePage> with AutomaticKeepA
                   child: Text(context.l10n.careScheduleAllTypes),
                 ),
                 ..._tasks.map((t) => t.taskType).toSet().map(
-                  (type) => DropdownMenuItem<CareTaskType?>(
-                    value: type,
-                    child: Text(type.label),
-                  ),
-                ),
+                      (type) => DropdownMenuItem<CareTaskType?>(
+                        value: type,
+                        child: Text(type.label),
+                      ),
+                    ),
               ],
               onChanged: (value) {
                 setState(() => _selectedTaskType = value);
@@ -341,6 +408,22 @@ class _CareSchedulePageState extends State<CareSchedulePage> with AutomaticKeepA
   Future<void> _completeTask(CareTask task) async {
     await _usecases.completeTask(task: task);
     if (!mounted) return;
+
+    // Show confirmation SnackBar with next-due info
+    // The next due date is always today + effectiveIntervalDays after completion
+    final daysUntilNext = task.effectiveIntervalDays;
+    final message = context.l10n.careScheduleCompletionSnackbar(
+      task.taskType.label,
+      daysUntilNext,
+    );
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(
+        SnackBar(
+          content: Text(message),
+        ),
+      );
+
     await _load();
   }
 

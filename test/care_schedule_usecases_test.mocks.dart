@@ -7,28 +7,19 @@ import 'dart:async' as _i10;
 import 'dart:io' as _i15;
 
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:open_plant/pages/care_schedule/care_schedule_datasource.dart'
-    as _i2;
-import 'package:open_plant/pages/care_schedule/care_schedule_repository.dart'
-    as _i9;
+import 'package:open_plant/pages/care_schedule/care_schedule_datasource.dart' as _i2;
+import 'package:open_plant/pages/care_schedule/care_schedule_repository.dart' as _i9;
 import 'package:open_plant/pages/care_schedule/custom_care_rule.dart' as _i13;
 import 'package:open_plant/pages/care_schedule/room_config.dart' as _i11;
 import 'package:open_plant/pages/care_schedule/schedule_config.dart' as _i3;
-import 'package:open_plant/pages/care_schedule/species_care_profile.dart'
-    as _i4;
+import 'package:open_plant/pages/care_schedule/species_care_profile.dart' as _i4;
 import 'package:open_plant/pages/care_schedule/task_completion.dart' as _i12;
-import 'package:open_plant/pages/plant_collection/plant_collection_item_entity.dart'
-    as _i6;
-import 'package:open_plant/pages/plant_collection/plant_collection_repository.dart'
-    as _i5;
-import 'package:open_plant/pages/plant_collection/plant_collection_usecases.dart'
-    as _i14;
-import 'package:open_plant/pages/plant_journal/plant_journal_item_entity.dart'
-    as _i8;
-import 'package:open_plant/pages/plant_journal/plant_journal_repository.dart'
-    as _i7;
-import 'package:open_plant/pages/plant_journal/plant_journal_usecases.dart'
-    as _i16;
+import 'package:open_plant/pages/plant_collection/plant_collection_item_entity.dart' as _i6;
+import 'package:open_plant/pages/plant_collection/plant_collection_repository.dart' as _i5;
+import 'package:open_plant/pages/plant_collection/plant_collection_usecases.dart' as _i14;
+import 'package:open_plant/pages/plant_journal/plant_journal_item_entity.dart' as _i8;
+import 'package:open_plant/pages/plant_journal/plant_journal_repository.dart' as _i7;
+import 'package:open_plant/pages/plant_journal/plant_journal_usecases.dart' as _i16;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -45,8 +36,7 @@ import 'package:open_plant/pages/plant_journal/plant_journal_usecases.dart'
 // ignore_for_file: subtype_of_sealed_class
 // ignore_for_file: invalid_use_of_internal_member
 
-class _FakeCareScheduleDataSource_0 extends _i1.SmartFake
-    implements _i2.CareScheduleDataSource {
+class _FakeCareScheduleDataSource_0 extends _i1.SmartFake implements _i2.CareScheduleDataSource {
   _FakeCareScheduleDataSource_0(
     Object parent,
     Invocation parentInvocation,
@@ -56,8 +46,7 @@ class _FakeCareScheduleDataSource_0 extends _i1.SmartFake
         );
 }
 
-class _FakeScheduleConfig_1 extends _i1.SmartFake
-    implements _i3.ScheduleConfig {
+class _FakeScheduleConfig_1 extends _i1.SmartFake implements _i3.ScheduleConfig {
   _FakeScheduleConfig_1(
     Object parent,
     Invocation parentInvocation,
@@ -67,8 +56,7 @@ class _FakeScheduleConfig_1 extends _i1.SmartFake
         );
 }
 
-class _FakeSpeciesCareProfile_2 extends _i1.SmartFake
-    implements _i4.SpeciesCareProfile {
+class _FakeSpeciesCareProfile_2 extends _i1.SmartFake implements _i4.SpeciesCareProfile {
   _FakeSpeciesCareProfile_2(
     Object parent,
     Invocation parentInvocation,
@@ -78,8 +66,7 @@ class _FakeSpeciesCareProfile_2 extends _i1.SmartFake
         );
 }
 
-class _FakePlantCollectionRepository_3 extends _i1.SmartFake
-    implements _i5.PlantCollectionRepository {
+class _FakePlantCollectionRepository_3 extends _i1.SmartFake implements _i5.PlantCollectionRepository {
   _FakePlantCollectionRepository_3(
     Object parent,
     Invocation parentInvocation,
@@ -99,8 +86,7 @@ class _FakePlantEntity_4 extends _i1.SmartFake implements _i6.PlantEntity {
         );
 }
 
-class _FakePlantJournalRepository_5 extends _i1.SmartFake
-    implements _i7.PlantJournalRepository {
+class _FakePlantJournalRepository_5 extends _i1.SmartFake implements _i7.PlantJournalRepository {
   _FakePlantJournalRepository_5(
     Object parent,
     Invocation parentInvocation,
@@ -123,8 +109,7 @@ class _FakeJournalEntry_6 extends _i1.SmartFake implements _i8.JournalEntry {
 /// A class which mocks [CareScheduleRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockCareScheduleRepository extends _i1.Mock
-    implements _i9.CareScheduleRepository {
+class MockCareScheduleRepository extends _i1.Mock implements _i9.CareScheduleRepository {
   MockCareScheduleRepository() {
     _i1.throwOnMissingStub(this);
   }
@@ -139,14 +124,12 @@ class MockCareScheduleRepository extends _i1.Mock
       ) as _i2.CareScheduleDataSource);
 
   @override
-  _i10.Future<_i3.ScheduleConfig> getScheduleConfig(String? plantId) =>
-      (super.noSuchMethod(
+  _i10.Future<_i3.ScheduleConfig> getScheduleConfig(String? plantId) => (super.noSuchMethod(
         Invocation.method(
           #getScheduleConfig,
           [plantId],
         ),
-        returnValue:
-            _i10.Future<_i3.ScheduleConfig>.value(_FakeScheduleConfig_1(
+        returnValue: _i10.Future<_i3.ScheduleConfig>.value(_FakeScheduleConfig_1(
           this,
           Invocation.method(
             #getScheduleConfig,
@@ -173,19 +156,16 @@ class MockCareScheduleRepository extends _i1.Mock
       ) as _i10.Future<void>);
 
   @override
-  _i10.Future<Map<String, _i3.ScheduleConfig>> getAllScheduleConfigs() =>
-      (super.noSuchMethod(
+  _i10.Future<Map<String, _i3.ScheduleConfig>> getAllScheduleConfigs() => (super.noSuchMethod(
         Invocation.method(
           #getAllScheduleConfigs,
           [],
         ),
-        returnValue: _i10.Future<Map<String, _i3.ScheduleConfig>>.value(
-            <String, _i3.ScheduleConfig>{}),
+        returnValue: _i10.Future<Map<String, _i3.ScheduleConfig>>.value(<String, _i3.ScheduleConfig>{}),
       ) as _i10.Future<Map<String, _i3.ScheduleConfig>>);
 
   @override
-  _i10.Future<_i11.RoomConfig?> getRoomConfig(String? roomName) =>
-      (super.noSuchMethod(
+  _i10.Future<_i11.RoomConfig?> getRoomConfig(String? roomName) => (super.noSuchMethod(
         Invocation.method(
           #getRoomConfig,
           [roomName],
@@ -194,8 +174,7 @@ class MockCareScheduleRepository extends _i1.Mock
       ) as _i10.Future<_i11.RoomConfig?>);
 
   @override
-  _i10.Future<void> saveRoomConfig(_i11.RoomConfig? config) =>
-      (super.noSuchMethod(
+  _i10.Future<void> saveRoomConfig(_i11.RoomConfig? config) => (super.noSuchMethod(
         Invocation.method(
           #saveRoomConfig,
           [config],
@@ -205,37 +184,30 @@ class MockCareScheduleRepository extends _i1.Mock
       ) as _i10.Future<void>);
 
   @override
-  _i10.Future<Map<String, _i11.RoomConfig>> getAllRoomConfigs() =>
-      (super.noSuchMethod(
+  _i10.Future<Map<String, _i11.RoomConfig>> getAllRoomConfigs() => (super.noSuchMethod(
         Invocation.method(
           #getAllRoomConfigs,
           [],
         ),
-        returnValue: _i10.Future<Map<String, _i11.RoomConfig>>.value(
-            <String, _i11.RoomConfig>{}),
+        returnValue: _i10.Future<Map<String, _i11.RoomConfig>>.value(<String, _i11.RoomConfig>{}),
       ) as _i10.Future<Map<String, _i11.RoomConfig>>);
 
   @override
-  _i10.Future<List<_i12.TaskCompletion>> getAllCompletions() =>
-      (super.noSuchMethod(
+  _i10.Future<List<_i12.TaskCompletion>> getAllCompletions() => (super.noSuchMethod(
         Invocation.method(
           #getAllCompletions,
           [],
         ),
-        returnValue: _i10.Future<List<_i12.TaskCompletion>>.value(
-            <_i12.TaskCompletion>[]),
+        returnValue: _i10.Future<List<_i12.TaskCompletion>>.value(<_i12.TaskCompletion>[]),
       ) as _i10.Future<List<_i12.TaskCompletion>>);
 
   @override
-  _i10.Future<List<_i12.TaskCompletion>> getCompletionsForPlant(
-          String? plantId) =>
-      (super.noSuchMethod(
+  _i10.Future<List<_i12.TaskCompletion>> getCompletionsForPlant(String? plantId) => (super.noSuchMethod(
         Invocation.method(
           #getCompletionsForPlant,
           [plantId],
         ),
-        returnValue: _i10.Future<List<_i12.TaskCompletion>>.value(
-            <_i12.TaskCompletion>[]),
+        returnValue: _i10.Future<List<_i12.TaskCompletion>>.value(<_i12.TaskCompletion>[]),
       ) as _i10.Future<List<_i12.TaskCompletion>>);
 
   @override
@@ -251,13 +223,11 @@ class MockCareScheduleRepository extends _i1.Mock
             taskTypeKey,
           ],
         ),
-        returnValue: _i10.Future<List<_i12.TaskCompletion>>.value(
-            <_i12.TaskCompletion>[]),
+        returnValue: _i10.Future<List<_i12.TaskCompletion>>.value(<_i12.TaskCompletion>[]),
       ) as _i10.Future<List<_i12.TaskCompletion>>);
 
   @override
-  _i10.Future<void> recordCompletion(_i12.TaskCompletion? completion) =>
-      (super.noSuchMethod(
+  _i10.Future<void> recordCompletion(_i12.TaskCompletion? completion) => (super.noSuchMethod(
         Invocation.method(
           #recordCompletion,
           [completion],
@@ -267,8 +237,7 @@ class MockCareScheduleRepository extends _i1.Mock
       ) as _i10.Future<void>);
 
   @override
-  _i10.Future<void> deleteCompletion(_i12.TaskCompletion? completion) =>
-      (super.noSuchMethod(
+  _i10.Future<void> deleteCompletion(_i12.TaskCompletion? completion) => (super.noSuchMethod(
         Invocation.method(
           #deleteCompletion,
           [completion],
@@ -278,43 +247,34 @@ class MockCareScheduleRepository extends _i1.Mock
       ) as _i10.Future<void>);
 
   @override
-  _i10.Future<Map<String, _i12.TaskCompletion>> getLatestCompletionsPerType(
-          String? plantId) =>
-      (super.noSuchMethod(
+  _i10.Future<Map<String, _i12.TaskCompletion>> getLatestCompletionsPerType(String? plantId) => (super.noSuchMethod(
         Invocation.method(
           #getLatestCompletionsPerType,
           [plantId],
         ),
-        returnValue: _i10.Future<Map<String, _i12.TaskCompletion>>.value(
-            <String, _i12.TaskCompletion>{}),
+        returnValue: _i10.Future<Map<String, _i12.TaskCompletion>>.value(<String, _i12.TaskCompletion>{}),
       ) as _i10.Future<Map<String, _i12.TaskCompletion>>);
 
   @override
-  _i10.Future<List<_i13.CustomCareRuleEntity>> getCustomCareRules(
-          String? plantId) =>
-      (super.noSuchMethod(
+  _i10.Future<List<_i13.CustomCareRuleEntity>> getCustomCareRules(String? plantId) => (super.noSuchMethod(
         Invocation.method(
           #getCustomCareRules,
           [plantId],
         ),
-        returnValue: _i10.Future<List<_i13.CustomCareRuleEntity>>.value(
-            <_i13.CustomCareRuleEntity>[]),
+        returnValue: _i10.Future<List<_i13.CustomCareRuleEntity>>.value(<_i13.CustomCareRuleEntity>[]),
       ) as _i10.Future<List<_i13.CustomCareRuleEntity>>);
 
   @override
-  _i10.Future<List<_i13.CustomCareRuleEntity>> getAllCustomCareRules() =>
-      (super.noSuchMethod(
+  _i10.Future<List<_i13.CustomCareRuleEntity>> getAllCustomCareRules() => (super.noSuchMethod(
         Invocation.method(
           #getAllCustomCareRules,
           [],
         ),
-        returnValue: _i10.Future<List<_i13.CustomCareRuleEntity>>.value(
-            <_i13.CustomCareRuleEntity>[]),
+        returnValue: _i10.Future<List<_i13.CustomCareRuleEntity>>.value(<_i13.CustomCareRuleEntity>[]),
       ) as _i10.Future<List<_i13.CustomCareRuleEntity>>);
 
   @override
-  _i10.Future<void> saveCustomCareRule(_i13.CustomCareRuleEntity? rule) =>
-      (super.noSuchMethod(
+  _i10.Future<void> saveCustomCareRule(_i13.CustomCareRuleEntity? rule) => (super.noSuchMethod(
         Invocation.method(
           #saveCustomCareRule,
           [rule],
@@ -334,8 +294,7 @@ class MockCareScheduleRepository extends _i1.Mock
       ) as _i10.Future<void>);
 
   @override
-  _i4.SpeciesCareProfile getSpeciesProfile(String? speciesId) =>
-      (super.noSuchMethod(
+  _i4.SpeciesCareProfile getSpeciesProfile(String? speciesId) => (super.noSuchMethod(
         Invocation.method(
           #getSpeciesProfile,
           [speciesId],
@@ -353,8 +312,7 @@ class MockCareScheduleRepository extends _i1.Mock
 /// A class which mocks [PlantCollectionUsecases].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockPlantCollectionUsecases extends _i1.Mock
-    implements _i14.PlantCollectionUsecases {
+class MockPlantCollectionUsecases extends _i1.Mock implements _i14.PlantCollectionUsecases {
   MockPlantCollectionUsecases() {
     _i1.throwOnMissingStub(this);
   }
@@ -374,8 +332,7 @@ class MockPlantCollectionUsecases extends _i1.Mock
           #loadPlants,
           [],
         ),
-        returnValue:
-            _i10.Future<List<_i6.PlantEntity>>.value(<_i6.PlantEntity>[]),
+        returnValue: _i10.Future<List<_i6.PlantEntity>>.value(<_i6.PlantEntity>[]),
       ) as _i10.Future<List<_i6.PlantEntity>>);
 
   @override
@@ -440,31 +397,25 @@ class MockPlantCollectionUsecases extends _i1.Mock
       ) as _i10.Future<void>);
 
   @override
-  _i10.Future<List<_i6.PlantEntity>> searchPlants(String? query) =>
-      (super.noSuchMethod(
+  _i10.Future<List<_i6.PlantEntity>> searchPlants(String? query) => (super.noSuchMethod(
         Invocation.method(
           #searchPlants,
           [query],
         ),
-        returnValue:
-            _i10.Future<List<_i6.PlantEntity>>.value(<_i6.PlantEntity>[]),
+        returnValue: _i10.Future<List<_i6.PlantEntity>>.value(<_i6.PlantEntity>[]),
       ) as _i10.Future<List<_i6.PlantEntity>>);
 
   @override
-  _i10.Future<List<_i6.PlantEntity>> filterByCareStatus(
-          _i6.CareStatus? status) =>
-      (super.noSuchMethod(
+  _i10.Future<List<_i6.PlantEntity>> filterByCareStatus(_i6.CareStatus? status) => (super.noSuchMethod(
         Invocation.method(
           #filterByCareStatus,
           [status],
         ),
-        returnValue:
-            _i10.Future<List<_i6.PlantEntity>>.value(<_i6.PlantEntity>[]),
+        returnValue: _i10.Future<List<_i6.PlantEntity>>.value(<_i6.PlantEntity>[]),
       ) as _i10.Future<List<_i6.PlantEntity>>);
 
   @override
-  _i10.Future<_i6.PlantEntity> markAsWatered(_i6.PlantEntity? plant) =>
-      (super.noSuchMethod(
+  _i10.Future<_i6.PlantEntity> markAsWatered(_i6.PlantEntity? plant) => (super.noSuchMethod(
         Invocation.method(
           #markAsWatered,
           [plant],
@@ -479,8 +430,7 @@ class MockPlantCollectionUsecases extends _i1.Mock
       ) as _i10.Future<_i6.PlantEntity>);
 
   @override
-  _i10.Future<_i6.PlantEntity> markAsFertilized(_i6.PlantEntity? plant) =>
-      (super.noSuchMethod(
+  _i10.Future<_i6.PlantEntity> markAsFertilized(_i6.PlantEntity? plant) => (super.noSuchMethod(
         Invocation.method(
           #markAsFertilized,
           [plant],
@@ -498,8 +448,7 @@ class MockPlantCollectionUsecases extends _i1.Mock
 /// A class which mocks [PlantJournalUseCases].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockPlantJournalUseCases extends _i1.Mock
-    implements _i16.PlantJournalUseCases {
+class MockPlantJournalUseCases extends _i1.Mock implements _i16.PlantJournalUseCases {
   MockPlantJournalUseCases() {
     _i1.throwOnMissingStub(this);
   }
@@ -514,14 +463,12 @@ class MockPlantJournalUseCases extends _i1.Mock
       ) as _i7.PlantJournalRepository);
 
   @override
-  _i10.Future<List<_i8.JournalEntry>> getEntries(String? plantId) =>
-      (super.noSuchMethod(
+  _i10.Future<List<_i8.JournalEntry>> getEntries(String? plantId) => (super.noSuchMethod(
         Invocation.method(
           #getEntries,
           [plantId],
         ),
-        returnValue:
-            _i10.Future<List<_i8.JournalEntry>>.value(<_i8.JournalEntry>[]),
+        returnValue: _i10.Future<List<_i8.JournalEntry>>.value(<_i8.JournalEntry>[]),
       ) as _i10.Future<List<_i8.JournalEntry>>);
 
   @override
@@ -577,8 +524,7 @@ class MockPlantJournalUseCases extends _i1.Mock
       ) as _i10.Future<void>);
 
   @override
-  _i10.Future<void> deleteEntriesForPlant(String? plantId) =>
-      (super.noSuchMethod(
+  _i10.Future<void> deleteEntriesForPlant(String? plantId) => (super.noSuchMethod(
         Invocation.method(
           #deleteEntriesForPlant,
           [plantId],

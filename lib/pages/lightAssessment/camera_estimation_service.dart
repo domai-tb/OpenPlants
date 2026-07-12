@@ -147,8 +147,7 @@ class CameraEstimationService {
         final pixel = image.getPixel(x, y);
 
         // Compute luminance using ITU-R BT.601
-        final double luminance =
-            0.299 * pixel.r + 0.587 * pixel.g + 0.114 * pixel.b;
+        final double luminance = 0.299 * pixel.r + 0.587 * pixel.g + 0.114 * pixel.b;
 
         totalLuminance += luminance;
         sampleCount++;

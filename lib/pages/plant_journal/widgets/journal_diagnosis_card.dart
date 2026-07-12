@@ -55,8 +55,7 @@ class JournalDiagnosisCard extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: 8),
-                  if (topConfidence != null)
-                    _ConfidenceBadge(confidence: topConfidence),
+                  if (topConfidence != null) _ConfidenceBadge(confidence: topConfidence),
                   const Spacer(),
                   Text(
                     _formatDate(entry.timestamp, context),
@@ -72,10 +71,12 @@ class JournalDiagnosisCard extends StatelessWidget {
               // Top cause
               if (topCause != null) ...[
                 Text(
-                  topCause.replaceAllMapped(
-                    RegExp('(?<=[a-z])(?=[A-Z])|_'),
-                    (m) => ' ',
-                  ).trim(),
+                  topCause
+                      .replaceAllMapped(
+                        RegExp('(?<=[a-z])(?=[A-Z])|_'),
+                        (m) => ' ',
+                      )
+                      .trim(),
                   style: theme.textTheme.titleSmall?.copyWith(
                     fontWeight: FontWeight.w600,
                   ),

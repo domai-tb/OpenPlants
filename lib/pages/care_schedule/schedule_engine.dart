@@ -153,9 +153,8 @@ class ScheduleEngine {
       );
 
       // Compute due date
-      final dueDate = lastCompletion != null
-          ? lastCompletion.completedAt.add(Duration(days: effectiveInterval))
-          : today;
+      final dueDate =
+          lastCompletion != null ? lastCompletion.completedAt.add(Duration(days: effectiveInterval)) : today;
 
       tasks.add(
         CareTask(
@@ -165,6 +164,7 @@ class ScheduleEngine {
           dueDate: dueDate,
           status: status,
           effectiveIntervalDays: effectiveInterval,
+          completedAt: lastCompletion?.completedAt,
         ),
       );
     }

@@ -53,17 +53,13 @@ class JournalSymptomCard extends StatelessWidget {
                   Icon(
                     Icons.bug_report_outlined,
                     size: 18,
-                    color: resolved
-                        ? theme.colorScheme.onSurfaceVariant
-                        : Colors.orange.shade700,
+                    color: resolved ? theme.colorScheme.onSurfaceVariant : Colors.orange.shade700,
                   ),
                   const SizedBox(width: 8),
                   Text(
                     context.l10n.healthTimelineSymptomEntry,
                     style: theme.textTheme.labelMedium?.copyWith(
-                      color: resolved
-                          ? theme.colorScheme.onSurfaceVariant
-                          : Colors.orange.shade700,
+                      color: resolved ? theme.colorScheme.onSurfaceVariant : Colors.orange.shade700,
                     ),
                   ),
                   const SizedBox(width: 8),
@@ -237,10 +233,12 @@ class JournalSymptomCard extends StatelessWidget {
 
   String _symptomLabel(PlantSymptom symptom, BuildContext context) {
     // Use the symptom name as a simple label; l10n can be added later
-    return symptom.name.replaceAllMapped(
-      RegExp('[A-Z]'),
-      (m) => ' ${m.group(0)}',
-    ).trim();
+    return symptom.name
+        .replaceAllMapped(
+          RegExp('[A-Z]'),
+          (m) => ' ${m.group(0)}',
+        )
+        .trim();
   }
 }
 

@@ -87,9 +87,7 @@ class Settings {
       useSystemTextScaling: json['useSystemTextScaling'] ?? false,
       didCompleteOnboarding: json['didCompleteOnboarding'] ?? false,
       localeCode: json['localeCode'],
-      temperatureUnit: json['temperatureUnit'] == 'fahrenheit'
-          ? TemperatureUnit.fahrenheit
-          : TemperatureUnit.celsius,
+      temperatureUnit: json['temperatureUnit'] == 'fahrenheit' ? TemperatureUnit.fahrenheit : TemperatureUnit.celsius,
     );
   }
 

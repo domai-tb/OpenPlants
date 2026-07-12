@@ -50,9 +50,11 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    final items = tester.widgetList<BottomNavBarItem>(
-      find.byType(BottomNavBarItem),
-    ).toList();
+    final items = tester
+        .widgetList<BottomNavBarItem>(
+          find.byType(BottomNavBarItem),
+        )
+        .toList();
 
     expect(items[0].isActive, isTrue);
     expect(items[1].isActive, isFalse);

@@ -73,9 +73,7 @@ class CustomCareRuleEntity {
       intervalDays: json['intervalDays'] as int,
       reminderEnabled: json['reminderEnabled'] as bool? ?? false,
       reminderTime: json['reminderTime'] as String?,
-      reminderDays: json['reminderDays'] != null
-          ? (json['reminderDays'] as List<dynamic>).cast<String>()
-          : null,
+      reminderDays: json['reminderDays'] != null ? (json['reminderDays'] as List<dynamic>).cast<String>() : null,
       isEnabled: json['isEnabled'] as bool? ?? true,
       createdAt: DateTime.parse(json['createdAt'] as String),
     );

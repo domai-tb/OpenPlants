@@ -3037,6 +3037,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Browse all plant species'**
   String get moreSpeciesListSubtitle;
+
+  /// No description provided for @careScheduleCompletedEarly.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed early'**
+  String get careScheduleCompletedEarly;
+
+  /// Label for a task completed early, showing days until next due
+  ///
+  /// In en, this message translates to:
+  /// **'Completed early — next due in {days} days'**
+  String careScheduleCompletedEarlyNextDue(int days);
+
+  /// No description provided for @careScheduleCompletedSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed Early'**
+  String get careScheduleCompletedSection;
+
+  /// No description provided for @careScheduleCompletedDueAgainToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed — due again today'**
+  String get careScheduleCompletedDueAgainToday;
+
+  /// Snackbar shown after completing a care task, showing task type and days until next due
+  ///
+  /// In en, this message translates to:
+  /// **'{taskType} marked done — next due in {days} days'**
+  String careScheduleCompletionSnackbar(String taskType, int days);
 }
 
 class _AppLocalizationsDelegate
