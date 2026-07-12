@@ -1,10 +1,10 @@
-import 'package:open_plant/pages/care_schedule/care_schedule_datasource.dart';
-import 'package:open_plant/pages/care_schedule/custom_care_rule.dart';
-import 'package:open_plant/pages/care_schedule/room_config.dart';
-import 'package:open_plant/pages/care_schedule/schedule_config.dart';
-import 'package:open_plant/pages/care_schedule/species_care_profile.dart';
-import 'package:open_plant/pages/care_schedule/species_care_profiles.dart';
-import 'package:open_plant/pages/care_schedule/task_completion.dart';
+import 'package:open_plants/pages/care_schedule/care_schedule_datasource.dart';
+import 'package:open_plants/pages/care_schedule/custom_care_rule.dart';
+import 'package:open_plants/pages/care_schedule/room_config.dart';
+import 'package:open_plants/pages/care_schedule/schedule_config.dart';
+import 'package:open_plants/pages/care_schedule/species_care_profile.dart';
+import 'package:open_plants/pages/care_schedule/species_care_profiles.dart';
+import 'package:open_plants/pages/care_schedule/task_completion.dart';
 
 /// Repository for care schedule domain operations.
 ///

@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/services.dart';
 
-import 'package:open_plant/pages/species_library/species_library_item_entity.dart';
+import 'package:open_plants/pages/species_library/species_library_item_entity.dart';
 
 /// Loads bundled species JSON asset lazily with in-memory caching.
 class SpeciesLibraryDatasource {

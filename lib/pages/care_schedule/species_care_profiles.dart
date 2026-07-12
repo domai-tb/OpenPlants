@@ -1,4 +1,4 @@
-import 'package:open_plant/pages/care_schedule/species_care_profile.dart';
+import 'package:open_plants/pages/care_schedule/species_care_profile.dart';
 
 /// Hardcoded species care profiles for common houseplants.
 class SpeciesCareProfiles {

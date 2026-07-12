@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import 'package:open_plant/core/app_scope.dart';
-import 'package:open_plant/pages/room_profiles/room_profiles_entity.dart';
-import 'package:open_plant/pages/room_profiles/room_profiles_repository.dart';
-import 'package:open_plant/pages/room_profiles/room_profiles_usecases.dart';
+import 'package:open_plants/core/app_scope.dart';
+import 'package:open_plants/pages/room_profiles/room_profiles_entity.dart';
+import 'package:open_plants/pages/room_profiles/room_profiles_repository.dart';
+import 'package:open_plants/pages/room_profiles/room_profiles_usecases.dart';
 
 /// Room presets with pre-filled environment attributes.
 class _RoomPreset {

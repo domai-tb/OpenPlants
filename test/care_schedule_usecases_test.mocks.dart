@@ -7,19 +7,19 @@ import 'dart:async' as _i10;
 import 'dart:io' as _i15;
 
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:open_plant/pages/care_schedule/care_schedule_datasource.dart' as _i2;
-import 'package:open_plant/pages/care_schedule/care_schedule_repository.dart' as _i9;
-import 'package:open_plant/pages/care_schedule/custom_care_rule.dart' as _i13;
-import 'package:open_plant/pages/care_schedule/room_config.dart' as _i11;
-import 'package:open_plant/pages/care_schedule/schedule_config.dart' as _i3;
-import 'package:open_plant/pages/care_schedule/species_care_profile.dart' as _i4;
-import 'package:open_plant/pages/care_schedule/task_completion.dart' as _i12;
-import 'package:open_plant/pages/plant_collection/plant_collection_item_entity.dart' as _i6;
-import 'package:open_plant/pages/plant_collection/plant_collection_repository.dart' as _i5;
-import 'package:open_plant/pages/plant_collection/plant_collection_usecases.dart' as _i14;
-import 'package:open_plant/pages/plant_journal/plant_journal_item_entity.dart' as _i8;
-import 'package:open_plant/pages/plant_journal/plant_journal_repository.dart' as _i7;
-import 'package:open_plant/pages/plant_journal/plant_journal_usecases.dart' as _i16;
+import 'package:open_plants/pages/care_schedule/care_schedule_datasource.dart' as _i2;
+import 'package:open_plants/pages/care_schedule/care_schedule_repository.dart' as _i9;
+import 'package:open_plants/pages/care_schedule/custom_care_rule.dart' as _i13;
+import 'package:open_plants/pages/care_schedule/room_config.dart' as _i11;
+import 'package:open_plants/pages/care_schedule/schedule_config.dart' as _i3;
+import 'package:open_plants/pages/care_schedule/species_care_profile.dart' as _i4;
+import 'package:open_plants/pages/care_schedule/task_completion.dart' as _i12;
+import 'package:open_plants/pages/plant_collection/plant_collection_item_entity.dart' as _i6;
+import 'package:open_plants/pages/plant_collection/plant_collection_repository.dart' as _i5;
+import 'package:open_plants/pages/plant_collection/plant_collection_usecases.dart' as _i14;
+import 'package:open_plants/pages/plant_journal/plant_journal_item_entity.dart' as _i8;
+import 'package:open_plants/pages/plant_journal/plant_journal_repository.dart' as _i7;
+import 'package:open_plants/pages/plant_journal/plant_journal_usecases.dart' as _i16;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values

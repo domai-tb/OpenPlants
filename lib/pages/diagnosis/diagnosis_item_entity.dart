@@ -1,5 +1,5 @@
-import 'package:open_plant/pages/room_profiles/room_profiles_entity.dart';
-import 'package:open_plant/pages/symptom_logger/symptom_logger_item_entity.dart';
+import 'package:open_plants/pages/room_profiles/room_profiles_entity.dart';
+import 'package:open_plants/pages/symptom_logger/symptom_logger_item_entity.dart';
 
 /// Plant symptoms that can be observed during diagnosis.
 enum PlantSymptom {

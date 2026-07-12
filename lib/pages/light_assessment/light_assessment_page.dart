@@ -6,14 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 
-import 'package:open_plant/pages/light_assessment/brightness_mapper.dart';
-import 'package:open_plant/pages/light_assessment/camera_estimation_service.dart';
-import 'package:open_plant/pages/light_assessment/interactive_light_assessment_page.dart';
-import 'package:open_plant/pages/light_assessment/light_assessment_item_entity.dart';
-import 'package:open_plant/pages/light_assessment/light_assessment_usecases.dart';
-import 'package:open_plant/pages/plant_collection/plant_collection_item_entity.dart';
-import 'package:open_plant/pages/plant_photo_timeline/plant_photo_timeline_item_entity.dart';
-import 'package:open_plant/widgets/inline_camera_preview.dart';
+import 'package:open_plants/pages/light_assessment/brightness_mapper.dart';
+import 'package:open_plants/pages/light_assessment/camera_estimation_service.dart';
+import 'package:open_plants/pages/light_assessment/interactive_light_assessment_page.dart';
+import 'package:open_plants/pages/light_assessment/light_assessment_item_entity.dart';
+import 'package:open_plants/pages/light_assessment/light_assessment_usecases.dart';
+import 'package:open_plants/pages/plant_collection/plant_collection_item_entity.dart';
+import 'package:open_plants/pages/plant_photo_timeline/plant_photo_timeline_item_entity.dart';
+import 'package:open_plants/widgets/inline_camera_preview.dart';
 
 /// Page for assessing and setting a plant's light level.
 ///

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:open_plant/l10n/l10n.dart';
-import 'package:open_plant/pages/plant_identification/classifier/classification_result.dart';
-import 'package:open_plant/pages/plant_identification/widgets/identification_picker.dart';
+import 'package:open_plants/l10n/l10n.dart';
+import 'package:open_plants/pages/plant_identification/classifier/classification_result.dart';
+import 'package:open_plants/pages/plant_identification/widgets/identification_picker.dart';
 
 void main() {
   Widget buildTestWidget({

@@ -12,7 +12,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get helloWorld => 'Hallo Welt!';
 
   @override
-  String get appTitle => 'OpenPlant';
+  String get appTitle => 'OpenPlants';
 
   @override
   String get todayDashboardTitle => 'Heute';
@@ -97,7 +97,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get onboardingIntroBody =>
-      'Willkommen bei OpenPlant — deine Open-Source & datenschutzfreundliche Pflanzen-App.';
+      'Willkommen bei OpenPlants — deine Open-Source & datenschutzfreundliche Pflanzen-App.';
 
   @override
   String get onboardingIntroHint =>
@@ -202,14 +202,14 @@ class AppLocalizationsDe extends AppLocalizations {
   String get secondaryActionSnack => 'Noch eine Platzhalter-Aktion';
 
   @override
-  String get menuSettingsSubtitle => 'OpenPlant-Einstellungen';
+  String get menuSettingsSubtitle => 'OpenPlants-Einstellungen';
 
   @override
-  String get menuAboutSubtitle => 'Ueber OpenPlant';
+  String get menuAboutSubtitle => 'Ueber OpenPlants';
 
   @override
   String get aboutBody =>
-      'OpenPlant ist eine Open-Source & datenschutzfreundliche Begleiter-App fuer deine Pflanzen.\n\nErfasse deine Pflanzenpflege, setze Giesserinnerungen und halte deinen Garten gesund — alles ohne dein Privatschutz zu kompromittieren.';
+      'OpenPlants ist eine Open-Source & datenschutzfreundliche Begleiter-App fuer deine Pflanzen.\n\nErfasse deine Pflanzenpflege, setze Giesserinnerungen und halte deinen Garten gesund — alles ohne dein Privatschutz zu kompromittieren.';
 
   @override
   String get serverFailureMessage =>

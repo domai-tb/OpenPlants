@@ -1,4 +1,4 @@
-import 'package:open_plant/pages/care_schedule/care_task.dart';
+import 'package:open_plants/pages/care_schedule/care_task.dart';
 
 /// Detects overdue tasks based on elapsed time vs effective interval.
 class OverdueDetector {

@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:open_plant/pages/light_assessment/brightness_mapper.dart';
-import 'package:open_plant/pages/light_assessment/camera_estimation_service.dart';
-import 'package:open_plant/pages/plant_collection/plant_collection_item_entity.dart';
+import 'package:open_plants/pages/light_assessment/brightness_mapper.dart';
+import 'package:open_plants/pages/light_assessment/camera_estimation_service.dart';
+import 'package:open_plants/pages/plant_collection/plant_collection_item_entity.dart';
 
 void main() {
   group('BrightnessMapper', () {

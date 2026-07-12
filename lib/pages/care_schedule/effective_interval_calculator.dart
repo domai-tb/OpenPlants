@@ -1,6 +1,6 @@
-import 'package:open_plant/pages/care_schedule/care_task_type.dart';
-import 'package:open_plant/pages/care_schedule/schedule_config.dart';
-import 'package:open_plant/pages/care_schedule/species_care_profile.dart';
+import 'package:open_plants/pages/care_schedule/care_task_type.dart';
+import 'package:open_plants/pages/care_schedule/schedule_config.dart';
+import 'package:open_plants/pages/care_schedule/species_care_profile.dart';
 
 /// Merges species defaults with user overrides and applies seasonal modifiers.
 class EffectiveIntervalCalculator {

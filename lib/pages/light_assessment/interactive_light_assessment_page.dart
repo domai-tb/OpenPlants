@@ -6,11 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-import 'package:open_plant/core/app_scope.dart';
-import 'package:open_plant/pages/light_assessment/camera_estimation_service.dart';
-import 'package:open_plant/pages/light_assessment/light_assessment_item_entity.dart';
-import 'package:open_plant/pages/light_assessment/light_assessment_usecases.dart';
-import 'package:open_plant/pages/plant_collection/plant_collection_item_entity.dart';
+import 'package:open_plants/core/app_scope.dart';
+import 'package:open_plants/pages/light_assessment/camera_estimation_service.dart';
+import 'package:open_plants/pages/light_assessment/light_assessment_item_entity.dart';
+import 'package:open_plants/pages/light_assessment/light_assessment_usecases.dart';
+import 'package:open_plants/pages/plant_collection/plant_collection_item_entity.dart';
 
 /// A full-screen interactive camera view for real-time light level assessment.
 ///

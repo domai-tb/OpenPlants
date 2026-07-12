@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:open_plant/l10n/l10n.dart';
+import 'package:open_plants/l10n/l10n.dart';
 
-import 'package:open_plant/pages/care_schedule/custom_care_rule.dart';
-import 'package:open_plant/pages/care_schedule/custom_care_rule_usecases.dart';
+import 'package:open_plants/pages/care_schedule/custom_care_rule.dart';
+import 'package:open_plants/pages/care_schedule/custom_care_rule_usecases.dart';
 
 /// Section on the plant detail page showing custom care rules.
 class CareRulesSection extends StatelessWidget {

@@ -1,4 +1,4 @@
-import 'package:open_plant/pages/plant_photo_timeline/plant_photo_timeline_item_entity.dart';
+import 'package:open_plants/pages/plant_photo_timeline/plant_photo_timeline_item_entity.dart';
 
 /// Light level assessment for a plant's location.
 enum LightLevel {

@@ -1,9 +1,9 @@
-import 'package:open_plant/pages/diagnosis/auto_diagnosis_service.dart';
-import 'package:open_plant/pages/diagnosis/diagnosis_result_entity.dart';
-import 'package:open_plant/pages/plant_collection/plant_collection_item_entity.dart';
-import 'package:open_plant/pages/plant_collection/plant_collection_usecases.dart';
-import 'package:open_plant/pages/symptom_logger/symptom_logger_item_entity.dart';
-import 'package:open_plant/pages/symptom_logger/symptom_logger_repository.dart';
+import 'package:open_plants/pages/diagnosis/auto_diagnosis_service.dart';
+import 'package:open_plants/pages/diagnosis/diagnosis_result_entity.dart';
+import 'package:open_plants/pages/plant_collection/plant_collection_item_entity.dart';
+import 'package:open_plants/pages/plant_collection/plant_collection_usecases.dart';
+import 'package:open_plants/pages/symptom_logger/symptom_logger_item_entity.dart';
+import 'package:open_plants/pages/symptom_logger/symptom_logger_repository.dart';
 
 /// Business logic for the symptom logger feature.
 class SymptomLoggerUseCases {

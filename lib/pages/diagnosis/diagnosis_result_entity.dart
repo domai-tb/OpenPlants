@@ -1,4 +1,4 @@
-import 'package:open_plant/pages/diagnosis/diagnosis_item_entity.dart';
+import 'package:open_plants/pages/diagnosis/diagnosis_item_entity.dart';
 
 /// Persistent representation of a diagnosis result.
 ///

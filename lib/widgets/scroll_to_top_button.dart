@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:open_plant/core/constants.dart';
+import 'package:open_plants/core/constants.dart';
 
 class ScrollToTopButton extends StatefulWidget {
   final ScrollController scrollController;

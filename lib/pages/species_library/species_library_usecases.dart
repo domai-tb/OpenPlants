@@ -1,6 +1,6 @@
-import 'package:open_plant/pages/species_library/care_plan.dart';
-import 'package:open_plant/pages/species_library/species_library_item_entity.dart';
-import 'package:open_plant/pages/species_library/species_library_repository.dart';
+import 'package:open_plants/pages/species_library/care_plan.dart';
+import 'package:open_plants/pages/species_library/species_library_item_entity.dart';
+import 'package:open_plants/pages/species_library/species_library_repository.dart';
 
 /// Business logic for the species library feature.
 class SpeciesLibraryUsecases {

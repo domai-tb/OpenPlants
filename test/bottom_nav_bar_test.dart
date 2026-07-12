@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:open_plant/l10n/l10n.dart';
-import 'package:open_plant/pages/home/page_navigator.dart';
-import 'package:open_plant/pages/home/widgets/bottom_nav_bar.dart';
-import 'package:open_plant/pages/home/widgets/bottom_nav_bar_item.dart';
+import 'package:open_plants/l10n/l10n.dart';
+import 'package:open_plants/pages/home/page_navigator.dart';
+import 'package:open_plants/pages/home/widgets/bottom_nav_bar.dart';
+import 'package:open_plants/pages/home/widgets/bottom_nav_bar_item.dart';
 
 Widget buildNavBar({
   required PageItem currentPage,

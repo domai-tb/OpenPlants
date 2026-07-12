@@ -1,17 +1,17 @@
-import 'package:open_plant/pages/care_schedule/care_task.dart';
-import 'package:open_plant/pages/care_schedule/care_task_type.dart';
-import 'package:open_plant/pages/care_schedule/custom_care_rule.dart';
-import 'package:open_plant/pages/care_schedule/effective_interval_calculator.dart';
-import 'package:open_plant/pages/care_schedule/light_level_modifier.dart';
-import 'package:open_plant/pages/care_schedule/overdue_detector.dart';
-import 'package:open_plant/pages/care_schedule/pot_type_modifier.dart';
-import 'package:open_plant/pages/care_schedule/room_config.dart';
-import 'package:open_plant/pages/care_schedule/room_modifier.dart';
-import 'package:open_plant/pages/care_schedule/schedule_config.dart';
-import 'package:open_plant/pages/care_schedule/species_care_profile.dart';
-import 'package:open_plant/pages/care_schedule/task_completion.dart';
-import 'package:open_plant/pages/plant_collection/plant_collection_item_entity.dart';
-import 'package:open_plant/pages/room_profiles/room_profiles_entity.dart';
+import 'package:open_plants/pages/care_schedule/care_task.dart';
+import 'package:open_plants/pages/care_schedule/care_task_type.dart';
+import 'package:open_plants/pages/care_schedule/custom_care_rule.dart';
+import 'package:open_plants/pages/care_schedule/effective_interval_calculator.dart';
+import 'package:open_plants/pages/care_schedule/light_level_modifier.dart';
+import 'package:open_plants/pages/care_schedule/overdue_detector.dart';
+import 'package:open_plants/pages/care_schedule/pot_type_modifier.dart';
+import 'package:open_plants/pages/care_schedule/room_config.dart';
+import 'package:open_plants/pages/care_schedule/room_modifier.dart';
+import 'package:open_plants/pages/care_schedule/schedule_config.dart';
+import 'package:open_plants/pages/care_schedule/species_care_profile.dart';
+import 'package:open_plants/pages/care_schedule/task_completion.dart';
+import 'package:open_plants/pages/plant_collection/plant_collection_item_entity.dart';
+import 'package:open_plants/pages/room_profiles/room_profiles_entity.dart';
 
 /// Input data for computing a schedule for a single plant.
 class PlantScheduleInput {

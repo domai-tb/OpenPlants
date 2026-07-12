@@ -1,6 +1,6 @@
 import 'package:intl/intl.dart';
 
-import 'package:open_plant/core/locale_service.dart';
+import 'package:open_plants/core/locale_service.dart';
 
 /// Provides locale-aware date formatting using the active locale.
 class DateFormatter {

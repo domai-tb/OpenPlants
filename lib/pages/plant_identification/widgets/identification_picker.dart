@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'package:open_plant/l10n/l10n_x.dart';
-import 'package:open_plant/pages/plant_identification/classifier/classification_result.dart';
-import 'package:open_plant/pages/plant_identification/widgets/species_result_card.dart';
+import 'package:open_plants/l10n/l10n_x.dart';
+import 'package:open_plants/pages/plant_identification/classifier/classification_result.dart';
+import 'package:open_plants/pages/plant_identification/widgets/species_result_card.dart';
 
 /// An inline picker that displays identification results as tappable cards.
 ///

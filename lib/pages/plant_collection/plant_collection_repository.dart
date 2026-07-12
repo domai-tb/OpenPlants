@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:uuid/uuid.dart';
 
-import 'package:open_plant/pages/plant_collection/plant_collection_datasource.dart';
-import 'package:open_plant/pages/plant_collection/plant_collection_item_entity.dart';
+import 'package:open_plants/pages/plant_collection/plant_collection_datasource.dart';
+import 'package:open_plants/pages/plant_collection/plant_collection_item_entity.dart';
 
 /// Repository for plant collection domain operations.
 ///

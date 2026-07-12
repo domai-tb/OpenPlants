@@ -2,12 +2,12 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
-import 'package:open_plant/core/app_scope.dart';
-import 'package:open_plant/core/date_utils.dart';
-import 'package:open_plant/l10n/l10n_x.dart';
-import 'package:open_plant/pages/plant_photo_timeline/plant_photo_timeline_item_entity.dart';
-import 'package:open_plant/pages/plant_photo_timeline/plant_photo_timeline_usecases.dart';
-import 'package:open_plant/widgets/confirm_dialog.dart';
+import 'package:open_plants/core/app_scope.dart';
+import 'package:open_plants/core/date_utils.dart';
+import 'package:open_plants/l10n/l10n_x.dart';
+import 'package:open_plants/pages/plant_photo_timeline/plant_photo_timeline_item_entity.dart';
+import 'package:open_plants/pages/plant_photo_timeline/plant_photo_timeline_usecases.dart';
+import 'package:open_plants/widgets/confirm_dialog.dart';
 
 /// Dedicated page showing a plant's growth photo timeline.
 ///

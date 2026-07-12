@@ -1,5 +1,5 @@
-import 'package:open_plant/pages/today_dashboard/today_dashboard_entity.dart';
-import 'package:open_plant/pages/today_dashboard/today_dashboard_repository.dart';
+import 'package:open_plants/pages/today_dashboard/today_dashboard_entity.dart';
+import 'package:open_plants/pages/today_dashboard/today_dashboard_repository.dart';
 
 /// Business logic for the today dashboard.
 class TodayDashboardUsecases {

@@ -1,4 +1,4 @@
-import 'package:open_plant/pages/plant_collection/plant_collection_item_entity.dart';
+import 'package:open_plants/pages/plant_collection/plant_collection_item_entity.dart';
 
 /// Maps ambient brightness values to light levels.
 ///

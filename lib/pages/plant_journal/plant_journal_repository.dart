@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:uuid/uuid.dart';
 
-import 'package:open_plant/pages/plant_journal/plant_journal_datasource.dart';
-import 'package:open_plant/pages/plant_journal/plant_journal_item_entity.dart';
+import 'package:open_plants/pages/plant_journal/plant_journal_datasource.dart';
+import 'package:open_plants/pages/plant_journal/plant_journal_item_entity.dart';
 
 /// Repository for plant journal domain operations.
 ///

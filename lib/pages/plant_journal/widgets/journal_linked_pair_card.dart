@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'package:open_plant/pages/plant_journal/plant_journal_item_entity.dart';
-import 'package:open_plant/pages/plant_journal/widgets/journal_diagnosis_card.dart';
-import 'package:open_plant/pages/plant_journal/widgets/journal_symptom_card.dart';
+import 'package:open_plants/pages/plant_journal/plant_journal_item_entity.dart';
+import 'package:open_plants/pages/plant_journal/widgets/journal_diagnosis_card.dart';
+import 'package:open_plants/pages/plant_journal/widgets/journal_symptom_card.dart';
 
 /// Widget that visually groups a symptom entry with its linked diagnosis result.
 ///

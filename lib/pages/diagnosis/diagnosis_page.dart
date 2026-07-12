@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
-import 'package:open_plant/core/app_scope.dart';
-import 'package:open_plant/l10n/l10n_x.dart';
-import 'package:open_plant/pages/diagnosis/diagnosis_item_entity.dart';
-import 'package:open_plant/pages/diagnosis/diagnosis_result_entity.dart';
-import 'package:open_plant/pages/diagnosis/diagnosis_result_page.dart';
+import 'package:open_plants/core/app_scope.dart';
+import 'package:open_plants/l10n/l10n_x.dart';
+import 'package:open_plants/pages/diagnosis/diagnosis_item_entity.dart';
+import 'package:open_plants/pages/diagnosis/diagnosis_result_entity.dart';
+import 'package:open_plants/pages/diagnosis/diagnosis_result_page.dart';
 
 /// Multi-step questionnaire for collecting symptom and plant context information
 /// to feed into the diagnosis engine.

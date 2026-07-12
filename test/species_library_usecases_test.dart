@@ -4,11 +4,11 @@ import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:open_plant/pages/species_library/care_plan.dart';
-import 'package:open_plant/pages/species_library/species_library_datasource.dart';
-import 'package:open_plant/pages/species_library/species_library_item_entity.dart';
-import 'package:open_plant/pages/species_library/species_library_repository.dart';
-import 'package:open_plant/pages/species_library/species_library_usecases.dart';
+import 'package:open_plants/pages/species_library/care_plan.dart';
+import 'package:open_plants/pages/species_library/species_library_datasource.dart';
+import 'package:open_plants/pages/species_library/species_library_item_entity.dart';
+import 'package:open_plants/pages/species_library/species_library_repository.dart';
+import 'package:open_plants/pages/species_library/species_library_usecases.dart';
 
 void main() {
   late SpeciesLibraryRepository repository;

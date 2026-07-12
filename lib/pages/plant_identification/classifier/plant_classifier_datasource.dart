@@ -1,10 +1,10 @@
 import 'dart:typed_data';
 
-import 'package:open_plant/pages/plant_identification/classifier/classification_result.dart';
-import 'package:open_plant/pages/plant_identification/classifier/image_preprocessor.dart';
-import 'package:open_plant/pages/plant_identification/classifier/labels_loader.dart';
-import 'package:open_plant/pages/plant_identification/classifier/plant_classifier.dart';
-import 'package:open_plant/pages/plant_identification/classifier/softmax_postprocessor.dart';
+import 'package:open_plants/pages/plant_identification/classifier/classification_result.dart';
+import 'package:open_plants/pages/plant_identification/classifier/image_preprocessor.dart';
+import 'package:open_plants/pages/plant_identification/classifier/labels_loader.dart';
+import 'package:open_plants/pages/plant_identification/classifier/plant_classifier.dart';
+import 'package:open_plants/pages/plant_identification/classifier/softmax_postprocessor.dart';
 
 /// Orchestrates the full classification pipeline: preprocess → infer → postprocess.
 class PlantClassifierDatasource {

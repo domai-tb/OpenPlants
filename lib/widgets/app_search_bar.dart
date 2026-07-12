@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:open_plant/l10n/l10n_x.dart';
-import 'package:open_plant/widgets/app_icon_button.dart';
+import 'package:open_plants/l10n/l10n_x.dart';
+import 'package:open_plants/widgets/app_icon_button.dart';
 
 /// This widget displays a search bar that can be hidden via a button
 /// and is used to search the news feed and events.

@@ -2,10 +2,10 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:open_plant/pages/plant_collection/plant_collection_datasource.dart';
-import 'package:open_plant/pages/plant_collection/plant_collection_item_entity.dart';
-import 'package:open_plant/pages/plant_collection/plant_collection_repository.dart';
-import 'package:open_plant/pages/plant_collection/plant_collection_usecases.dart';
+import 'package:open_plants/pages/plant_collection/plant_collection_datasource.dart';
+import 'package:open_plants/pages/plant_collection/plant_collection_item_entity.dart';
+import 'package:open_plants/pages/plant_collection/plant_collection_repository.dart';
+import 'package:open_plants/pages/plant_collection/plant_collection_usecases.dart';
 
 /// In-memory mock datasource for testing.
 class _MockPlantCollectionDataSource extends PlantCollectionDataSource {

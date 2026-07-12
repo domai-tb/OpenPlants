@@ -1,4 +1,4 @@
-import 'package:open_plant/pages/diagnosis/diagnosis_item_entity.dart';
+import 'package:open_plants/pages/diagnosis/diagnosis_item_entity.dart';
 
 // SymptomType enum has been removed — use PlantSymptom from diagnosis_item_entity.dart instead.
 

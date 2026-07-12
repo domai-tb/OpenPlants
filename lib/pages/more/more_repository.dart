@@ -1,5 +1,5 @@
-import 'package:open_plant/pages/more/more_datasource.dart';
-import 'package:open_plant/pages/more/more_item_entity.dart';
+import 'package:open_plants/pages/more/more_datasource.dart';
+import 'package:open_plants/pages/more/more_item_entity.dart';
 
 class MoreRepository {
   final MoreDataSource dataSource;

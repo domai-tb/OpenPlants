@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-import 'package:open_plant/l10n/l10n_x.dart';
-import 'package:open_plant/pages/home/widgets/page_navigation_animation.dart';
-import 'package:open_plant/pages/care_schedule/care_schedule_page.dart';
-import 'package:open_plant/pages/today_dashboard/today_dashboard_page.dart';
-import 'package:open_plant/pages/more/more_page.dart';
+import 'package:open_plants/l10n/l10n_x.dart';
+import 'package:open_plants/pages/home/widgets/page_navigation_animation.dart';
+import 'package:open_plants/pages/care_schedule/care_schedule_page.dart';
+import 'package:open_plants/pages/today_dashboard/today_dashboard_page.dart';
+import 'package:open_plants/pages/more/more_page.dart';
 
 enum PageItem { dashboard, careSchedule, more }
 

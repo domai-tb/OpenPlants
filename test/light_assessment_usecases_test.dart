@@ -1,10 +1,10 @@
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:open_plant/pages/light_assessment/light_assessment_repository.dart';
-import 'package:open_plant/pages/light_assessment/light_assessment_usecases.dart';
-import 'package:open_plant/pages/plant_collection/plant_collection_item_entity.dart';
-import 'package:open_plant/pages/plant_photo_timeline/plant_photo_timeline_item_entity.dart';
+import 'package:open_plants/pages/light_assessment/light_assessment_repository.dart';
+import 'package:open_plants/pages/light_assessment/light_assessment_usecases.dart';
+import 'package:open_plants/pages/plant_collection/plant_collection_item_entity.dart';
+import 'package:open_plants/pages/plant_photo_timeline/plant_photo_timeline_item_entity.dart';
 
 /// In-memory mock datasource for testing.
 class MockLightAssessmentDataSource {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:open_plant/core/settings.dart';
-import 'package:open_plant/l10n/l10n.dart';
+import 'package:open_plants/core/settings.dart';
+import 'package:open_plants/l10n/l10n.dart';
 
 /// Manages the active locale, resolving the user's preference against the
 /// system locale and the set of supported locales.

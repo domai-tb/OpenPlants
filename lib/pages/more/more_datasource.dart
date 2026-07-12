@@ -1,4 +1,4 @@
-import 'package:open_plant/pages/more/more_item_entity.dart';
+import 'package:open_plants/pages/more/more_item_entity.dart';
 
 class MoreDataSource {
   Future<List<MoreItemEntity>> fetchItems() async {
@@ -9,8 +9,8 @@ class MoreDataSource {
       MoreItemEntity(id: 'light_assessment', title: 'Light Assessment', subtitle: 'Assess light levels for your plants'),
       MoreItemEntity(id: 'log_symptom', title: 'Log Symptom', subtitle: 'Record a plant health issue'),
       MoreItemEntity(id: 'diagnosis', title: 'Plant Diagnosis', subtitle: 'Diagnose plant problems'),
-      MoreItemEntity(id: 'settings', title: 'Settings', subtitle: 'OpenPlant settings'),
-      MoreItemEntity(id: 'about', title: 'About', subtitle: 'About OpenPlant'),
+      MoreItemEntity(id: 'settings', title: 'Settings', subtitle: 'OpenPlants settings'),
+      MoreItemEntity(id: 'about', title: 'About', subtitle: 'About OpenPlants'),
     ];
   }
 }

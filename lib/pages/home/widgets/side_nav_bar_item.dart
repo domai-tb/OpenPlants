@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:open_plant/widgets/custom_button.dart';
+import 'package:open_plants/widgets/custom_button.dart';
 
 class SideNavBarItem extends StatefulWidget {
   final IconData activeIcon;

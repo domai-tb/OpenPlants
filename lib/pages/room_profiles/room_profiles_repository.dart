@@ -1,7 +1,7 @@
 import 'package:uuid/uuid.dart';
 
-import 'package:open_plant/pages/room_profiles/room_profiles_datasource.dart';
-import 'package:open_plant/pages/room_profiles/room_profiles_entity.dart';
+import 'package:open_plants/pages/room_profiles/room_profiles_datasource.dart';
+import 'package:open_plants/pages/room_profiles/room_profiles_entity.dart';
 
 /// Repository for room profiles CRUD operations.
 ///

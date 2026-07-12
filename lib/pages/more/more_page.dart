@@ -2,20 +2,20 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
-import 'package:open_plant/core/app_scope.dart';
-import 'package:open_plant/l10n/l10n_x.dart';
-import 'package:open_plant/pages/home/widgets/page_navigation_animation.dart';
-import 'package:open_plant/pages/more/more_about_page.dart';
-import 'package:open_plant/pages/more/more_item_entity.dart';
-import 'package:open_plant/pages/more/more_settings_page.dart';
-import 'package:open_plant/pages/more/more_usecases.dart';
-import 'package:open_plant/pages/plant_collection/plant_collection_item_entity.dart';
-import 'package:open_plant/pages/room_profiles/room_profiles_page.dart';
-import 'package:open_plant/pages/species_library/species_library_page.dart';
-import 'package:open_plant/pages/symptom_logger/symptom_logger_page.dart';
-import 'package:open_plant/pages/diagnosis/diagnosis_page.dart';
-import 'package:open_plant/pages/light_assessment/interactive_light_assessment_page.dart';
-import 'package:open_plant/widgets/scroll_to_top_button.dart';
+import 'package:open_plants/core/app_scope.dart';
+import 'package:open_plants/l10n/l10n_x.dart';
+import 'package:open_plants/pages/home/widgets/page_navigation_animation.dart';
+import 'package:open_plants/pages/more/more_about_page.dart';
+import 'package:open_plants/pages/more/more_item_entity.dart';
+import 'package:open_plants/pages/more/more_settings_page.dart';
+import 'package:open_plants/pages/more/more_usecases.dart';
+import 'package:open_plants/pages/plant_collection/plant_collection_item_entity.dart';
+import 'package:open_plants/pages/room_profiles/room_profiles_page.dart';
+import 'package:open_plants/pages/species_library/species_library_page.dart';
+import 'package:open_plants/pages/symptom_logger/symptom_logger_page.dart';
+import 'package:open_plants/pages/diagnosis/diagnosis_page.dart';
+import 'package:open_plants/pages/light_assessment/interactive_light_assessment_page.dart';
+import 'package:open_plants/widgets/scroll_to_top_button.dart';
 
 class MorePage extends StatefulWidget {
   final GlobalKey<NavigatorState> mainNavigatorKey;

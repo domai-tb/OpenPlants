@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:open_plant/pages/diagnosis/diagnosis_result_entity.dart';
+import 'package:open_plants/pages/diagnosis/diagnosis_result_entity.dart';
 
 /// Data source for diagnosis result persistence.
 ///

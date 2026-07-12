@@ -1,7 +1,7 @@
 import 'dart:math';
 
-import 'package:open_plant/pages/plant_identification/classifier/classification_result.dart';
-import 'package:open_plant/pages/plant_identification/classifier/labels_loader.dart';
+import 'package:open_plants/pages/plant_identification/classifier/classification_result.dart';
+import 'package:open_plants/pages/plant_identification/classifier/labels_loader.dart';
 
 /// Post-processes raw logits into classification results.
 class SoftmaxPostprocessor {

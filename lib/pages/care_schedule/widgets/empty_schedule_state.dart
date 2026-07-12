@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:open_plant/l10n/l10n_x.dart';
+import 'package:open_plants/l10n/l10n_x.dart';
 
 /// Empty state widget shown when no care tasks exist.
 class EmptyScheduleState extends StatelessWidget {

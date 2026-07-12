@@ -5,8 +5,8 @@ import 'dart:typed_data';
 import 'package:camera/camera.dart';
 import 'package:image/image.dart' as img;
 
-import 'package:open_plant/pages/light_assessment/brightness_mapper.dart';
-import 'package:open_plant/pages/plant_collection/plant_collection_item_entity.dart';
+import 'package:open_plants/pages/light_assessment/brightness_mapper.dart';
+import 'package:open_plants/pages/plant_collection/plant_collection_item_entity.dart';
 
 /// Result of a camera-based light estimation.
 class CameraEstimationResult {

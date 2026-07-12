@@ -2,10 +2,10 @@ import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:open_plant/pages/care_schedule/custom_care_rule.dart';
-import 'package:open_plant/pages/care_schedule/room_config.dart';
-import 'package:open_plant/pages/care_schedule/schedule_config.dart';
-import 'package:open_plant/pages/care_schedule/task_completion.dart';
+import 'package:open_plants/pages/care_schedule/custom_care_rule.dart';
+import 'package:open_plants/pages/care_schedule/room_config.dart';
+import 'package:open_plants/pages/care_schedule/schedule_config.dart';
+import 'package:open_plants/pages/care_schedule/task_completion.dart';
 
 /// Data source for care schedule persistence.
 ///

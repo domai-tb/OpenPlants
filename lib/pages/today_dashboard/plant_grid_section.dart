@@ -2,13 +2,13 @@ import 'dart:io' show File;
 
 import 'package:flutter/material.dart';
 
-import 'package:open_plant/core/app_scope.dart';
-import 'package:open_plant/core/constants.dart';
-import 'package:open_plant/l10n/l10n.dart';
-import 'package:open_plant/l10n/l10n_x.dart';
-import 'package:open_plant/pages/plant_collection/plant_collection_item_entity.dart';
-import 'package:open_plant/pages/plant_collection/plant_collection_usecases.dart';
-import 'package:open_plant/pages/room_profiles/room_profiles_usecases.dart';
+import 'package:open_plants/core/app_scope.dart';
+import 'package:open_plants/core/constants.dart';
+import 'package:open_plants/l10n/l10n.dart';
+import 'package:open_plants/l10n/l10n_x.dart';
+import 'package:open_plants/pages/plant_collection/plant_collection_item_entity.dart';
+import 'package:open_plants/pages/plant_collection/plant_collection_usecases.dart';
+import 'package:open_plants/pages/room_profiles/room_profiles_usecases.dart';
 
 /// Section widget that displays the plant collection as a searchable,
 /// filterable grid within the today dashboard.

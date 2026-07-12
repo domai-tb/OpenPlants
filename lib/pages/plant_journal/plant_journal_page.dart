@@ -3,19 +3,19 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
-import 'package:open_plant/core/app_scope.dart';
-import 'package:open_plant/l10n/l10n_x.dart';
-import 'package:open_plant/pages/diagnosis/diagnosis_page.dart';
-import 'package:open_plant/pages/diagnosis/diagnosis_repository.dart';
-import 'package:open_plant/pages/diagnosis/diagnosis_result_page.dart';
-import 'package:open_plant/pages/plant_journal/plant_journal_entry_form_page.dart';
-import 'package:open_plant/pages/plant_journal/plant_journal_extensions.dart';
-import 'package:open_plant/pages/plant_journal/plant_journal_item_entity.dart';
-import 'package:open_plant/pages/plant_journal/plant_journal_usecases.dart';
-import 'package:open_plant/pages/plant_journal/widgets/journal_diagnosis_card.dart';
-import 'package:open_plant/pages/plant_journal/widgets/journal_symptom_card.dart';
-import 'package:open_plant/pages/symptom_logger/symptom_logger_page.dart';
-import 'package:open_plant/widgets/confirm_dialog.dart';
+import 'package:open_plants/core/app_scope.dart';
+import 'package:open_plants/l10n/l10n_x.dart';
+import 'package:open_plants/pages/diagnosis/diagnosis_page.dart';
+import 'package:open_plants/pages/diagnosis/diagnosis_repository.dart';
+import 'package:open_plants/pages/diagnosis/diagnosis_result_page.dart';
+import 'package:open_plants/pages/plant_journal/plant_journal_entry_form_page.dart';
+import 'package:open_plants/pages/plant_journal/plant_journal_extensions.dart';
+import 'package:open_plants/pages/plant_journal/plant_journal_item_entity.dart';
+import 'package:open_plants/pages/plant_journal/plant_journal_usecases.dart';
+import 'package:open_plants/pages/plant_journal/widgets/journal_diagnosis_card.dart';
+import 'package:open_plants/pages/plant_journal/widgets/journal_symptom_card.dart';
+import 'package:open_plants/pages/symptom_logger/symptom_logger_page.dart';
+import 'package:open_plants/widgets/confirm_dialog.dart';
 
 /// Timeline view of journal entries for a specific plant.
 ///

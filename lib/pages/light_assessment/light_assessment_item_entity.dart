@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:open_plant/pages/plant_collection/plant_collection_item_entity.dart';
+import 'package:open_plants/pages/plant_collection/plant_collection_item_entity.dart';
 
 /// Data model representing a light level option for the UI selector.
 class LightAssessmentItem {

@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:test/test.dart';
 
-import 'package:open_plant/pages/diagnosis/diagnosis_item_entity.dart';
-import 'package:open_plant/pages/diagnosis/diagnosis_result_entity.dart';
+import 'package:open_plants/pages/diagnosis/diagnosis_item_entity.dart';
+import 'package:open_plants/pages/diagnosis/diagnosis_result_entity.dart';
 
 void main() {
   group('DiagnosisResultEntity JSON serialization edge cases', () {

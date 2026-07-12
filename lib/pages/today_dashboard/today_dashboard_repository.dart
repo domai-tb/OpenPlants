@@ -1,5 +1,5 @@
-import 'package:open_plant/pages/today_dashboard/today_dashboard_datasource.dart';
-import 'package:open_plant/pages/today_dashboard/today_dashboard_entity.dart';
+import 'package:open_plants/pages/today_dashboard/today_dashboard_datasource.dart';
+import 'package:open_plants/pages/today_dashboard/today_dashboard_entity.dart';
 
 /// Thin pass-through repository for the today dashboard.
 class TodayDashboardRepository {

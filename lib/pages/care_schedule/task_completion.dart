@@ -1,4 +1,4 @@
-import 'package:open_plant/pages/care_schedule/care_task_type.dart';
+import 'package:open_plants/pages/care_schedule/care_task_type.dart';
 
 /// An immutable event recording that a care task was completed.
 class TaskCompletion {

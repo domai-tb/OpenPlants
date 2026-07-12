@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:open_plant/l10n/l10n_x.dart';
+import 'package:open_plants/l10n/l10n_x.dart';
 
 /// Minimal page for the plant names feature module.
 ///

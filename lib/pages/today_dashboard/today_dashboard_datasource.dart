@@ -1,5 +1,5 @@
-import 'package:open_plant/pages/plant_collection/plant_collection_usecases.dart';
-import 'package:open_plant/pages/today_dashboard/today_dashboard_entity.dart';
+import 'package:open_plants/pages/plant_collection/plant_collection_usecases.dart';
+import 'package:open_plants/pages/today_dashboard/today_dashboard_entity.dart';
 
 /// Data source for the today dashboard.
 ///

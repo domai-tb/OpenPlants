@@ -1,4 +1,4 @@
-import 'package:open_plant/pages/care_schedule/care_task_type.dart';
+import 'package:open_plants/pages/care_schedule/care_task_type.dart';
 
 /// Default care intervals and seasonal modifiers for a plant species.
 class SpeciesCareProfile {

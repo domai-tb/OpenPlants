@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'package:open_plant/l10n/l10n_x.dart';
-import 'package:open_plant/pages/diagnosis/diagnosis_item_entity.dart';
-import 'package:open_plant/pages/symptom_logger/symptom_logger_item_entity.dart';
+import 'package:open_plants/l10n/l10n_x.dart';
+import 'package:open_plants/pages/diagnosis/diagnosis_item_entity.dart';
+import 'package:open_plants/pages/symptom_logger/symptom_logger_item_entity.dart';
 
 // ---------------------------------------------------------------------------
 // PlantSymptom (unified enum)

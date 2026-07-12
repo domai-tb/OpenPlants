@@ -1,7 +1,7 @@
 import 'package:uuid/uuid.dart';
 
-import 'package:open_plant/pages/symptom_logger/symptom_logger_datasource.dart';
-import 'package:open_plant/pages/symptom_logger/symptom_logger_item_entity.dart';
+import 'package:open_plants/pages/symptom_logger/symptom_logger_datasource.dart';
+import 'package:open_plants/pages/symptom_logger/symptom_logger_item_entity.dart';
 
 /// Repository for symptom logger domain operations.
 ///

@@ -1,5 +1,5 @@
-import 'package:open_plant/pages/light_assessment/light_assessment_datasource.dart';
-import 'package:open_plant/pages/plant_collection/plant_collection_item_entity.dart';
+import 'package:open_plants/pages/light_assessment/light_assessment_datasource.dart';
+import 'package:open_plants/pages/plant_collection/plant_collection_item_entity.dart';
 
 /// Repository for light assessment domain operations.
 class LightAssessmentRepository {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:open_plant/l10n/l10n_x.dart';
-import 'package:open_plant/pages/model_info/model_info_page.dart';
+import 'package:open_plants/l10n/l10n_x.dart';
+import 'package:open_plants/pages/model_info/model_info_page.dart';
 
 class MoreAboutPage extends StatelessWidget {
   const MoreAboutPage({super.key});

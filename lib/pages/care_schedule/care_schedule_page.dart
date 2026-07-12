@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
-import 'package:open_plant/core/app_scope.dart';
-import 'package:open_plant/l10n/l10n_x.dart';
-import 'package:open_plant/pages/care_schedule/care_schedule_usecases.dart';
-import 'package:open_plant/pages/care_schedule/care_task.dart';
-import 'package:open_plant/pages/care_schedule/care_task_type.dart';
-import 'package:open_plant/pages/care_schedule/widgets/care_task_card.dart';
-import 'package:open_plant/pages/care_schedule/widgets/empty_schedule_state.dart';
-import 'package:open_plant/pages/home/widgets/page_navigation_animation.dart';
-import 'package:open_plant/pages/symptom_logger/symptom_logger_extensions.dart';
-import 'package:open_plant/pages/symptom_logger/symptom_logger_item_entity.dart';
+import 'package:open_plants/core/app_scope.dart';
+import 'package:open_plants/l10n/l10n_x.dart';
+import 'package:open_plants/pages/care_schedule/care_schedule_usecases.dart';
+import 'package:open_plants/pages/care_schedule/care_task.dart';
+import 'package:open_plants/pages/care_schedule/care_task_type.dart';
+import 'package:open_plants/pages/care_schedule/widgets/care_task_card.dart';
+import 'package:open_plants/pages/care_schedule/widgets/empty_schedule_state.dart';
+import 'package:open_plants/pages/home/widgets/page_navigation_animation.dart';
+import 'package:open_plants/pages/symptom_logger/symptom_logger_extensions.dart';
+import 'package:open_plants/pages/symptom_logger/symptom_logger_item_entity.dart';
 
 /// Care schedule page — dashboard showing overdue, due-today, and upcoming tasks.
 class CareSchedulePage extends StatefulWidget {

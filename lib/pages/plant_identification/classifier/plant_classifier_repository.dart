@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
-import 'package:open_plant/pages/plant_identification/classifier/classification_result.dart';
-import 'package:open_plant/pages/plant_identification/classifier/plant_classifier_datasource.dart';
+import 'package:open_plants/pages/plant_identification/classifier/classification_result.dart';
+import 'package:open_plants/pages/plant_identification/classifier/plant_classifier_datasource.dart';
 
 /// Wraps the datasource and maps to domain entities.
 class PlantClassifierRepository {

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'package:open_plant/l10n/l10n_x.dart';
-import 'package:open_plant/pages/care_schedule/care_task.dart';
-import 'package:open_plant/pages/care_schedule/care_task_type.dart';
+import 'package:open_plants/l10n/l10n_x.dart';
+import 'package:open_plants/pages/care_schedule/care_task.dart';
+import 'package:open_plants/pages/care_schedule/care_task_type.dart';
 
 /// A card displaying a care task with actions.
 class CareTaskCard extends StatelessWidget {

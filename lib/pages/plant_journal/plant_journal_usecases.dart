@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:open_plant/pages/plant_journal/plant_journal_item_entity.dart';
-import 'package:open_plant/pages/plant_journal/plant_journal_repository.dart';
+import 'package:open_plants/pages/plant_journal/plant_journal_item_entity.dart';
+import 'package:open_plants/pages/plant_journal/plant_journal_repository.dart';
 
 /// Use cases for plant journal business logic.
 class PlantJournalUseCases {

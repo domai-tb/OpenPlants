@@ -1,9 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:open_plant/pages/plant_journal/plant_journal_datasource.dart';
-import 'package:open_plant/pages/plant_journal/plant_journal_item_entity.dart';
-import 'package:open_plant/pages/plant_journal/plant_journal_repository.dart';
-import 'package:open_plant/pages/plant_journal/plant_journal_usecases.dart';
+import 'package:open_plants/pages/plant_journal/plant_journal_datasource.dart';
+import 'package:open_plants/pages/plant_journal/plant_journal_item_entity.dart';
+import 'package:open_plants/pages/plant_journal/plant_journal_repository.dart';
+import 'package:open_plants/pages/plant_journal/plant_journal_usecases.dart';
 
 /// In-memory mock datasource for testing.
 class _MockPlantJournalDataSource extends PlantJournalDataSource {

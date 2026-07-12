@@ -5,14 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:open_plant/pages/light_assessment/brightness_mapper.dart';
-import 'package:open_plant/pages/light_assessment/interactive_light_assessment_page.dart';
-import 'package:open_plant/pages/light_assessment/camera_estimation_service.dart';
-import 'package:open_plant/pages/light_assessment/light_assessment_usecases.dart';
-import 'package:open_plant/pages/light_assessment/light_assessment_repository.dart';
-import 'package:open_plant/pages/light_assessment/light_assessment_datasource.dart';
-import 'package:open_plant/pages/plant_collection/plant_collection_item_entity.dart';
-import 'package:open_plant/pages/plant_photo_timeline/plant_photo_timeline_item_entity.dart';
+import 'package:open_plants/pages/light_assessment/brightness_mapper.dart';
+import 'package:open_plants/pages/light_assessment/interactive_light_assessment_page.dart';
+import 'package:open_plants/pages/light_assessment/camera_estimation_service.dart';
+import 'package:open_plants/pages/light_assessment/light_assessment_usecases.dart';
+import 'package:open_plants/pages/light_assessment/light_assessment_repository.dart';
+import 'package:open_plants/pages/light_assessment/light_assessment_datasource.dart';
+import 'package:open_plants/pages/plant_collection/plant_collection_item_entity.dart';
+import 'package:open_plants/pages/plant_photo_timeline/plant_photo_timeline_item_entity.dart';
 
 // ---------------------------------------------------------------------------
 // Fake camera service — no real platform channels needed.

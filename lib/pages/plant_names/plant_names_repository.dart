@@ -1,4 +1,4 @@
-import 'package:open_plant/pages/plant_names/plant_names_datasource.dart';
+import 'package:open_plants/pages/plant_names/plant_names_datasource.dart';
 
 /// Resolves plant species to localized display names using tiered lookup:
 /// 1. In-memory cache (from datasource)

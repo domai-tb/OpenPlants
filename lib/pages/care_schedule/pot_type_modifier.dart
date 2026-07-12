@@ -1,5 +1,5 @@
-import 'package:open_plant/pages/care_schedule/care_task_type.dart';
-import 'package:open_plant/pages/care_schedule/schedule_config.dart';
+import 'package:open_plants/pages/care_schedule/care_task_type.dart';
+import 'package:open_plants/pages/care_schedule/schedule_config.dart';
 
 /// Applies pot-type modifiers to watering intervals.
 class PotTypeModifier {

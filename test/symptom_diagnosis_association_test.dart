@@ -1,9 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:open_plant/pages/diagnosis/diagnosis_item_entity.dart';
-import 'package:open_plant/pages/symptom_logger/symptom_logger_datasource.dart';
-import 'package:open_plant/pages/symptom_logger/symptom_logger_item_entity.dart';
+import 'package:open_plants/pages/diagnosis/diagnosis_item_entity.dart';
+import 'package:open_plants/pages/symptom_logger/symptom_logger_datasource.dart';
+import 'package:open_plants/pages/symptom_logger/symptom_logger_item_entity.dart';
 
 void main() {
   late SymptomLoggerDataSource dataSource;

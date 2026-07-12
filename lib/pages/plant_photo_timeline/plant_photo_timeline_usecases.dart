@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:open_plant/pages/plant_photo_timeline/plant_photo_timeline_repository.dart';
-import 'package:open_plant/pages/plant_photo_timeline/plant_photo_timeline_item_entity.dart';
+import 'package:open_plants/pages/plant_photo_timeline/plant_photo_timeline_repository.dart';
+import 'package:open_plants/pages/plant_photo_timeline/plant_photo_timeline_item_entity.dart';
 
 /// Use-cases for the plant photo timeline feature.
 class PlantPhotoTimelineUseCases {

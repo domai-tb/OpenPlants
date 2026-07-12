@@ -12,7 +12,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get helloWorld => 'Hello World!';
 
   @override
-  String get appTitle => 'OpenPlant';
+  String get appTitle => 'OpenPlants';
 
   @override
   String get todayDashboardTitle => 'Today';
@@ -97,7 +97,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get onboardingIntroBody =>
-      'Welcome to OpenPlant — your open-source & privacy-friendly plant companion.';
+      'Welcome to OpenPlants — your open-source & privacy-friendly plant companion.';
 
   @override
   String get onboardingIntroHint =>
@@ -201,14 +201,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get secondaryActionSnack => 'Another placeholder action';
 
   @override
-  String get menuSettingsSubtitle => 'OpenPlant settings';
+  String get menuSettingsSubtitle => 'OpenPlants settings';
 
   @override
-  String get menuAboutSubtitle => 'About OpenPlant';
+  String get menuAboutSubtitle => 'About OpenPlants';
 
   @override
   String get aboutBody =>
-      'OpenPlant is an open-source & privacy-friendly companion app for your plants.\n\nTrack your plant care, set watering reminders, and keep your garden healthy — all without compromising your privacy.';
+      'OpenPlants is an open-source & privacy-friendly companion app for your plants.\n\nTrack your plant care, set watering reminders, and keep your garden healthy — all without compromising your privacy.';
 
   @override
   String get serverFailureMessage => 'Could not load server data.';

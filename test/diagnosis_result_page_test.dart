@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:open_plant/core/app_scope.dart';
-import 'package:open_plant/core/injection.dart';
-import 'package:open_plant/core/settings.dart';
-import 'package:open_plant/l10n/l10n.dart';
-import 'package:open_plant/pages/diagnosis/diagnosis_item_entity.dart';
-import 'package:open_plant/pages/diagnosis/diagnosis_result_entity.dart';
-import 'package:open_plant/pages/diagnosis/diagnosis_result_page.dart';
-import 'package:open_plant/pages/symptom_logger/symptom_logger_item_entity.dart';
-import 'package:open_plant/pages/symptom_logger/symptom_logger_page.dart';
+import 'package:open_plants/core/app_scope.dart';
+import 'package:open_plants/core/injection.dart';
+import 'package:open_plants/core/settings.dart';
+import 'package:open_plants/l10n/l10n.dart';
+import 'package:open_plants/pages/diagnosis/diagnosis_item_entity.dart';
+import 'package:open_plants/pages/diagnosis/diagnosis_result_entity.dart';
+import 'package:open_plants/pages/diagnosis/diagnosis_result_page.dart';
+import 'package:open_plants/pages/symptom_logger/symptom_logger_item_entity.dart';
+import 'package:open_plants/pages/symptom_logger/symptom_logger_page.dart';
 
 void main() {
   setUpAll(() async {

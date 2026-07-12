@@ -1,5 +1,5 @@
-import 'package:open_plant/pages/room_profiles/room_profiles_entity.dart';
-import 'package:open_plant/pages/room_profiles/room_profiles_repository.dart';
+import 'package:open_plants/pages/room_profiles/room_profiles_entity.dart';
+import 'package:open_plants/pages/room_profiles/room_profiles_repository.dart';
 
 /// Business logic for room profiles management.
 class RoomProfilesUsecases {

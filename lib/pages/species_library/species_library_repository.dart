@@ -1,5 +1,5 @@
-import 'package:open_plant/pages/species_library/species_library_datasource.dart';
-import 'package:open_plant/pages/species_library/species_library_item_entity.dart';
+import 'package:open_plants/pages/species_library/species_library_datasource.dart';
+import 'package:open_plants/pages/species_library/species_library_item_entity.dart';
 
 /// Repository wrapping the species data source with search and filter methods.
 class SpeciesLibraryRepository {

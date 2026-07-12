@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/services.dart';
 
-import 'package:open_plant/pages/plant_names/plant_names_entity.dart';
+import 'package:open_plants/pages/plant_names/plant_names_entity.dart';
 
 /// Loads plant names from the bundled JSON asset.
 class PlantNamesDatasource {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import 'package:open_plant/core/settings.dart';
+import 'package:open_plants/core/settings.dart';
 
 /// Formats temperature values according to the user's unit preference
 /// and the active locale's number conventions.

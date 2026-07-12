@@ -1,11 +1,11 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:open_plant/pages/diagnosis/diagnosis_datasource.dart';
-import 'package:open_plant/pages/diagnosis/diagnosis_item_entity.dart';
-import 'package:open_plant/pages/diagnosis/diagnosis_repository.dart';
-import 'package:open_plant/pages/diagnosis/diagnosis_result_entity.dart';
-import 'package:open_plant/pages/diagnosis/diagnosis_usecases.dart';
+import 'package:open_plants/pages/diagnosis/diagnosis_datasource.dart';
+import 'package:open_plants/pages/diagnosis/diagnosis_item_entity.dart';
+import 'package:open_plants/pages/diagnosis/diagnosis_repository.dart';
+import 'package:open_plants/pages/diagnosis/diagnosis_result_entity.dart';
+import 'package:open_plants/pages/diagnosis/diagnosis_usecases.dart';
 
 void main() {
   late DiagnosisDataSource dataSource;

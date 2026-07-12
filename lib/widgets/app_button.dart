@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 enum AppButtonType { normal, light }
 
-/// Simple app-styled button used by OpenPlant.
+/// Simple app-styled button used by OpenPlants.
 class AppButton extends StatelessWidget {
   /// The displayed text inside the button
   final String text;

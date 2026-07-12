@@ -1,11 +1,11 @@
-import 'package:open_plant/pages/diagnosis/diagnosis_item_entity.dart';
-import 'package:open_plant/pages/diagnosis/diagnosis_repository.dart';
-import 'package:open_plant/pages/diagnosis/diagnosis_result_entity.dart';
-import 'package:open_plant/pages/diagnosis/diagnosis_usecases.dart';
-import 'package:open_plant/pages/plant_collection/plant_collection_usecases.dart';
-import 'package:open_plant/pages/room_profiles/room_profiles_entity.dart';
-import 'package:open_plant/pages/room_profiles/room_profiles_usecases.dart';
-import 'package:open_plant/pages/symptom_logger/symptom_logger_item_entity.dart';
+import 'package:open_plants/pages/diagnosis/diagnosis_item_entity.dart';
+import 'package:open_plants/pages/diagnosis/diagnosis_repository.dart';
+import 'package:open_plants/pages/diagnosis/diagnosis_result_entity.dart';
+import 'package:open_plants/pages/diagnosis/diagnosis_usecases.dart';
+import 'package:open_plants/pages/plant_collection/plant_collection_usecases.dart';
+import 'package:open_plants/pages/room_profiles/room_profiles_entity.dart';
+import 'package:open_plants/pages/room_profiles/room_profiles_usecases.dart';
+import 'package:open_plants/pages/symptom_logger/symptom_logger_item_entity.dart';
 
 /// Orchestrates automatic diagnosis when a symptom is logged.
 ///

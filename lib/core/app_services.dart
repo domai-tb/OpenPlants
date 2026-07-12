@@ -1,23 +1,23 @@
-import 'package:open_plant/core/date_formatter.dart';
-import 'package:open_plant/core/locale_service.dart';
-import 'package:open_plant/core/unit_preferences.dart';
-import 'package:open_plant/pages/care_schedule/care_schedule_usecases.dart';
-import 'package:open_plant/pages/care_schedule/custom_care_rule_usecases.dart';
-import 'package:open_plant/pages/model_info/model_info_usecases.dart';
-import 'package:open_plant/pages/plant_identification/classifier/plant_classifier_usecases.dart';
-import 'package:open_plant/pages/more/more_usecases.dart';
-import 'package:open_plant/pages/plant_collection/plant_collection_usecases.dart';
-import 'package:open_plant/pages/plant_journal/plant_journal_usecases.dart';
-import 'package:open_plant/pages/plant_photo_timeline/plant_photo_timeline_usecases.dart';
-import 'package:open_plant/pages/room_profiles/room_profiles_usecases.dart';
-import 'package:open_plant/pages/species_library/species_library_usecases.dart';
-import 'package:open_plant/pages/symptom_logger/symptom_logger_usecases.dart';
-import 'package:open_plant/pages/today_dashboard/today_dashboard_usecases.dart';
-import 'package:open_plant/pages/light_assessment/light_assessment_usecases.dart';
-import 'package:open_plant/pages/diagnosis/auto_diagnosis_service.dart';
-import 'package:open_plant/pages/diagnosis/diagnosis_history_usecases.dart';
-import 'package:open_plant/pages/diagnosis/diagnosis_repository.dart';
-import 'package:open_plant/pages/plant_names/plant_names_usecases.dart';
+import 'package:open_plants/core/date_formatter.dart';
+import 'package:open_plants/core/locale_service.dart';
+import 'package:open_plants/core/unit_preferences.dart';
+import 'package:open_plants/pages/care_schedule/care_schedule_usecases.dart';
+import 'package:open_plants/pages/care_schedule/custom_care_rule_usecases.dart';
+import 'package:open_plants/pages/model_info/model_info_usecases.dart';
+import 'package:open_plants/pages/plant_identification/classifier/plant_classifier_usecases.dart';
+import 'package:open_plants/pages/more/more_usecases.dart';
+import 'package:open_plants/pages/plant_collection/plant_collection_usecases.dart';
+import 'package:open_plants/pages/plant_journal/plant_journal_usecases.dart';
+import 'package:open_plants/pages/plant_photo_timeline/plant_photo_timeline_usecases.dart';
+import 'package:open_plants/pages/room_profiles/room_profiles_usecases.dart';
+import 'package:open_plants/pages/species_library/species_library_usecases.dart';
+import 'package:open_plants/pages/symptom_logger/symptom_logger_usecases.dart';
+import 'package:open_plants/pages/today_dashboard/today_dashboard_usecases.dart';
+import 'package:open_plants/pages/light_assessment/light_assessment_usecases.dart';
+import 'package:open_plants/pages/diagnosis/auto_diagnosis_service.dart';
+import 'package:open_plants/pages/diagnosis/diagnosis_history_usecases.dart';
+import 'package:open_plants/pages/diagnosis/diagnosis_repository.dart';
+import 'package:open_plants/pages/plant_names/plant_names_usecases.dart';
 
 /// Aggregates feature use-cases for convenient access via `AppScope`.
 ///

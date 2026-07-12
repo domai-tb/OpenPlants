@@ -2,13 +2,13 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
-import 'package:open_plant/pages/care_schedule/care_schedule_repository.dart';
-import 'package:open_plant/pages/care_schedule/care_schedule_usecases.dart';
-import 'package:open_plant/pages/care_schedule/care_task.dart';
-import 'package:open_plant/pages/care_schedule/care_task_type.dart';
-import 'package:open_plant/pages/plant_collection/plant_collection_usecases.dart';
-import 'package:open_plant/pages/plant_journal/plant_journal_item_entity.dart';
-import 'package:open_plant/pages/plant_journal/plant_journal_usecases.dart';
+import 'package:open_plants/pages/care_schedule/care_schedule_repository.dart';
+import 'package:open_plants/pages/care_schedule/care_schedule_usecases.dart';
+import 'package:open_plants/pages/care_schedule/care_task.dart';
+import 'package:open_plants/pages/care_schedule/care_task_type.dart';
+import 'package:open_plants/pages/plant_collection/plant_collection_usecases.dart';
+import 'package:open_plants/pages/plant_journal/plant_journal_item_entity.dart';
+import 'package:open_plants/pages/plant_journal/plant_journal_usecases.dart';
 
 @GenerateMocks([
   CareScheduleRepository,

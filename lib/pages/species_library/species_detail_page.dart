@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'package:open_plant/l10n/l10n_x.dart';
-import 'package:open_plant/pages/species_library/species_library_item_entity.dart';
-import 'package:open_plant/pages/species_library/species_library_usecases.dart';
+import 'package:open_plants/l10n/l10n_x.dart';
+import 'package:open_plants/pages/species_library/species_library_item_entity.dart';
+import 'package:open_plants/pages/species_library/species_library_usecases.dart';
 
 /// Detail page showing all species fields in structured layout with care plan,
 /// toxicity highlights, and difficulty badge.

@@ -2,9 +2,9 @@ import 'dart:io';
 
 import 'package:uuid/uuid.dart';
 
-import 'package:open_plant/pages/plant_collection/plant_collection_repository.dart';
-import 'package:open_plant/pages/plant_photo_timeline/plant_photo_timeline_datasource.dart';
-import 'package:open_plant/pages/plant_photo_timeline/plant_photo_timeline_item_entity.dart';
+import 'package:open_plants/pages/plant_collection/plant_collection_repository.dart';
+import 'package:open_plants/pages/plant_photo_timeline/plant_photo_timeline_datasource.dart';
+import 'package:open_plants/pages/plant_photo_timeline/plant_photo_timeline_item_entity.dart';
 
 /// Repository for plant growth photo domain operations.
 ///

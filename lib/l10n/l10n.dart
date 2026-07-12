@@ -107,7 +107,7 @@ abstract class AppLocalizations {
   /// No description provided for @appTitle.
   ///
   /// In en, this message translates to:
-  /// **'OpenPlant'**
+  /// **'OpenPlants'**
   String get appTitle;
 
   /// No description provided for @todayDashboardTitle.
@@ -275,7 +275,7 @@ abstract class AppLocalizations {
   /// No description provided for @onboardingIntroBody.
   ///
   /// In en, this message translates to:
-  /// **'Welcome to OpenPlant — your open-source & privacy-friendly plant companion.'**
+  /// **'Welcome to OpenPlants — your open-source & privacy-friendly plant companion.'**
   String get onboardingIntroBody;
 
   /// No description provided for @onboardingIntroHint.
@@ -473,19 +473,19 @@ abstract class AppLocalizations {
   /// No description provided for @menuSettingsSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'OpenPlant settings'**
+  /// **'OpenPlants settings'**
   String get menuSettingsSubtitle;
 
   /// No description provided for @menuAboutSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'About OpenPlant'**
+  /// **'About OpenPlants'**
   String get menuAboutSubtitle;
 
   /// No description provided for @aboutBody.
   ///
   /// In en, this message translates to:
-  /// **'OpenPlant is an open-source & privacy-friendly companion app for your plants.\n\nTrack your plant care, set watering reminders, and keep your garden healthy — all without compromising your privacy.'**
+  /// **'OpenPlants is an open-source & privacy-friendly companion app for your plants.\n\nTrack your plant care, set watering reminders, and keep your garden healthy — all without compromising your privacy.'**
   String get aboutBody;
 
   /// No description provided for @serverFailureMessage.

@@ -5,12 +5,12 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 
-import 'package:open_plant/core/app_scope.dart';
-import 'package:open_plant/l10n/l10n_x.dart';
-import 'package:open_plant/pages/plant_journal/plant_journal_extensions.dart';
-import 'package:open_plant/pages/plant_journal/plant_journal_item_entity.dart';
-import 'package:open_plant/pages/plant_journal/plant_journal_usecases.dart';
-import 'package:open_plant/widgets/inline_camera_preview.dart';
+import 'package:open_plants/core/app_scope.dart';
+import 'package:open_plants/l10n/l10n_x.dart';
+import 'package:open_plants/pages/plant_journal/plant_journal_extensions.dart';
+import 'package:open_plants/pages/plant_journal/plant_journal_item_entity.dart';
+import 'package:open_plants/pages/plant_journal/plant_journal_usecases.dart';
+import 'package:open_plants/widgets/inline_camera_preview.dart';
 
 /// Form page for creating or editing a journal entry.
 class PlantJournalEntryFormPage extends StatefulWidget {

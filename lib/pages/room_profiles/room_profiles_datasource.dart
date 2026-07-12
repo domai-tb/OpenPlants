@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:open_plant/pages/room_profiles/room_profiles_entity.dart';
+import 'package:open_plants/pages/room_profiles/room_profiles_entity.dart';
 
 /// Data source for room profiles persistence.
 ///

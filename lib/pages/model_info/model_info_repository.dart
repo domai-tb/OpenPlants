@@ -1,5 +1,5 @@
-import 'package:open_plant/pages/model_info/model_info_datasource.dart';
-import 'package:open_plant/pages/model_info/model_info_item_entity.dart';
+import 'package:open_plants/pages/model_info/model_info_datasource.dart';
+import 'package:open_plants/pages/model_info/model_info_item_entity.dart';
 
 /// Repository mapping raw JSON from the datasource to [ModelInfoItem] entities.
 class ModelInfoRepository {

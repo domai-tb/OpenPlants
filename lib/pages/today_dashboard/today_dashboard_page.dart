@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 
-import 'package:open_plant/core/app_scope.dart';
-import 'package:open_plant/core/constants.dart';
-import 'package:open_plant/l10n/l10n.dart';
-import 'package:open_plant/l10n/l10n_x.dart';
-import 'package:open_plant/pages/diagnosis/diagnosis_page.dart';
-import 'package:open_plant/pages/home/home_page.dart';
-import 'package:open_plant/pages/home/widgets/page_navigation_animation.dart';
-import 'package:open_plant/pages/plant_collection/plant_collection_detail_page.dart';
-import 'package:open_plant/pages/plant_collection/plant_collection_form_page.dart';
-import 'package:open_plant/pages/plant_collection/plant_collection_item_entity.dart';
-import 'package:open_plant/pages/plant_identification/plant_identification_page.dart';
-import 'package:open_plant/pages/today_dashboard/plant_grid_section.dart';
-import 'package:open_plant/pages/today_dashboard/today_dashboard_entity.dart';
-import 'package:open_plant/pages/today_dashboard/today_dashboard_usecases.dart';
-import 'package:open_plant/widgets/app_search_bar.dart';
+import 'package:open_plants/core/app_scope.dart';
+import 'package:open_plants/core/constants.dart';
+import 'package:open_plants/l10n/l10n.dart';
+import 'package:open_plants/l10n/l10n_x.dart';
+import 'package:open_plants/pages/diagnosis/diagnosis_page.dart';
+import 'package:open_plants/pages/home/home_page.dart';
+import 'package:open_plants/pages/home/widgets/page_navigation_animation.dart';
+import 'package:open_plants/pages/plant_collection/plant_collection_detail_page.dart';
+import 'package:open_plants/pages/plant_collection/plant_collection_form_page.dart';
+import 'package:open_plants/pages/plant_collection/plant_collection_item_entity.dart';
+import 'package:open_plants/pages/plant_identification/plant_identification_page.dart';
+import 'package:open_plants/pages/today_dashboard/plant_grid_section.dart';
+import 'package:open_plants/pages/today_dashboard/today_dashboard_entity.dart';
+import 'package:open_plants/pages/today_dashboard/today_dashboard_usecases.dart';
+import 'package:open_plants/widgets/app_search_bar.dart';
 
 class TodayDashboardPage extends StatefulWidget {
   final GlobalKey<NavigatorState> mainNavigatorKey;

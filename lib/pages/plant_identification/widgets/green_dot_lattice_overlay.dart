@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:open_plant/pages/plant_identification/widgets/green_dot_lattice_painter.dart';
+import 'package:open_plants/pages/plant_identification/widgets/green_dot_lattice_painter.dart';
 
 /// Wraps the [GreenDotLatticePainter] in an [AnimatedBuilder] for continuous animation.
 ///

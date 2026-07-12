@@ -1,4 +1,4 @@
-import 'package:open_plant/pages/plant_names/plant_names_repository.dart';
+import 'package:open_plants/pages/plant_names/plant_names_repository.dart';
 
 /// Use-case for resolving plant display names.
 class PlantNamesUsecases {
