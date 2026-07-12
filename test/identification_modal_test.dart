@@ -7,7 +7,7 @@ import 'package:open_plant/core/injection.dart';
 import 'package:open_plant/core/settings.dart';
 import 'package:open_plant/l10n/l10n.dart';
 import 'package:open_plant/pages/plant_identification/plant_identification_page.dart';
-import 'package:open_plant/shared/widgets/inline_camera_preview.dart';
+import 'package:open_plant/widgets/inline_camera_preview.dart';
 
 void main() {
   setUpAll(() async {

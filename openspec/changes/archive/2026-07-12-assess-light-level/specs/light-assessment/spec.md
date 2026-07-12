@@ -1,12 +1,4 @@
-# Light Assessment
-
-Camera-based and manual light level assessment for plants.
-
-## Purpose
-
-Allow users to assess and assign a light level to each plant, either manually or via camera estimation. The assigned light level feeds into the care schedule engine to modulate watering frequency.
-
-## Requirements
+## MODIFIED Requirements
 
 ### Requirement: Camera-based light estimation provides a guidance hint
 The system SHALL provide an interactive full-screen camera view for real-time light level estimation. The camera view SHALL display a live viewfinder with overlaid light level indicator that updates continuously. The user SHALL be able to capture a photo when they find a suitable light level, which SHALL be stored in the plant's photo timeline. The user SHALL also be able to set the light level directly from the live estimation without capturing a photo.
@@ -46,6 +38,8 @@ The system SHALL allow users to assess light level from three sources: live came
 - **WHEN** the user taps "Take new photo" on the light assessment page
 - **THEN** the system opens the inline camera preview and estimates light level from the captured photo
 
+## ADDED Requirements
+
 ### Requirement: Standalone light assessment entry point
 The system SHALL provide a standalone light assessment entry point from the "More" page that allows users to assess light levels without selecting a specific plant first.
 
@@ -71,3 +65,13 @@ The system SHALL allow users to access light assessment directly from the plant 
 #### Scenario: Plant detail shows assessment result
 - **WHEN** the user completes a light assessment from the plant detail page
 - **THEN** the system returns to the plant detail page and displays the updated light level
+
+## REMOVED Requirements
+
+### Requirement: User can set a light level for a plant
+**Reason**: This requirement is replaced by more specific requirements for interactive assessment and direct selection. The core functionality is preserved in the modified and added requirements.
+**Migration**: Use the new interactive camera view or direct selection options to set light levels.
+
+### Requirement: Light level is displayed in plant details
+**Reason**: This requirement is moved to a separate spec for plant detail page. The functionality remains unchanged.
+**Migration**: Light level display is handled by the plant detail page component.

@@ -11,7 +11,7 @@ import 'package:open_plant/pages/diagnosis/diagnosis_item_entity.dart';
 import 'package:open_plant/pages/symptom_logger/symptom_logger_extensions.dart';
 import 'package:open_plant/pages/symptom_logger/symptom_logger_item_entity.dart';
 import 'package:open_plant/pages/symptom_logger/symptom_logger_usecases.dart';
-import 'package:open_plant/shared/widgets/inline_camera_preview.dart';
+import 'package:open_plant/widgets/inline_camera_preview.dart';
 
 /// Multi-step symptom logging form for recording plant health issues.
 class SymptomLoggerPage extends StatefulWidget {

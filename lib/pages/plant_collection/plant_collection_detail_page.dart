@@ -17,8 +17,8 @@ import 'package:open_plant/pages/plant_photo_timeline/plant_photo_timeline_page.
 import 'package:open_plant/pages/plant_photo_timeline/plant_photo_timeline_usecases.dart';
 import 'package:open_plant/pages/care_schedule/custom_care_rule_usecases.dart';
 import 'package:open_plant/pages/care_schedule/widgets/care_rules_section.dart';
-import 'package:open_plant/pages/lightAssessment/light_assessment_page.dart';
-import 'package:open_plant/pages/lightAssessment/light_assessment_usecases.dart';
+import 'package:open_plant/pages/light_assessment/interactive_light_assessment_page.dart';
+import 'package:open_plant/pages/light_assessment/light_assessment_usecases.dart';
 import 'package:open_plant/pages/diagnosis/diagnosis_history_usecases.dart';
 import 'package:open_plant/pages/diagnosis/diagnosis_item_entity.dart';
 import 'package:open_plant/pages/diagnosis/diagnosis_page.dart';
@@ -270,14 +270,17 @@ class _PlantCollectionDetailPageState extends State<PlantCollectionDetailPage> {
   Future<void> _openLightAssessment() async {
     await Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (_) => LightAssessmentPage(
+        builder: (_) => InteractiveLightAssessmentPage(
           plantId: _plant.id,
           plantName: _plant.name,
           usecases: _lightAssessmentUsecases,
+          onLightLevelSet: (level) {
+            setState(() => _plant = _plant.copyWith(lightLevel: level));
+          },
         ),
       ),
     );
-    // Reload plant to reflect updated light level
+    // Reload plant to reflect any other changes made during the flow
     final updatedPlants = await _usecases.loadPlants();
     final matching = updatedPlants.where((p) => p.id == _plant.id);
     final updated = matching.isNotEmpty ? matching.first : null;
@@ -405,21 +408,94 @@ class _PlantCollectionDetailPageState extends State<PlantCollectionDetailPage> {
           ],
 
           // Light Level
-          _buildInfoRow(
-            theme,
-            icon: Icons.light_mode,
-            label: 'Light Level',
-            value: _plant.lightLevel?.label ?? 'Not set',
-          ),
-          const SizedBox(height: 8),
-          SizedBox(
-            width: double.infinity,
-            child: OutlinedButton.icon(
-              onPressed: _openLightAssessment,
-              icon: const Icon(Icons.edit, size: 18),
-              label: const Text('Assess Light Level'),
+          if (_plant.lightLevel != null)
+            Card(
+              color: theme.colorScheme.surfaceContainerHighest,
+              child: InkWell(
+                onTap: _openLightAssessment,
+                borderRadius: BorderRadius.circular(12),
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.light_mode,
+                            color: theme.colorScheme.onSurfaceVariant,
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            'Light Level',
+                            style: theme.textTheme.titleSmall,
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              _plant.lightLevel!.label,
+                              style: theme.textTheme.titleMedium?.copyWith(
+                                color: theme.colorScheme.onSurface,
+                              ),
+                            ),
+                          ),
+                          Icon(
+                            Icons.chevron_right,
+                            color: theme.colorScheme.onSurfaceVariant,
+                            size: 20,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            )
+          else
+            Card(
+              color: theme.colorScheme.surfaceContainerHighest,
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.light_mode,
+                          color: theme.colorScheme.onSurfaceVariant,
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          'Light Level',
+                          style: theme.textTheme.titleSmall,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'Not set',
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        color: theme.colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    SizedBox(
+                      width: double.infinity,
+                      child: FilledButton.icon(
+                        onPressed: _openLightAssessment,
+                        icon: const Icon(Icons.camera_alt),
+                        label: const Text('Assess with Camera'),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
-          ),
           const Divider(height: 32),
 
           // Notes

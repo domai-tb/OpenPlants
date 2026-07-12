@@ -13,7 +13,7 @@ import 'package:open_plant/pages/plant_identification/widgets/species_result_car
 import 'package:open_plant/pages/species_library/species_library_item_entity.dart';
 import 'package:open_plant/pages/species_library/species_library_usecases.dart';
 import 'package:open_plant/pages/species_library/species_detail_page.dart';
-import 'package:open_plant/shared/widgets/inline_camera_preview.dart';
+import 'package:open_plant/widgets/inline_camera_preview.dart';
 
 class PlantIdentificationPage extends StatefulWidget {
   const PlantIdentificationPage({

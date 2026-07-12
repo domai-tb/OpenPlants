@@ -10,7 +10,7 @@ import 'package:open_plant/l10n/l10n_x.dart';
 import 'package:open_plant/pages/plant_journal/plant_journal_extensions.dart';
 import 'package:open_plant/pages/plant_journal/plant_journal_item_entity.dart';
 import 'package:open_plant/pages/plant_journal/plant_journal_usecases.dart';
-import 'package:open_plant/shared/widgets/inline_camera_preview.dart';
+import 'package:open_plant/widgets/inline_camera_preview.dart';
 
 /// Form page for creating or editing a journal entry.
 class PlantJournalEntryFormPage extends StatefulWidget {

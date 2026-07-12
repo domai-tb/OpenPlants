@@ -13,7 +13,7 @@ import 'package:open_plant/pages/room_profiles/room_profiles_usecases.dart';
 import 'package:open_plant/pages/species_library/species_library_usecases.dart';
 import 'package:open_plant/pages/symptom_logger/symptom_logger_usecases.dart';
 import 'package:open_plant/pages/today_dashboard/today_dashboard_usecases.dart';
-import 'package:open_plant/pages/lightAssessment/light_assessment_usecases.dart';
+import 'package:open_plant/pages/light_assessment/light_assessment_usecases.dart';
 import 'package:open_plant/pages/diagnosis/auto_diagnosis_service.dart';
 import 'package:open_plant/pages/diagnosis/diagnosis_history_usecases.dart';
 import 'package:open_plant/pages/diagnosis/diagnosis_repository.dart';

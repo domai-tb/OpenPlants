@@ -1,10 +1,11 @@
 import 'dart:io';
 import 'dart:math';
+import 'dart:typed_data';
 
 import 'package:camera/camera.dart';
 import 'package:image/image.dart' as img;
 
-import 'package:open_plant/pages/lightAssessment/brightness_mapper.dart';
+import 'package:open_plant/pages/light_assessment/brightness_mapper.dart';
 import 'package:open_plant/pages/plant_collection/plant_collection_item_entity.dart';
 
 /// Result of a camera-based light estimation.
@@ -22,11 +23,19 @@ class CameraEstimationResult {
 
 /// Service that estimates light level using the device camera.
 ///
-/// Captures a single frame from the viewfinder, analyzes average brightness,
-/// and maps it to one of the four light levels.
+/// Supports two modes:
+/// 1. **Frame stream** — processes live camera frames at 1–2 FPS for
+///    real-time brightness feedback via [startFrameStream].
+/// 2. **Single frame / file** — captures a photo or analyses an existing
+///    image via [estimate] / [estimateFromFile].
 class CameraEstimationService {
   CameraController? _controller;
   List<CameraDescription>? _cameras;
+  DateTime _lastFrameProcessed = DateTime(2000);
+  bool _frameStreamActive = false;
+
+  /// Minimum interval between frame processing (1–2 FPS target).
+  static const Duration _frameInterval = Duration(milliseconds: 600);
 
   /// Check if camera is available on this device.
   Future<bool> isAvailable() async {
@@ -63,6 +72,55 @@ class CameraEstimationService {
     );
 
     await _controller!.initialize();
+  }
+
+  /// Start processing live camera frames for real-time brightness estimation.
+  ///
+  /// Frames are processed at approximately 1–2 FPS. [onFrame] is called
+  /// with the brightness (0.0–1.0), mapped [LightLevel], and a confidence
+  /// value (0.0–1.0) based on frame quality.
+  Future<void> startFrameStream({
+    required void Function(double brightness, LightLevel level, double confidence) onFrame,
+  }) async {
+    if (_controller == null || !_controller!.value.isInitialized) {
+      throw const CameraEstimationException('Camera not initialized');
+    }
+
+    if (_frameStreamActive) return;
+
+    _frameStreamActive = true;
+    await _controller!.startImageStream(
+      (CameraImage image) => _processFrame(image, onFrame),
+    );
+  }
+
+  /// Stop the live frame stream.
+  Future<void> stopFrameStream() async {
+    _frameStreamActive = false;
+
+    if (_controller != null && _controller!.value.isStreamingImages) {
+      await _controller!.stopImageStream();
+    }
+  }
+
+  /// Process a single [CameraImage] frame, throttled to ~1–2 FPS.
+  void _processFrame(
+    CameraImage image,
+    void Function(double brightness, LightLevel level, double confidence) onFrame,
+  ) {
+    final now = DateTime.now();
+    if (now.difference(_lastFrameProcessed) < _frameInterval) return;
+    _lastFrameProcessed = now;
+
+    try {
+      final brightness = _computeLuminanceFromYuv(image);
+      final level = BrightnessMapper.mapToLightLevel(brightness);
+      final confidence = _estimateConfidence(brightness, image);
+
+      onFrame(brightness, level, confidence);
+    } catch (_) {
+      // Silently skip unprocessable frames
+    }
   }
 
   /// Estimate the light level from the current camera view.
@@ -120,13 +178,67 @@ class CameraEstimationService {
     );
   }
 
-  /// Release camera resources.
+  /// Provide a rough confidence score (0.0–1.0) for the current estimate
+  /// based on how widely pixel values are spread.
+  double _estimateConfidence(double brightness, CameraImage image) {
+    // Simple heuristic: higher resolution samples give more confidence
+    final pixelCount = image.width * image.height;
+    if (pixelCount < 10_000) return 0.5;
+    if (pixelCount < 50_000) return 0.7;
+
+    // Consistent brightness (not at the extremes) is more reliable
+    if (brightness < 0.05 || brightness > 0.95) return 0.6;
+
+    return 0.85;
+  }
+
+  /// Whether the underlying camera controller is initialized and ready.
+  bool get isControllerInitialized => _controller != null && _controller!.value.isInitialized;
+
+  /// Expose the camera controller for use with [CameraPreview].
+  CameraController? get controller => _controller;
+
+  /// Release camera resources and stop frame stream.
   Future<void> dispose() async {
+    await stopFrameStream();
     await _controller?.dispose();
     _controller = null;
   }
 
-  /// Compute average brightness from an image.
+  // ---------------------------------------------------------------------------
+  // Brightness computation
+  // ---------------------------------------------------------------------------
+
+  /// Compute average luminance directly from a YUV_420_888 [CameraImage].
+  ///
+  /// Only the Y (luminance) plane is sampled — no RGB conversion needed.
+  /// Returns a value between 0.0 (dark) and 1.0 (bright).
+  double _computeLuminanceFromYuv(CameraImage image) {
+    final Plane plane = image.planes[0]; // Y plane
+    final Uint8List yBuffer = plane.bytes;
+    final int width = image.width;
+    final int height = image.height;
+
+    // Stride may be wider than logical width — account for it.
+    final int rowStride = plane.bytesPerRow;
+    final int step = _sampleStep(width, height);
+
+    double total = 0;
+    int count = 0;
+
+    for (int y = 0; y < height; y += step) {
+      final int rowOffset = y * rowStride;
+      for (int x = 0; x < width; x += step) {
+        total += yBuffer[rowOffset + x];
+        count++;
+      }
+    }
+
+    if (count == 0) return 0;
+    return (total / count) / 255.0;
+  }
+
+  /// Compute average brightness from an already-decoded image.
   ///
   /// Converts each pixel to grayscale using the luminance formula:
   /// `L = 0.299R + 0.587G + 0.114B`
@@ -137,7 +249,7 @@ class CameraEstimationService {
     final int height = image.height;
 
     // Sample every Nth pixel for performance on large images
-    final int step = max(1, min(width, height) ~/ 100);
+    final int step = _sampleStep(width, height);
 
     double totalLuminance = 0;
     int sampleCount = 0;
@@ -158,6 +270,11 @@ class CameraEstimationService {
 
     // Normalize to 0.0–1.0 (pixel values are 0–255)
     return (totalLuminance / sampleCount) / 255.0;
+  }
+
+  /// Calculate a sampling step that keeps the number of samples manageable.
+  int _sampleStep(int width, int height) {
+    return max(1, min(width, height) ~/ 100);
   }
 }
 

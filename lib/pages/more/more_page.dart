@@ -14,6 +14,7 @@ import 'package:open_plant/pages/room_profiles/room_profiles_page.dart';
 import 'package:open_plant/pages/species_library/species_library_page.dart';
 import 'package:open_plant/pages/symptom_logger/symptom_logger_page.dart';
 import 'package:open_plant/pages/diagnosis/diagnosis_page.dart';
+import 'package:open_plant/pages/light_assessment/interactive_light_assessment_page.dart';
 import 'package:open_plant/widgets/scroll_to_top_button.dart';
 
 class MorePage extends StatefulWidget {
@@ -75,6 +76,9 @@ class _MorePageState extends State<MorePage> with AutomaticKeepAliveClientMixin<
       case 'rooms':
         Navigator.of(context).push(MaterialPageRoute(builder: (_) => const RoomProfilesPage()));
         break;
+      case 'light_assessment':
+        _openLightAssessment();
+        break;
       case 'settings':
         Navigator.of(context).push(MaterialPageRoute(builder: (_) => const MoreSettingsPage()));
         break;
@@ -90,6 +94,24 @@ class _MorePageState extends State<MorePage> with AutomaticKeepAliveClientMixin<
       default:
         break;
     }
+  }
+
+  Future<void> _openLightAssessment() async {
+    final services = AppScope.of(context).services;
+
+    // In standalone mode, we navigate to the interactive camera.
+    // If the user sets a level from the camera, we prompt for plant selection.
+    await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => InteractiveLightAssessmentPage(
+          usecases: services.lightAssessment,
+          onLightLevelSet: (level) {
+            // The level was set via "Set this level" in standalone mode.
+            // The dialog for saving to a plant is shown by the page itself.
+          },
+        ),
+      ),
+    );
   }
 
   Future<void> _logSymptom() async {

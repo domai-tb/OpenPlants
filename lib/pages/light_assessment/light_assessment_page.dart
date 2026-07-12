@@ -6,13 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 
-import 'package:open_plant/pages/lightAssessment/brightness_mapper.dart';
-import 'package:open_plant/pages/lightAssessment/camera_estimation_service.dart';
-import 'package:open_plant/pages/lightAssessment/light_assessment_item_entity.dart';
-import 'package:open_plant/pages/lightAssessment/light_assessment_usecases.dart';
+import 'package:open_plant/pages/light_assessment/brightness_mapper.dart';
+import 'package:open_plant/pages/light_assessment/camera_estimation_service.dart';
+import 'package:open_plant/pages/light_assessment/interactive_light_assessment_page.dart';
+import 'package:open_plant/pages/light_assessment/light_assessment_item_entity.dart';
+import 'package:open_plant/pages/light_assessment/light_assessment_usecases.dart';
 import 'package:open_plant/pages/plant_collection/plant_collection_item_entity.dart';
 import 'package:open_plant/pages/plant_photo_timeline/plant_photo_timeline_item_entity.dart';
-import 'package:open_plant/shared/widgets/inline_camera_preview.dart';
+import 'package:open_plant/widgets/inline_camera_preview.dart';
 
 /// Page for assessing and setting a plant's light level.
 ///
@@ -183,6 +184,37 @@ class _LightAssessmentPageState extends State<LightAssessmentPage> {
     }
   }
 
+  /// Open the full-screen interactive camera view with a smooth transition.
+  Future<void> _openInteractiveCamera() async {
+    await Navigator.of(context).push(
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) => InteractiveLightAssessmentPage(
+          plantId: widget.plantId,
+          plantName: widget.plantName,
+          usecases: widget.usecases,
+          onLightLevelSet: (level) {
+            setState(() => _currentLevel = level);
+          },
+        ),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          return FadeTransition(
+            opacity: animation,
+            child: ScaleTransition(
+              scale: Tween<double>(begin: 0.95, end: 1).animate(
+                CurvedAnimation(parent: animation, curve: Curves.easeOut),
+              ),
+              child: child,
+            ),
+          );
+        },
+      ),
+    );
+    if (mounted) {
+      // Reload plant data after returning from interactive camera
+      unawaited(_loadData());
+    }
+  }
+
   /// Pick a photo from gallery, save it to timeline, and analyze it.
   Future<void> _pickPhotoAndEstimate() async {
     if (!mounted) return;
@@ -309,6 +341,50 @@ class _LightAssessmentPageState extends State<LightAssessmentPage> {
                   );
                 }),
 
+                const SizedBox(height: 24),
+
+                // Interactive Camera section
+                Card(
+                  color: theme.colorScheme.primaryContainer.withValues(alpha: 0.3),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.videocam,
+                              color: theme.colorScheme.primary,
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              'Interactive Camera',
+                              style: theme.textTheme.titleSmall,
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          'Move around in real time to see how light levels change '
+                          'before setting the level or capturing a photo.',
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: theme.colorScheme.onSurfaceVariant,
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        SizedBox(
+                          width: double.infinity,
+                          child: FilledButton.icon(
+                            onPressed: _openInteractiveCamera,
+                            icon: const Icon(Icons.camera_alt),
+                            label: const Text('Assess with camera'),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
                 const SizedBox(height: 24),
 
                 // Photo-based estimation section
