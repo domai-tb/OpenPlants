@@ -43,7 +43,6 @@ class ScrollToTopButtonState extends State<ScrollToTopButton> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isLight = theme.brightness == Brightness.light;
     final safeBottom = MediaQuery.of(context).padding.bottom;
 
     return Align(
@@ -70,7 +69,7 @@ class ScrollToTopButtonState extends State<ScrollToTopButton> {
               backgroundColor: theme.cardColor,
               child: Icon(
                 Icons.arrow_upward,
-                color: isLight ? Colors.black : const Color.fromRGBO(184, 186, 191, 1),
+                color: theme.colorScheme.onSurfaceVariant,
               ),
             ),
           ),

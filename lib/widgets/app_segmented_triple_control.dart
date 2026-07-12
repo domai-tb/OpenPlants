@@ -83,7 +83,7 @@ class AppSegmentedTripleControlState extends State<AppSegmentedTripleControl> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isLight = theme.brightness == Brightness.light;
+    final colorScheme = theme.colorScheme;
 
     return SizedBox(
       height: 42,
@@ -94,11 +94,11 @@ class AppSegmentedTripleControlState extends State<AppSegmentedTripleControl> {
           // Background
           Container(
             decoration: BoxDecoration(
-              color: isLight ? const Color.fromRGBO(245, 246, 250, 1) : theme.colorScheme.surface,
-              borderRadius: isLight ? BorderRadius.circular(6) : BorderRadius.circular(10),
+              color: colorScheme.surfaceContainerHighest,
+              borderRadius: BorderRadius.circular(6),
               border: Border.all(
-                color: isLight ? const Color.fromRGBO(245, 246, 250, 1) : const Color.fromRGBO(34, 40, 54, 1),
-                width: isLight ? 0 : 2,
+                color: colorScheme.outlineVariant,
+                width: 0.5,
               ),
             ),
           ),
@@ -112,10 +112,10 @@ class AppSegmentedTripleControlState extends State<AppSegmentedTripleControl> {
               height: 32,
               margin: const EdgeInsets.symmetric(horizontal: 5),
               decoration: BoxDecoration(
-                color: isLight ? Colors.white : const Color.fromRGBO(34, 40, 54, 1),
+                color: colorScheme.surface,
                 borderRadius: BorderRadius.circular(6),
-                boxShadow: const [
-                  BoxShadow(color: Colors.black12, blurRadius: 5),
+                boxShadow: [
+                  BoxShadow(color: colorScheme.shadow, blurRadius: 5),
                 ],
               ),
             ),
@@ -128,27 +128,27 @@ class AppSegmentedTripleControlState extends State<AppSegmentedTripleControl> {
                 child: Text(
                   widget.leftTitle,
                   textAlign: TextAlign.center,
-                  style: isLight
-                      ? theme.textTheme.labelMedium?.copyWith(color: Colors.black)
-                      : theme.textTheme.labelMedium,
+                  style: theme.textTheme.labelMedium?.copyWith(
+                    color: colorScheme.onSurface,
+                  ),
                 ),
               ),
               Expanded(
                 child: Text(
                   widget.centerTitle,
                   textAlign: TextAlign.center,
-                  style: isLight
-                      ? theme.textTheme.labelMedium?.copyWith(color: Colors.black)
-                      : theme.textTheme.labelMedium,
+                  style: theme.textTheme.labelMedium?.copyWith(
+                    color: colorScheme.onSurface,
+                  ),
                 ),
               ),
               Expanded(
                 child: Text(
                   widget.rightTitle,
                   textAlign: TextAlign.center,
-                  style: isLight
-                      ? theme.textTheme.labelMedium?.copyWith(color: Colors.black)
-                      : theme.textTheme.labelMedium,
+                  style: theme.textTheme.labelMedium?.copyWith(
+                    color: colorScheme.onSurface,
+                  ),
                 ),
               ),
             ],

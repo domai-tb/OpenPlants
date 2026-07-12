@@ -48,7 +48,7 @@ class _BottomNavBarItemState extends State<BottomNavBarItem> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isLight = theme.brightness == Brightness.light;
+    final colorScheme = theme.colorScheme;
 
     return AnimatedPadding(
       padding: widget.isActive ? const EdgeInsets.only(top: 2) : const EdgeInsets.only(top: 7),
@@ -69,8 +69,8 @@ class _BottomNavBarItemState extends State<BottomNavBarItem> {
                 widget.isActive ? widget.activeIcon : widget.inactiveIcon,
                 size: iconHeight,
                 color: widget.isActive
-                    ? theme.colorScheme.secondary
-                    : (isLight ? Colors.black : const Color.fromRGBO(184, 186, 191, 1)),
+                    ? colorScheme.secondary
+                    : colorScheme.onSurfaceVariant,
               ),
             ),
           ),

@@ -43,7 +43,7 @@ class _SideNavBarItemState extends State<SideNavBarItem> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isLight = theme.brightness == Brightness.light;
+    final colorScheme = theme.colorScheme;
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
@@ -62,8 +62,8 @@ class _SideNavBarItemState extends State<SideNavBarItem> {
                   widget.isActive ? widget.activeIcon : widget.inactiveIcon,
                   size: widget.iconHeight,
                   color: widget.isActive
-                      ? theme.colorScheme.secondary
-                      : (isLight ? Colors.black : const Color.fromRGBO(184, 186, 191, 1)),
+                      ? colorScheme.secondary
+                      : colorScheme.onSurfaceVariant,
                 ),
               ),
               // Text

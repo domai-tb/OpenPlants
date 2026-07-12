@@ -7,26 +7,34 @@ class ErrorMessage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        const Icon(
-          Icons.error,
-          size: 50,
-          color: Colors.redAccent,
-        ),
-        const SizedBox(
-          height: 20,
-        ),
-        DefaultTextStyle(
-          style: const TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Container(
+      padding: const EdgeInsets.all(24),
+      margin: const EdgeInsets.symmetric(horizontal: 32),
+      decoration: BoxDecoration(
+        color: colorScheme.errorContainer,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            Icons.error,
+            size: 50,
+            color: colorScheme.error,
           ),
-          child: Text(message),
-        ),
-      ],
+          const SizedBox(height: 20),
+          DefaultTextStyle(
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: colorScheme.onErrorContainer,
+            ),
+            child: Text(message),
+          ),
+        ],
+      ),
     );
   }
 }

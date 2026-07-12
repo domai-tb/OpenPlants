@@ -21,7 +21,7 @@ class AppSearchBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isLight = theme.brightness == Brightness.light;
+    final colorScheme = theme.colorScheme;
 
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
@@ -29,7 +29,7 @@ class AppSearchBar extends StatelessWidget {
         height: 55,
         alignment: Alignment.centerLeft,
         decoration: BoxDecoration(
-          color: isLight ? const Color.fromRGBO(245, 246, 250, 1) : const Color.fromRGBO(34, 40, 54, 1),
+          color: colorScheme.surfaceContainerHighest,
           borderRadius: BorderRadius.circular(15),
         ),
         child: Row(
@@ -42,9 +42,8 @@ class AppSearchBar extends StatelessWidget {
                   icon: Icons.arrow_back,
                   onTap: onBack,
                   transparent: true,
-                  backgroundColor:
-                      isLight ? const Color.fromRGBO(245, 246, 250, 1) : const Color.fromRGBO(34, 40, 54, 1),
-                  borderColor: isLight ? const Color.fromRGBO(245, 246, 250, 1) : const Color.fromRGBO(34, 40, 54, 1),
+                  backgroundColor: colorScheme.surfaceContainerHighest,
+                  borderColor: colorScheme.surfaceContainerHighest,
                 ),
               ),
             ],
@@ -52,7 +51,6 @@ class AppSearchBar extends StatelessWidget {
               child: TextField(
                 style: theme.textTheme.headlineMedium?.copyWith(
                   fontSize: 17,
-                  color: isLight ? Colors.black : null,
                 ),
                 onChanged: onChange,
                 decoration: InputDecoration(

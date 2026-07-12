@@ -40,35 +40,6 @@ class HomePageState extends State<HomePage> {
     PageItem.more: GlobalKey<AnimatedEntryState>(),
   };
 
-  final SystemUiOverlayStyle lightSystemUiStyle = const SystemUiOverlayStyle(
-    statusBarBrightness: Brightness.light, // iOS
-    statusBarColor: Colors.white, // Android
-    statusBarIconBrightness: Brightness.dark, // Android
-    systemNavigationBarColor: Colors.white, // Android
-    systemNavigationBarIconBrightness: Brightness.dark, // Android
-  );
-  final SystemUiOverlayStyle darkSystemUiStyle = const SystemUiOverlayStyle(
-    statusBarBrightness: Brightness.dark, // iOS
-    statusBarColor: Color.fromRGBO(14, 20, 32, 1), // Android
-    statusBarIconBrightness: Brightness.light, // Android
-    systemNavigationBarColor: Color.fromRGBO(17, 25, 38, 1), // Android
-    systemNavigationBarIconBrightness: Brightness.light, // Android
-  );
-  final SystemUiOverlayStyle lightTabletSystemUiStyle = const SystemUiOverlayStyle(
-    statusBarBrightness: Brightness.light, // iOS
-    statusBarColor: Color.fromRGBO(245, 246, 250, 1), // Android
-    statusBarIconBrightness: Brightness.dark, // Android
-    systemNavigationBarColor: Color.fromRGBO(245, 246, 250, 1), // Android
-    systemNavigationBarIconBrightness: Brightness.dark, // Android
-  );
-  final SystemUiOverlayStyle darkTabletSystemUiStyle = const SystemUiOverlayStyle(
-    statusBarBrightness: Brightness.dark, // iOS
-    statusBarColor: Color.fromRGBO(17, 25, 38, 1), // Android
-    statusBarIconBrightness: Brightness.light, // Android
-    systemNavigationBarColor: Color.fromRGBO(17, 25, 38, 1), // Android
-    systemNavigationBarIconBrightness: Brightness.light, // Android
-  );
-
   /// Holds the currently active page.
   PageItem currentPage = PageItem.dashboard;
 
@@ -172,14 +143,45 @@ class HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
     final isPhone = MediaQuery.of(context).size.shortestSide < 600;
     final isLight = theme.brightness == Brightness.light;
     final visiblePages = _visiblePages;
 
+    final systemUiStyle = isPhone
+        ? (isLight
+            ? SystemUiOverlayStyle(
+                statusBarBrightness: Brightness.light,
+                statusBarColor: colorScheme.surface,
+                statusBarIconBrightness: Brightness.dark,
+                systemNavigationBarColor: colorScheme.surface,
+                systemNavigationBarIconBrightness: Brightness.dark,
+              )
+            : const SystemUiOverlayStyle(
+                statusBarBrightness: Brightness.dark,
+                statusBarColor: Color(0xFF0E1420),
+                statusBarIconBrightness: Brightness.light,
+                systemNavigationBarColor: Color(0xFF111926),
+                systemNavigationBarIconBrightness: Brightness.light,
+              ))
+        : (isLight
+            ? SystemUiOverlayStyle(
+                statusBarBrightness: Brightness.light,
+                statusBarColor: colorScheme.surfaceContainerHighest,
+                statusBarIconBrightness: Brightness.dark,
+                systemNavigationBarColor: colorScheme.surfaceContainerHighest,
+                systemNavigationBarIconBrightness: Brightness.dark,
+              )
+            : const SystemUiOverlayStyle(
+                statusBarBrightness: Brightness.dark,
+                statusBarColor: Color(0xFF111926),
+                statusBarIconBrightness: Brightness.light,
+                systemNavigationBarColor: Color(0xFF111926),
+                systemNavigationBarIconBrightness: Brightness.light,
+              ));
+
     return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: isPhone
-          ? (isLight ? lightSystemUiStyle : darkSystemUiStyle)
-          : (isLight ? lightTabletSystemUiStyle : darkTabletSystemUiStyle),
+      value: systemUiStyle,
       child: PopScope(
         canPop: false,
         onPopInvokedWithResult: (didPop, _) {
@@ -190,7 +192,7 @@ class HomePageState extends State<HomePage> {
         },
         child: Scaffold(
           resizeToAvoidBottomInset: false,
-          backgroundColor: theme.colorScheme.surface,
+          backgroundColor: colorScheme.surface,
           body: isPhone
               // Phone layout
               ? SafeArea(
@@ -252,13 +254,13 @@ class HomePageState extends State<HomePage> {
               // Tablet layout
               : SafeArea(
                   child: Container(
-                    color: isLight ? const Color.fromRGBO(245, 246, 250, 1) : theme.cardColor,
+                    color: colorScheme.surfaceContainerHighest,
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Container(
                           height: 20,
-                          color: isLight ? const Color.fromRGBO(245, 246, 250, 1) : theme.cardColor,
+                          color: colorScheme.surfaceContainerHighest,
                         ),
                         Expanded(
                           child: Row(
@@ -273,7 +275,7 @@ class HomePageState extends State<HomePage> {
                                 child: Container(
                                   padding: const EdgeInsets.all(5),
                                   decoration: BoxDecoration(
-                                    color: theme.colorScheme.surface,
+                                    color: colorScheme.surface,
                                     borderRadius: BorderRadius.circular(15),
                                   ),
                                   child: Center(
@@ -289,14 +291,14 @@ class HomePageState extends State<HomePage> {
                               // Detail space
                               Container(
                                 width: 20,
-                                color: isLight ? const Color.fromRGBO(245, 246, 250, 1) : theme.cardColor,
+                                color: colorScheme.surfaceContainerHighest,
                               ),
                             ],
                           ),
                         ),
                         Container(
                           height: 20,
-                          color: isLight ? const Color.fromRGBO(245, 246, 250, 1) : theme.cardColor,
+                          color: colorScheme.surfaceContainerHighest,
                         ),
                       ],
                     ),

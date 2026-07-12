@@ -41,11 +41,11 @@ class _BottomNavBarState extends State<BottomNavBar> {
           topLeft: Radius.circular(15),
           topRight: Radius.circular(15),
         ),
-        boxShadow: const [
+        boxShadow: [
           BoxShadow(
-            color: Colors.black12,
+            color: theme.colorScheme.shadow,
             blurRadius: 5,
-            offset: Offset(0, -1),
+            offset: const Offset(0, -1),
           ),
         ],
       ),
