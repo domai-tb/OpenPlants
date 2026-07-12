@@ -8,7 +8,7 @@ REQ_FILE="$SCRIPT_DIR/requirements.txt"
 # Create venv if missing
 if [ ! -d "$VENV_DIR" ]; then
   echo "Creating virtual environment..."
-  python3 -m venv "$VENV_DIR"
+  python3.12 -m venv "$VENV_DIR"
 fi
 
 # Activate
@@ -22,5 +22,5 @@ fi
 
 # Run the export
 python "$SCRIPT_DIR/convert_to_onnx.py" \
-  --model juppy44/plant-identification-2m-vit-b \
+  --model domai-tb/OpenPlants-Identification-ViT-Base-Patch16-224 \
   --out "$SCRIPT_DIR/../assets/ml/plant-identification"
