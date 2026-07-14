@@ -1,20 +1,26 @@
 import 'dart:io';
 
-import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_onnxruntime/flutter_onnxruntime.dart';
+import 'package:open_plants/pages/plant_identification/classifier/model_asset_cache.dart';
 import 'package:path_provider/path_provider.dart';
 
 /// Manages the ONNX Runtime session for plant classification.
 ///
-/// The model is split into two files (model.onnx + model.onnx.data) which
-/// must be co-located on the filesystem. This class copies both to the
-/// app's cache directory on first use, then loads the session from there.
+/// Uses [ModelAssetCache] to copy model assets to the cache directory,
+/// with identity-based invalidation to detect model updates.
 class PlantClassifier {
   OnnxRuntime? _ort;
   OrtSession? _session;
 
+  late final ModelAssetCache _cache = ModelAssetCache(
+    modelAssetPath: _modelAsset,
+    dataAssetPath: _dataAsset,
+    identityAssetPath: _identityAsset,
+  );
+
   static const String _modelAsset = 'assets/ml/plant-identification/model.onnx';
   static const String _dataAsset = 'assets/ml/plant-identification/model.onnx.data';
+  static const String _identityAsset = 'assets/ml/plant-identification/model_identity.json';
 
   /// Copies model assets to the cache directory if not already present,
   /// then creates and returns the ONNX session.
@@ -29,32 +35,18 @@ class PlantClassifier {
     return _session!;
   }
 
-  /// Copies model.onnx and model.onnx.data to the cache directory.
-  /// Skips if both files already exist.
+  /// Uses [ModelAssetCache] to ensure model is cached with identity tracking.
   Future<Directory> _ensureModelCached() async {
     final cacheDir = await getApplicationCacheDirectory();
-    final modelFile = File('${cacheDir.path}/model.onnx');
-    final dataFile = File('${cacheDir.path}/model.onnx.data');
-
-    // Use synchronous file checks to avoid slow async IO lint.
-    if (modelFile.existsSync() && dataFile.existsSync()) {
-      final modelSize = modelFile.lengthSync();
-      final dataSize = dataFile.lengthSync();
-      if (modelSize > 0 && dataSize > 0) {
-        return cacheDir;
-      }
-    }
-
-    final modelBytes = await rootBundle.load(_modelAsset);
-    final dataBytes = await rootBundle.load(_dataAsset);
-
-    await modelFile.writeAsBytes(
-      modelBytes.buffer.asUint8List(),
-      flush: true,
+    final assetLoader = BundleAssetLoader(
+      modelAssetPath: _modelAsset,
+      dataAssetPath: _dataAsset,
+      identityAssetPath: _identityAsset,
     );
-    await dataFile.writeAsBytes(
-      dataBytes.buffer.asUint8List(),
-      flush: true,
+
+    await _cache.ensureModelCached(
+      assetLoader: assetLoader,
+      cacheDir: cacheDir,
     );
 
     return cacheDir;

@@ -68,9 +68,7 @@ class _BottomNavBarItemState extends State<BottomNavBarItem> {
               child: Icon(
                 widget.isActive ? widget.activeIcon : widget.inactiveIcon,
                 size: iconHeight,
-                color: widget.isActive
-                    ? colorScheme.secondary
-                    : colorScheme.onSurfaceVariant,
+                color: widget.isActive ? colorScheme.secondary : colorScheme.onSurfaceVariant,
               ),
             ),
           ),

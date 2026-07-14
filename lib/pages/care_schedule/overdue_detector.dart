@@ -6,11 +6,28 @@ class OverdueDetector {
   static const double _toleranceMultiplier = 1.2;
 
   /// Determine the status of a task given its last completion and effective interval.
+  ///
+  /// When [overriddenDueDate] is provided, status is computed from that date
+  /// instead of the interval-based calculation.
   static CareTaskStatus detect({
     required DateTime today,
     required DateTime? lastCompletedAt,
     required int effectiveIntervalDays,
+    DateTime? overriddenDueDate,
   }) {
+    if (overriddenDueDate != null) {
+      // Use the overridden due date for status computation
+      final daysUntilDue = overriddenDueDate.difference(today).inDays;
+
+      if (daysUntilDue < 0) {
+        return CareTaskStatus.overdue;
+      } else if (daysUntilDue == 0) {
+        return CareTaskStatus.dueToday;
+      } else {
+        return CareTaskStatus.upcoming;
+      }
+    }
+
     if (lastCompletedAt == null) {
       // Never completed — treat as due today (first-time scheduling)
       return CareTaskStatus.dueToday;

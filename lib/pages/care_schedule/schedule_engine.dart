@@ -1,3 +1,4 @@
+import 'package:open_plants/pages/care_schedule/care_schedule_action.dart';
 import 'package:open_plants/pages/care_schedule/care_task.dart';
 import 'package:open_plants/pages/care_schedule/care_task_type.dart';
 import 'package:open_plants/pages/care_schedule/custom_care_rule.dart';
@@ -24,6 +25,7 @@ class PlantScheduleInput {
   final List<TaskCompletion> completionHistory;
   final List<CareTaskType> customTaskTypes;
   final List<CustomCareRuleEntity> customCareRules;
+  final List<CareScheduleAction> activeScheduleActions;
   final LightLevel? lightLevel;
 
   const PlantScheduleInput({
@@ -36,6 +38,7 @@ class PlantScheduleInput {
     this.completionHistory = const [],
     this.customTaskTypes = const [],
     this.customCareRules = const [],
+    this.activeScheduleActions = const [],
     this.lightLevel,
   });
 }
@@ -145,16 +148,33 @@ class ScheduleEngine {
         input.plantId,
       );
 
-      // Determine status
-      final status = OverdueDetector.detect(
+      // Compute base due date from completion anchor
+      final baseDueDate =
+          lastCompletion != null ? lastCompletion.completedAt.add(Duration(days: effectiveInterval)) : today;
+
+      // Apply schedule action override if active
+      DateTime dueDate = baseDueDate;
+      CareTaskStatus status;
+
+      final activeAction = _findActiveAction(
+        input.activeScheduleActions,
+        taskType,
+        input.plantId,
+        baseDueDate,
+      );
+
+      if (activeAction != null) {
+        // Apply the override due date
+        dueDate = activeAction.overriddenDueDate;
+      }
+
+      // Determine status using the final due date
+      status = OverdueDetector.detect(
         today: today,
         lastCompletedAt: lastCompletion?.completedAt,
         effectiveIntervalDays: effectiveInterval,
+        overriddenDueDate: activeAction != null ? dueDate : null,
       );
-
-      // Compute due date
-      final dueDate =
-          lastCompletion != null ? lastCompletion.completedAt.add(Duration(days: effectiveInterval)) : today;
 
       tasks.add(
         CareTask(
@@ -209,5 +229,23 @@ class ScheduleEngine {
       ..sort((a, b) => b.completedAt.compareTo(a.completedAt));
 
     return matching.isNotEmpty ? matching.first : null;
+  }
+
+  static CareScheduleAction? _findActiveAction(
+    List<CareScheduleAction> actions,
+    CareTaskType taskType,
+    String plantId,
+    DateTime baseDueDate,
+  ) {
+    for (final action in actions) {
+      if (action.plantId == plantId && action.taskType == taskType) {
+        // Check if the action targets the current occurrence
+        // An action is stale if its targeted due date doesn't match the current base due date
+        if (action.targetedOccurrenceDueDate == baseDueDate) {
+          return action;
+        }
+      }
+    }
+    return null;
   }
 }

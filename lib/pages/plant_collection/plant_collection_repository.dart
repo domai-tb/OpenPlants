@@ -46,8 +46,15 @@ class PlantCollectionRepository {
 
   /// Update an existing plant.
   ///
-  /// If [photoFile] is provided, the old photo will be deleted and the new
-  /// one will be copied to the app's documents directory.
+  /// If [photoFile] is provided, the new photo is staged first, then the
+  /// entity is persisted, and only then is the old photo deleted. This
+  /// ensures the old photo is retained if persistence fails.
+  ///
+  /// If persistence fails after staging a new photo, the staged file is
+  /// cleaned up and a classified failure is reported.
+  ///
+  /// If clearing the photo, the old photo is deleted only after persistence
+  /// succeeds.
   Future<PlantEntity> updatePlant(
     PlantEntity plant, {
     File? photoFile,
@@ -59,25 +66,39 @@ class PlantCollectionRepository {
       throw Exception('Plant not found: ${plant.id}');
     }
 
+    final existingPlant = plants[index];
     String? photoPath = plant.photoPath;
+    String? stagedPhotoPath;
 
     if (photoFile != null) {
-      // Delete old photo if it exists
-      if (plant.photoPath != null) {
-        await dataSource.deletePhoto(plant.photoPath!);
-      }
-      // Copy new photo
-      photoPath = await dataSource.savePhoto(photoFile, plant.id);
+      // Stage the new photo first (before deleting old)
+      stagedPhotoPath = await dataSource.savePhoto(photoFile, plant.id);
+      photoPath = stagedPhotoPath;
     }
 
     final updatedPlant = plant.copyWith(
       photoPath: photoPath,
-      clearPhoto: photoPath == null,
+      clearPhoto: photoPath == null && existingPlant.photoPath != null,
       updatedAt: DateTime.now(),
     );
 
-    plants[index] = updatedPlant;
-    await dataSource.savePlants(plants);
+    try {
+      plants[index] = updatedPlant;
+      await dataSource.savePlants(plants);
+    } catch (e) {
+      // Persistence failed — clean up staged photo if any
+      if (stagedPhotoPath != null) {
+        await dataSource.deletePhoto(stagedPhotoPath);
+      }
+      rethrow;
+    }
+
+    // Persistence succeeded — now safe to delete old photo
+    if (photoFile != null && existingPlant.photoPath != null) {
+      await dataSource.deletePhoto(existingPlant.photoPath!);
+    } else if (photoPath == null && existingPlant.photoPath != null) {
+      await dataSource.deletePhoto(existingPlant.photoPath!);
+    }
 
     return updatedPlant;
   }

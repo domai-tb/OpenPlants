@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:open_plants/core/exceptions.dart';
 import 'package:open_plants/pages/plant_collection/plant_collection_item_entity.dart';
 import 'package:open_plants/pages/plant_collection/plant_collection_repository.dart';
 
@@ -33,9 +34,24 @@ class PlantCollectionUsecases {
 
   /// Update an existing plant.
   ///
-  /// If [photoFile] is provided, the old photo will be replaced.
-  Future<PlantEntity> updatePlant(PlantEntity plant, {File? photoFile}) {
-    return repository.updatePlant(plant, photoFile: photoFile);
+  /// If [photoFile] is provided, the old photo will be replaced safely:
+  /// the new photo is staged first, then the entity is persisted, and only
+  /// then is the old photo deleted.
+  ///
+  /// Throws [PhotoSaveFailure] if persistence fails after staging a new photo.
+  /// Throws [PhotoClearFailure] if persistence fails when clearing a photo.
+  Future<PlantEntity> updatePlant(PlantEntity plant, {File? photoFile}) async {
+    try {
+      return await repository.updatePlant(plant, photoFile: photoFile);
+    } on Exception catch (e) {
+      // Classify the failure based on what was being attempted
+      if (photoFile != null) {
+        throw PhotoSaveFailure(plantId: plant.id, underlyingError: e);
+      } else if (plant.photoPath == null) {
+        throw PhotoClearFailure(plantId: plant.id, underlyingError: e);
+      }
+      rethrow;
+    }
   }
 
   /// Delete a plant by ID.

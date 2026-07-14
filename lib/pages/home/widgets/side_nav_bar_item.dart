@@ -61,9 +61,7 @@ class _SideNavBarItemState extends State<SideNavBarItem> {
                 child: Icon(
                   widget.isActive ? widget.activeIcon : widget.inactiveIcon,
                   size: widget.iconHeight,
-                  color: widget.isActive
-                      ? colorScheme.secondary
-                      : colorScheme.onSurfaceVariant,
+                  color: widget.isActive ? colorScheme.secondary : colorScheme.onSurfaceVariant,
                 ),
               ),
               // Text

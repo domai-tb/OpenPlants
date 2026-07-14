@@ -1,9 +1,10 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:open_plants/core/exceptions.dart';
+import 'package:open_plants/core/local_collection_codec.dart';
 import 'package:open_plants/pages/diagnosis/diagnosis_datasource.dart';
 import 'package:open_plants/pages/diagnosis/diagnosis_result_entity.dart';
 import 'package:open_plants/pages/plant_journal/plant_journal_item_entity.dart';
@@ -15,34 +16,57 @@ import 'package:open_plants/pages/symptom_logger/symptom_logger_item_entity.dart
 /// Stores journal entries as JSON in SharedPreferences and
 /// manages photo files in the app's documents directory.
 /// Also loads symptom logs and diagnosis results for a merged timeline.
+///
+/// Uses [LocalCollectionCodec] to distinguish missing keys from corruption,
+/// preserve raw values on failure, and block mutations after a decode failure.
 class PlantJournalDataSource {
   static const String _prefsKey = 'plant_journal_v1';
   static const String _photoSubdir = 'journal_photos';
 
   final SymptomLoggerDataSource _symptomLoggerDataSource;
   final DiagnosisDataSource _diagnosisDataSource;
+  final SharedPreferences? _prefsOverride;
+  LocalCollectionCodec<JournalEntry>? _codec;
 
   PlantJournalDataSource({
     SymptomLoggerDataSource? symptomLoggerDataSource,
     DiagnosisDataSource? diagnosisDataSource,
+    SharedPreferences? prefs,
   })  : _symptomLoggerDataSource = symptomLoggerDataSource ?? SymptomLoggerDataSource(),
-        _diagnosisDataSource = diagnosisDataSource ?? DiagnosisDataSource();
+        _diagnosisDataSource = diagnosisDataSource ?? DiagnosisDataSource(),
+        _prefsOverride = prefs;
+
+  Future<LocalCollectionCodec<JournalEntry>> _getCodec() async {
+    if (_codec == null) {
+      final prefs = _prefsOverride ?? await SharedPreferences.getInstance();
+      _codec = LocalCollectionCodec<JournalEntry>(
+        prefs: prefs,
+        key: _prefsKey,
+        fromJson: JournalEntry.fromJson,
+        toJson: (e) => e.toJson(),
+        keyExtractor: (e) => e.id,
+      );
+    }
+    return _codec!;
+  }
+
+  /// Whether the journal collection is in a corrupted state.
+  Future<bool> get isBlocked async {
+    final codec = await _getCodec();
+    return codec.isBlocked;
+  }
 
   /// Load all journal entries from SharedPreferences.
+  ///
+  /// Throws [CollectionDecodeFailure], [CollectionShapeFailure], or
+  /// [RecordDecodeFailure] when stored data is malformed.
   Future<List<JournalEntry>> loadAll() async {
-    final prefs = await SharedPreferences.getInstance();
-    final raw = prefs.getString(_prefsKey);
-
-    if (raw == null || raw.trim().isEmpty) {
-      return [];
+    final codec = await _getCodec();
+    final result = await codec.load();
+    if (result.isFailure) {
+      throw result.asFailure!;
     }
-
-    try {
-      final decoded = jsonDecode(raw) as List<dynamic>;
-      return decoded.map((item) => JournalEntry.fromJson(item as Map<String, dynamic>)).toList();
-    } catch (_) {
-      return [];
-    }
+    return result.asSuccess;
   }
 
   /// Load journal entries for a specific plant, sorted newest first.
@@ -52,35 +76,54 @@ class PlantJournalDataSource {
   }
 
   /// Save the full list of journal entries.
+  ///
+  /// Throws [BlockedAfterDecodeFailure] if the collection is corrupted.
   Future<void> saveAll(List<JournalEntry> entries) async {
-    final prefs = await SharedPreferences.getInstance();
-    final json = entries.map((e) => e.toJson()).toList();
-    await prefs.setString(_prefsKey, jsonEncode(json));
+    final codec = await _getCodec();
+    await codec.save(entries);
   }
 
   /// Save a journal entry (add to list).
+  ///
+  /// Throws [BlockedAfterDecodeFailure] if the collection is corrupted.
   Future<void> save(JournalEntry entry) async {
-    final all = await loadAll();
-    all.add(entry);
-    await saveAll(all);
+    final codec = await _getCodec();
+    await codec.add(entry);
   }
 
   /// Update a journal entry by ID.
+  ///
+  /// Throws [BlockedAfterDecodeFailure] if the collection is corrupted.
   Future<void> update(JournalEntry entry) async {
-    final all = await loadAll();
-    final index = all.indexWhere((e) => e.id == entry.id);
-    if (index == -1) {
-      throw Exception('JournalEntry not found: ${entry.id}');
-    }
-    all[index] = entry;
-    await saveAll(all);
+    final codec = await _getCodec();
+    await codec.update(entry, matchKey: (e) => e.id);
   }
 
   /// Delete a journal entry by ID.
+  ///
+  /// Throws [BlockedAfterDecodeFailure] if the collection is corrupted.
   Future<void> delete(String id) async {
-    final all = await loadAll();
-    all.removeWhere((e) => e.id == id);
-    await saveAll(all);
+    final codec = await _getCodec();
+    await codec.delete(id, matchKey: (e) => e.id);
+  }
+
+  /// Delete all journal entries for a specific plant.
+  ///
+  /// Also deletes associated photo files from disk.
+  /// Idempotent: succeeds even if plant has no entries.
+  Future<void> deleteForPlant(String plantId) async {
+    final entries = await loadAll();
+    final toRemove = entries.where((e) => e.plantId == plantId).toList();
+
+    // Delete photo files for entries being removed
+    for (final entry in toRemove) {
+      if (entry.photoPath != null) {
+        await deletePhoto(entry.photoPath!);
+      }
+    }
+
+    final remaining = entries.where((e) => e.plantId != plantId).toList();
+    await saveAll(remaining);
   }
 
   /// Copy a photo file to the app's documents directory.

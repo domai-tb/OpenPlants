@@ -70,6 +70,11 @@ class SymptomLoggerUseCases {
   /// Deletes the draft for a plant.
   Future<void> deleteDraft(String plantId) => _repository.deleteDraft(plantId);
 
+  /// Delete all symptom entries for a plant.
+  ///
+  /// Also deletes the draft for this plant.
+  Future<void> deleteEntriesForPlant(String plantId) => _repository.deleteEntriesForPlant(plantId);
+
   /// Returns the most recent diagnosis for [plantId], or `null` if no
   /// diagnosis has been performed or auto-diagnosis is not configured.
   Future<DiagnosisResultEntity?> getLatestDiagnosis(String plantId) async {

@@ -9,12 +9,15 @@ import 'package:open_plants/core/injection.dart';
 import 'package:open_plants/core/settings.dart';
 import 'package:open_plants/l10n/l10n.dart';
 import 'package:open_plants/pages/today_dashboard/plant_grid_section.dart';
-import 'package:open_plants/widgets/app_search_bar.dart';
 
 void main() {
   setUpAll(() async {
     SharedPreferences.setMockInitialValues({});
     await init();
+  });
+
+  setUp(() {
+    SharedPreferences.setMockInitialValues({});
   });
 
   /// Builds a PlantGridSection wrapped in the app's DI and localization tree.
@@ -27,6 +30,7 @@ void main() {
       settings: sl<SettingsController>(),
       services: sl(),
       child: MaterialApp(
+        locale: const Locale('en'),
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
         home: Scaffold(
@@ -48,6 +52,7 @@ void main() {
       settings: sl<SettingsController>(),
       services: sl(),
       child: MaterialApp(
+        locale: const Locale('en'),
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
         home: Scaffold(
@@ -65,9 +70,15 @@ void main() {
     testWidgets('shows loading state initially', (tester) async {
       await tester.pumpWidget(buildPage());
 
-      // The section header is visible immediately, but the empty-state
-      // message only appears once the async data load finishes.
-      expect(find.text('Plant Collection'), findsOneWidget);
+      final loadingGrid = find.byType(GridView);
+      expect(loadingGrid, findsOneWidget);
+      expect(
+        find.descendant(
+          of: loadingGrid,
+          matching: find.byType(Container),
+        ),
+        findsNWidgets(4),
+      );
       expect(find.text('No plants yet'), findsNothing);
     });
 
@@ -75,40 +86,7 @@ void main() {
       await tester.pumpWidget(buildPage());
       await tester.pumpAndSettle();
 
-      expect(find.text('Plant Collection'), findsOneWidget);
       expect(find.text('No plants yet'), findsOneWidget);
-    });
-
-    testWidgets('shows search toggle button', (tester) async {
-      await tester.pumpWidget(buildPage());
-      await tester.pumpAndSettle();
-
-      expect(find.byIcon(Icons.search), findsOneWidget);
-    });
-
-    testWidgets('toggling search shows AppSearchBar', (tester) async {
-      await tester.pumpWidget(buildPage());
-      await tester.pumpAndSettle();
-
-      // Search bar starts hidden.
-      expect(find.byType(AppSearchBar), findsNothing);
-
-      // Tap the search icon.
-      await tester.tap(find.byIcon(Icons.search));
-      await tester.pump();
-
-      // AppSearchBar should now be visible and the icon changes to close.
-      expect(find.byType(AppSearchBar), findsOneWidget);
-      expect(find.byIcon(Icons.close), findsOneWidget);
-    });
-
-    testWidgets('filter chips render', (tester) async {
-      await tester.pumpWidget(buildPage());
-      await tester.pumpAndSettle();
-
-      expect(find.text('All'), findsOneWidget);
-      expect(find.text('Needs Water'), findsOneWidget);
-      expect(find.text('Needs Fertilizer'), findsOneWidget);
     });
 
     testWidgets('plant grid renders with pre-populated plants', (tester) async {

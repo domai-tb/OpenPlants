@@ -57,4 +57,9 @@ class SymptomLoggerRepository {
 
   /// Deletes the draft for a specific plant.
   Future<void> deleteDraft(String plantId) => _dataSource.deleteDraft(plantId);
+
+  /// Delete all symptom entries for a specific plant.
+  ///
+  /// Also deletes the draft for this plant.
+  Future<void> deleteEntriesForPlant(String plantId) => _dataSource.deleteForPlant(plantId);
 }

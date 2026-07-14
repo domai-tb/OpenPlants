@@ -57,4 +57,9 @@ class DiagnosisRepository {
   Future<void> deleteResult(String id) {
     return _dataSource.delete(id);
   }
+
+  /// Delete all diagnosis results for a specific plant.
+  Future<void> deleteResultsForPlant(String plantId) {
+    return _dataSource.deleteForPlant(plantId);
+  }
 }

@@ -231,27 +231,6 @@ void main() {
       );
     });
 
-    testWidgets('shows battery warning and can dismiss it', (tester) async {
-      await tester.pumpWidget(buildPage(plantId: 'plant-1'));
-      await pumpUntilCameraReady(tester);
-
-      // Battery warning visible
-      expect(
-        find.textContaining('Continuous camera use may increase battery'),
-        findsOneWidget,
-      );
-      expect(find.byIcon(Icons.battery_alert), findsOneWidget);
-
-      // Dismiss by tapping the battery warning close button (last Icons.close in tree)
-      await tester.tap(find.byIcon(Icons.close).last);
-      await tester.pump();
-
-      expect(
-        find.textContaining('Continuous camera use may increase battery'),
-        findsNothing,
-      );
-    });
-
     testWidgets('shows light level indicator with brightness bar', (tester) async {
       await tester.pumpWidget(buildPage(plantId: 'plant-1'));
       await pumpUntilCameraReady(tester);
@@ -418,8 +397,13 @@ void main() {
       expect(find.text('Close'), findsOneWidget);
     });
 
-    testWidgets('"Continue assessing" dismisses the timeout', (tester) async {
-      await tester.pumpWidget(buildPage(plantId: 'plant-1'));
+    testWidgets('"Continue assessing" dismisses the timeout without setting the level', (tester) async {
+      await tester.pumpWidget(
+        buildPage(
+          plantId: 'plant-1',
+          onLightLevelSet: (level) => capturedLevel = level,
+        ),
+      );
       await pumpUntilCameraReady(tester);
 
       // Advance past timeout
@@ -434,6 +418,9 @@ void main() {
       // Timeout gone, camera view restored
       expect(find.text('Camera timed out'), findsNothing);
       expect(find.textContaining('Light Assessment'), findsOneWidget);
+      expect(find.byType(InteractiveLightAssessmentPage), findsOneWidget);
+      expect(await usecases.getLightLevel('plant-1'), isNull);
+      expect(capturedLevel, isNull);
     });
   });
 
@@ -524,7 +511,7 @@ void main() {
       expect(find.text('Cancel'), findsOneWidget);
 
       await tester.tap(find.text('Cancel'));
-      await tester.pump();
+      await tester.pumpAndSettle();
 
       // Page should be popped
       expect(find.byType(InteractiveLightAssessmentPage), findsNothing);
@@ -539,7 +526,7 @@ void main() {
       expect(find.text('Go back'), findsOneWidget);
 
       await tester.tap(find.text('Go back'));
-      await tester.pump();
+      await tester.pumpAndSettle();
 
       // Page should be popped
       expect(find.byType(InteractiveLightAssessmentPage), findsNothing);

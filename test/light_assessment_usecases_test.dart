@@ -1,23 +1,27 @@
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:open_plants/pages/light_assessment/light_assessment_datasource.dart';
 import 'package:open_plants/pages/light_assessment/light_assessment_repository.dart';
 import 'package:open_plants/pages/light_assessment/light_assessment_usecases.dart';
 import 'package:open_plants/pages/plant_collection/plant_collection_item_entity.dart';
 import 'package:open_plants/pages/plant_photo_timeline/plant_photo_timeline_item_entity.dart';
 
 /// In-memory mock datasource for testing.
-class MockLightAssessmentDataSource {
+class MockLightAssessmentDataSource implements LightAssessmentDataSource {
   final Map<String, LightLevel?> _store = {};
 
+  @override
   Future<LightLevel?> loadLightLevel(String plantId) async {
     return _store[plantId];
   }
 
+  @override
   Future<void> saveLightLevel(String plantId, LightLevel level) async {
     _store[plantId] = level;
   }
 
+  @override
   Future<void> clearLightLevel(String plantId) async {
     _store[plantId] = null;
   }
@@ -51,7 +55,7 @@ void main() {
 
   setUp(() {
     mockDataSource = MockLightAssessmentDataSource();
-    repository = LightAssessmentRepository(dataSource: mockDataSource as dynamic);
+    repository = LightAssessmentRepository(dataSource: mockDataSource);
     mockPhotoStore = MockPhotoStore();
     usecases = LightAssessmentUseCases(
       repository: repository,

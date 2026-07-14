@@ -680,12 +680,6 @@ class _InteractiveLightAssessmentPageState extends State<InteractiveLightAssessm
                       child: _buildGuidanceText(theme),
                     ),
 
-                    // === Timeout warning dialog (Task 1.6) ===
-                    if (_showTimeoutWarning)
-                      Positioned.fill(
-                        child: _buildTimeoutOverlay(theme),
-                      ),
-
                     // === Bottom controls (Tasks 1.4, 1.5) ===
                     Positioned(
                       left: 0,
@@ -702,6 +696,12 @@ class _InteractiveLightAssessmentPageState extends State<InteractiveLightAssessm
                           duration: const Duration(milliseconds: 200),
                           child: Container(color: Colors.white),
                         ),
+                      ),
+
+                    // === Timeout warning dialog (Task 1.6) ===
+                    if (_showTimeoutWarning)
+                      Positioned.fill(
+                        child: _buildTimeoutOverlay(theme),
                       ),
                   ],
                 ),

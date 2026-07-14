@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:open_plants/pages/care_schedule/care_schedule_action.dart';
 import 'package:open_plants/pages/care_schedule/care_task.dart';
 import 'package:open_plants/pages/care_schedule/care_task_type.dart';
 import 'package:open_plants/pages/care_schedule/custom_care_rule.dart';
@@ -438,6 +439,129 @@ void main() {
       );
       // Rule interval used directly, modifiers ignored
       expect(watering.effectiveIntervalDays, 10);
+    });
+
+    group('schedule actions', () {
+      test('snooze overrides due date', () {
+        final action = CareScheduleAction(
+          plantId: 'plant-1',
+          taskType: const CareTaskType.builtIn(BuiltInTaskType.watering),
+          actionKind: CareScheduleActionKind.snooze,
+          actionTime: DateTime(2025, 7, 1), // ignore: avoid_redundant_argument_values
+          targetedOccurrenceDueDate: DateTime(2025, 7, 1), // No completion → base due is today
+          overriddenDueDate: DateTime(2025, 7, 8),
+        );
+
+        final tasks = ScheduleEngine.computeForPlant(
+          input: PlantScheduleInput(
+            plantId: 'plant-1',
+            plantName: 'My Pothos',
+            config: ScheduleConfig.defaults(),
+            profile: testProfile,
+            activeScheduleActions: [action],
+          ),
+          today: today,
+        );
+
+        final watering = tasks.firstWhere(
+          (t) => t.taskType.builtIn == BuiltInTaskType.watering,
+        );
+        expect(watering.dueDate, DateTime(2025, 7, 8));
+        expect(watering.status, CareTaskStatus.upcoming);
+      });
+
+      test('skip advances due date by one effective interval', () {
+        final action = CareScheduleAction(
+          plantId: 'plant-1',
+          taskType: const CareTaskType.builtIn(BuiltInTaskType.watering),
+          actionKind: CareScheduleActionKind.skip,
+          actionTime: DateTime(2025, 7, 1), // ignore: avoid_redundant_argument_values
+          targetedOccurrenceDueDate: DateTime(2025, 7, 1),
+          overriddenDueDate: DateTime(2025, 7, 8), // 7 days from current due date
+        );
+
+        final tasks = ScheduleEngine.computeForPlant(
+          input: PlantScheduleInput(
+            plantId: 'plant-1',
+            plantName: 'My Pothos',
+            config: ScheduleConfig.defaults(),
+            profile: testProfile,
+            activeScheduleActions: [action],
+          ),
+          today: today,
+        );
+
+        final watering = tasks.firstWhere(
+          (t) => t.taskType.builtIn == BuiltInTaskType.watering,
+        );
+        expect(watering.dueDate, DateTime(2025, 7, 8));
+        expect(watering.status, CareTaskStatus.upcoming);
+      });
+
+      test('stale action is ignored', () {
+        final action = CareScheduleAction(
+          plantId: 'plant-1',
+          taskType: const CareTaskType.builtIn(BuiltInTaskType.watering),
+          actionKind: CareScheduleActionKind.snooze,
+          actionTime: DateTime(2025, 6, 15),
+          targetedOccurrenceDueDate: DateTime(2025, 6, 20), // Old occurrence
+          overriddenDueDate: DateTime(2025, 6, 25), // Old override
+        );
+
+        final tasks = ScheduleEngine.computeForPlant(
+          input: PlantScheduleInput(
+            plantId: 'plant-1',
+            plantName: 'My Pothos',
+            config: ScheduleConfig.defaults(),
+            profile: testProfile,
+            activeScheduleActions: [action],
+          ),
+          today: today,
+        );
+
+        final watering = tasks.firstWhere(
+          (t) => t.taskType.builtIn == BuiltInTaskType.watering,
+        );
+        // Action is stale, so default schedule applies (no completion → due today)
+        expect(watering.status, CareTaskStatus.dueToday);
+      });
+
+      test('action does not replace completion anchor', () {
+        final completion = TaskCompletion(
+          taskType: const CareTaskType.builtIn(BuiltInTaskType.watering),
+          plantId: 'plant-1',
+          completedAt: DateTime(2025, 6, 28),
+        );
+
+        final action = CareScheduleAction(
+          plantId: 'plant-1',
+          taskType: const CareTaskType.builtIn(BuiltInTaskType.watering),
+          actionKind: CareScheduleActionKind.snooze,
+          actionTime: DateTime(2025, 7, 1), // ignore: avoid_redundant_argument_values
+          targetedOccurrenceDueDate: DateTime(2025, 7, 5),
+          overriddenDueDate: DateTime(2025, 7, 10), // Snoozed to July 10
+        );
+
+        final tasks = ScheduleEngine.computeForPlant(
+          input: PlantScheduleInput(
+            plantId: 'plant-1',
+            plantName: 'My Pothos',
+            config: ScheduleConfig.defaults(),
+            profile: testProfile,
+            completionHistory: [completion],
+            activeScheduleActions: [action],
+          ),
+          today: today,
+        );
+
+        final watering = tasks.firstWhere(
+          (t) => t.taskType.builtIn == BuiltInTaskType.watering,
+        );
+        // Due date is the snoozed date, not completion-based
+        expect(watering.dueDate, DateTime(2025, 7, 10));
+        // But completedAt still reflects the genuine completion
+        expect(watering.completedAt, DateTime(2025, 6, 28));
+      });
     });
   });
 }

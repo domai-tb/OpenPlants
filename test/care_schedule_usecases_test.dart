@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
+import 'package:open_plants/pages/care_schedule/care_schedule_action.dart';
 import 'package:open_plants/pages/care_schedule/care_schedule_repository.dart';
 import 'package:open_plants/pages/care_schedule/care_schedule_usecases.dart';
 import 'package:open_plants/pages/care_schedule/care_task.dart';
@@ -30,10 +31,12 @@ void main() {
 
     // Stub getSchedule dependencies to return empty results
     when(mockPlantCollection.loadPlants()).thenAnswer((_) async => []);
+    when(mockPlantCollection.getPlantById(any)).thenAnswer((_) async => null);
     when(mockRepository.getAllScheduleConfigs()).thenAnswer((_) async => {});
     when(mockRepository.getAllRoomConfigs()).thenAnswer((_) async => {});
     when(mockRepository.getAllCompletions()).thenAnswer((_) async => []);
     when(mockRepository.getAllCustomCareRules()).thenAnswer((_) async => []);
+    when(mockRepository.getAllScheduleActions()).thenAnswer((_) async => {});
 
     usecases = CareScheduleUsecases(
       repository: mockRepository,
@@ -136,7 +139,7 @@ void main() {
   });
 
   group('snoozeTask', () {
-    test('does NOT create journal entry', () async {
+    test('saves schedule action instead of completion', () async {
       final task = CareTask(
         taskType: const CareTaskType.builtIn(BuiltInTaskType.watering),
         plantId: 'plant-1',
@@ -146,17 +149,18 @@ void main() {
         effectiveIntervalDays: 7,
       );
 
-      when(mockRepository.recordCompletion(any)).thenAnswer((_) async {});
+      when(mockRepository.saveScheduleAction(any)).thenAnswer((_) async {});
 
       await usecases.snoozeTask(task: task, days: 3);
 
-      verify(mockRepository.recordCompletion(any)).called(1);
+      verifyNever(mockRepository.recordCompletion(any));
+      verify(mockRepository.saveScheduleAction(any)).called(1);
       verifyNever(mockPlantJournal.addEntry(any));
     });
   });
 
   group('skipTask', () {
-    test('does NOT create journal entry', () async {
+    test('saves schedule action instead of completion', () async {
       final task = CareTask(
         taskType: const CareTaskType.builtIn(BuiltInTaskType.watering),
         plantId: 'plant-1',
@@ -166,11 +170,12 @@ void main() {
         effectiveIntervalDays: 7,
       );
 
-      when(mockRepository.recordCompletion(any)).thenAnswer((_) async {});
+      when(mockRepository.saveScheduleAction(any)).thenAnswer((_) async {});
 
       await usecases.skipTask(task: task);
 
-      verify(mockRepository.recordCompletion(any)).called(1);
+      verifyNever(mockRepository.recordCompletion(any));
+      verify(mockRepository.saveScheduleAction(any)).called(1);
       verifyNever(mockPlantJournal.addEntry(any));
     });
   });
@@ -231,6 +236,101 @@ void main() {
       final entry = captured.last as JournalEntry;
 
       expect(entry.notes, 'Check for flowers completed');
+    });
+  });
+
+  group('schedule actions', () {
+    test('completeTask clears active schedule action', () async {
+      final task = CareTask(
+        taskType: const CareTaskType.builtIn(BuiltInTaskType.watering),
+        plantId: 'plant-1',
+        plantName: 'My Plant',
+        dueDate: DateTime.now(),
+        status: CareTaskStatus.dueToday,
+        effectiveIntervalDays: 7,
+      );
+
+      when(mockRepository.recordCompletion(any)).thenAnswer((_) async {});
+      when(mockRepository.deleteScheduleAction(any, any)).thenAnswer((_) async {});
+      when(mockPlantJournal.addEntry(any)).thenAnswer(
+        (_) async => JournalEntry(
+          id: 'generated-id',
+          plantId: 'plant-1',
+          type: JournalEntryType.task,
+          timestamp: DateTime.now(),
+          notes: 'Watering completed',
+        ),
+      );
+
+      await usecases.completeTask(task: task);
+
+      verify(mockRepository.recordCompletion(any)).called(1);
+      verify(mockRepository.deleteScheduleAction('plant-1', const CareTaskType.builtIn(BuiltInTaskType.watering)))
+          .called(1);
+    });
+
+    test('snoozeTask saves schedule action instead of completion', () async {
+      final task = CareTask(
+        taskType: const CareTaskType.builtIn(BuiltInTaskType.watering),
+        plantId: 'plant-1',
+        plantName: 'My Plant',
+        dueDate: DateTime.now(),
+        status: CareTaskStatus.dueToday,
+        effectiveIntervalDays: 7,
+      );
+
+      when(mockRepository.saveScheduleAction(any)).thenAnswer((_) async {});
+
+      await usecases.snoozeTask(task: task, days: 3);
+
+      // Should NOT create a completion
+      verifyNever(mockRepository.recordCompletion(any));
+      // Should save a schedule action
+      verify(mockRepository.saveScheduleAction(any)).called(1);
+      // Should NOT create a journal entry
+      verifyNever(mockPlantJournal.addEntry(any));
+    });
+
+    test('skipTask saves schedule action instead of completion', () async {
+      final task = CareTask(
+        taskType: const CareTaskType.builtIn(BuiltInTaskType.watering),
+        plantId: 'plant-1',
+        plantName: 'My Plant',
+        dueDate: DateTime.now(),
+        status: CareTaskStatus.dueToday,
+        effectiveIntervalDays: 7,
+      );
+
+      when(mockRepository.saveScheduleAction(any)).thenAnswer((_) async {});
+
+      await usecases.skipTask(task: task);
+
+      // Should NOT create a completion
+      verifyNever(mockRepository.recordCompletion(any));
+      // Should save a schedule action
+      verify(mockRepository.saveScheduleAction(any)).called(1);
+      // Should NOT create a journal entry
+      verifyNever(mockPlantJournal.addEntry(any));
+    });
+
+    test('getScheduleActions returns actions from repository', () async {
+      final action = CareScheduleAction(
+        plantId: 'plant-1',
+        taskType: const CareTaskType.builtIn(BuiltInTaskType.watering),
+        actionKind: CareScheduleActionKind.snooze,
+        actionTime: DateTime.now(),
+        targetedOccurrenceDueDate: DateTime.now(),
+        overriddenDueDate: DateTime.now().add(const Duration(days: 3)),
+      );
+
+      when(mockRepository.getAllScheduleActions()).thenAnswer(
+        (_) async => {'plant-1_watering': action},
+      );
+
+      final actions = await usecases.getScheduleActions();
+
+      expect(actions.length, 1);
+      expect(actions['plant-1_watering'], action);
     });
   });
 }

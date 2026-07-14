@@ -21,4 +21,9 @@ class DiagnosisHistoryUseCases {
   Future<void> deleteResult(String id) {
     return _repository.deleteResult(id);
   }
+
+  /// Delete all diagnosis results for a specific plant.
+  Future<void> deleteResultsForPlant(String plantId) {
+    return _repository.deleteResultsForPlant(plantId);
+  }
 }

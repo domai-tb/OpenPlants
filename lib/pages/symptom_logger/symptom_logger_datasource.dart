@@ -2,75 +2,113 @@ import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:open_plants/core/exceptions.dart';
+import 'package:open_plants/core/local_collection_codec.dart';
 import 'package:open_plants/pages/symptom_logger/symptom_logger_item_entity.dart';
 
 /// Data source for symptom logger persistence.
 ///
 /// Stores symptom log entries as JSON in SharedPreferences.
+/// Uses [LocalCollectionCodec] to distinguish missing keys from corruption,
+/// preserve raw values on failure, and block mutations after a decode failure.
 class SymptomLoggerDataSource {
   static const String _prefsKey = 'symptom_logs_v1';
   static const String _draftPrefsKey = 'symptom_draft_v1';
 
+  final SharedPreferences? _prefsOverride;
+  LocalCollectionCodec<SymptomLogEntry>? _codec;
+
+  SymptomLoggerDataSource({SharedPreferences? prefs}) : _prefsOverride = prefs;
+
+  Future<LocalCollectionCodec<SymptomLogEntry>> _getCodec() async {
+    if (_codec == null) {
+      final prefs = _prefsOverride ?? await SharedPreferences.getInstance();
+      _codec = LocalCollectionCodec<SymptomLogEntry>(
+        prefs: prefs,
+        key: _prefsKey,
+        fromJson: SymptomLogEntry.fromJson,
+        toJson: (e) => e.toJson(),
+        keyExtractor: (e) => e.id,
+      );
+    }
+    return _codec!;
+  }
+
+  /// Whether the symptom logs collection is in a corrupted state.
+  Future<bool> get isBlocked async {
+    final codec = await _getCodec();
+    return codec.isBlocked;
+  }
+
   /// Loads all symptom log entries for a given plant, newest first.
+  ///
+  /// Throws [CollectionDecodeFailure], [CollectionShapeFailure], or
+  /// [RecordDecodeFailure] when stored data is malformed.
   Future<List<SymptomLogEntry>> getAllByPlant(String plantId) async {
     final all = await _loadAll();
     return all.where((entry) => entry.plantId == plantId).toList()..sort((a, b) => b.createdAt.compareTo(a.createdAt));
   }
 
   /// Saves a new symptom log entry.
+  ///
+  /// Throws [BlockedAfterDecodeFailure] if the collection is corrupted.
   Future<void> save(SymptomLogEntry entry) async {
-    final all = await _loadAll();
-    all.add(entry);
-    await _saveAll(all);
+    final codec = await _getCodec();
+    await codec.add(entry);
   }
 
   /// Updates an existing symptom log entry by ID.
+  ///
+  /// Throws [BlockedAfterDecodeFailure] if the collection is corrupted.
   Future<void> update(SymptomLogEntry entry) async {
-    final all = await _loadAll();
-    final index = all.indexWhere((e) => e.id == entry.id);
-    if (index == -1) {
-      throw Exception('SymptomLogEntry not found: ${entry.id}');
-    }
-    all[index] = entry;
-    await _saveAll(all);
+    final codec = await _getCodec();
+    await codec.update(entry, matchKey: (e) => e.id);
   }
 
   /// Deletes a symptom log entry by ID.
+  ///
+  /// Throws [BlockedAfterDecodeFailure] if the collection is corrupted.
   Future<void> delete(String id) async {
-    final all = await _loadAll();
-    all.removeWhere((e) => e.id == id);
-    await _saveAll(all);
+    final codec = await _getCodec();
+    await codec.delete(id, matchKey: (e) => e.id);
   }
 
   /// Loads all entries across all plants.
   Future<List<SymptomLogEntry>> loadAllEntries() => _loadAll();
 
-  Future<List<SymptomLogEntry>> _loadAll() async {
-    final prefs = await SharedPreferences.getInstance();
-    final raw = prefs.getString(_prefsKey);
-
-    if (raw == null || raw.trim().isEmpty) return [];
-
-    try {
-      final decoded = jsonDecode(raw) as List<dynamic>;
-      return decoded.map((item) => SymptomLogEntry.fromJson(item as Map<String, dynamic>)).toList();
-    } catch (_) {
-      return [];
-    }
+  /// Save the full list of symptom log entries.
+  ///
+  /// Throws [BlockedAfterDecodeFailure] if the collection is corrupted.
+  Future<void> saveAll(List<SymptomLogEntry> entries) async {
+    final codec = await _getCodec();
+    await codec.save(entries);
   }
 
-  /// Saves the full list of entries.
-  Future<void> _saveAll(List<SymptomLogEntry> entries) async {
-    final prefs = await SharedPreferences.getInstance();
-    final json = entries.map((e) => e.toJson()).toList();
-    await prefs.setString(_prefsKey, jsonEncode(json));
+  /// Delete all symptom log entries for a specific plant.
+  ///
+  /// Also deletes the draft for this plant.
+  /// Idempotent: succeeds even if plant has no entries.
+  Future<void> deleteForPlant(String plantId) async {
+    final entries = await _loadAll();
+    final remaining = entries.where((e) => e.plantId != plantId).toList();
+    await saveAll(remaining);
+    await deleteDraft(plantId);
+  }
+
+  Future<List<SymptomLogEntry>> _loadAll() async {
+    final codec = await _getCodec();
+    final result = await codec.load();
+    if (result.isFailure) {
+      throw result.asFailure!;
+    }
+    return result.asSuccess;
   }
 
   // --- Draft support ---
 
   /// Saves form progress as a draft JSON string.
   Future<void> saveDraft(String plantId, Map<String, dynamic> draft) async {
-    final prefs = await SharedPreferences.getInstance();
+    final prefs = _prefsOverride ?? await SharedPreferences.getInstance();
     final allDrafts = await _loadAllDrafts(prefs);
     allDrafts[plantId] = draft;
     await prefs.setString(_draftPrefsKey, jsonEncode(allDrafts));
@@ -78,14 +116,14 @@ class SymptomLoggerDataSource {
 
   /// Loads the draft for a specific plant, or null if none exists.
   Future<Map<String, dynamic>?> getDraft(String plantId) async {
-    final prefs = await SharedPreferences.getInstance();
+    final prefs = _prefsOverride ?? await SharedPreferences.getInstance();
     final allDrafts = await _loadAllDrafts(prefs);
     return allDrafts[plantId] as Map<String, dynamic>?;
   }
 
   /// Deletes the draft for a specific plant.
   Future<void> deleteDraft(String plantId) async {
-    final prefs = await SharedPreferences.getInstance();
+    final prefs = _prefsOverride ?? await SharedPreferences.getInstance();
     final allDrafts = await _loadAllDrafts(prefs);
     allDrafts.remove(plantId);
     await prefs.setString(_draftPrefsKey, jsonEncode(allDrafts));

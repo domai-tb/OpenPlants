@@ -53,13 +53,9 @@ class AppButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(15),
         child: InkWell(
           onTap: onTap,
-          splashColor: (type == AppButtonType.normal
-                  ? colorScheme.onPrimary
-                  : colorScheme.onSurfaceVariant)
+          splashColor: (type == AppButtonType.normal ? colorScheme.onPrimary : colorScheme.onSurfaceVariant)
               .withValues(alpha: 0.12),
-          highlightColor: (type == AppButtonType.normal
-                  ? colorScheme.onPrimary
-                  : colorScheme.onSurfaceVariant)
+          highlightColor: (type == AppButtonType.normal ? colorScheme.onPrimary : colorScheme.onSurfaceVariant)
               .withValues(alpha: 0.08),
           borderRadius: BorderRadius.circular(15),
           child: Center(

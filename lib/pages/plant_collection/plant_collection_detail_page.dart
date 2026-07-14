@@ -10,11 +10,13 @@ import 'package:open_plants/l10n/l10n_x.dart';
 import 'package:open_plants/pages/plant_collection/plant_collection_form_page.dart';
 import 'package:open_plants/pages/plant_collection/plant_collection_item_entity.dart';
 import 'package:open_plants/pages/plant_collection/plant_collection_usecases.dart';
+import 'package:open_plants/pages/plant_collection/plant_data_cleanup.dart';
 import 'package:open_plants/pages/plant_journal/plant_journal_page.dart';
 import 'package:open_plants/pages/plant_journal/plant_journal_usecases.dart';
 import 'package:open_plants/pages/plant_photo_timeline/plant_photo_timeline_item_entity.dart';
 import 'package:open_plants/pages/plant_photo_timeline/plant_photo_timeline_page.dart';
 import 'package:open_plants/pages/plant_photo_timeline/plant_photo_timeline_usecases.dart';
+import 'package:open_plants/pages/care_schedule/care_schedule_usecases.dart';
 import 'package:open_plants/pages/care_schedule/custom_care_rule_usecases.dart';
 import 'package:open_plants/pages/care_schedule/widgets/care_rules_section.dart';
 import 'package:open_plants/pages/light_assessment/interactive_light_assessment_page.dart';
@@ -49,6 +51,8 @@ class _PlantCollectionDetailPageState extends State<PlantCollectionDetailPage> {
   late CustomCareRuleUsecases _careRuleUsecases;
   late LightAssessmentUseCases _lightAssessmentUsecases;
   late DiagnosisHistoryUseCases _diagnosisHistoryUsecases;
+  late CareScheduleUsecases _careScheduleUsecases;
+  late PlantDataCleanup _dataCleanup;
   bool _wired = false;
   late PlantEntity _plant;
   List<SymptomLogEntry> _symptomHistory = const [];
@@ -77,6 +81,14 @@ class _PlantCollectionDetailPageState extends State<PlantCollectionDetailPage> {
     _careRuleUsecases = services.customCareRules;
     _lightAssessmentUsecases = services.lightAssessment;
     _diagnosisHistoryUsecases = services.diagnosisHistory;
+    _careScheduleUsecases = services.careSchedule;
+    _dataCleanup = PlantDataCleanup(
+      journalUsecases: _journalUsecases,
+      symptomUsecases: _symptomUsecases,
+      diagnosisHistoryUsecases: _diagnosisHistoryUsecases,
+      photoTimelineUsecases: _photoTimelineUsecases,
+      careScheduleUsecases: _careScheduleUsecases,
+    );
     _wired = true;
     _loadSymptomHistory();
     _loadRoomName();
@@ -218,9 +230,9 @@ class _PlantCollectionDetailPageState extends State<PlantCollectionDetailPage> {
     );
 
     if (confirmed == true && mounted) {
-      // Delete growth photo files before deleting the plant
-      await _photoTimelineUsecases.deleteAllPhotos(_plant.id);
-      await _journalUsecases.deleteEntriesForPlant(_plant.id);
+      // Delete all associated data (photos, journal, symptoms, diagnosis, care schedule)
+      await _dataCleanup.deleteAllForPlant(_plant.id);
+      // Delete the plant itself
       await _usecases.deletePlant(_plant.id);
       if (mounted) {
         Navigator.of(context).pop();

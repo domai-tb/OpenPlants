@@ -1,4 +1,6 @@
+import 'package:open_plants/pages/care_schedule/care_schedule_action.dart';
 import 'package:open_plants/pages/care_schedule/care_schedule_datasource.dart';
+import 'package:open_plants/pages/care_schedule/care_task_type.dart';
 import 'package:open_plants/pages/care_schedule/custom_care_rule.dart';
 import 'package:open_plants/pages/care_schedule/room_config.dart';
 import 'package:open_plants/pages/care_schedule/schedule_config.dart';
@@ -139,5 +141,42 @@ class CareScheduleRepository {
   /// Get a species care profile by ID.
   SpeciesCareProfile getSpeciesProfile(String? speciesId) {
     return SpeciesCareProfiles.getProfile(speciesId);
+  }
+
+  // --- Schedule Actions (Snooze/Skip) ---
+
+  /// Get all active schedule actions.
+  Future<Map<String, CareScheduleAction>> getAllScheduleActions() async {
+    return dataSource.loadScheduleActions();
+  }
+
+  /// Get the active schedule action for a specific plant and task type.
+  Future<CareScheduleAction?> getScheduleAction(String plantId, CareTaskType taskType) async {
+    return dataSource.loadScheduleAction(plantId, taskType);
+  }
+
+  /// Save a schedule action, replacing any existing action for the same plant/task pair.
+  Future<void> saveScheduleAction(CareScheduleAction action) async {
+    await dataSource.saveScheduleAction(action);
+  }
+
+  /// Delete the schedule action for a specific plant and task type.
+  Future<void> deleteScheduleAction(String plantId, CareTaskType taskType) async {
+    await dataSource.deleteScheduleAction(plantId, taskType);
+  }
+
+  /// Delete all schedule actions for a specific plant.
+  Future<void> deleteAllScheduleActionsForPlant(String plantId) async {
+    await dataSource.deleteAllScheduleActionsForPlant(plantId);
+  }
+
+  /// Delete all task completions for a specific plant.
+  Future<void> deleteCompletionsForPlant(String plantId) async {
+    await dataSource.deleteCompletionsForPlant(plantId);
+  }
+
+  /// Delete all custom care rules for a specific plant.
+  Future<void> deleteCustomRulesForPlant(String plantId) async {
+    await dataSource.deleteCustomRulesForPlant(plantId);
   }
 }

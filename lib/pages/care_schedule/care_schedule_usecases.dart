@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 
+import 'package:open_plants/pages/care_schedule/care_schedule_action.dart';
 import 'package:open_plants/pages/care_schedule/care_task.dart';
 import 'package:open_plants/pages/care_schedule/care_task_type.dart';
 import 'package:open_plants/pages/care_schedule/overdue_detector.dart';
@@ -60,12 +61,16 @@ class CareScheduleUsecases {
       plantRoomMap[plant.id] = plant.roomId;
     }
 
+    final allScheduleActions = await repository.getAllScheduleActions();
+
     final inputs = plants.map((plant) {
       final config = allConfigs[plant.id] ?? ScheduleConfig.defaults();
       final roomConfig = plant.room != null ? allRoomConfigs[plant.room!] : null;
       final roomEntity = plant.roomId != null ? roomEntities[plant.roomId] : null;
       final profile = repository.getSpeciesProfile(plant.speciesName);
       final plantRules = allCustomRules.where((r) => r.plantId == plant.id).toList();
+      final plantActions =
+          allScheduleActions.entries.where((e) => e.key.startsWith('${plant.id}_')).map((e) => e.value).toList();
 
       return PlantScheduleInput(
         plantId: plant.id,
@@ -76,6 +81,7 @@ class CareScheduleUsecases {
         profile: profile,
         completionHistory: completions,
         customCareRules: plantRules,
+        activeScheduleActions: plantActions,
         lightLevel: plant.lightLevel,
       );
     }).toList();
@@ -122,6 +128,8 @@ class CareScheduleUsecases {
   }
 
   /// Complete a task — records the completion event and auto-journals it.
+  ///
+  /// Clears any active schedule action for this plant/task pair.
   Future<List<CareTask>> completeTask({
     required CareTask task,
     String? note,
@@ -134,6 +142,9 @@ class CareScheduleUsecases {
     );
 
     await repository.recordCompletion(completion);
+
+    // Clear any active schedule action for this plant/task pair
+    await repository.deleteScheduleAction(task.plantId, task.taskType);
 
     // Auto-journal the completed task (graceful degradation on failure)
     try {
@@ -177,34 +188,42 @@ class CareScheduleUsecases {
 
   /// Snooze a task by deferring it for [days] days.
   ///
-  /// Records a completion event anchored to today. The next-due date will be
-  /// today + effectiveInterval, which may differ from the requested snooze
-  /// duration. This is the simplest correct behavior for a completion-based
-  /// scheduling model.
+  /// Saves a schedule action instead of recording a completion.
+  /// The action overrides the due date without creating a genuine completion.
   Future<List<CareTask>> snoozeTask({
     required CareTask task,
     required int days,
   }) async {
-    final completion = TaskCompletion(
-      taskType: task.taskType,
+    final now = DateTime.now();
+    final action = CareScheduleAction(
       plantId: task.plantId,
-      completedAt: DateTime.now(),
+      taskType: task.taskType,
+      actionKind: CareScheduleActionKind.snooze,
+      actionTime: now,
+      targetedOccurrenceDueDate: task.dueDate,
+      overriddenDueDate: now.add(Duration(days: days)),
     );
 
-    await repository.recordCompletion(completion);
+    await repository.saveScheduleAction(action);
     return (await getSchedule()).tasks;
   }
 
-  /// Skip a task — resets the anchor to today without recording completion.
+  /// Skip a task — advances the due date by one effective interval.
+  ///
+  /// Saves a schedule action instead of recording a completion.
+  /// The action advances the due date without creating a genuine completion.
   Future<List<CareTask>> skipTask({required CareTask task}) async {
-    // Record a completion with today's timestamp to reset the timer
-    final completion = TaskCompletion(
-      taskType: task.taskType,
+    final now = DateTime.now();
+    final action = CareScheduleAction(
       plantId: task.plantId,
-      completedAt: DateTime.now(),
+      taskType: task.taskType,
+      actionKind: CareScheduleActionKind.skip,
+      actionTime: now,
+      targetedOccurrenceDueDate: task.dueDate,
+      overriddenDueDate: task.dueDate.add(Duration(days: task.effectiveIntervalDays)),
     );
 
-    await repository.recordCompletion(completion);
+    await repository.saveScheduleAction(action);
     return (await getSchedule()).tasks;
   }
 
@@ -245,5 +264,25 @@ class CareScheduleUsecases {
   }) async {
     await repository.deleteCompletion(completion);
     return (await getSchedule()).tasks;
+  }
+
+  /// Get all active schedule actions.
+  Future<Map<String, CareScheduleAction>> getScheduleActions() async {
+    return repository.getAllScheduleActions();
+  }
+
+  /// Delete all task completions for a specific plant.
+  Future<void> deleteCompletionsForPlant(String plantId) async {
+    await repository.deleteCompletionsForPlant(plantId);
+  }
+
+  /// Delete all custom care rules for a specific plant.
+  Future<void> deleteCustomRulesForPlant(String plantId) async {
+    await repository.deleteCustomRulesForPlant(plantId);
+  }
+
+  /// Delete all schedule actions for a specific plant.
+  Future<void> deleteAllScheduleActionsForPlant(String plantId) async {
+    await repository.deleteAllScheduleActionsForPlant(plantId);
   }
 }
