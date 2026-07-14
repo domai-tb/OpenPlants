@@ -58,7 +58,7 @@ void main() {
       await prefs.setString(
         'diagnosis_results_v1',
         jsonEncode([
-          {'id': 'invalid'}
+          {'id': 'invalid'},
         ]),
       );
       expect(() => dataSource.getAll(), throwsA(isA<RecordDecodeFailure>()));
@@ -104,7 +104,6 @@ void main() {
         onsetTiming: OnsetTiming.today,
         notes: 'Test symptom',
         createdAt: DateTime(2026, 1, 15),
-        resolved: false,
       );
     }
 
@@ -122,7 +121,7 @@ void main() {
       await prefs.setString(
         'symptom_logs_v1',
         jsonEncode([
-          {'id': 'invalid'}
+          {'id': 'invalid'},
         ]),
       );
       expect(() => dataSource.getAllByPlant('plant-1'), throwsA(isA<RecordDecodeFailure>()));
@@ -183,7 +182,7 @@ void main() {
       await prefs.setString(
         'plant_journal_v1',
         jsonEncode([
-          {'id': 'invalid'}
+          {'id': 'invalid'},
         ]),
       );
       expect(() => dataSource.loadAll(), throwsA(isA<RecordDecodeFailure>()));

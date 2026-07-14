@@ -11,13 +11,10 @@ import 'package:open_plants/l10n/l10n.dart';
 import 'package:open_plants/pages/today_dashboard/plant_grid_section.dart';
 
 void main() {
-  setUpAll(() async {
+  setUp(() async {
     SharedPreferences.setMockInitialValues({});
+    await sl.reset();
     await init();
-  });
-
-  setUp(() {
-    SharedPreferences.setMockInitialValues({});
   });
 
   /// Builds a PlantGridSection wrapped in the app's DI and localization tree.

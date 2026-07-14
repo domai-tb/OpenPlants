@@ -448,7 +448,7 @@ void main() {
           taskType: const CareTaskType.builtIn(BuiltInTaskType.watering),
           actionKind: CareScheduleActionKind.snooze,
           actionTime: DateTime(2025, 7, 1), // ignore: avoid_redundant_argument_values
-          targetedOccurrenceDueDate: DateTime(2025, 7, 1), // No completion → base due is today
+          targetedOccurrenceDueDate: DateTime(2025, 7, 1), // ignore: avoid_redundant_argument_values
           overriddenDueDate: DateTime(2025, 7, 8),
         );
 
@@ -476,7 +476,7 @@ void main() {
           taskType: const CareTaskType.builtIn(BuiltInTaskType.watering),
           actionKind: CareScheduleActionKind.skip,
           actionTime: DateTime(2025, 7, 1), // ignore: avoid_redundant_argument_values
-          targetedOccurrenceDueDate: DateTime(2025, 7, 1),
+          targetedOccurrenceDueDate: DateTime(2025, 7, 1), // ignore: avoid_redundant_argument_values
           overriddenDueDate: DateTime(2025, 7, 8), // 7 days from current due date
         );
 

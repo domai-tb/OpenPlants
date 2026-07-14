@@ -82,7 +82,7 @@ void main() {
 
     group('corrupt data protection', () {
       test('savePlants does not replace corrupt data', () async {
-        final corruptValue = 'not valid json';
+        const corruptValue = 'not valid json';
         await prefs.setString('plant_collection_v1', corruptValue);
 
         // First load detects the corruption
@@ -102,7 +102,7 @@ void main() {
       });
 
       test('addPlant does not replace corrupt data', () async {
-        final corruptValue = '{"corrupted": "data"}';
+        const corruptValue = '{"corrupted": "data"}';
         await prefs.setString('plant_collection_v1', corruptValue);
 
         expect(
@@ -114,7 +114,7 @@ void main() {
       });
 
       test('updatePlant does not replace corrupt data', () async {
-        final corruptValue = '["invalid", "data"]';
+        const corruptValue = '["invalid", "data"]';
         await prefs.setString('plant_collection_v1', corruptValue);
 
         expect(
@@ -126,7 +126,7 @@ void main() {
       });
 
       test('deletePlant does not replace corrupt data', () async {
-        final corruptValue = 'not valid json';
+        const corruptValue = 'not valid json';
         await prefs.setString('plant_collection_v1', corruptValue);
 
         expect(

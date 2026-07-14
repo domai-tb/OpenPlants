@@ -75,7 +75,7 @@ class PlantCollectionDataSource {
     await codec.add(plant);
   }
 
-  /// Replace a plant identified by its [id].
+  /// Replace a plant identified by its id.
   ///
   /// Throws [BlockedAfterDecodeFailure] if the collection is corrupted.
   Future<void> updatePlant(PlantEntity plant) async {

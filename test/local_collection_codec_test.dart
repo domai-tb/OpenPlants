@@ -55,7 +55,7 @@ void main() {
       });
 
       test('leaves raw stored value unchanged after decode failure', () async {
-        final rawValue = 'not valid json{{';
+        const rawValue = 'not valid json{{';
         await prefs.setString('plant_collection_v1', rawValue);
 
         final codec = LocalCollectionCodec<PlantEntity>(
@@ -143,7 +143,7 @@ void main() {
 
         expect(result.isFailure, isTrue);
         expect(result.asFailure, isA<RecordDecodeFailure>());
-        expect((result.asFailure as RecordDecodeFailure).failingIndex, equals(1));
+        expect((result.asFailure! as RecordDecodeFailure).failingIndex, equals(1));
       });
 
       test('does not return partial collection as writable state', () async {
@@ -200,14 +200,14 @@ void main() {
         // Should succeed with migrated records (photos defaults to empty list)
         expect(result.isSuccess, isTrue);
         expect(result.asSuccess, hasLength(1));
-        expect(result.asSuccess!.first.id, equals('old-plant'));
-        expect(result.asSuccess!.first.photos, isEmpty);
+        expect(result.asSuccess.first.id, equals('old-plant'));
+        expect(result.asSuccess.first.photos, isEmpty);
       });
     });
 
     group('raw-value preservation', () {
       test('preserves raw SharedPreferences content on decode failure', () async {
-        final rawValue = '{"corrupted": "data"}';
+        const rawValue = '{"corrupted": "data"}';
         await prefs.setString('plant_collection_v1', rawValue);
 
         final codec = LocalCollectionCodec<PlantEntity>(
@@ -225,7 +225,7 @@ void main() {
       });
 
       test('preserves raw content even when save is attempted after failure', () async {
-        final rawValue = 'not valid json';
+        const rawValue = 'not valid json';
         await prefs.setString('plant_collection_v1', rawValue);
 
         final codec = LocalCollectionCodec<PlantEntity>(

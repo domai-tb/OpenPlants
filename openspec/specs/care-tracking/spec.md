@@ -72,7 +72,7 @@ The system SHALL indicate which plants need attention in the collection list vie
 
 ### Requirement: Task completions auto-create journal entries
 
-When a care task is marked as done via the schedule view (the `completeTask` operation), the system SHALL automatically create a `JournalEntry` of type `task` in the plant journal for the associated plant. The journal entry SHALL record what task type was completed and at what time.
+When a care task is marked as done via the schedule view (the `completeTask` operation), the system SHALL automatically create a `JournalEntry` of type `task` in the plant journal for the associated plant. The journal entry SHALL record what task type was completed and at what time. Snooze and skip are schedule-only actions and MUST NOT be persisted as task completions.
 
 In addition, when the completed task is a watering or fertilizing task, the system SHALL update the plant's care status timestamps (`lastWateredAt` or `lastFertilizedAt`) and reset the stored `careStatus` to `happy` if it was the corresponding needs-status. This ensures the plant's effective care status reflects the completed care action.
 
@@ -113,17 +113,19 @@ In addition, when the completed task is a watering or fertilizing task, the syst
 - **AND** the journal entry is still created (if applicable)
 - **AND** the error is logged but not surfaced to the user
 
-#### Scenario: Journal entry not created on snooze
+#### Scenario: Snooze does not complete care
 
-- **WHEN** user snoozes a care task (defers it)
-- **THEN** the system records the `TaskCompletion` for schedule anchoring
+- **WHEN** user snoozes a care task for a positive number of days
+- **THEN** the system persists a schedule-only snooze action
+- **AND** the system does NOT persist a `TaskCompletion`
 - **AND** the system does NOT create a journal entry
 - **AND** the system does NOT update the plant's care status
 
-#### Scenario: Journal entry not created on skip
+#### Scenario: Skip does not complete care
 
 - **WHEN** user skips a care task
-- **THEN** the system records the `TaskCompletion` for schedule anchoring
+- **THEN** the system persists a schedule-only skip action
+- **AND** the system does NOT persist a `TaskCompletion`
 - **AND** the system does NOT create a journal entry
 - **AND** the system does NOT update the plant's care status
 

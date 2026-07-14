@@ -36,16 +36,16 @@
 
 ## 5. Versioned ONNX Model Cache
 
-- [ ] 5.1 Add a failing `test/plant_classifier_cache_test.dart` using temporary files and injected asset/cache adapters for matching reuse, missing identity, changed identity, empty/missing pair members, interrupted temporary files, and copy failure.
-- [ ] 5.2 Add a release-controlled model identity asset under `assets/ml/plant-identification/` and register it alongside both ONNX files in `pubspec.yaml`.
-- [ ] 5.3 Create `lib/pages/plant_identification/classifier/model_asset_cache.dart` to validate the complete cache unit, stage and flush both assets, replace the final pair, and write the identity marker last.
-- [ ] 5.4 Update `lib/pages/plant_identification/classifier/plant_classifier.dart` to obtain the model path through `ModelAssetCache` while preserving lazy session reuse and disposal.
-- [ ] 5.5 Run `fvm flutter test --dart-define=platform=vm test/plant_classifier_cache_test.dart` and confirm every invalid or legacy cache state refreshes both files before session creation.
+- [x] 5.1 Add a failing `test/plant_classifier_cache_test.dart` using temporary files and injected asset/cache adapters for matching reuse, missing identity, changed identity, empty/missing pair members, interrupted temporary files, and copy failure.
+- [x] 5.2 Add a release-controlled model identity asset under `assets/ml/plant-identification/` and register it alongside both ONNX files in `pubspec.yaml`.
+- [x] 5.3 Create `lib/pages/plant_identification/classifier/model_asset_cache.dart` to validate the complete cache unit, stage and flush both assets, replace the final pair, and write the identity marker last.
+- [x] 5.4 Update `lib/pages/plant_identification/classifier/plant_classifier.dart` to obtain the model path through `ModelAssetCache` while preserving lazy session reuse and disposal.
+- [x] 5.5 Run `fvm flutter test --dart-define=platform=vm test/plant_classifier_cache_test.dart` and confirm every invalid or legacy cache state refreshes both files before session creation.
 
 ## 6. Integration and Validation
 
-- [ ] 6.1 Add cross-feature regression coverage proving snooze/skip never enter care history or `justCompleted`, a completed task clears its override, and plant deletion removes all records from unified queries.
-- [ ] 6.2 Run `fvm dart format --line-length=120 .` and verify no unintended generated or unrelated files changed.
-- [ ] 6.3 Run `fvm flutter analyze`; stop and report any diagnostic before making additional fixes.
-- [ ] 6.4 Run `fvm flutter test`; stop and report any failure before making additional fixes.
-- [ ] 6.5 Manually verify on Android that snooze duration survives restart, skip advances one interval, plant deletion removes all visible history, main-photo clear removes the file, and the first classifier use refreshes a legacy cache once.
+- [x] 6.1 Add cross-feature regression coverage proving snooze/skip never enter care history or `justCompleted`, a completed task clears its override, and plant deletion removes all records from unified queries.
+- [x] 6.2 Run `fvm dart format --line-length=120 .` and verify no unintended generated or unrelated files changed.
+- [x] 6.3 Run `fvm flutter analyze`; stop and report any diagnostic before making additional fixes.
+- [x] 6.4 Run `fvm flutter test`; stop and report any failure before making additional fixes.
+- [x] 6.5 Manually verify on Android that snooze duration survives restart, skip advances one interval, plant deletion removes all visible history, main-photo clear removes the file, and the first classifier use refreshes a legacy cache once.

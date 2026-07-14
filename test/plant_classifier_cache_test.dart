@@ -1,8 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 
 import 'package:open_plants/pages/plant_identification/classifier/model_asset_cache.dart';
 
@@ -18,9 +16,6 @@ void main() {
     tempDir = await Directory.systemTemp.createTemp('model_cache_test_');
     cacheDir = Directory('${tempDir.path}/cache');
     await cacheDir.create();
-
-    // Mock path_provider to return our temp directory
-    PathProviderPlatform.instance = MockPathProvider(cacheDir);
 
     cache = ModelAssetCache(
       modelAssetPath: 'assets/ml/plant-identification/model.onnx',
@@ -251,16 +246,6 @@ class MockAssetLoader implements AssetLoader {
 
   @override
   Future<String> loadIdentityContent() async => identityContent;
-}
-
-/// Mock PathProvider for testing
-class MockPathProvider extends PathProviderPlatform {
-  final Directory cacheDir;
-
-  MockPathProvider(this.cacheDir);
-
-  @override
-  Future<String?> getApplicationCachePath() async => cacheDir.path;
 }
 
 /// Mock AssetLoader that throws on load

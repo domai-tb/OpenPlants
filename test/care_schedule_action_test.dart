@@ -11,7 +11,7 @@ void main() {
           plantId: 'plant-1',
           taskType: const CareTaskType.builtIn(BuiltInTaskType.watering),
           actionKind: CareScheduleActionKind.snooze,
-          actionTime: DateTime(2026, 7, 14, 10, 0),
+          actionTime: DateTime(2026, 7, 14, 10, 0), // ignore: avoid_redundant_argument_values
           targetedOccurrenceDueDate: DateTime(2026, 7, 10),
           overriddenDueDate: DateTime(2026, 7, 17),
         );
@@ -31,7 +31,7 @@ void main() {
           plantId: 'plant-1',
           taskType: const CareTaskType.builtIn(BuiltInTaskType.watering),
           actionKind: CareScheduleActionKind.snooze,
-          actionTime: DateTime(2026, 7, 14, 10, 0),
+          actionTime: DateTime(2026, 7, 14, 10, 0), // ignore: avoid_redundant_argument_values
           targetedOccurrenceDueDate: DateTime(2026, 7, 10),
           overriddenDueDate: DateTime(2026, 7, 17),
         );

@@ -31,27 +31,33 @@ void main() {
 
     group('PlantJournalDataSource', () {
       test('deleteForPlant removes all entries for plant', () async {
-        await journal.save(JournalEntry(
-          id: 'j1',
-          plantId: 'plant-1',
-          type: JournalEntryType.text,
-          timestamp: DateTime(2025),
-          notes: 'Note 1',
-        ));
-        await journal.save(JournalEntry(
-          id: 'j2',
-          plantId: 'plant-2',
-          type: JournalEntryType.text,
-          timestamp: DateTime(2025),
-          notes: 'Note 2',
-        ));
-        await journal.save(JournalEntry(
-          id: 'j3',
-          plantId: 'plant-1',
-          type: JournalEntryType.photo,
-          timestamp: DateTime(2025),
-          photoPath: '/tmp/photo.jpg',
-        ));
+        await journal.save(
+          JournalEntry(
+            id: 'j1',
+            plantId: 'plant-1',
+            type: JournalEntryType.text,
+            timestamp: DateTime(2025),
+            notes: 'Note 1',
+          ),
+        );
+        await journal.save(
+          JournalEntry(
+            id: 'j2',
+            plantId: 'plant-2',
+            type: JournalEntryType.text,
+            timestamp: DateTime(2025),
+            notes: 'Note 2',
+          ),
+        );
+        await journal.save(
+          JournalEntry(
+            id: 'j3',
+            plantId: 'plant-1',
+            type: JournalEntryType.photo,
+            timestamp: DateTime(2025),
+            photoPath: '/tmp/photo.jpg',
+          ),
+        );
 
         await journal.deleteForPlant('plant-1');
 
@@ -69,24 +75,28 @@ void main() {
 
     group('SymptomLoggerDataSource', () {
       test('deleteForPlant removes all entries for plant', () async {
-        await symptom.save(SymptomLogEntry(
-          id: 's1',
-          plantId: 'plant-1',
-          symptomTypes: const [],
-          severity: Severity.mild,
-          affectedParts: const [],
-          onsetTiming: OnsetTiming.today,
-          createdAt: DateTime(2025),
-        ));
-        await symptom.save(SymptomLogEntry(
-          id: 's2',
-          plantId: 'plant-2',
-          symptomTypes: const [],
-          severity: Severity.moderate,
-          affectedParts: const [],
-          onsetTiming: OnsetTiming.fewDaysAgo,
-          createdAt: DateTime(2025),
-        ));
+        await symptom.save(
+          SymptomLogEntry(
+            id: 's1',
+            plantId: 'plant-1',
+            symptomTypes: const [],
+            severity: Severity.mild,
+            affectedParts: const [],
+            onsetTiming: OnsetTiming.today,
+            createdAt: DateTime(2025),
+          ),
+        );
+        await symptom.save(
+          SymptomLogEntry(
+            id: 's2',
+            plantId: 'plant-2',
+            symptomTypes: const [],
+            severity: Severity.moderate,
+            affectedParts: const [],
+            onsetTiming: OnsetTiming.fewDaysAgo,
+            createdAt: DateTime(2025),
+          ),
+        );
 
         await symptom.deleteForPlant('plant-1');
 
@@ -113,24 +123,28 @@ void main() {
 
     group('DiagnosisDataSource', () {
       test('deleteForPlant removes all results for plant', () async {
-        await diagnosis.save(DiagnosisResultEntity(
-          id: 'd1',
-          plantId: 'plant-1',
-          plantSymptoms: const [],
-          causes: const [],
-          type: DiagnosisResultType.rankedCauses,
-          context: const DiagnosisContext(symptoms: []),
-          createdAt: DateTime(2025),
-        ));
-        await diagnosis.save(DiagnosisResultEntity(
-          id: 'd2',
-          plantId: 'plant-2',
-          plantSymptoms: const [],
-          causes: const [],
-          type: DiagnosisResultType.rankedCauses,
-          context: const DiagnosisContext(symptoms: []),
-          createdAt: DateTime(2025),
-        ));
+        await diagnosis.save(
+          DiagnosisResultEntity(
+            id: 'd1',
+            plantId: 'plant-1',
+            plantSymptoms: const [],
+            causes: const [],
+            type: DiagnosisResultType.rankedCauses,
+            context: const DiagnosisContext(symptoms: []),
+            createdAt: DateTime(2025),
+          ),
+        );
+        await diagnosis.save(
+          DiagnosisResultEntity(
+            id: 'd2',
+            plantId: 'plant-2',
+            plantSymptoms: const [],
+            causes: const [],
+            type: DiagnosisResultType.rankedCauses,
+            context: const DiagnosisContext(symptoms: []),
+            createdAt: DateTime(2025),
+          ),
+        );
 
         await diagnosis.deleteForPlant('plant-1');
 

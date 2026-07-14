@@ -30,7 +30,7 @@ class DecodedCollection<T> {
     if (_items == null) {
       throw StateError('DecodedCollection is a failure, not a success.');
     }
-    return _items!;
+    return _items;
   }
 
   /// Returns the failure on error, or null if this is a success.
@@ -63,7 +63,7 @@ class LocalCollectionCodec<T> {
   final T Function(Map<String, dynamic>) _fromJson;
   final Map<String, dynamic> Function(T) _toJson;
   final RecordMigrator? _migrator;
-  final dynamic Function(T)? _keyExtractor;
+  final Object Function(T)? _keyExtractor;
 
   /// Whether the most recent [load] call returned a failure.
   bool _blocked = false;
@@ -74,7 +74,7 @@ class LocalCollectionCodec<T> {
     required T Function(Map<String, dynamic>) fromJson,
     required Map<String, dynamic> Function(T) toJson,
     RecordMigrator? migrator,
-    dynamic Function(T)? keyExtractor,
+    Object Function(T)? keyExtractor,
   })  : _prefs = prefs,
         _key = key,
         _fromJson = fromJson,
@@ -133,7 +133,7 @@ class LocalCollectionCodec<T> {
       // Attempt migration if supported.
       Map<String, dynamic> record = rawRecord;
       if (_migrator != null) {
-        final migrated = _migrator!(record);
+        final migrated = _migrator(record);
         if (migrated != null) {
           record = migrated;
         }
@@ -160,7 +160,7 @@ class LocalCollectionCodec<T> {
   /// failure.
   Future<void> save(List<T> items) {
     _assertNotBlocked();
-    final json = items.map((e) => _toJson(e)).toList();
+    final json = items.map(_toJson).toList();
     return _prefs.setString(_key, jsonEncode(json));
   }
 
@@ -179,11 +179,11 @@ class LocalCollectionCodec<T> {
   /// collection.
   ///
   /// If [matchKey] is provided, it is used to identify items. Otherwise the
-  /// [keyExtractor] passed to the constructor is used. Throws
+  /// keyExtractor passed to the constructor is used. Throws
   /// [BlockedAfterDecodeFailure] if the most recent [load] returned a failure.
   Future<void> update(
     T item, {
-    dynamic Function(T)? matchKey,
+    Object Function(T)? matchKey,
   }) async {
     _assertNotBlocked();
     final extractor = matchKey ?? _keyExtractor;
@@ -206,11 +206,11 @@ class LocalCollectionCodec<T> {
   /// Removes the item matching [value] from the collection.
   ///
   /// If [matchKey] is provided, it is used to identify items. Otherwise the
-  /// [keyExtractor] passed to the constructor is used. Throws
+  /// keyExtractor passed to the constructor is used. Throws
   /// [BlockedAfterDecodeFailure] if the most recent [load] returned a failure.
   Future<void> delete(
-    dynamic value, {
-    dynamic Function(T)? matchKey,
+    Object value, {
+    Object Function(T)? matchKey,
   }) async {
     _assertNotBlocked();
     final extractor = matchKey ?? _keyExtractor;
