@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:open_plants/core/constants.dart';
+
 class ScrollToTopButton extends StatefulWidget {
   final ScrollController scrollController;
   final double bottomOffset;
@@ -8,7 +10,7 @@ class ScrollToTopButton extends StatefulWidget {
   const ScrollToTopButton({
     super.key,
     required this.scrollController,
-    this.bottomOffset = 20,
+    this.bottomOffset = kBottomNavBarHeight,
     this.rightOffset = 20,
   });
 
@@ -41,7 +43,6 @@ class ScrollToTopButtonState extends State<ScrollToTopButton> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isLight = theme.brightness == Brightness.light;
     final safeBottom = MediaQuery.of(context).padding.bottom;
 
     return Align(
@@ -68,7 +69,7 @@ class ScrollToTopButtonState extends State<ScrollToTopButton> {
               backgroundColor: theme.cardColor,
               child: Icon(
                 Icons.arrow_upward,
-                color: isLight ? Colors.black : const Color.fromRGBO(184, 186, 191, 1),
+                color: theme.colorScheme.onSurfaceVariant,
               ),
             ),
           ),

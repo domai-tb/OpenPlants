@@ -2,10 +2,12 @@ import 'dart:io' show Platform;
 
 import 'package:flutter/material.dart';
 
-import 'package:open_plant/pages/home/page_navigator.dart';
-import 'package:open_plant/pages/home/widgets/bottom_nav_bar_item.dart';
+import 'package:open_plants/core/constants.dart';
+import 'package:open_plants/pages/home/page_navigator.dart';
+import 'package:open_plants/pages/home/widgets/bottom_nav_bar_item.dart';
 
 /// Creates the bottom navigation bar that lets the user switch between different pages.
+/// With 3 fixed tabs, the items fit without scrolling.
 class BottomNavBar extends StatefulWidget {
   /// Needs the currently active page in order to highlight it
   final PageItem currentPage;
@@ -31,46 +33,36 @@ class _BottomNavBarState extends State<BottomNavBar> {
     final theme = Theme.of(context);
 
     return Container(
-      height: Platform.isIOS ? 88 : 98,
-      padding: Platform.isIOS
-          ? const EdgeInsets.only(bottom: 20, left: 5)
-          : const EdgeInsets.only(left: 7),
+      height: bottomNavBarHeight,
+      padding: Platform.isIOS ? const EdgeInsets.only(bottom: 20) : null,
       decoration: BoxDecoration(
         color: theme.cardColor,
         borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(15),
           topRight: Radius.circular(15),
         ),
-        boxShadow: const [
+        boxShadow: [
           BoxShadow(
-            color: Colors.black12,
+            color: theme.colorScheme.shadow,
             blurRadius: 5,
-            offset: Offset(0, -1),
+            offset: const Offset(0, -1),
           ),
         ],
       ),
-      child: SingleChildScrollView(
-        physics: const NeverScrollableScrollPhysics(),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: widget.pages.map((page) {
-              final presentation = pageItemPresentation(context, page);
+      child: Row(
+        children: widget.pages.map((page) {
+          final presentation = pageItemPresentation(context, page);
 
-              return BottomNavBarItem(
-                title: presentation.title,
-                activeIcon: presentation.activeIcon,
-                inactiveIcon: presentation.inactiveIcon,
-                onTap: () => widget.onSelectedPage(page),
-                isActive: widget.currentPage == page,
-                iconPaddingLeft: presentation.iconPaddingLeft,
-                iconPaddingRight: presentation.iconPaddingRight,
-              );
-            }).toList(),
-          ),
-        ),
+          return Expanded(
+            child: BottomNavBarItem(
+              title: presentation.title,
+              activeIcon: presentation.activeIcon,
+              inactiveIcon: presentation.inactiveIcon,
+              onTap: () => widget.onSelectedPage(page),
+              isActive: widget.currentPage == page,
+            ),
+          );
+        }).toList(),
       ),
     );
   }

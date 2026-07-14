@@ -1,25 +1,55 @@
 import 'package:get_it/get_it.dart';
 
-import 'package:open_plant/core/app_services.dart';
-import 'package:open_plant/core/settings.dart';
-import 'package:open_plant/pages/page1/page1_datasource.dart';
-import 'package:open_plant/pages/page1/page1_repository.dart';
-import 'package:open_plant/pages/page1/page1_usecases.dart';
-import 'package:open_plant/pages/page2/page2_datasource.dart';
-import 'package:open_plant/pages/page2/page2_repository.dart';
-import 'package:open_plant/pages/page2/page2_usecases.dart';
-import 'package:open_plant/pages/page3/page3_datasource.dart';
-import 'package:open_plant/pages/page3/page3_repository.dart';
-import 'package:open_plant/pages/page3/page3_usecases.dart';
-import 'package:open_plant/pages/page4/page4_datasource.dart';
-import 'package:open_plant/pages/page4/page4_repository.dart';
-import 'package:open_plant/pages/page4/page4_usecases.dart';
-import 'package:open_plant/pages/page5/page5_datasource.dart';
-import 'package:open_plant/pages/page5/page5_repository.dart';
-import 'package:open_plant/pages/page5/page5_usecases.dart';
-import 'package:open_plant/pages/page6/page6_datasource.dart';
-import 'package:open_plant/pages/page6/page6_repository.dart';
-import 'package:open_plant/pages/page6/page6_usecases.dart';
+import 'package:open_plants/core/app_services.dart';
+import 'package:open_plants/core/date_formatter.dart';
+import 'package:open_plants/core/locale_service.dart';
+import 'package:open_plants/core/settings.dart';
+import 'package:open_plants/core/unit_preferences.dart';
+import 'package:open_plants/pages/model_info/model_info_datasource.dart';
+import 'package:open_plants/pages/model_info/model_info_repository.dart';
+import 'package:open_plants/pages/model_info/model_info_usecases.dart';
+import 'package:open_plants/pages/care_schedule/care_schedule_datasource.dart';
+import 'package:open_plants/pages/care_schedule/care_schedule_repository.dart';
+import 'package:open_plants/pages/care_schedule/care_schedule_usecases.dart';
+import 'package:open_plants/pages/care_schedule/custom_care_rule_usecases.dart';
+import 'package:open_plants/pages/plant_identification/classifier/plant_classifier_datasource.dart';
+import 'package:open_plants/pages/plant_identification/classifier/plant_classifier_repository.dart';
+import 'package:open_plants/pages/plant_identification/classifier/plant_classifier_usecases.dart';
+import 'package:open_plants/pages/more/more_datasource.dart';
+import 'package:open_plants/pages/more/more_repository.dart';
+import 'package:open_plants/pages/more/more_usecases.dart';
+import 'package:open_plants/pages/plant_collection/plant_collection_datasource.dart';
+import 'package:open_plants/pages/plant_collection/plant_collection_repository.dart';
+import 'package:open_plants/pages/plant_collection/plant_collection_usecases.dart';
+import 'package:open_plants/pages/plant_journal/plant_journal_datasource.dart';
+import 'package:open_plants/pages/plant_journal/plant_journal_repository.dart';
+import 'package:open_plants/pages/plant_journal/plant_journal_usecases.dart';
+import 'package:open_plants/pages/plant_photo_timeline/plant_photo_timeline_datasource.dart';
+import 'package:open_plants/pages/plant_photo_timeline/plant_photo_timeline_repository.dart';
+import 'package:open_plants/pages/plant_photo_timeline/plant_photo_timeline_usecases.dart';
+import 'package:open_plants/pages/room_profiles/room_profiles_datasource.dart';
+import 'package:open_plants/pages/room_profiles/room_profiles_repository.dart';
+import 'package:open_plants/pages/room_profiles/room_profiles_usecases.dart';
+import 'package:open_plants/pages/species_library/species_library_datasource.dart';
+import 'package:open_plants/pages/species_library/species_library_repository.dart';
+import 'package:open_plants/pages/species_library/species_library_usecases.dart';
+import 'package:open_plants/pages/symptom_logger/symptom_logger_datasource.dart';
+import 'package:open_plants/pages/symptom_logger/symptom_logger_repository.dart';
+import 'package:open_plants/pages/symptom_logger/symptom_logger_usecases.dart';
+import 'package:open_plants/pages/today_dashboard/today_dashboard_datasource.dart';
+import 'package:open_plants/pages/today_dashboard/today_dashboard_repository.dart';
+import 'package:open_plants/pages/today_dashboard/today_dashboard_usecases.dart';
+import 'package:open_plants/pages/light_assessment/light_assessment_datasource.dart';
+import 'package:open_plants/pages/light_assessment/light_assessment_repository.dart';
+import 'package:open_plants/pages/light_assessment/light_assessment_usecases.dart';
+import 'package:open_plants/pages/diagnosis/auto_diagnosis_service.dart';
+import 'package:open_plants/pages/diagnosis/diagnosis_datasource.dart';
+import 'package:open_plants/pages/diagnosis/diagnosis_history_usecases.dart';
+import 'package:open_plants/pages/diagnosis/diagnosis_repository.dart';
+import 'package:open_plants/pages/diagnosis/diagnosis_usecases.dart';
+import 'package:open_plants/pages/plant_names/plant_names_datasource.dart';
+import 'package:open_plants/pages/plant_names/plant_names_repository.dart';
+import 'package:open_plants/pages/plant_names/plant_names_usecases.dart';
 
 /// Global service locator (GetIt).
 ///
@@ -31,69 +61,237 @@ Future<void> init() async {
   // Core
   sl.registerSingleton<SettingsController>(await SettingsController.load());
 
-  // Page 1
-  sl.registerLazySingleton<Page1DataSource>(Page1DataSource.new);
-  sl.registerLazySingleton<Page1Repository>(
-    () => Page1Repository(dataSource: sl()),
-  );
-  sl.registerLazySingleton<Page1Usecases>(
-    () => Page1Usecases(repository: sl()),
+  // Locale Service
+  sl.registerLazySingleton<LocaleService>(
+    () => LocaleService(sl<SettingsController>()),
   );
 
-  // Page 2
-  sl.registerLazySingleton<Page2DataSource>(Page2DataSource.new);
-  sl.registerLazySingleton<Page2Repository>(
-    () => Page2Repository(dataSource: sl()),
-  );
-  sl.registerLazySingleton<Page2Usecases>(
-    () => Page2Usecases(repository: sl()),
+  // Unit Preferences
+  sl.registerLazySingleton<TemperatureFormatter>(
+    () => TemperatureFormatter(sl<SettingsController>()),
   );
 
-  // Page 3
-  sl.registerLazySingleton<Page3DataSource>(Page3DataSource.new);
-  sl.registerLazySingleton<Page3Repository>(
-    () => Page3Repository(dataSource: sl()),
-  );
-  sl.registerLazySingleton<Page3Usecases>(
-    () => Page3Usecases(repository: sl()),
+  // Date Formatter
+  sl.registerLazySingleton<DateFormatter>(
+    () => DateFormatter(sl<LocaleService>()),
   );
 
-  // Page 4
-  sl.registerLazySingleton<Page4DataSource>(Page4DataSource.new);
-  sl.registerLazySingleton<Page4Repository>(
-    () => Page4Repository(dataSource: sl()),
+  // Plant Classifier
+  sl.registerLazySingleton<PlantClassifierDatasource>(
+    PlantClassifierDatasource.new,
   );
-  sl.registerLazySingleton<Page4Usecases>(
-    () => Page4Usecases(repository: sl()),
+  sl.registerLazySingleton<PlantClassifierRepository>(
+    () => PlantClassifierRepository(dataSource: sl()),
   );
-
-  // Page 5
-  sl.registerLazySingleton<Page5DataSource>(Page5DataSource.new);
-  sl.registerLazySingleton<Page5Repository>(
-    () => Page5Repository(dataSource: sl()),
-  );
-  sl.registerLazySingleton<Page5Usecases>(
-    () => Page5Usecases(repository: sl()),
+  sl.registerLazySingleton<PlantClassifierUsecases>(
+    () => PlantClassifierUsecases(repository: sl()),
   );
 
-  // Page 6
-  sl.registerLazySingleton<Page6DataSource>(Page6DataSource.new);
-  sl.registerLazySingleton<Page6Repository>(
-    () => Page6Repository(dataSource: sl()),
+  // More
+  sl.registerLazySingleton<MoreDataSource>(MoreDataSource.new);
+  sl.registerLazySingleton<MoreRepository>(
+    () => MoreRepository(dataSource: sl()),
   );
-  sl.registerLazySingleton<Page6Usecases>(
-    () => Page6Usecases(repository: sl()),
+  sl.registerLazySingleton<MoreUsecases>(
+    () => MoreUsecases(repository: sl()),
+  );
+
+  // Plant Collection
+  sl.registerLazySingleton<PlantCollectionDataSource>(
+    PlantCollectionDataSource.new,
+  );
+  sl.registerLazySingleton<PlantCollectionRepository>(
+    () => PlantCollectionRepository(dataSource: sl()),
+  );
+  sl.registerLazySingleton<PlantCollectionUsecases>(
+    () => PlantCollectionUsecases(repository: sl()),
+  );
+
+  // Plant Photo Timeline
+  sl.registerLazySingleton<PlantPhotoTimelineDataSource>(
+    PlantPhotoTimelineDataSource.new,
+  );
+  sl.registerLazySingleton<PlantPhotoTimelineRepository>(
+    () => PlantPhotoTimelineRepository(
+      dataSource: sl(),
+      plantCollection: sl(),
+    ),
+  );
+  sl.registerLazySingleton<PlantPhotoTimelineUseCases>(
+    () => PlantPhotoTimelineUseCases(repository: sl()),
+  );
+
+  // Species Library
+  sl.registerLazySingleton<SpeciesLibraryDatasource>(
+    SpeciesLibraryDatasource.new,
+  );
+  sl.registerLazySingleton<SpeciesLibraryRepository>(
+    () => SpeciesLibraryRepository(datasource: sl()),
+  );
+  sl.registerLazySingleton<SpeciesLibraryUsecases>(
+    () => SpeciesLibraryUsecases(repository: sl()),
+  );
+
+  // Today Dashboard
+  sl.registerLazySingleton<TodayDashboardDataSource>(
+    () => TodayDashboardDataSource(plantCollection: sl()),
+  );
+  sl.registerLazySingleton<TodayDashboardRepository>(
+    () => TodayDashboardRepository(dataSource: sl()),
+  );
+  sl.registerLazySingleton<TodayDashboardUsecases>(
+    () => TodayDashboardUsecases(repository: sl()),
+  );
+
+  // Care Schedule
+  sl.registerLazySingleton<CareScheduleDataSource>(
+    CareScheduleDataSource.new,
+  );
+  sl.registerLazySingleton<CareScheduleRepository>(
+    () => CareScheduleRepository(dataSource: sl()),
+  );
+  sl.registerLazySingleton<CareScheduleUsecases>(
+    () => CareScheduleUsecases(
+      repository: sl(),
+      plantCollection: sl(),
+      plantJournal: sl(),
+      roomProfiles: sl(),
+    ),
+  );
+  sl.registerLazySingleton<CustomCareRuleUsecases>(
+    () => CustomCareRuleUsecases(repository: sl()),
+  );
+
+  // Symptom Logger
+  sl.registerLazySingleton<SymptomLoggerDataSource>(
+    SymptomLoggerDataSource.new,
+  );
+  sl.registerLazySingleton<SymptomLoggerRepository>(
+    () => SymptomLoggerRepository(dataSource: sl()),
+  );
+  sl.registerLazySingleton<SymptomLoggerUseCases>(
+    () => SymptomLoggerUseCases(
+      repository: sl(),
+      plantCollection: sl(),
+      autoDiagnosis: sl(),
+    ),
+  );
+
+  // Plant Journal
+  sl.registerLazySingleton<PlantJournalDataSource>(
+    () => PlantJournalDataSource(
+      symptomLoggerDataSource: sl(),
+      diagnosisDataSource: sl(),
+    ),
+  );
+  sl.registerLazySingleton<PlantJournalRepository>(
+    () => PlantJournalRepository(dataSource: sl()),
+  );
+  sl.registerLazySingleton<PlantJournalUseCases>(
+    () => PlantJournalUseCases(repository: sl()),
+  );
+
+  // Room Profiles
+  sl.registerLazySingleton<RoomProfilesDatasource>(
+    RoomProfilesDatasource.new,
+  );
+  sl.registerLazySingleton<RoomProfilesRepository>(
+    () => RoomProfilesRepository(dataSource: sl()),
+  );
+  sl.registerLazySingleton<RoomProfilesUsecases>(
+    () => RoomProfilesUsecases(repository: sl()),
+  );
+
+  // Model Info
+  sl.registerLazySingleton<ModelInfoDatasource>(ModelInfoDatasource.new);
+  sl.registerLazySingleton<ModelInfoRepository>(
+    () => ModelInfoRepository(datasource: sl()),
+  );
+  sl.registerLazySingleton<ModelInfoUseCase>(
+    () => ModelInfoUseCase(repository: sl()),
+  );
+
+  // Light Assessment
+  sl.registerLazySingleton<LightAssessmentDataSource>(
+    () => LightAssessmentDataSource(plantDataSource: sl()),
+  );
+  sl.registerLazySingleton<LightAssessmentRepository>(
+    () => LightAssessmentRepository(dataSource: sl()),
+  );
+  sl.registerLazySingleton<LightAssessmentUseCases>(
+    () => LightAssessmentUseCases(
+      repository: sl(),
+      getLatestPhoto: (plantId) async {
+        final timeline = await sl<PlantPhotoTimelineUseCases>().getTimeline(plantId);
+        return timeline.isNotEmpty ? timeline.first : null;
+      },
+      addPhoto: (plantId, image) => sl<PlantPhotoTimelineUseCases>().addPhoto(
+        plantId,
+        image,
+        date: DateTime.now(),
+      ),
+    ),
+  );
+
+  // Diagnosis
+  sl.registerLazySingleton<DiagnosisDataSource>(
+    DiagnosisDataSource.new,
+  );
+  sl.registerLazySingleton<DiagnosisEngine>(
+    DiagnosisEngine.new,
+  );
+  sl.registerLazySingleton<DiagnosisRepository>(
+    () => DiagnosisRepository(
+      engine: sl(),
+      dataSource: sl(),
+    ),
+  );
+  sl.registerLazySingleton<AutoDiagnosisService>(
+    () => AutoDiagnosisService(
+      repository: sl(),
+      engine: sl(),
+      plantCollection: sl(),
+      roomProfiles: sl(),
+    ),
+  );
+  sl.registerLazySingleton<DiagnosisHistoryUseCases>(
+    () => DiagnosisHistoryUseCases(repository: sl()),
+  );
+
+  // Plant Names
+  sl.registerLazySingleton<PlantNamesDatasource>(
+    PlantNamesDatasource.new,
+  );
+  sl.registerLazySingleton<PlantNamesRepository>(
+    () => PlantNamesRepository(datasource: sl()),
+  );
+  sl.registerLazySingleton<PlantNamesUsecases>(
+    () => PlantNamesUsecases(repository: sl()),
   );
 
   // Aggregate wiring
   sl.registerLazySingleton<AppServices>(
     () => AppServices(
-      page1: sl(),
-      page2: sl(),
-      page3: sl(),
-      page4: sl(),
-      page5: sl(),
-      page6: sl(),
+      plantIdentification: sl(),
+      more: sl(),
+      plantCollection: sl(),
+      plantPhotoTimeline: sl(),
+      speciesLibrary: sl(),
+      todayDashboard: sl(),
+      careSchedule: sl(),
+      customCareRules: sl(),
+      symptomLogger: sl(),
+      plantJournal: sl(),
+      roomProfiles: sl(),
+      modelInfo: sl(),
+      lightAssessment: sl(),
+      diagnosis: sl(),
+      autoDiagnosis: sl(),
+      diagnosisHistory: sl(),
+      localeService: sl(),
+      temperatureFormatter: sl(),
+      dateFormatter: sl(),
+      plantNames: sl(),
     ),
   );
 }

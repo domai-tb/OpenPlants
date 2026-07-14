@@ -1,15 +1,15 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'package:open_plant/core/app_scope.dart';
-import 'package:open_plant/core/app_services.dart';
-import 'package:open_plant/core/injection.dart' as ic;
-import 'package:open_plant/core/settings.dart';
-import 'package:open_plant/core/themes.dart';
-import 'package:open_plant/l10n/l10n.dart';
-import 'package:open_plant/l10n/l10n_x.dart';
-import 'package:open_plant/pages/home/home_page.dart';
-import 'package:open_plant/pages/home/onboarding.dart';
+import 'package:open_plants/core/app_scope.dart';
+import 'package:open_plants/core/app_services.dart';
+import 'package:open_plants/core/injection.dart' as ic;
+import 'package:open_plants/core/settings.dart';
+import 'package:open_plants/core/themes.dart';
+import 'package:open_plants/l10n/l10n.dart';
+import 'package:open_plants/l10n/l10n_x.dart';
+import 'package:open_plants/pages/home/home_page.dart';
+import 'package:open_plants/pages/home/onboarding.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,35 +25,32 @@ Future<void> main() async {
     AppScope(
       settings: settings,
       services: services,
-      child: const OpenPlantApp(),
+      child: const OpenPlantsApp(),
     ),
   );
 }
 
-class OpenPlantApp extends StatefulWidget {
-  const OpenPlantApp({super.key});
+class OpenPlantsApp extends StatefulWidget {
+  const OpenPlantsApp({super.key});
 
   @override
-  State<OpenPlantApp> createState() => _OpenPlantAppState();
+  State<OpenPlantsApp> createState() => _OpenPlantsAppState();
 }
 
-class _OpenPlantAppState extends State<OpenPlantApp> {
-  final GlobalKey<NavigatorState> _mainNavigatorKey =
-      GlobalKey<NavigatorState>();
+class _OpenPlantsAppState extends State<OpenPlantsApp> {
+  final GlobalKey<NavigatorState> _mainNavigatorKey = GlobalKey<NavigatorState>();
 
   @override
   Widget build(BuildContext context) {
     final scope = AppScope.of(context);
 
     return AnimatedBuilder(
-      animation: scope.settings,
+      animation: Listenable.merge([scope.settings, scope.services.localeService]),
       builder: (context, _) {
         final settings = scope.settings.settings;
-        final themeMode = settings.useSystemDarkmode
-            ? ThemeMode.system
-            : (settings.useDarkmode ? ThemeMode.dark : ThemeMode.light);
-        final locale =
-            settings.localeCode == null ? null : Locale(settings.localeCode!);
+        final themeMode =
+            settings.useSystemDarkmode ? ThemeMode.system : (settings.useDarkmode ? ThemeMode.dark : ThemeMode.light);
+        final locale = scope.services.localeService.activeLocale;
 
         return MaterialApp(
           debugShowCheckedModeBanner: false,
@@ -69,9 +66,7 @@ class _OpenPlantAppState extends State<OpenPlantApp> {
             final mq = MediaQuery.of(context);
             return MediaQuery(
               data: mq.copyWith(
-                textScaler: settings.useSystemTextScaling
-                    ? mq.textScaler
-                    : TextScaler.noScaling,
+                textScaler: settings.useSystemTextScaling ? mq.textScaler : TextScaler.noScaling,
               ),
               child: child,
             );

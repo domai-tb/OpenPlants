@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:open_plant/l10n/l10n_x.dart';
-import 'package:open_plant/widgets/app_icon_button.dart';
+import 'package:open_plants/l10n/l10n_x.dart';
+import 'package:open_plants/widgets/app_icon_button.dart';
 
 /// This widget displays a search bar that can be hidden via a button
 /// and is used to search the news feed and events.
@@ -21,7 +21,7 @@ class AppSearchBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isLight = theme.brightness == Brightness.light;
+    final colorScheme = theme.colorScheme;
 
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
@@ -29,9 +29,7 @@ class AppSearchBar extends StatelessWidget {
         height: 55,
         alignment: Alignment.centerLeft,
         decoration: BoxDecoration(
-          color: isLight
-              ? const Color.fromRGBO(245, 246, 250, 1)
-              : const Color.fromRGBO(34, 40, 54, 1),
+          color: colorScheme.surfaceContainerHighest,
           borderRadius: BorderRadius.circular(15),
         ),
         child: Row(
@@ -44,12 +42,8 @@ class AppSearchBar extends StatelessWidget {
                   icon: Icons.arrow_back,
                   onTap: onBack,
                   transparent: true,
-                  backgroundColor: isLight
-                      ? const Color.fromRGBO(245, 246, 250, 1)
-                      : const Color.fromRGBO(34, 40, 54, 1),
-                  borderColor: isLight
-                      ? const Color.fromRGBO(245, 246, 250, 1)
-                      : const Color.fromRGBO(34, 40, 54, 1),
+                  backgroundColor: colorScheme.surfaceContainerHighest,
+                  borderColor: colorScheme.surfaceContainerHighest,
                 ),
               ),
             ],
@@ -57,7 +51,6 @@ class AppSearchBar extends StatelessWidget {
               child: TextField(
                 style: theme.textTheme.headlineMedium?.copyWith(
                   fontSize: 17,
-                  color: isLight ? Colors.black : null,
                 ),
                 onChanged: onChange,
                 decoration: InputDecoration(
@@ -69,7 +62,10 @@ class AppSearchBar extends StatelessWidget {
                   errorBorder: InputBorder.none,
                   disabledBorder: InputBorder.none,
                   contentPadding: EdgeInsets.only(
-                      left: !arrowHidden ? 12 : 20, right: 15, bottom: 21.6),
+                    left: !arrowHidden ? 12 : 20,
+                    right: 15,
+                    bottom: 21.6,
+                  ),
                   floatingLabelBehavior: FloatingLabelBehavior.never,
                 ),
               ),

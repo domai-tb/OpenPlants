@@ -1,28 +1,70 @@
-import 'package:open_plant/pages/page1/page1_usecases.dart';
-import 'package:open_plant/pages/page2/page2_usecases.dart';
-import 'package:open_plant/pages/page3/page3_usecases.dart';
-import 'package:open_plant/pages/page4/page4_usecases.dart';
-import 'package:open_plant/pages/page5/page5_usecases.dart';
-import 'package:open_plant/pages/page6/page6_usecases.dart';
+import 'package:open_plants/core/date_formatter.dart';
+import 'package:open_plants/core/locale_service.dart';
+import 'package:open_plants/core/unit_preferences.dart';
+import 'package:open_plants/pages/care_schedule/care_schedule_usecases.dart';
+import 'package:open_plants/pages/care_schedule/custom_care_rule_usecases.dart';
+import 'package:open_plants/pages/model_info/model_info_usecases.dart';
+import 'package:open_plants/pages/plant_identification/classifier/plant_classifier_usecases.dart';
+import 'package:open_plants/pages/more/more_usecases.dart';
+import 'package:open_plants/pages/plant_collection/plant_collection_usecases.dart';
+import 'package:open_plants/pages/plant_journal/plant_journal_usecases.dart';
+import 'package:open_plants/pages/plant_photo_timeline/plant_photo_timeline_usecases.dart';
+import 'package:open_plants/pages/room_profiles/room_profiles_usecases.dart';
+import 'package:open_plants/pages/species_library/species_library_usecases.dart';
+import 'package:open_plants/pages/symptom_logger/symptom_logger_usecases.dart';
+import 'package:open_plants/pages/today_dashboard/today_dashboard_usecases.dart';
+import 'package:open_plants/pages/light_assessment/light_assessment_usecases.dart';
+import 'package:open_plants/pages/diagnosis/auto_diagnosis_service.dart';
+import 'package:open_plants/pages/diagnosis/diagnosis_history_usecases.dart';
+import 'package:open_plants/pages/diagnosis/diagnosis_repository.dart';
+import 'package:open_plants/pages/plant_names/plant_names_usecases.dart';
 
 /// Aggregates feature use-cases for convenient access via `AppScope`.
 ///
 /// Wiring happens in `lib/core/injection.dart` (GetIt), so pages can stay free of
 /// plugin imports.
 class AppServices {
-  final Page1Usecases page1;
-  final Page2Usecases page2;
-  final Page3Usecases page3;
-  final Page4Usecases page4;
-  final Page5Usecases page5;
-  final Page6Usecases page6;
+  final PlantClassifierUsecases plantIdentification;
+  final MoreUsecases more;
+  final PlantCollectionUsecases plantCollection;
+  final PlantPhotoTimelineUseCases plantPhotoTimeline;
+  final SpeciesLibraryUsecases speciesLibrary;
+  final TodayDashboardUsecases todayDashboard;
+  final CareScheduleUsecases careSchedule;
+  final CustomCareRuleUsecases customCareRules;
+  final SymptomLoggerUseCases symptomLogger;
+  final PlantJournalUseCases plantJournal;
+  final RoomProfilesUsecases roomProfiles;
+  final ModelInfoUseCase modelInfo;
+  final LightAssessmentUseCases lightAssessment;
+  final DiagnosisRepository diagnosis;
+  final AutoDiagnosisService autoDiagnosis;
+  final DiagnosisHistoryUseCases diagnosisHistory;
+  final LocaleService localeService;
+  final TemperatureFormatter temperatureFormatter;
+  final DateFormatter dateFormatter;
+  final PlantNamesUsecases plantNames;
 
   const AppServices({
-    required this.page1,
-    required this.page2,
-    required this.page3,
-    required this.page4,
-    required this.page5,
-    required this.page6,
+    required this.plantIdentification,
+    required this.more,
+    required this.plantCollection,
+    required this.plantPhotoTimeline,
+    required this.speciesLibrary,
+    required this.todayDashboard,
+    required this.careSchedule,
+    required this.customCareRules,
+    required this.symptomLogger,
+    required this.plantJournal,
+    required this.roomProfiles,
+    required this.modelInfo,
+    required this.lightAssessment,
+    required this.diagnosis,
+    required this.autoDiagnosis,
+    required this.diagnosisHistory,
+    required this.localeService,
+    required this.temperatureFormatter,
+    required this.dateFormatter,
+    required this.plantNames,
   });
 }

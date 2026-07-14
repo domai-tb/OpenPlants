@@ -1,0 +1,50 @@
+{
+  "monstera_deliciosa": {
+    "en": "Swiss Cheese Plant",
+    "de": "Monstera"
+  },
+  "ficus_lyrata": {
+    "en": "Fiddle Leaf Fig",
+    "de": "Geigenfeige"
+  },
+  "sansevieria_trifasciata": {
+    "en": "Snake Plant",
+    "de": "Bogenhanf"
+  },
+  "epipremnum_aureum": {
+    "en": "Golden Pothos",
+    "de": "Geldbaum"
+  },
+  "chlorophytum_comosum": {
+    "en": "Spider Plant",
+    "de": "Grünlilie"
+  },
+  "aloe_vera": {
+    "en": "Aloe Vera",
+    "de": "Aloe Vera"
+  },
+  "dracaena_marginata": {
+    "en": "Dragon Tree",
+    "de": "Drachenbaum"
+  },
+  "spathiphyllum": {
+    "en": "Peace Lily",
+    "de": "Einblatt"
+  },
+  "zz_plant": {
+    "en": "ZZ Plant",
+    "de": "ZZ-Pflanze"
+  },
+  "calathea_ornata": {
+    "en": "Calathea",
+    "de": "Calathea"
+  },
+  "pilea_peperomioides": {
+    "en": "Chinese Money Plant",
+    "de": "Pilea"
+  },
+  "tradescantia_zebrina": {
+    "en": "Wandering Dude",
+    "de": "Zebrina-Wanderkraut"
+  }
+}

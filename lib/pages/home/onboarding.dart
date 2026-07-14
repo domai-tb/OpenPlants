@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'package:open_plant/core/app_scope.dart';
-import 'package:open_plant/l10n/l10n_x.dart';
-import 'package:open_plant/pages/home/page_navigator.dart';
-import 'package:open_plant/pages/home/widgets/nav_bar_preferences_editor.dart';
-import 'package:open_plant/widgets/app_segmented_triple_control.dart';
+import 'package:open_plants/core/app_scope.dart';
+import 'package:open_plants/l10n/l10n_x.dart';
+import 'package:open_plants/widgets/app_segmented_triple_control.dart';
 
 class OnboardingPage extends StatefulWidget {
   final GlobalKey<NavigatorState> mainNavigatorKey;
@@ -23,8 +21,6 @@ class _OnboardingPageState extends State<OnboardingPage> {
   // 0 = system, 1 = light, 2 = dark
   int _selectedTheme = 0;
   bool _useSystemTextScaling = false;
-  List<PageItem> _navBarOrder = PageItem.values.toList();
-  Set<PageItem> _hiddenNavBarItems = <PageItem>{};
 
   void _applySettings() {
     final settingsController = AppScope.of(context).settings;
@@ -38,8 +34,6 @@ class _OnboardingPageState extends State<OnboardingPage> {
         useSystemDarkmode: useSystemDarkmode,
         useDarkmode: useDarkmode,
         useSystemTextScaling: _useSystemTextScaling,
-        navBarItemOrder: pageItemIds(_navBarOrder),
-        hiddenNavBarItems: pageItemIds(_hiddenNavBarItems),
         didCompleteOnboarding: true,
       ),
     );
@@ -79,9 +73,6 @@ class _OnboardingPageState extends State<OnboardingPage> {
               ? 2
               : 1;
       _useSystemTextScaling = settings.useSystemTextScaling;
-      _navBarOrder = orderedPageItemsFromSettings(settings.navBarItemOrder);
-      _hiddenNavBarItems =
-          hiddenPageItemsFromSettings(settings.hiddenNavBarItems);
       _hydrated = true;
     }
 
@@ -98,6 +89,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                     controller: _pageController,
                     onPageChanged: (idx) => setState(() => _pageIndex = idx),
                     children: [
+                      // Page 0: Intro
                       Padding(
                         padding: const EdgeInsets.fromLTRB(30, 60, 30, 30),
                         child: Column(
@@ -117,9 +109,14 @@ class _OnboardingPageState extends State<OnboardingPage> {
                               context.l10n.onboardingIntroHint,
                               style: theme.textTheme.labelSmall,
                             ),
+                            const SizedBox(height: 24),
+                            const _PrivacySummaryBadges(),
                           ],
                         ),
                       ),
+                      // Page 1: Privacy
+                      const _PrivacyPage(),
+                      // Page 2: Preferences
                       Padding(
                         padding: const EdgeInsets.fromLTRB(30, 60, 30, 30),
                         child: SingleChildScrollView(
@@ -161,17 +158,6 @@ class _OnboardingPageState extends State<OnboardingPage> {
                                   _applyPreviewSettings();
                                 },
                               ),
-                              const SizedBox(height: 24),
-                              NavBarPreferencesEditor(
-                                orderedItems: _navBarOrder,
-                                hiddenItems: _hiddenNavBarItems,
-                                onOrderChanged: (items) {
-                                  setState(() => _navBarOrder = items);
-                                },
-                                onHiddenItemsChanged: (items) {
-                                  setState(() => _hiddenNavBarItems = items);
-                                },
-                              ),
                             ],
                           ),
                         ),
@@ -195,7 +181,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                       const Spacer(),
                       FilledButton(
                         onPressed: () {
-                          if (_pageIndex == 0) {
+                          if (_pageIndex < 2) {
                             _pageController.nextPage(
                               duration: const Duration(milliseconds: 200),
                               curve: Curves.easeOut,
@@ -205,9 +191,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                           _applySettings();
                         },
                         child: Text(
-                          _pageIndex == 0
-                              ? context.l10n.next
-                              : context.l10n.finish,
+                          _pageIndex == 2 ? context.l10n.finish : context.l10n.next,
                         ),
                       ),
                     ],
@@ -218,6 +202,130 @@ class _OnboardingPageState extends State<OnboardingPage> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _PrivacyPage extends StatelessWidget {
+  const _PrivacyPage();
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(30, 60, 30, 30),
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              context.l10n.onboardingPrivacyTitle,
+              style: theme.textTheme.displayMedium,
+            ),
+            const SizedBox(height: 24),
+            _PrivacyPromiseRow(
+              icon: Icons.phonelink_off_outlined,
+              heading: context.l10n.onboardingPrivacyWorksLocally,
+              body: context.l10n.onboardingPrivacyWorksLocallyBody,
+            ),
+            const SizedBox(height: 16),
+            _PrivacyPromiseRow(
+              icon: Icons.person_off_outlined,
+              heading: context.l10n.onboardingPrivacyNoAccount,
+              body: context.l10n.onboardingPrivacyNoAccountBody,
+            ),
+            const SizedBox(height: 16),
+            _PrivacyPromiseRow(
+              icon: Icons.cloud_off_outlined,
+              heading: context.l10n.onboardingPrivacyPhotosPrivate,
+              body: context.l10n.onboardingPrivacyPhotosPrivateBody,
+            ),
+            const SizedBox(height: 16),
+            _PrivacyPromiseRow(
+              icon: Icons.shield_outlined,
+              heading: context.l10n.onboardingPrivacyNoThirdParties,
+              body: context.l10n.onboardingPrivacyNoThirdPartiesBody,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _PrivacyPromiseRow extends StatelessWidget {
+  final IconData icon;
+  final String heading;
+  final String body;
+
+  const _PrivacyPromiseRow({
+    required this.icon,
+    required this.heading,
+    required this.body,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Icon(icon, size: 28, color: theme.colorScheme.primary),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(heading, style: theme.textTheme.titleSmall),
+              const SizedBox(height: 2),
+              Text(
+                body,
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _PrivacySummaryBadges extends StatelessWidget {
+  const _PrivacySummaryBadges();
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final badgeStyle = theme.textTheme.labelSmall?.copyWith(
+      color: theme.colorScheme.onSurfaceVariant,
+    );
+
+    final badges = [
+      (Icons.phonelink_off_outlined, context.l10n.onboardingPrivacyBadgeLocal),
+      (Icons.person_off_outlined, context.l10n.onboardingPrivacyBadgeNoAccount),
+      (Icons.cloud_off_outlined, context.l10n.onboardingPrivacyBadgePhotos),
+      (Icons.shield_outlined, context.l10n.onboardingPrivacyBadgeNoTrackers),
+    ];
+
+    return Wrap(
+      spacing: 12,
+      runSpacing: 8,
+      children: badges
+          .map(
+            (b) => Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(b.$1, size: 14, color: theme.colorScheme.primary),
+                const SizedBox(width: 4),
+                Text(b.$2, style: badgeStyle),
+              ],
+            ),
+          )
+          .toList(),
     );
   }
 }

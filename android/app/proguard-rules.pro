@@ -40,6 +40,12 @@
 -dontwarn kotlinx.coroutines.**
 
 ############################################
+# ONNX Runtime (used by flutter_onnxruntime)
+############################################
+-keep class ai.onnxruntime.** { *; }
+-dontwarn ai.onnxruntime.**
+
+############################################
 # Prevent stripping of any classes loaded via reflection
 ############################################
 -keepclassmembers class * {

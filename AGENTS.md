@@ -1,4 +1,4 @@
-# AGENTS.md — OpenPlant
+# AGENTS.md — OpenPlants
 
 Flutter plant companion app with Clean Architecture. AGPL v3.
 

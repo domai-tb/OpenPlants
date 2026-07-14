@@ -4,6 +4,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+enum TemperatureUnit { celsius, fahrenheit }
+
 class SettingsController with ChangeNotifier {
   static const String _prefsKey = 'app_settings_json_v1';
 
@@ -43,22 +45,13 @@ class SettingsController with ChangeNotifier {
 
 class Settings {
   static const Object _noChange = Object();
-  static const List<String> _defaultNavBarOrder = [
-    'page1',
-    'page2',
-    'page3',
-    'page4',
-    'page5',
-    'page6',
-  ];
 
   final bool useSystemDarkmode;
   final bool useDarkmode;
   final bool useSystemTextScaling;
   final bool didCompleteOnboarding;
   final String? localeCode;
-  final List<String> navBarItemOrder;
-  final List<String> hiddenNavBarItems;
+  final TemperatureUnit temperatureUnit;
 
   const Settings({
     this.useSystemDarkmode = true,
@@ -66,8 +59,7 @@ class Settings {
     this.useSystemTextScaling = false,
     this.didCompleteOnboarding = false,
     this.localeCode,
-    this.navBarItemOrder = _defaultNavBarOrder,
-    this.hiddenNavBarItems = const [],
+    this.temperatureUnit = TemperatureUnit.celsius,
   });
 
   Settings copyWith({
@@ -76,20 +68,15 @@ class Settings {
     bool? useSystemTextScaling,
     bool? didCompleteOnboarding,
     Object? localeCode = _noChange,
-    List<String>? navBarItemOrder,
-    List<String>? hiddenNavBarItems,
+    TemperatureUnit? temperatureUnit,
   }) {
     return Settings(
       useSystemDarkmode: useSystemDarkmode ?? this.useSystemDarkmode,
       useDarkmode: useDarkmode ?? this.useDarkmode,
       useSystemTextScaling: useSystemTextScaling ?? this.useSystemTextScaling,
-      didCompleteOnboarding:
-          didCompleteOnboarding ?? this.didCompleteOnboarding,
-      localeCode: identical(localeCode, _noChange)
-          ? this.localeCode
-          : localeCode as String?,
-      navBarItemOrder: navBarItemOrder ?? this.navBarItemOrder,
-      hiddenNavBarItems: hiddenNavBarItems ?? this.hiddenNavBarItems,
+      didCompleteOnboarding: didCompleteOnboarding ?? this.didCompleteOnboarding,
+      localeCode: identical(localeCode, _noChange) ? this.localeCode : localeCode as String?,
+      temperatureUnit: temperatureUnit ?? this.temperatureUnit,
     );
   }
 
@@ -100,15 +87,7 @@ class Settings {
       useSystemTextScaling: json['useSystemTextScaling'] ?? false,
       didCompleteOnboarding: json['didCompleteOnboarding'] ?? false,
       localeCode: json['localeCode'],
-      navBarItemOrder: (json['navBarItemOrder'] as List<dynamic>?)
-              ?.whereType<String>()
-              .toList() ??
-          _defaultNavBarOrder,
-      hiddenNavBarItems: (json['hiddenNavBarItems'] as List<dynamic>?)
-              ?.whereType<String>()
-              .where((item) => item != 'page6')
-              .toList() ??
-          const [],
+      temperatureUnit: json['temperatureUnit'] == 'fahrenheit' ? TemperatureUnit.fahrenheit : TemperatureUnit.celsius,
     );
   }
 
@@ -119,9 +98,7 @@ class Settings {
       'useSystemTextScaling': useSystemTextScaling,
       'didCompleteOnboarding': didCompleteOnboarding,
       'localeCode': localeCode,
-      'navBarItemOrder': navBarItemOrder,
-      'hiddenNavBarItems':
-          hiddenNavBarItems.where((item) => item != 'page6').toList(),
+      'temperatureUnit': temperatureUnit == TemperatureUnit.fahrenheit ? 'fahrenheit' : 'celsius',
     };
   }
 }

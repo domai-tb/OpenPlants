@@ -1,128 +1,45 @@
-# Pages Overview
+# Feature Areas
 
-The template contains 6 placeholder tabs. Each tab demonstrates the same basic pattern:
+OpenPlants exposes three primary navigation destinations: **Today**, **Care Schedule**, and **More**. The dashboard and feature detail screens provide access to the wider set of plant-management tools.
 
-- UI in `lib/pages/pageN/pageN_page.dart`
-- A `DataSource` that simulates I/O
-- A `Repository` that wraps the datasource
-- A `Usecases` class that the UI calls
+## Plant Management
 
-Replace `page1` to `page6` with your actual features, keeping the folder structure if it works for your team.
+- **Plant Collection** — create, edit, and inspect the user's plants.
+- **Plant Journal** and **Photo Timeline** — record observations and photos over time.
+- **Room Profiles** — maintain room context used by care and diagnosis features.
+- **Plant Names** — manage plant naming data.
 
+## Care and Insights
 
----
+- **Today Dashboard** — presents the current plant overview.
+- **Care Schedule** — calculates and manages care tasks, including custom care rules.
+- **Light Assessment** — assesses light with camera-based estimation and can associate a result with a plant photo.
+- **Symptom Logger** and **Diagnosis** — capture symptoms, keep diagnosis history, and provide automated diagnosis support.
 
-# Page 1
+## Reference and Identification
 
-Demonstrates:
+- **Plant Identification** — uses the bundled local classifier to identify a plant from an image.
+- **Species Library** — provides species information and care-plan data.
+- **Model Info** — presents information about the bundled identification model.
 
-- Loading placeholder items through `Usecases`
-- Pull-to-refresh
-- A search UI
-- Navigating to a detail page
-- A scroll-to-top floating action button
-
-Files:
-
-- `lib/pages/page1/page1_page.dart`
-- `lib/pages/page1/page1_detail_page.dart`
-- `lib/pages/page1/page1_usecases.dart`
-- `lib/pages/page1/page1_repository.dart`
-- `lib/pages/page1/page1_datasource.dart`
-
+Each feature owns its presentation, use cases, repository, data source, and domain data where those layers apply. See [Architecture](Architecture) for the dependency rules.
 
 ---
 
-# Page 2
+# More
 
-Demonstrates:
+The **More** destination provides navigation to app settings and the About screen.
 
-- A list-style page with pull-to-refresh
-- Using localization for the page title
-- Scroll-to-top FAB support for long lists
+## Settings
 
-Files:
+Settings are stored locally and take effect immediately. Users can choose:
 
-- `lib/pages/page2/page2_page.dart`
-- `lib/pages/page2/page2_usecases.dart`
-- `lib/pages/page2/page2_repository.dart`
-- `lib/pages/page2/page2_datasource.dart`
+- system, light, or dark theme;
+- system default, English, or German language;
+- Celsius or Fahrenheit temperature display; and
+- whether to respect the system text-scaling preference.
 
-
----
-
-# Page 3
-
-Demonstrates:
-
-- A simple list with placeholder content
-- Pull-to-refresh and scroll-to-top behavior
-
-Files:
-
-- `lib/pages/page3/page3_page.dart`
-- `lib/pages/page3/page3_usecases.dart`
-- `lib/pages/page3/page3_repository.dart`
-- `lib/pages/page3/page3_datasource.dart`
-
-
----
-
-# Page 4
-
-Demonstrates:
-
-- Another list page variant
-- Placeholder rows with a trailing value
-- Pull-to-refresh and scroll-to-top behavior
-
-Files:
-
-- `lib/pages/page4/page4_page.dart`
-- `lib/pages/page4/page4_usecases.dart`
-- `lib/pages/page4/page4_repository.dart`
-- `lib/pages/page4/page4_datasource.dart`
-
-
----
-
-# Page 5
-
-Demonstrates:
-
-- A scrollable page built with `ListView` (not `ListView.builder`)
-- Buttons and placeholder actions
-- Pull-to-refresh and scroll-to-top behavior
-
-Files:
-
-- `lib/pages/page5/page5_page.dart`
-- `lib/pages/page5/page5_usecases.dart`
-- `lib/pages/page5/page5_repository.dart`
-- `lib/pages/page5/page5_datasource.dart`
-
-
----
-
-# Page 6
-
-Demonstrates:
-
-- A simple menu list
-- Navigation to Settings and About sub-pages
-
-The Settings screen also demonstrates:
-
-- Theme selection
-- Language selection (English/German/System)
-- A persisted onboarding flag
-
-Files:
-
-- `lib/pages/page6/page6_page.dart`
-- `lib/pages/page6/page6_settings_page.dart`
-- `lib/pages/page6/page6_about_page.dart`
-
+The settings UI is implemented in `lib/pages/more/more_settings_page.dart`; persistence is owned by `SettingsController` in `lib/core/settings.dart`.
 
 ---
 

@@ -1,7 +1,7 @@
-name: open_plant
+name: open_plants
 description: 🌱 Open-Source & Privacy-Friendly Companion App for your Plants
 publish_to: "none"
-version: 0.1.0+1
+version: 1.0.0
 
 environment:
   sdk: ">=3.6.0 <4.0.0"
@@ -10,15 +10,29 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
+  camera: ^0.11.2
   get_it: ^8.0.3
+  image: ^4.5.3
+  image_picker: ^1.2.0
+  permission_handler: ^11.3.1
+  url_launcher: ^6.3.1
   intl: ^0.20.2
+  path_provider: ^2.1.5
+  flutter_onnxruntime: ^1.8.0
   shared_preferences: ^2.3.3
+  uuid: ^4.5.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^5.0.0
+  test: ^1.25.0
+  mockito: ^5.4.4
+  build_runner: ^2.4.9
 
 flutter:
   uses-material-design: true
   generate: true
+  assets:
+    - assets/ml/plant-identification/
+    - assets/species/

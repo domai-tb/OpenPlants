@@ -1,0 +1,5 @@
+schema: spec-driven
+created: 2026-07-10
+goal: Bridging symptom logging and diagnosis so logged symptoms automatically
+  feed into diagnosis, results persist on a plant health timeline visible from
+  plant detail

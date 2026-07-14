@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:open_plant/widgets/custom_button.dart';
+import 'package:open_plants/widgets/custom_button.dart';
 
 class SideNavBarItem extends StatefulWidget {
   final IconData activeIcon;
@@ -43,7 +43,7 @@ class _SideNavBarItemState extends State<SideNavBarItem> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isLight = theme.brightness == Brightness.light;
+    final colorScheme = theme.colorScheme;
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
@@ -61,9 +61,7 @@ class _SideNavBarItemState extends State<SideNavBarItem> {
                 child: Icon(
                   widget.isActive ? widget.activeIcon : widget.inactiveIcon,
                   size: widget.iconHeight,
-                  color: widget.isActive
-                      ? theme.colorScheme.secondary
-                      : (isLight ? Colors.black : const Color.fromRGBO(184, 186, 191, 1)),
+                  color: widget.isActive ? colorScheme.secondary : colorScheme.onSurfaceVariant,
                 ),
               ),
               // Text

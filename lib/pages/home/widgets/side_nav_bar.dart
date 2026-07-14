@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:open_plant/pages/home/page_navigator.dart';
-import 'package:open_plant/pages/home/widgets/side_nav_bar_item.dart';
+import 'package:open_plants/pages/home/page_navigator.dart';
+import 'package:open_plants/pages/home/widgets/side_nav_bar_item.dart';
 
 class SideNavBar extends StatefulWidget {
   /// Needs the currently active page in order to highlight it
@@ -25,15 +25,13 @@ class SideNavBar extends StatefulWidget {
 class _SideNavBarState extends State<SideNavBar> {
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final isLight = theme.brightness == Brightness.light;
+    final colorScheme = Theme.of(context).colorScheme;
 
     return Container(
       width: 80,
       padding: const EdgeInsets.only(top: 40, bottom: 10, left: 15, right: 15),
       decoration: BoxDecoration(
-        color:
-            isLight ? const Color.fromRGBO(245, 246, 250, 1) : theme.cardColor,
+        color: colorScheme.surfaceContainerHighest,
       ),
       child: Column(
         children: widget.pages.map((page) {

@@ -1,129 +1,85 @@
-# Architecture
+# Architecture Utilities
 
-This repository is a Flutter app template that demonstrates a lightweight, layered structure you can copy for new features.
+`lib/core/` contains application-wide services and wiring:
 
-## Folder Layout
+- `injection.dart` registers dependencies with GetIt before the app starts.
+- `app_scope.dart` exposes `AppServices` and `SettingsController` to widgets.
+- `app_services.dart` is the aggregate of UI-facing feature services.
+- `settings.dart`, `locale_service.dart`, and `unit_preferences.dart` provide persisted preferences, locale resolution, and temperature formatting.
+- `themes.dart` defines the app's light and dark themes.
 
-- `lib/core/`
-  - Cross-cutting concerns (app scope, settings, themes, etc.).
-- `lib/core/injection.dart`
-  - Dependency injection wiring (GetIt).
-- `lib/l10n/`
-  - Generated localization code (see the Localization page).
-- `lib/pages/`
-  - Feature modules. In this app they are `page1` to `page6`.
-  - Each module demonstrates a layered approach:
-    - `*_datasource.dart` for I/O (API, DB, etc.)
-    - `*_repository.dart` for domain-friendly access
-    - `*_usecases.dart` for orchestration / business rules
-    - `*_entity.dart` for immutable data models
-    - `*_page.dart` for UI
-- `lib/widgets/`
-  - Shared widgets used across multiple pages (buttons, search bar, etc.).
+Widgets access dependencies through `AppScope.of(context)` rather than directly through GetIt. This keeps the service locator outside presentation code and centralizes feature wiring in `injection.dart`.
 
-## Dependency Wiring
-
-OpenPlant uses GetIt for dependency injection, wired in one place:
-
-- `lib/core/injection.dart` registers datasources, repositories, and usecases, and builds `AppServices`.
-- `lib/main.dart` calls `init()` at startup.
-- `lib/core/app_scope.dart` exposes `SettingsController` and `AppServices` to the widget tree (so pages stay free of plugin imports).
-
-Pages access services via:
-
-- `AppScope.of(context).services.pageN`
-
-For the full architecture description, see [Architecture](Architecture).
+For the full structure and dependency direction, see [Architecture](Architecture).
 
 ---
 
 # Localization (l10n)
 
-The template uses Flutter's built-in `gen-l10n` system with `.arb` files.
+OpenPlants uses Flutter's built-in `gen-l10n` system with ARB files.
 
 ## Where Translations Live
 
 - `assets/l10n/l10n_en.arb`
 - `assets/l10n/l10n_de.arb`
 
-Configuration:
+Configuration lives in `l10n.yaml`; generated output is written to `lib/l10n/`.
 
-- `l10n.yaml`
+## Using Translations in Widgets
 
-Generated output:
-
-- `lib/l10n/l10n.dart`
-- `lib/l10n/l10n_en.dart`
-- `lib/l10n/l10n_de.dart`
-
-## Using Translations In Widgets
-
-Use the `BuildContext` extension:
-
-- `lib/l10n/l10n_x.dart`
-
-Example:
+Use the `BuildContext` extension from `lib/l10n/l10n_x.dart`:
 
 ```dart
-Text(context.l10n.page1Title)
+Text(context.l10n.appTitle)
 ```
 
-## Adding A New String
+## Adding a New String
 
-1. Add the key to all supported locales in `assets/l10n/`.
-2. Re-run localization generation (for example `flutter gen-l10n` or `flutter run` which triggers generation).
+1. Add the key to every supported locale in `assets/l10n/`.
+2. Run `fvm flutter gen-l10n` to regenerate `lib/l10n/`.
 3. Use the new key via `context.l10n.<key>`.
 
+`LocaleService` applies an explicit user choice when supported, otherwise uses the device locale and falls back to English. Keep the ARB files aligned so that every supported locale has each key.
 
 ---
 
 # Settings (Persistent)
 
-The template keeps UI state in memory but persists user settings to local storage.
+OpenPlants persists user preferences in `shared_preferences` as JSON.
 
 ## Where It Lives
 
-- `lib/core/settings.dart`
-
-`SettingsController` loads its initial state once at startup and persists updates via `shared_preferences`.
+`SettingsController` in `lib/core/settings.dart` loads settings once at startup and writes changes asynchronously.
 
 ## What Is Stored
 
-The `Settings` model is serialized to JSON and includes (at minimum):
+The `Settings` model includes:
 
-- Theme mode flags
-- Text scaling preference
-- Onboarding completion flag (`didCompleteOnboarding`)
-- Selected language (`localeCode`) or `null` for system language
+- theme mode flags;
+- text-scaling preference;
+- onboarding completion flag (`didCompleteOnboarding`);
+- selected language (`localeCode`) or `null` for the system language; and
+- temperature unit (Celsius or Fahrenheit).
 
 ## Why JSON
 
-JSON keeps the migration story simple for a template:
-
-- Add a new field with a default in `Settings.fromJson(...)`
-- Old installs continue to load
-
+JSON keeps settings backwards-compatible: add a new field with a default in `Settings.fromJson(...)` so existing installations can load it safely.
 
 ---
 
 # Shared Widgets
 
-Shared widgets live in:
+Shared widgets live in `lib/widgets/`. They keep feature modules focused on their own behaviour and prevent UI duplication.
 
-- `lib/widgets/`
+## Shared Components
 
-The goal is to keep page modules small and avoid duplicating UI components across features.
+- Buttons: `app_button.dart`, `custom_button.dart`, and `app_icon_button.dart`
+- Search: `app_search_bar.dart`
+- Controls: `app_segmented_triple_control.dart` and `scroll_to_top_button.dart`
+- Feedback: `confirm_dialog.dart` and `error_message.dart`
+- Camera preview: `inline_camera_preview.dart`
 
-## Included Examples
-
-- Buttons: `app_button.dart`
-- Icon button: `app_icon_button.dart`
-- Search bar: `app_search_bar.dart`
-- Segmented control: `app_segmented_triple_control.dart`
-- Scroll-to-top FAB: `scroll_to_top_button.dart`
-
-If a widget is only used by a single feature, keep it inside that feature folder instead.
-
+Keep a widget inside its feature module when it is used only by that feature; move it to `lib/widgets/` only once it represents a reusable app-wide component.
 
 ---
 

@@ -8,6 +8,7 @@
 .buildlog/
 .history
 .svn/
+.tmp/
 
 # IntelliJ related
 *.iml
@@ -48,7 +49,10 @@ app.*.map.json
 
 # exclude all .env files
 *.env
+
+# Exclude tokensave and codegraph
 .tokensave
+.codegraph
 
 # FVM Version Cache
 .fvm/

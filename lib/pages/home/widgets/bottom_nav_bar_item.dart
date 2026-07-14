@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:open_plant/widgets/custom_button.dart';
+import 'package:open_plants/widgets/custom_button.dart';
 
 /// A widget that displays an item in the bottom navigation menu which allows the user
 /// to switch between different pages. When active, the whole item is moved up and the title
@@ -11,8 +11,6 @@ class BottomNavBarItem extends StatefulWidget {
 
   /// Padding above and below the icon
   final double iconVerticalPadding;
-  final double iconPaddingLeft;
-  final double iconPaddingRight;
 
   /// Title of the page that this menu item refers to
   final String title;
@@ -28,9 +26,7 @@ class BottomNavBarItem extends StatefulWidget {
     required this.activeIcon,
     required this.inactiveIcon,
     required this.title,
-    this.iconVerticalPadding = 10,
-    this.iconPaddingLeft = 10,
-    this.iconPaddingRight = 10,
+    this.iconVerticalPadding = 6,
     required this.onTap,
     this.isActive = false,
   });
@@ -52,50 +48,44 @@ class _BottomNavBarItemState extends State<BottomNavBarItem> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isLight = theme.brightness == Brightness.light;
+    final colorScheme = theme.colorScheme;
 
-    return Padding(
-      padding: EdgeInsets.only(left: widget.iconPaddingLeft, right: widget.iconPaddingRight),
-      child: AnimatedPadding(
-        padding: widget.isActive ? const EdgeInsets.only(top: 2) : const EdgeInsets.only(top: 11),
-        duration: animationDuration,
-        curve: animationCurve,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            // Icon-button
-            CustomButton(
-              tapHandler: () => widget.onTap(),
-              child: Padding(
-                padding: EdgeInsets.only(
-                  top: widget.iconVerticalPadding,
-                  bottom: widget.iconVerticalPadding,
-                ),
-                child: Icon(
-                  widget.isActive ? widget.activeIcon : widget.inactiveIcon,
-                  size: iconHeight,
-                  color: widget.isActive
-                      ? theme.colorScheme.secondary
-                      : (isLight ? Colors.black : const Color.fromRGBO(184, 186, 191, 1)),
-                ),
+    return AnimatedPadding(
+      padding: widget.isActive ? const EdgeInsets.only(top: 2) : const EdgeInsets.only(top: 7),
+      duration: animationDuration,
+      curve: animationCurve,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Icon-button
+          CustomButton(
+            tapHandler: () => widget.onTap(),
+            child: Padding(
+              padding: EdgeInsets.only(
+                top: widget.iconVerticalPadding,
+                bottom: widget.iconVerticalPadding,
+              ),
+              child: Icon(
+                widget.isActive ? widget.activeIcon : widget.inactiveIcon,
+                size: iconHeight,
+                color: widget.isActive ? colorScheme.secondary : colorScheme.onSurfaceVariant,
               ),
             ),
-            // Text
-            AnimatedPadding(
-              padding: widget.isActive ? EdgeInsets.zero : const EdgeInsets.only(top: 10),
-              duration: animationDuration,
-              curve: animationCurve,
-              child: AnimatedOpacity(
-                opacity: widget.isActive ? 1 : 0,
-                duration: animationDuration,
-                child: Text(
-                  widget.title,
-                  style: theme.textTheme.labelSmall,
-                ),
+          ),
+          // Text
+          AnimatedPadding(
+            padding: widget.isActive ? EdgeInsets.zero : const EdgeInsets.only(top: 6),
+            duration: animationDuration,
+            curve: animationCurve,
+            child: Center(
+              child: Text(
+                widget.title,
+                style: theme.textTheme.labelSmall,
+                textAlign: TextAlign.center,
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

@@ -4,7 +4,7 @@ Convert a Hugging Face ViT image-classification model from Safetensors/PyTorch
 to ONNX for mobile/Flutter inference.
 
 Default target:
-  juppy44/plant-identification-2m-vit-b
+  domai-tb/OpenPlants-Identification-ViT-Base-Patch16-224
 
 Outputs:
   output_dir/
@@ -40,7 +40,7 @@ from torch import nn
 from transformers import AutoConfig, AutoImageProcessor, AutoModelForImageClassification
 
 
-DEFAULT_MODEL_ID = "juppy44/plant-identification-2m-vit-b"
+DEFAULT_MODEL_ID = "domai-tb/OpenPlants-Identification-ViT-Base-Patch16-224"
 
 
 class LogitsOnlyWrapper(nn.Module):

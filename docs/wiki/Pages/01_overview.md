@@ -1,11 +1,25 @@
-# Pages Overview
+# Feature Areas
 
-The template contains 6 placeholder tabs. Each tab demonstrates the same basic pattern:
+OpenPlants exposes three primary navigation destinations: **Today**, **Care Schedule**, and **More**. The dashboard and feature detail screens provide access to the wider set of plant-management tools.
 
-- UI in `lib/pages/pageN/pageN_page.dart`
-- A `DataSource` that simulates I/O
-- A `Repository` that wraps the datasource
-- A `Usecases` class that the UI calls
+## Plant Management
 
-Replace `page1` to `page6` with your actual features, keeping the folder structure if it works for your team.
+- **Plant Collection** — create, edit, and inspect the user's plants.
+- **Plant Journal** and **Photo Timeline** — record observations and photos over time.
+- **Room Profiles** — maintain room context used by care and diagnosis features.
+- **Plant Names** — manage plant naming data.
 
+## Care and Insights
+
+- **Today Dashboard** — presents the current plant overview.
+- **Care Schedule** — calculates and manages care tasks, including custom care rules.
+- **Light Assessment** — assesses light with camera-based estimation and can associate a result with a plant photo.
+- **Symptom Logger** and **Diagnosis** — capture symptoms, keep diagnosis history, and provide automated diagnosis support.
+
+## Reference and Identification
+
+- **Plant Identification** — uses the bundled local classifier to identify a plant from an image.
+- **Species Library** — provides species information and care-plan data.
+- **Model Info** — presents information about the bundled identification model.
+
+Each feature owns its presentation, use cases, repository, data source, and domain data where those layers apply. See [Architecture](Architecture) for the dependency rules.
