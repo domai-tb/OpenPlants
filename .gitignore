@@ -50,8 +50,9 @@ app.*.map.json
 # exclude all .env files
 *.env
 
-# Exclude tokensave
+# Exclude tokensave and codegraph
 .tokensave
+.codegraph
 
 # FVM Version Cache
 .fvm/
