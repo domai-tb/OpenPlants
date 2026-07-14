@@ -1,102 +1,45 @@
-This pages will explain how to setup your development environment and first steps to start contributing to our project.
+# Getting Started
 
----
+OpenPlants is an Android-focused Flutter application. The project pins Flutter **3.41.0** with [FVM](https://fvm.app/), so always run Flutter and Dart through `fvm`.
 
-## Install Flutter
+## Prerequisites
 
-First you need to install Flutter. The [official flutter documentation](https://docs.flutter.dev/get-started/install) provides a handy tutorial about Flutter installation.
+1. Install Flutter tooling and FVM.
+2. Install Android Studio or another Android SDK setup, then create or connect an Android device. Android API 26 is the minimum supported version.
+3. Clone the repository and open its root directory.
 
----
+## Run the App
 
-## Setup an editor and emulator
+From the repository root:
 
-To write code you need an editor or IDE (obvously :D ). Wer would recommend to follow
-the official steps for VS Code by the [official flutter documentation](https://docs.flutter.dev/get-started/editor?tab=vscode).
+```bash
+fvm flutter pub get
+fvm flutter run
+```
 
-In addition of the VS Code setup you need a running phone emulator. The best case, for non-MAC-users, is to install Android Studio Code and the included Virtual Device Manager.
-The [android developer documentation](https://developer.android.com/studio/run/managing-avds) provide a useful tutorial about AVD creation and management. We would recommend to create a phone with the newest Android API Level or at least API level 30 (Android 11.0). Google Play support is optional.
+Use Flutter's terminal commands while the app is running: `r` performs a hot reload, `R` performs a hot restart, and `q` stops the session.
 
----
+## Contributor Commands
 
-## Clone repository
+```bash
+# Static analysis and the project's strict lint rules
+fvm flutter analyze
 
-If you work the first time with git, check out this [cheat sheet](https://training.github.com/downloads/github-git-cheat-sheet/).
+# Full test suite
+fvm flutter test
 
-Clone your fork (or this repository) with `git clone <your-repo-url>`. Git will create a new folder for you inside your current directory.
+# One test file on the Dart VM
+fvm flutter test --dart-define=platform=vm test/path.dart
 
-Now you can open VS Code with `code ./<repo-folder>` and start development.
+# Regenerate localization after changing assets/l10n/*.arb
+fvm flutter gen-l10n
 
----
+# Format source using the project's 120-character line length
+fvm dart format --line-length=120 .
+```
 
-## Start development
+Do not use bare `flutter` or `dart`: doing so can select a different SDK version from the one configured by `.fvmrc`.
 
-After opening VS Code you should open a terminal and update all flutter dependencies. For this, run the following command: `flutter pub get`.
+## Before Opening a Pull Request
 
-Meanwhile you can start your emulator created privously. For that you can run: `flutter emulator --launch <emulator_name>`.
-
-In the end execute `flutter run` to start the app. Now, evertime you updated the source you can use the key `r` or `R` to update the running app.
-You can quite quit `q`.
-
-Happy coding. :)
-
----
-
-## Flutter Cheat Sheet
-
-Last but not least we will provide a small cheat sheet about all Flutter commands you will need to develop.
-
-### Flutter help
-
-`flutter -h`
-
-### Flutter Version
-
-`flutter --version`
-
-### Check out Flutter channel / branch:​
-
-`flutter channel`
-
-### Check your Development Environment
-
-`flutter doctor`
-
-### Start App
-
-`flutter run`
-​
-
-### Update Dependencies
-
-`flutter pub get` // Download dependencies
-`flutter pub upgrade` // Update dependencies
-
-### Upgrade Flutter Version
-
-`flutter upgrade`
-
-### Downgrade Flutter Version
-
-`flutter downgrade <version>`
-
-### Create a new Flutter app
-
-`flutter create <app name>`
-​
-
-### List virtual devices
-
-`flutter emulator`
-​
-
-### Start an Emulator
-
-`flutter emulator --launch <emulator_name>`
-
-### Create Mocks
-
-`flutter packages run build_runner build --delete-conflicting-outputs`
-
-### Generate language files
-
-`flutter gen-l10n`
+Run `fvm flutter analyze` and `fvm flutter test`. When adding localized text, update every supported ARB file and run `fvm flutter gen-l10n` before validating the app.

@@ -1,26 +1,21 @@
 # Settings (Persistent)
 
-The template keeps UI state in memory but persists user settings to local storage.
+OpenPlants persists user preferences in `shared_preferences` as JSON.
 
 ## Where It Lives
 
-- `lib/core/settings.dart`
-
-`SettingsController` loads its initial state once at startup and persists updates via `shared_preferences`.
+`SettingsController` in `lib/core/settings.dart` loads settings once at startup and writes changes asynchronously.
 
 ## What Is Stored
 
-The `Settings` model is serialized to JSON and includes (at minimum):
+The `Settings` model includes:
 
-- Theme mode flags
-- Text scaling preference
-- Onboarding completion flag (`didCompleteOnboarding`)
-- Selected language (`localeCode`) or `null` for system language
+- theme mode flags;
+- text-scaling preference;
+- onboarding completion flag (`didCompleteOnboarding`);
+- selected language (`localeCode`) or `null` for the system language; and
+- temperature unit (Celsius or Fahrenheit).
 
 ## Why JSON
 
-JSON keeps the migration story simple for a template:
-
-- Add a new field with a default in `Settings.fromJson(...)`
-- Old installs continue to load
-
+JSON keeps settings backwards-compatible: add a new field with a default in `Settings.fromJson(...)` so existing installations can load it safely.

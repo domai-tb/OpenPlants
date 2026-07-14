@@ -1,13 +1,22 @@
 # Architecture
 
+<<<<<<< HEAD
 This page documents the current project architecture used by OpenPlant.
+=======
+OpenPlants is a Flutter plant companion app organised around a lightweight Clean Architecture. It avoids a BLoC layer: feature pages keep local presentation state, while shared application state is supplied through `AppScope`.
+>>>>>>> dev
 
-It is intentionally small: the goal is to demonstrate a repeatable structure (layers, wiring, testing seams) without pulling in app-specific concepts from the original repository this template came from.
+## Project Layout
 
-## Folder Structure
+- `lib/core/` — application wiring, settings, localization and formatting services, themes, and shared failures.
+- `lib/pages/` — feature modules, including collection management, care scheduling, diagnosis, journals, identification, and species data.
+- `lib/widgets/` — reusable UI components shared by features.
+- `assets/l10n/` — source ARB localization files; generated Dart output is in `lib/l10n/`.
+- `assets/ml/plant-identification/` and `assets/species/` — bundled identification and species-reference assets.
 
-All source code lives in `lib/` and tests live in `test/`.
+## Feature Boundaries
 
+<<<<<<< HEAD
 At the top level, OpenPlant is split into:
 
 - `lib/core/`: Cross-cutting code (settings persistence, theming, dependency wiring).
@@ -24,72 +33,42 @@ Within each feature module (example: `lib/pages/page1/`) we follow a small layer
 - `*_page.dart`: UI.
 
 As a simplified tree:
+=======
+Feature modules normally follow this dependency direction:
+>>>>>>> dev
 
 ```text
-├── assets
-│   └── l10n
-├── docs
-│   └── wiki
-├── lib
-│   ├── core
-│   │   ├── app_scope.dart
-│   │   ├── injection.dart
-│   │   ├── settings.dart
-│   │   └── themes.dart
-│   ├── l10n
-│   ├── pages
-│   │   ├── home
-│   │   ├── page1
-│   │   ├── ...
-│   │   └── pageN
-│   └── widgets
-└── test
+Page → UseCases → Repository → DataSource
 ```
 
-## Layered Architecture
+- `*_page.dart` renders the feature and handles local widget state.
+- `*_usecases.dart` coordinates feature behaviour.
+- `*_repository.dart` exposes domain-oriented operations.
+- `*_datasource.dart` owns external or persisted data access.
+- Entity and value files model feature data.
 
+<<<<<<< HEAD
 OpenPlant uses a simple layered approach inspired by Clean Architecture. The exact naming is less important than the dependency direction:
+=======
+Some larger features include focused helpers, such as the care-schedule engine and modifiers, the diagnosis engine, or the plant-identification classifier pipeline. Keep those details inside the owning feature rather than leaking them into pages.
+>>>>>>> dev
 
-- UI depends on use-cases.
-- Use-cases depend on repositories.
-- Repositories depend on datasources.
-- Datasources talk to the outside world.
+## Application Wiring
 
-```mermaid
-flowchart BT
-  subgraph Infrastructure["Infrastructure Layer"]
-    API["API / External services"]
-    DB["Local storage"]
-    RDS["Remote datasource"]
-    LDS["Local datasource"]
-    API -->|Raw data| RDS
-    DB -->|Raw data| LDS
-  end
+`main()` calls `init()` in `lib/core/injection.dart` before `runApp()`. The initializer loads `SettingsController` and registers feature data sources, repositories, use cases, and supporting services with GetIt.
 
-  subgraph Domain["Domain Layer"]
-    Repo["Repository"]
-    UC["Use-cases"]
-    RDS -->|Models| Repo
-    LDS -->|Models| Repo
-    Repo -->|Entities| UC
-  end
+`AppServices` groups the UI-facing feature services. `AppScope`, an `InheritedWidget`, makes both `AppServices` and `SettingsController` available to the widget tree:
 
-  subgraph Application["Application Layer"]
-    State["Presentation logic (controller/state)"]
-    UC --> State
-    Repo -.->|Entities| State
-  end
-
-  subgraph Presentation["Presentation Layer"]
-    UI["Widgets / Pages"]
-    State --> UI
-  end
+```dart
+final services = AppScope.of(context).services;
+final settings = AppScope.of(context).settings;
 ```
 
-### Presentation Layer
+Pages must use `AppScope` rather than importing the GetIt container directly. This keeps service lookup at the application boundary and makes dependencies explicit in feature wiring.
 
-The Presentation layer is made of Flutter widgets (pages and shared widgets). It renders the UI and routes user interactions to the underlying logic.
+## Cross-Cutting State
 
+<<<<<<< HEAD
 ### Application Layer
 
 The Application layer holds UI-facing state and orchestration that should not live directly in the widgets.
@@ -127,3 +106,9 @@ OpenPlant uses GetIt as a service locator to keep object creation centralized an
 - An `AppServices` aggregate used by the UI (`AppScope.of(context).services`).
 
 The UI does not need to import GetIt directly: `AppScope` exposes `SettingsController` and `AppServices` down the widget tree.
+=======
+- `SettingsController` is the single source of truth for persisted user preferences.
+- `LocaleService` resolves an explicit language selection, then the system locale, and finally English as a fallback.
+- `TemperatureFormatter` formats Celsius input in the user-selected unit and active locale.
+- `OpenPlantsApp` rebuilds `MaterialApp` when settings or the locale service changes, applying theme, locale, and text-scaling preferences.
+>>>>>>> dev
