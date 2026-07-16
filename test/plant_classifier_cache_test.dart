@@ -20,7 +20,7 @@ void main() {
     cache = ModelAssetCache(
       modelAssetPath: 'assets/ml/plant-identification/model.onnx',
       dataAssetPath: 'assets/ml/plant-identification/model.onnx.data',
-      identityAssetPath: 'assets/ml/plant-identification/model_identity.json',
+      identityAssetPath: 'assets/ml/plant-identification/onnx_export_info.json',
     );
   });
 
@@ -35,7 +35,7 @@ void main() {
       // Setup: Create cached files with matching identity
       final modelFile = File('${cacheDir.path}/model.onnx');
       final dataFile = File('${cacheDir.path}/model.onnx.data');
-      final identityFile = File('${cacheDir.path}/model_identity.json');
+      final identityFile = File('${cacheDir.path}/onnx_export_info.json');
 
       await modelFile.writeAsBytes([1, 2, 3]);
       await dataFile.writeAsBytes([4, 5, 6]);
@@ -64,7 +64,7 @@ void main() {
       // Setup: Create cached files with old identity
       final modelFile = File('${cacheDir.path}/model.onnx');
       final dataFile = File('${cacheDir.path}/model.onnx.data');
-      final identityFile = File('${cacheDir.path}/model_identity.json');
+      final identityFile = File('${cacheDir.path}/onnx_export_info.json');
 
       await modelFile.writeAsBytes([1, 2, 3]);
       await dataFile.writeAsBytes([4, 5, 6]);
@@ -177,7 +177,7 @@ void main() {
       );
 
       // Assert: Identity file should be created
-      final identityFile = File('${cacheDir.path}/model_identity.json');
+      final identityFile = File('${cacheDir.path}/onnx_export_info.json');
       expect(identityFile.existsSync(), isTrue);
       expect(identityFile.readAsStringSync(), equals('{"version": "1.0.0"}'));
     });

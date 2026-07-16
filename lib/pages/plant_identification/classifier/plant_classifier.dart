@@ -20,7 +20,7 @@ class PlantClassifier {
 
   static const String _modelAsset = 'assets/ml/plant-identification/model.onnx';
   static const String _dataAsset = 'assets/ml/plant-identification/model.onnx.data';
-  static const String _identityAsset = 'assets/ml/plant-identification/model_identity.json';
+  static const String _identityAsset = 'assets/ml/plant-identification/onnx_export_info.json';
 
   /// Copies model assets to the cache directory if not already present,
   /// then creates and returns the ONNX session.
