@@ -1,7 +1,7 @@
 name: open_plants
 description: 🌱 Open-Source & Privacy-Friendly Companion App for your Plants
 publish_to: "none"
-version: 1.0.0
+version: 1.0.1
 
 environment:
   sdk: ">=3.6.0 <4.0.0"
