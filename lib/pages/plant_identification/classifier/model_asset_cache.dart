@@ -44,7 +44,7 @@ class BundleAssetLoader implements AssetLoader {
 /// The model consists of three assets:
 /// - model.onnx: The ONNX model graph
 /// - model.onnx.data: External data for the model
-/// - model_identity.json: Version/metadata for cache invalidation
+/// - onnx_export_info.json: Version/metadata for cache invalidation
 ///
 /// The cache is invalidated when:
 /// - Any cached file is missing
@@ -72,7 +72,7 @@ class ModelAssetCache {
     final dir = cacheDir ?? await _getDefaultCacheDir();
     final modelFile = File('${dir.path}/model.onnx');
     final dataFile = File('${dir.path}/model.onnx.data');
-    final identityFile = File('${dir.path}/model_identity.json');
+    final identityFile = File('${dir.path}/onnx_export_info.json');
 
     // Check if cache is valid
     if (await _isCacheValid(modelFile, dataFile, identityFile, assetLoader)) {
@@ -136,11 +136,11 @@ class ModelAssetCache {
     // Write to temporary files first, then rename (atomic operation)
     final modelFile = File('${dir.path}/model.onnx');
     final dataFile = File('${dir.path}/model.onnx.data');
-    final identityFile = File('${dir.path}/model_identity.json');
+    final identityFile = File('${dir.path}/onnx_export_info.json');
 
     final tempModel = File('${dir.path}/model.onnx.tmp');
     final tempData = File('${dir.path}/model.onnx.data.tmp');
-    final tempIdentity = File('${dir.path}/model_identity.json.tmp');
+    final tempIdentity = File('${dir.path}/onnx_export_info.json.tmp');
 
     try {
       await tempModel.writeAsBytes(modelBytes, flush: true);
