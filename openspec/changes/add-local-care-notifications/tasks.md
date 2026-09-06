@@ -22,10 +22,10 @@
 
 ## 4. Notification settings UI and routing
 
-- [ ] 4.1 Add failing widget tests for notification settings page: master toggle, category toggles, permission state, request/open-settings affordances, and `l10n` keys
-- [ ] 4.2 Implement notification settings page reachable from app settings/More, bound to `SettingsController` and permission status, with localized copy and accessible labels
-- [ ] 4.3 Add notification tap handler that opens care schedule and focuses the referenced plant/task when payload present; gracefully falls back when plant/rule no longer exists
-- [ ] 4.4 Register notification tap callback during plugin initialization and handle both foreground and terminated-launch delivery
+- [x] 4.1 Add failing widget tests for notification settings page: master toggle, category toggles, permission state, request/open-settings affordances, and `l10n` keys
+- [x] 4.2 Implement notification settings page reachable from app settings/More, bound to `SettingsController` and permission status, with localized copy and accessible labels
+- [~] 4.3 Add notification tap handler that opens care schedule and focuses the referenced plant/task when payload present; gracefully falls back when plant/rule no longer exists
+- [~] 4.4 Register notification tap callback during plugin initialization and handle both foreground and terminated-launch delivery
 
 ## 5. Firebase removal and privacy hardening
 
