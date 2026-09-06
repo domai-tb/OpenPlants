@@ -13,6 +13,8 @@ import 'package:open_plants/pages/plant_collection/plant_collection_usecases.dar
 import 'package:open_plants/pages/plant_collection/plant_data_cleanup.dart';
 import 'package:open_plants/pages/plant_journal/plant_journal_page.dart';
 import 'package:open_plants/pages/plant_journal/plant_journal_usecases.dart';
+import 'package:open_plants/pages/plant_metrics/metric_list_page.dart';
+import 'package:open_plants/pages/plant_metrics/metric_usecases.dart';
 import 'package:open_plants/pages/plant_photo_timeline/plant_photo_timeline_item_entity.dart';
 import 'package:open_plants/pages/plant_photo_timeline/plant_photo_timeline_page.dart';
 import 'package:open_plants/pages/plant_photo_timeline/plant_photo_timeline_usecases.dart';
@@ -52,6 +54,7 @@ class _PlantCollectionDetailPageState extends State<PlantCollectionDetailPage> {
   late LightAssessmentUseCases _lightAssessmentUsecases;
   late DiagnosisHistoryUseCases _diagnosisHistoryUsecases;
   late CareScheduleUsecases _careScheduleUsecases;
+  late MetricUsecases _metricUsecases;
   late PlantDataCleanup _dataCleanup;
   bool _wired = false;
   late PlantEntity _plant;
@@ -82,6 +85,7 @@ class _PlantCollectionDetailPageState extends State<PlantCollectionDetailPage> {
     _lightAssessmentUsecases = services.lightAssessment;
     _diagnosisHistoryUsecases = services.diagnosisHistory;
     _careScheduleUsecases = services.careSchedule;
+    _metricUsecases = services.metric;
     _dataCleanup = PlantDataCleanup(
       journalUsecases: _journalUsecases,
       symptomUsecases: _symptomUsecases,
@@ -279,6 +283,18 @@ class _PlantCollectionDetailPageState extends State<PlantCollectionDetailPage> {
     );
   }
 
+  void _openMetrics() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => MetricListPage(
+          plantId: _plant.id,
+          plantName: _plant.name,
+          usecases: _metricUsecases,
+        ),
+      ),
+    );
+  }
+
   Future<void> _openLightAssessment() async {
     await Navigator.of(context).push(
       MaterialPageRoute(
@@ -356,13 +372,52 @@ class _PlantCollectionDetailPageState extends State<PlantCollectionDetailPage> {
             tooltip: context.l10n.symptomLoggerLogSymptom,
             onPressed: _logSymptom,
           ),
-          IconButton(
-            icon: const Icon(Icons.edit),
-            onPressed: _editPlant,
-          ),
-          IconButton(
-            icon: const Icon(Icons.delete),
-            onPressed: _deletePlant,
+          PopupMenuButton<String>(
+            onSelected: (value) {
+              switch (value) {
+                case 'metrics':
+                  _openMetrics();
+                case 'edit':
+                  _editPlant();
+                case 'delete':
+                  _deletePlant();
+              }
+            },
+            itemBuilder: (context) => [
+              PopupMenuItem(
+                value: 'metrics',
+                child: Row(
+                  children: [
+                    const Icon(Icons.analytics_outlined, size: 20),
+                    const SizedBox(width: 12),
+                    Text(context.l10n.metricsTitle),
+                  ],
+                ),
+              ),
+              const PopupMenuItem(
+                value: 'edit',
+                child: Row(
+                  children: [
+                    Icon(Icons.edit, size: 20),
+                    SizedBox(width: 12),
+                    Text('Edit'),
+                  ],
+                ),
+              ),
+              PopupMenuItem(
+                value: 'delete',
+                child: Row(
+                  children: [
+                    Icon(Icons.delete, size: 20, color: Theme.of(context).colorScheme.error),
+                    const SizedBox(width: 12),
+                    Text(
+                      'Delete',
+                      style: TextStyle(color: Theme.of(context).colorScheme.error),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
         ],
       ),
