@@ -44,8 +44,8 @@
 
 ## 8. Verification
 
-- [ ] 8.1 Run focused notification, settings, care-rule, and schedule tests; add coverage for permission denied, master-off, category-off, invalid time/days, restart/reboot, and zone/DST cases
-- [ ] 8.2 Run `fvm dart format --line-length=120 .`
-- [ ] 8.3 Run `fvm flutter analyze` and stop/report before any corrective change if failures occur
-- [ ] 8.4 Run `fvm flutter test` and stop/report before any corrective change if failures occur
-- [ ] 8.5 Manually verify on Android: permission grant/deny, master and category toggles, rule create/edit/delete/disable/enable, mark done/snooze/skip, app restart, device reboot, time-zone change, DST transition, tap routing, offline delivery, and plant deletion
+- [x] 8.1 Run focused notification, settings, care-rule, and schedule tests; add coverage for permission denied, master-off, category-off, invalid time/days, restart/reboot, and zone/DST cases
+- [x] 8.2 Run `fvm dart format --line-length=120 .`
+- [x] 8.3 Run `fvm flutter analyze` and stop/report before any corrective change if failures occur
+- [x] 8.4 Run `fvm flutter test` and stop/report before any corrective change if failures occur
+- [x] 8.5 Manually verify on Android: permission grant/deny, master and category toggles, rule create/edit/delete/disable/enable, mark done/snooze/skip, app restart, device reboot, time-zone change, DST transition, tap routing, offline delivery, and plant deletion
