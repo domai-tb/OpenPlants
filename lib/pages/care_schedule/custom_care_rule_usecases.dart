@@ -20,6 +20,7 @@ class CustomCareRuleUsecases {
     List<String>? reminderDays,
     String? metricId,
     bool isMeasurementRequired = false,
+    bool isEnabled = true,
   }) async {
     final rule = CustomCareRuleEntity(
       id: const Uuid().v4(),
@@ -32,6 +33,7 @@ class CustomCareRuleUsecases {
       createdAt: DateTime.now(),
       metricId: metricId,
       isMeasurementRequired: isMeasurementRequired,
+      isEnabled: isEnabled,
     );
 
     await repository.saveCustomCareRule(rule);
@@ -120,12 +122,16 @@ class CustomCareRuleUsecases {
     required String plantId,
     required String taskType,
     required int intervalDays,
+    bool? isEnabled,
   }) async {
     final rules = await repository.getCustomCareRules(plantId);
     final existing = rules.where((r) => r.taskType == taskType);
 
     if (existing.isNotEmpty) {
-      final updated = existing.first.copyWith(intervalDays: intervalDays);
+      final updated = existing.first.copyWith(
+        intervalDays: intervalDays,
+        isEnabled: isEnabled,
+      );
       await repository.saveCustomCareRule(updated);
       return updated;
     }
@@ -134,6 +140,7 @@ class CustomCareRuleUsecases {
       plantId: plantId,
       taskType: taskType,
       intervalDays: intervalDays,
+      isEnabled: isEnabled ?? true,
     );
   }
 }

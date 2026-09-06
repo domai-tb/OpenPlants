@@ -328,7 +328,7 @@ void main() {
       expect(watering.effectiveIntervalDays, 10);
     });
 
-    test('disabled custom care rule is ignored', () {
+    test('disabled custom care rule suppresses task', () {
       final rule = CustomCareRuleEntity(
         id: 'rule-1',
         plantId: 'plant-1',
@@ -349,11 +349,9 @@ void main() {
         today: today,
       );
 
-      final watering = tasks.firstWhere(
-        (t) => t.taskType.builtIn == BuiltInTaskType.watering,
-      );
-      // Disabled rule → species default (7 days)
-      expect(watering.effectiveIntervalDays, 7);
+      final watering = tasks.where((t) => t.taskType.builtIn == BuiltInTaskType.watering);
+      // Disabled override suppresses computed rule instead of falling back
+      expect(watering, isEmpty);
     });
 
     test('no matching rule uses fallback', () {

@@ -291,7 +291,8 @@ class CareScheduleUsecases {
   /// Get the 8 computed rules for a plant based on its species profile.
   ///
   /// Each entry has: taskType name, default interval from species profile,
-  /// and whether a custom override exists.
+  /// and whether a custom override exists. Also includes any custom
+  /// non-built-in rules so they are not hidden from the unified list.
   Future<List<ComputedRule>> getComputedRules(String plantId) async {
     final plants = await plantCollection.loadPlants();
     final plant = plants.firstWhere(
@@ -304,7 +305,7 @@ class CareScheduleUsecases {
       for (final r in customRules) r.taskType: r,
     };
 
-    return BuiltInTaskType.values.map((builtIn) {
+    final builtInRules = BuiltInTaskType.values.map((builtIn) {
       final defaultInterval = profile.getDefaultInterval(builtIn);
       final custom = customByType[builtIn.name];
       return ComputedRule(
@@ -315,12 +316,26 @@ class CareScheduleUsecases {
         isEnabled: custom?.isEnabled ?? (defaultInterval != null && defaultInterval > 0),
       );
     }).toList();
+
+    // Include custom task types that are not built-in so they remain
+    // visible/editable in the unified list.
+    final customOnly = customRules.where((r) => BuiltInTaskType.values.every((b) => b.name != r.taskType)).map(
+          (r) => ComputedRule(
+            taskType: r.taskType,
+            defaultIntervalDays: null,
+            customIntervalDays: r.intervalDays,
+            isOverridden: true,
+            isEnabled: r.isEnabled,
+          ),
+        );
+
+    return [...builtInRules, ...customOnly];
   }
 
   /// Toggle a computed rule: create or disable a custom override.
   ///
-  /// If no custom override exists, creates one with [intervalDays].
-  /// If one exists, toggles its enabled state.
+  /// If no custom override exists, creates a disabled override so the
+  /// computed default is suppressed. If one exists, toggles its enabled state.
   Future<List<ComputedRule>> toggleComputedRule({
     required String plantId,
     required String taskType,
@@ -338,6 +353,7 @@ class CareScheduleUsecases {
         plantId: plantId,
         taskType: taskType,
         intervalDays: intervalDays,
+        isEnabled: false,
       );
     }
 

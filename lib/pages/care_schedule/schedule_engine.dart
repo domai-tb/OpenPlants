@@ -12,7 +12,6 @@ import 'package:open_plants/pages/care_schedule/schedule_config.dart';
 import 'package:open_plants/pages/care_schedule/species_care_profile.dart';
 import 'package:open_plants/pages/care_schedule/task_completion.dart';
 import 'package:open_plants/pages/plant_collection/plant_collection_item_entity.dart';
-import 'package:open_plants/pages/plant_metrics/metric_measurement.dart';
 import 'package:open_plants/pages/room_profiles/room_profiles_entity.dart';
 
 /// Input data for computing a schedule for a single plant.
@@ -66,6 +65,12 @@ class ScheduleEngine {
   }) {
     final tasks = <CareTask>[];
 
+    // All custom rules by taskType, including disabled overrides so they can
+    // suppress the computed default rather than falling back to it.
+    final allRulesByType = <String, CustomCareRuleEntity>{
+      for (final r in input.customCareRules) r.taskType: r,
+    };
+
     // Build a map of enabled custom care rules keyed by task type string
     final enabledRules = <String, CustomCareRuleEntity>{};
     for (final rule in input.customCareRules) {
@@ -94,6 +99,12 @@ class ScheduleEngine {
     }
 
     for (final taskType in allTypes) {
+      // Disabled custom override suppresses the task entirely instead of
+      // falling back to the species default.
+      final lookupKey = taskType.isBuiltIn ? taskType.builtIn!.name : taskType.customName!;
+      final disabled = allRulesByType[lookupKey];
+      if (disabled != null && !disabled.isEnabled) continue;
+
       // Check for a matching custom care rule first
       // Match by label (for built-in) or customName (for custom)
       CustomCareRuleEntity? matchingRule;

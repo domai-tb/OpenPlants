@@ -9,11 +9,13 @@ import 'package:open_plants/pages/care_schedule/custom_care_rule_usecases.dart';
 class CareRulesSection extends StatelessWidget {
   final String plantId;
   final CustomCareRuleUsecases usecases;
+  final CareScheduleUsecases? careScheduleUsecases;
 
   const CareRulesSection({
     super.key,
     required this.plantId,
     required this.usecases,
+    this.careScheduleUsecases,
   });
 
   @override
@@ -141,6 +143,7 @@ class CareRulesSection extends StatelessWidget {
       builder: (_) => CareRuleListSheet(
         plantId: plantId,
         usecases: usecases,
+        careScheduleUsecases: careScheduleUsecases,
       ),
     );
   }
@@ -494,7 +497,7 @@ class _CareRuleFormSheetState extends State<CareRuleFormSheet> {
     final interval = int.tryParse(_intervalController.text) ?? 7;
 
     try {
-      if (_isEditing) {
+      if (widget.existingRule != null) {
         await widget.usecases.update(
           widget.existingRule!.id,
           taskType: taskType,
@@ -506,6 +509,16 @@ class _CareRuleFormSheetState extends State<CareRuleFormSheet> {
           reminderDays: _reminderEnabled && _selectedDays.isNotEmpty ? _selectedDays : null,
           clearReminderDays: !_reminderEnabled || _selectedDays.isEmpty,
         );
+      } else if (widget.existingTaskType != null) {
+        // Editing a computed rule without an existing custom rule: create
+        // or update the custom override for that task type.
+        await widget.usecases.createOrUpdateOverride(
+          plantId: widget.plantId,
+          taskType: taskType,
+          intervalDays: interval,
+        );
+        // Reminder fields for computed overrides are not part of the
+        // original contract; if needed, a follow-up update could apply them.
       } else {
         await widget.usecases.create(
           plantId: widget.plantId,

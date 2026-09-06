@@ -53,8 +53,13 @@ class PlantCollectionRepository {
     plants.add(newPlant);
     await dataSource.savePlants(plants);
 
-    // Apply species care presets if species is known
-    await _applySpeciesPresets(newPlant);
+    // Apply species care presets if species is known. Best-effort: preset
+    // failures must not roll back the plant creation that already succeeded.
+    try {
+      await _applySpeciesPresets(newPlant);
+    } catch (_) {
+      // Presets are supplementary; plant already persisted.
+    }
 
     return newPlant;
   }

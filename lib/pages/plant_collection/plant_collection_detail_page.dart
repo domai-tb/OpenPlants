@@ -543,6 +543,7 @@ class _PlantCollectionDetailPageState extends State<PlantCollectionDetailPage> {
           CareRulesSection(
             plantId: _plant.id,
             usecases: _careRuleUsecases,
+            careScheduleUsecases: _careScheduleUsecases,
           ),
           const SizedBox(height: 24),
 
