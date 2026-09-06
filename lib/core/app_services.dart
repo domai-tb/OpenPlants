@@ -8,6 +8,7 @@ import 'package:open_plants/pages/plant_identification/classifier/plant_classifi
 import 'package:open_plants/pages/more/more_usecases.dart';
 import 'package:open_plants/pages/plant_collection/plant_collection_usecases.dart';
 import 'package:open_plants/pages/plant_journal/plant_journal_usecases.dart';
+import 'package:open_plants/pages/plant_metrics/metric_usecases.dart';
 import 'package:open_plants/pages/plant_photo_timeline/plant_photo_timeline_usecases.dart';
 import 'package:open_plants/pages/room_profiles/room_profiles_usecases.dart';
 import 'package:open_plants/pages/species_library/species_library_usecases.dart';
@@ -46,6 +47,7 @@ class AppServices {
   final TemperatureFormatter temperatureFormatter;
   final DateFormatter dateFormatter;
   final PlantNamesUsecases plantNames;
+  final MetricUsecases metric;
 
   const AppServices({
     required this.plantIdentification,
@@ -69,5 +71,6 @@ class AppServices {
     required this.temperatureFormatter,
     required this.dateFormatter,
     required this.plantNames,
+    required this.metric,
   });
 }

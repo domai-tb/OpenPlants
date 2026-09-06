@@ -1663,4 +1663,64 @@ class AppLocalizationsDe extends AppLocalizations {
   String careScheduleCompletionSnackbar(String taskType, int days) {
     return '$taskType marked done — next due in $days days';
   }
+
+  @override
+  String get metricsTitle => 'Metrics';
+
+  @override
+  String get metricsEmpty => 'No metrics yet';
+
+  @override
+  String get metricsEmptyDescription =>
+      'Add a metric to track things like soil moisture, temperature, or leaf health.';
+
+  @override
+  String get metricsAdd => 'Add Metric';
+
+  @override
+  String get metricsName => 'Name';
+
+  @override
+  String get metricsNameHint => 'e.g., Soil Moisture';
+
+  @override
+  String get metricsUnit => 'Unit (optional)';
+
+  @override
+  String get metricsUnitHint => 'e.g., %, °C';
+
+  @override
+  String get metricsValueType => 'Value Type';
+
+  @override
+  String get metricsSave => 'Save';
+
+  @override
+  String get metricsNoData => 'No data';
+
+  @override
+  String metricsRecordMeasurement(String name) {
+    return 'Record $name';
+  }
+
+  @override
+  String get metricsValue => 'Value';
+
+  @override
+  String get metricsNotes => 'Notes (optional)';
+
+  @override
+  String get metricsRecordFirst => 'Record First Measurement';
+
+  @override
+  String get metricsNoMeasurements => 'No measurements yet';
+
+  @override
+  String get metricsValueTypeNumeric => 'Numeric';
+
+  @override
+  String get metricsValueTypeBoolean => 'Boolean';
+
+  @override
+  String get metricsValueTypeCategorical => 'Categorical';
 }

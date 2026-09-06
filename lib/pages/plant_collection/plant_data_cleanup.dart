@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:open_plants/pages/care_schedule/care_schedule_usecases.dart';
 import 'package:open_plants/pages/diagnosis/diagnosis_history_usecases.dart';
 import 'package:open_plants/pages/plant_journal/plant_journal_usecases.dart';
+import 'package:open_plants/pages/plant_metrics/metric_usecases.dart';
 import 'package:open_plants/pages/plant_photo_timeline/plant_photo_timeline_usecases.dart';
 import 'package:open_plants/pages/symptom_logger/symptom_logger_usecases.dart';
 
@@ -16,6 +17,7 @@ class PlantDataCleanup {
   final DiagnosisHistoryUseCases _diagnosisHistoryUsecases;
   final PlantPhotoTimelineUseCases _photoTimelineUsecases;
   final CareScheduleUsecases _careScheduleUsecases;
+  final MetricUsecases? _metricUsecases;
 
   PlantDataCleanup({
     required PlantJournalUseCases journalUsecases,
@@ -23,11 +25,13 @@ class PlantDataCleanup {
     required DiagnosisHistoryUseCases diagnosisHistoryUsecases,
     required PlantPhotoTimelineUseCases photoTimelineUsecases,
     required CareScheduleUsecases careScheduleUsecases,
+    MetricUsecases? metricUsecases,
   })  : _journalUsecases = journalUsecases,
         _symptomUsecases = symptomUsecases,
         _diagnosisHistoryUsecases = diagnosisHistoryUsecases,
         _photoTimelineUsecases = photoTimelineUsecases,
-        _careScheduleUsecases = careScheduleUsecases;
+        _careScheduleUsecases = careScheduleUsecases,
+        _metricUsecases = metricUsecases;
 
   /// Delete all associated data for [plantId] across all data sources.
   ///
@@ -51,6 +55,11 @@ class PlantDataCleanup {
     await _safeDelete('completions', () => _careScheduleUsecases.deleteCompletionsForPlant(plantId));
     await _safeDelete('custom rules', () => _careScheduleUsecases.deleteCustomRulesForPlant(plantId));
     await _safeDelete('schedule actions', () => _careScheduleUsecases.deleteAllScheduleActionsForPlant(plantId));
+
+    // Delete metric definitions and measurements
+    if (_metricUsecases != null) {
+      await _safeDelete('metrics', () => _metricUsecases!.deleteAllForPlant(plantId));
+    }
   }
 
   /// Safely execute a delete operation, logging errors without rethrowing.

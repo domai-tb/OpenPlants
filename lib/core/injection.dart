@@ -53,6 +53,10 @@ import 'package:open_plants/pages/diagnosis/diagnosis_usecases.dart';
 import 'package:open_plants/pages/plant_names/plant_names_datasource.dart';
 import 'package:open_plants/pages/plant_names/plant_names_repository.dart';
 import 'package:open_plants/pages/plant_names/plant_names_usecases.dart';
+import 'package:open_plants/pages/plant_metrics/metric_definition_datasource.dart';
+import 'package:open_plants/pages/plant_metrics/metric_measurement_datasource.dart';
+import 'package:open_plants/pages/plant_metrics/metric_repository.dart';
+import 'package:open_plants/pages/plant_metrics/metric_usecases.dart';
 
 /// Global service locator (GetIt).
 ///
@@ -287,6 +291,23 @@ Future<void> init() async {
     () => PlantNamesUsecases(repository: sl()),
   );
 
+  // Plant Metrics
+  sl.registerLazySingleton<MetricDefinitionDataSource>(
+    MetricDefinitionDataSource.new,
+  );
+  sl.registerLazySingleton<MetricMeasurementDataSource>(
+    MetricMeasurementDataSource.new,
+  );
+  sl.registerLazySingleton<MetricRepository>(
+    () => MetricRepository(
+      definitionDataSource: sl(),
+      measurementDataSource: sl(),
+    ),
+  );
+  sl.registerLazySingleton<MetricUsecases>(
+    () => MetricUsecases(repository: sl()),
+  );
+
   // Aggregate wiring
   sl.registerLazySingleton<AppServices>(
     () => AppServices(
@@ -311,6 +332,7 @@ Future<void> init() async {
       temperatureFormatter: sl(),
       dateFormatter: sl(),
       plantNames: sl(),
+      metric: sl(),
     ),
   );
 }

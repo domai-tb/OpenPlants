@@ -12,6 +12,7 @@ import 'package:open_plants/pages/care_schedule/schedule_config.dart';
 import 'package:open_plants/pages/care_schedule/species_care_profile.dart';
 import 'package:open_plants/pages/care_schedule/task_completion.dart';
 import 'package:open_plants/pages/plant_collection/plant_collection_item_entity.dart';
+import 'package:open_plants/pages/plant_metrics/metric_measurement.dart';
 import 'package:open_plants/pages/room_profiles/room_profiles_entity.dart';
 
 /// Input data for computing a schedule for a single plant.
@@ -28,6 +29,14 @@ class PlantScheduleInput {
   final List<CareScheduleAction> activeScheduleActions;
   final LightLevel? lightLevel;
 
+  /// Metric context: latest measurement time per metric ID.
+  /// Used to anchor measurement-reminder intervals from the newest measurement.
+  final Map<String, DateTime>? metricLatestMeasurementTimes;
+
+  /// Metric context: alert episode IDs that have already been completed.
+  /// Used to suppress completed alert tasks until recovery.
+  final Set<String>? completedAlertEpisodeIds;
+
   const PlantScheduleInput({
     required this.plantId,
     required this.plantName,
@@ -40,6 +49,8 @@ class PlantScheduleInput {
     this.customCareRules = const [],
     this.activeScheduleActions = const [],
     this.lightLevel,
+    this.metricLatestMeasurementTimes,
+    this.completedAlertEpisodeIds,
   });
 }
 
@@ -93,9 +104,17 @@ class ScheduleEngine {
       }
 
       int? effectiveInterval;
+      DateTime? measurementAnchor;
       if (matchingRule != null) {
         // Custom rule found: use rule interval directly, skip all modifiers
         effectiveInterval = matchingRule.intervalDays;
+
+        // For metric-linked rules, anchor from newest measurement if available
+        if (matchingRule.metricId != null &&
+            input.metricLatestMeasurementTimes != null &&
+            input.metricLatestMeasurementTimes!.containsKey(matchingRule.metricId)) {
+          measurementAnchor = input.metricLatestMeasurementTimes![matchingRule.metricId];
+        }
       } else {
         // No custom rule: use existing computation pipeline
         effectiveInterval = EffectiveIntervalCalculator.compute(
@@ -148,9 +167,16 @@ class ScheduleEngine {
         input.plantId,
       );
 
-      // Compute base due date from completion anchor
-      final baseDueDate =
-          lastCompletion != null ? lastCompletion.completedAt.add(Duration(days: effectiveInterval)) : today;
+      // Compute base due date: prefer measurement anchor for metric-linked rules,
+      // otherwise use completion history
+      DateTime baseDueDate;
+      if (measurementAnchor != null) {
+        baseDueDate = measurementAnchor.add(Duration(days: effectiveInterval));
+      } else if (lastCompletion != null) {
+        baseDueDate = lastCompletion.completedAt.add(Duration(days: effectiveInterval));
+      } else {
+        baseDueDate = today;
+      }
 
       // Apply schedule action override if active
       DateTime dueDate = baseDueDate;
@@ -185,6 +211,27 @@ class ScheduleEngine {
           status: status,
           effectiveIntervalDays: effectiveInterval,
           completedAt: lastCompletion?.completedAt,
+        ),
+      );
+    }
+
+    // Generate alert tasks for metric-linked rules with active alert episodes
+    for (final rule in input.customCareRules) {
+      if (!rule.isEnabled || rule.metricId == null) continue;
+
+      // Check if there's a completed alert episode for this metric
+      final completedEpisodes = input.completedAlertEpisodeIds ?? {};
+      if (completedEpisodes.contains(rule.metricId)) continue;
+
+      // Add alert task for this metric rule
+      tasks.add(
+        CareTask(
+          taskType: CareTaskType.custom('${rule.taskType}_alert'),
+          plantId: input.plantId,
+          plantName: input.plantName,
+          dueDate: today,
+          status: CareTaskStatus.dueToday,
+          effectiveIntervalDays: 0,
         ),
       );
     }

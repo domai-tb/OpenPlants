@@ -32,6 +32,8 @@ void main() {
         reminderDays: ['monday', 'wednesday'],
         isEnabled: false,
         createdAt: DateTime(2025, 1, 15, 10, 30),
+        metricId: 'metric-1',
+        isMeasurementRequired: true,
       );
 
       final json = rule.toJson();
@@ -46,6 +48,23 @@ void main() {
       expect(restored.reminderDays, rule.reminderDays);
       expect(restored.isEnabled, rule.isEnabled);
       expect(restored.createdAt, rule.createdAt);
+      expect(restored.metricId, 'metric-1');
+      expect(restored.isMeasurementRequired, true);
+    });
+
+    test('serialization roundtrip handles missing metric fields (backward compat)', () {
+      final json = {
+        'id': 'test-id',
+        'plantId': 'plant-1',
+        'taskType': 'watering',
+        'intervalDays': 7,
+        'isEnabled': true,
+        'createdAt': '2025-01-01T00:00:00.000',
+      };
+
+      final restored = CustomCareRuleEntity.fromJson(json);
+      expect(restored.metricId, isNull);
+      expect(restored.isMeasurementRequired, false);
     });
 
     test('copyWith creates modified copy', () {
@@ -80,6 +99,58 @@ void main() {
       expect(rule.intervalDays, 7);
       expect(rule.isEnabled, true);
       expect(rule.reminderEnabled, false);
+      expect(rule.metricId, isNull);
+      expect(rule.isMeasurementRequired, false);
+    });
+
+    test('create with metric linkage persists metric fields', () async {
+      final rule = await usecases.create(
+        plantId: 'plant-1',
+        taskType: 'watering',
+        intervalDays: 7,
+        metricId: 'metric-1',
+        isMeasurementRequired: true,
+      );
+
+      expect(rule.metricId, 'metric-1');
+      expect(rule.isMeasurementRequired, true);
+    });
+
+    test('update preserves metric linkage', () async {
+      final created = await usecases.create(
+        plantId: 'plant-1',
+        taskType: 'watering',
+        intervalDays: 7,
+        metricId: 'metric-1',
+        isMeasurementRequired: true,
+      );
+
+      final updated = await usecases.update(
+        created.id,
+        intervalDays: 14,
+      );
+
+      expect(updated.metricId, 'metric-1');
+      expect(updated.isMeasurementRequired, true);
+    });
+
+    test('update can clear metric linkage', () async {
+      final created = await usecases.create(
+        plantId: 'plant-1',
+        taskType: 'watering',
+        intervalDays: 7,
+        metricId: 'metric-1',
+        isMeasurementRequired: true,
+      );
+
+      final updated = await usecases.update(
+        created.id,
+        clearMetricId: true,
+        isMeasurementRequired: false,
+      );
+
+      expect(updated.metricId, isNull);
+      expect(updated.isMeasurementRequired, false);
     });
 
     test('create with reminder config', () async {

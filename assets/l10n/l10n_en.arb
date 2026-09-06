@@ -602,5 +602,32 @@
         "example": "7"
       }
     }
-  }
+  },
+  "metricsTitle": "Metrics",
+  "metricsEmpty": "No metrics yet",
+  "metricsEmptyDescription": "Add a metric to track things like soil moisture, temperature, or leaf health.",
+  "metricsAdd": "Add Metric",
+  "metricsName": "Name",
+  "metricsNameHint": "e.g., Soil Moisture",
+  "metricsUnit": "Unit (optional)",
+  "metricsUnitHint": "e.g., %, °C",
+  "metricsValueType": "Value Type",
+  "metricsSave": "Save",
+  "metricsNoData": "No data",
+  "metricsRecordMeasurement": "Record {name}",
+  "@metricsRecordMeasurement": {
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "example": "Soil Moisture"
+      }
+    }
+  },
+  "metricsValue": "Value",
+  "metricsNotes": "Notes (optional)",
+  "metricsRecordFirst": "Record First Measurement",
+  "metricsNoMeasurements": "No measurements yet",
+  "metricsValueTypeNumeric": "Numeric",
+  "metricsValueTypeBoolean": "Boolean",
+  "metricsValueTypeCategorical": "Categorical"
 }

@@ -563,5 +563,126 @@ void main() {
         expect(watering.completedAt, DateTime(2025, 6, 28));
       });
     });
+
+    group('Metric-linked rules', () {
+      test('metric-linked rule anchors from newest measurement', () {
+        final rule = CustomCareRuleEntity(
+          id: 'rule-1',
+          plantId: 'plant-1',
+          taskType: 'watering',
+          intervalDays: 3,
+          metricId: 'metric-1',
+          createdAt: today,
+        );
+
+        final tasks = ScheduleEngine.computeForPlant(
+          input: PlantScheduleInput(
+            plantId: 'plant-1',
+            plantName: 'Test Plant',
+            config: const ScheduleConfig(),
+            profile: testProfile,
+            customCareRules: [rule],
+            metricLatestMeasurementTimes: {
+              'metric-1': DateTime(2025, 6, 25), // 6 days ago
+            },
+          ),
+          today: today,
+        );
+
+        final watering = tasks.firstWhere(
+          (t) => t.taskType.builtIn == BuiltInTaskType.watering,
+        );
+        // Due date = measurement time + interval = 6/25 + 3 = 6/28
+        expect(watering.dueDate, DateTime(2025, 6, 28));
+      });
+
+      test('metric-linked rule without measurement uses today', () {
+        final rule = CustomCareRuleEntity(
+          id: 'rule-1',
+          plantId: 'plant-1',
+          taskType: 'watering',
+          intervalDays: 3,
+          metricId: 'metric-1',
+          createdAt: today,
+        );
+
+        final tasks = ScheduleEngine.computeForPlant(
+          input: PlantScheduleInput(
+            plantId: 'plant-1',
+            plantName: 'Test Plant',
+            config: const ScheduleConfig(),
+            profile: testProfile,
+            customCareRules: [rule],
+            metricLatestMeasurementTimes: {},
+          ),
+          today: today,
+        );
+
+        final watering = tasks.firstWhere(
+          (t) => t.taskType.builtIn == BuiltInTaskType.watering,
+        );
+        // No measurement => anchor from today
+        expect(watering.dueDate, today);
+      });
+
+      test('alert task generated for metric-linked rule', () {
+        final rule = CustomCareRuleEntity(
+          id: 'rule-1',
+          plantId: 'plant-1',
+          taskType: 'watering',
+          intervalDays: 7,
+          metricId: 'metric-1',
+          createdAt: today,
+        );
+
+        final tasks = ScheduleEngine.computeForPlant(
+          input: PlantScheduleInput(
+            plantId: 'plant-1',
+            plantName: 'Test Plant',
+            config: const ScheduleConfig(),
+            profile: testProfile,
+            customCareRules: [rule],
+          ),
+          today: today,
+        );
+
+        // Should have both the regular watering task and an alert task
+        expect(tasks.length, greaterThanOrEqualTo(2));
+        final alertTask = tasks.firstWhere(
+          (t) => t.taskType.customName == 'watering_alert',
+        );
+        expect(alertTask.dueDate, today);
+        expect(alertTask.status, CareTaskStatus.dueToday);
+      });
+
+      test('completed alert episode suppresses alert task', () {
+        final rule = CustomCareRuleEntity(
+          id: 'rule-1',
+          plantId: 'plant-1',
+          taskType: 'watering',
+          intervalDays: 7,
+          metricId: 'metric-1',
+          createdAt: today,
+        );
+
+        final tasks = ScheduleEngine.computeForPlant(
+          input: PlantScheduleInput(
+            plantId: 'plant-1',
+            plantName: 'Test Plant',
+            config: const ScheduleConfig(),
+            profile: testProfile,
+            customCareRules: [rule],
+            completedAlertEpisodeIds: {'metric-1'},
+          ),
+          today: today,
+        );
+
+        // Alert task should not be generated for completed episode
+        final alertTasks = tasks.where(
+          (t) => t.taskType.customName == 'watering_alert',
+        );
+        expect(alertTasks, isEmpty);
+      });
+    });
   });
 }

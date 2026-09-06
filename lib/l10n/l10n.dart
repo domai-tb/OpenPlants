@@ -3103,6 +3103,120 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{taskType} marked done — next due in {days} days'**
   String careScheduleCompletionSnackbar(String taskType, int days);
+
+  /// No description provided for @metricsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Metrics'**
+  String get metricsTitle;
+
+  /// No description provided for @metricsEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No metrics yet'**
+  String get metricsEmpty;
+
+  /// No description provided for @metricsEmptyDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a metric to track things like soil moisture, temperature, or leaf health.'**
+  String get metricsEmptyDescription;
+
+  /// No description provided for @metricsAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Metric'**
+  String get metricsAdd;
+
+  /// No description provided for @metricsName.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get metricsName;
+
+  /// No description provided for @metricsNameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g., Soil Moisture'**
+  String get metricsNameHint;
+
+  /// No description provided for @metricsUnit.
+  ///
+  /// In en, this message translates to:
+  /// **'Unit (optional)'**
+  String get metricsUnit;
+
+  /// No description provided for @metricsUnitHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g., %, °C'**
+  String get metricsUnitHint;
+
+  /// No description provided for @metricsValueType.
+  ///
+  /// In en, this message translates to:
+  /// **'Value Type'**
+  String get metricsValueType;
+
+  /// No description provided for @metricsSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get metricsSave;
+
+  /// No description provided for @metricsNoData.
+  ///
+  /// In en, this message translates to:
+  /// **'No data'**
+  String get metricsNoData;
+
+  /// No description provided for @metricsRecordMeasurement.
+  ///
+  /// In en, this message translates to:
+  /// **'Record {name}'**
+  String metricsRecordMeasurement(String name);
+
+  /// No description provided for @metricsValue.
+  ///
+  /// In en, this message translates to:
+  /// **'Value'**
+  String get metricsValue;
+
+  /// No description provided for @metricsNotes.
+  ///
+  /// In en, this message translates to:
+  /// **'Notes (optional)'**
+  String get metricsNotes;
+
+  /// No description provided for @metricsRecordFirst.
+  ///
+  /// In en, this message translates to:
+  /// **'Record First Measurement'**
+  String get metricsRecordFirst;
+
+  /// No description provided for @metricsNoMeasurements.
+  ///
+  /// In en, this message translates to:
+  /// **'No measurements yet'**
+  String get metricsNoMeasurements;
+
+  /// No description provided for @metricsValueTypeNumeric.
+  ///
+  /// In en, this message translates to:
+  /// **'Numeric'**
+  String get metricsValueTypeNumeric;
+
+  /// No description provided for @metricsValueTypeBoolean.
+  ///
+  /// In en, this message translates to:
+  /// **'Boolean'**
+  String get metricsValueTypeBoolean;
+
+  /// No description provided for @metricsValueTypeCategorical.
+  ///
+  /// In en, this message translates to:
+  /// **'Categorical'**
+  String get metricsValueTypeCategorical;
 }
 
 class _AppLocalizationsDelegate
