@@ -3,11 +3,11 @@
 - [x] 1.1 Add `flutter_local_notifications`, `timezone`, and `flutter_timezone` (or `flutter_native_timezone`) dependencies compatible with Flutter 3.41.x, minSdk 26, iOS 13, and run `fvm flutter pub get`
 - [x] 1.2 Configure Android: `POST_NOTIFICATIONS` (API 33+), `RECEIVE_BOOT_COMPLETED`, notification channel `care_reminders`, and boot receiver; configure iOS: `UNUserNotificationCenterDelegate`, foreground presentation, and permission strings; verify `fvm flutter analyze` passes for platform config
 - [x] 1.3 Create notification module skeleton `lib/pages/notifications/` with datasource, repository, entity/payload helpers, and use cases following `Page → UseCase → Repository → DataSource`
-- [ ] 1.4 Initialize `timezone` data from device zone on startup and handle zone-change reconciliation hook
+- [x] 1.4 Initialize `timezone` data from device zone on startup and handle zone-change reconciliation hook
 
 ## 2. Global notification settings and permission service
 
-- [ ] 2.1 Extend `Settings` with `notificationsEnabled` master flag and `notifyDueTasks` / `notifyOverdueTasks` category flags, with additive `fromJson`/`toJson` defaults true and no migration for existing stored JSON
+- [x] 2.1 Extend `Settings` with `notificationsEnabled` master flag and `notifyDueTasks` / `notifyOverdueTasks` category flags, with additive `fromJson`/`toJson` defaults true and no migration for existing stored JSON
 - [ ] 2.2 Add failing unit tests for settings decode defaults, master-off cancellation, and per-category filtering
 - [ ] 2.3 Implement `SettingsController` persistence for new flags until settings tests pass
 - [ ] 2.4 Add notification permission helper (check/request/open OS settings) behind repository, with iOS `requestPermissions` and Android `POST_NOTIFICATIONS` handling
