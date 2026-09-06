@@ -67,5 +67,7 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>NSUserNotificationsUsageDescription</key>
+	<string>OpenPlants uses notifications to remind you about plant care tasks.</string>
 </dict>
 </plist>
