@@ -1723,4 +1723,44 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get metricsValueTypeCategorical => 'Categorical';
+
+  @override
+  String get notificationsTitle => 'Notifications';
+
+  @override
+  String get notificationsEnable => 'Enable Notifications';
+
+  @override
+  String get notificationsEnableDescription =>
+      'Master switch for all notifications';
+
+  @override
+  String get notificationsDueTasks => 'Due Task Reminders';
+
+  @override
+  String get notificationsDueTasksDescription =>
+      'Notify when care tasks are due';
+
+  @override
+  String get notificationsOverdueTasks => 'Overdue Task Alerts';
+
+  @override
+  String get notificationsOverdueTasksDescription =>
+      'Alert when care tasks are overdue';
+
+  @override
+  String get notificationsPermissionStatus => 'Permission Status';
+
+  @override
+  String get notificationsPermissionEnabled => 'Notifications enabled';
+
+  @override
+  String get notificationsPermissionDisabled => 'Notifications disabled';
+
+  @override
+  String get notificationsChannelName => 'Care Reminders';
+
+  @override
+  String get notificationsChannelDescription =>
+      'Reminders for plant care tasks';
 }

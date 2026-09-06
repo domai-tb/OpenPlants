@@ -53,8 +53,7 @@ class NotificationReconciler {
       if (!input.isOverdue && !notifyDueTasks) continue;
 
       // Compute notification ID
-      final notificationId =
-          _repository.generateNotificationId(input.ruleId, input.taskType);
+      final notificationId = _repository.generateNotificationId(input.ruleId, input.taskType);
 
       // Check if notification already exists
       if (existingIds.contains(notificationId)) {

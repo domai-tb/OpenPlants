@@ -3217,6 +3217,78 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Categorical'**
   String get metricsValueTypeCategorical;
+
+  /// No description provided for @notificationsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get notificationsTitle;
+
+  /// No description provided for @notificationsEnable.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable Notifications'**
+  String get notificationsEnable;
+
+  /// No description provided for @notificationsEnableDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Master switch for all notifications'**
+  String get notificationsEnableDescription;
+
+  /// No description provided for @notificationsDueTasks.
+  ///
+  /// In en, this message translates to:
+  /// **'Due Task Reminders'**
+  String get notificationsDueTasks;
+
+  /// No description provided for @notificationsDueTasksDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Notify when care tasks are due'**
+  String get notificationsDueTasksDescription;
+
+  /// No description provided for @notificationsOverdueTasks.
+  ///
+  /// In en, this message translates to:
+  /// **'Overdue Task Alerts'**
+  String get notificationsOverdueTasks;
+
+  /// No description provided for @notificationsOverdueTasksDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Alert when care tasks are overdue'**
+  String get notificationsOverdueTasksDescription;
+
+  /// No description provided for @notificationsPermissionStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Permission Status'**
+  String get notificationsPermissionStatus;
+
+  /// No description provided for @notificationsPermissionEnabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications enabled'**
+  String get notificationsPermissionEnabled;
+
+  /// No description provided for @notificationsPermissionDisabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications disabled'**
+  String get notificationsPermissionDisabled;
+
+  /// No description provided for @notificationsChannelName.
+  ///
+  /// In en, this message translates to:
+  /// **'Care Reminders'**
+  String get notificationsChannelName;
+
+  /// No description provided for @notificationsChannelDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminders for plant care tasks'**
+  String get notificationsChannelDescription;
 }
 
 class _AppLocalizationsDelegate

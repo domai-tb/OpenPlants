@@ -30,9 +30,8 @@ class SpeciesCatalogDatasource {
     final jsonString = await _bundle.loadString(_catalogAsset);
     final List<dynamic> jsonList = json.decode(jsonString) as List<dynamic>;
 
-    _cachedCatalog = jsonList
-        .map((e) => SpeciesCatalogEntry.fromJson(e as Map<String, dynamic>))
-        .toList(growable: false);
+    _cachedCatalog =
+        jsonList.map((e) => SpeciesCatalogEntry.fromJson(e as Map<String, dynamic>)).toList(growable: false);
 
     return _cachedCatalog!;
   }
@@ -45,9 +44,7 @@ class SpeciesCatalogDatasource {
       final jsonString = await _bundle.loadString(_localeAssetPath(locale));
       final List<dynamic> jsonList = json.decode(jsonString) as List<dynamic>;
 
-      final data = jsonList
-          .map((e) => SpeciesLocaleData.fromJson(e as Map<String, dynamic>))
-          .toList(growable: false);
+      final data = jsonList.map((e) => SpeciesLocaleData.fromJson(e as Map<String, dynamic>)).toList(growable: false);
 
       _cachedLocales[locale] = data;
       return data;

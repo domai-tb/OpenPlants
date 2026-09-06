@@ -17,8 +17,7 @@ class NotificationUsecases {
 
   /// Initialize the notification plugin.
   Future<void> initialize() async {
-    const androidSettings =
-        AndroidInitializationSettings('@mipmap/ic_launcher');
+    const androidSettings = AndroidInitializationSettings('@mipmap/ic_launcher');
     const iosSettings = DarwinInitializationSettings(
       requestAlertPermission: false,
       requestBadgePermission: false,
@@ -33,14 +32,12 @@ class NotificationUsecases {
 
   /// Check if notifications are enabled.
   Future<bool> areNotificationsEnabled() async {
-    final android = _plugin.resolvePlatformSpecificImplementation<
-        AndroidFlutterLocalNotificationsPlugin>();
+    final android = _plugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
     if (android != null) {
       final granted = await android.areNotificationsEnabled();
       return granted ?? false;
     }
-    final ios = _plugin.resolvePlatformSpecificImplementation<
-        IOSFlutterLocalNotificationsPlugin>();
+    final ios = _plugin.resolvePlatformSpecificImplementation<IOSFlutterLocalNotificationsPlugin>();
     if (ios != null) {
       final settings = await ios.checkPermissions();
       return settings?.isEnabled ?? false;
@@ -50,14 +47,12 @@ class NotificationUsecases {
 
   /// Request notification permissions.
   Future<bool> requestPermissions() async {
-    final android = _plugin.resolvePlatformSpecificImplementation<
-        AndroidFlutterLocalNotificationsPlugin>();
+    final android = _plugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
     if (android != null) {
       final granted = await android.requestNotificationsPermission();
       return granted ?? false;
     }
-    final ios = _plugin.resolvePlatformSpecificImplementation<
-        IOSFlutterLocalNotificationsPlugin>();
+    final ios = _plugin.resolvePlatformSpecificImplementation<IOSFlutterLocalNotificationsPlugin>();
     if (ios != null) {
       final granted = await ios.requestPermissions(
         alert: true,
@@ -98,8 +93,7 @@ class NotificationUsecases {
       tzScheduled,
       details,
       androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
-      uiLocalNotificationDateInterpretation:
-          UILocalNotificationDateInterpretation.absoluteTime,
+      uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
       payload: payload.encode(),
     );
 
@@ -151,6 +145,5 @@ class NotificationUsecases {
   }
 
   /// Get pending notification requests.
-  Future<List<PendingNotificationRequest>> getPendingNotifications() =>
-      _plugin.pendingNotificationRequests();
+  Future<List<PendingNotificationRequest>> getPendingNotifications() => _plugin.pendingNotificationRequests();
 }

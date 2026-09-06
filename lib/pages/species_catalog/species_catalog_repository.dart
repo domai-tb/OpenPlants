@@ -5,8 +5,7 @@ import 'package:open_plants/pages/species_catalog/species_catalog_entity.dart';
 class SpeciesCatalogRepository {
   final SpeciesCatalogDatasource _datasource;
 
-  const SpeciesCatalogRepository({required SpeciesCatalogDatasource datasource})
-      : _datasource = datasource;
+  const SpeciesCatalogRepository({required SpeciesCatalogDatasource datasource}) : _datasource = datasource;
 
   /// Returns all catalog entries.
   Future<List<SpeciesCatalogEntry>> listAll() => _datasource.loadCatalog();

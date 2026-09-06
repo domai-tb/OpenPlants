@@ -5,23 +5,17 @@ import 'package:open_plants/pages/notifications/notification_entity.dart';
 class NotificationRepository {
   final NotificationDataSource _datasource;
 
-  NotificationRepository({required NotificationDataSource datasource})
-      : _datasource = datasource;
+  NotificationRepository({required NotificationDataSource datasource}) : _datasource = datasource;
 
-  Future<List<ScheduledNotification>> loadNotifications() =>
-      _datasource.loadNotifications();
+  Future<List<ScheduledNotification>> loadNotifications() => _datasource.loadNotifications();
 
-  Future<void> saveNotification(ScheduledNotification notification) =>
-      _datasource.saveNotification(notification);
+  Future<void> saveNotification(ScheduledNotification notification) => _datasource.saveNotification(notification);
 
-  Future<void> deleteNotification(int id) =>
-      _datasource.deleteNotification(id);
+  Future<void> deleteNotification(int id) => _datasource.deleteNotification(id);
 
-  Future<void> deleteNotificationsForRule(String ruleId) =>
-      _datasource.deleteNotificationsForRule(ruleId);
+  Future<void> deleteNotificationsForRule(String ruleId) => _datasource.deleteNotificationsForRule(ruleId);
 
-  Future<void> deleteNotificationsForPlant(String plantId) =>
-      _datasource.deleteNotificationsForPlant(plantId);
+  Future<void> deleteNotificationsForPlant(String plantId) => _datasource.deleteNotificationsForPlant(plantId);
 
   Future<void> clearAll() => _datasource.clearAll();
 

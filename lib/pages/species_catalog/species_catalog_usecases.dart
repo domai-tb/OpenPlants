@@ -5,8 +5,7 @@ import 'package:open_plants/pages/species_catalog/species_catalog_repository.dar
 class SpeciesCatalogUsecases {
   final SpeciesCatalogRepository _repository;
 
-  const SpeciesCatalogUsecases({required SpeciesCatalogRepository repository})
-      : _repository = repository;
+  const SpeciesCatalogUsecases({required SpeciesCatalogRepository repository}) : _repository = repository;
 
   /// Search species by query with locale-aware results.
   Future<List<SpeciesCatalogEntry>> search(
@@ -20,12 +19,10 @@ class SpeciesCatalogUsecases {
   Future<SpeciesCatalogEntry?> findById(String id) => _repository.findById(id);
 
   /// Lookup a species by classifier model index.
-  Future<SpeciesCatalogEntry?> findByModelIndex(int index) =>
-      _repository.findByModelIndex(index);
+  Future<SpeciesCatalogEntry?> findByModelIndex(int index) => _repository.findByModelIndex(index);
 
   /// Lookup a species by scientific name.
-  Future<SpeciesCatalogEntry?> findByScientificName(String name) =>
-      _repository.findByScientificName(name);
+  Future<SpeciesCatalogEntry?> findByScientificName(String name) => _repository.findByScientificName(name);
 
   /// Resolve a species with locale data for display.
   Future<ResolvedSpecies?> resolveForDisplay(
