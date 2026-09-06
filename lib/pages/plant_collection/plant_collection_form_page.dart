@@ -205,6 +205,9 @@ class _PlantCollectionFormPageState extends State<PlantCollectionFormPage> {
           roomId: _selectedRoomId,
           notes: _notesController.text.trim().isEmpty ? null : _notesController.text.trim(),
           careStatus: _careStatus,
+          // ponytail: set timestamps for happy to prevent effectiveCareStatus override
+          lastWateredAt: _careStatus == CareStatus.happy ? now : null,
+          lastFertilizedAt: _careStatus == CareStatus.happy ? now : null,
           createdAt: now,
           updatedAt: now,
         );
