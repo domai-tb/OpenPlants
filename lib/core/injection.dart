@@ -59,6 +59,8 @@ import 'package:open_plants/pages/plant_metrics/metric_repository.dart';
 import 'package:open_plants/pages/plant_metrics/metric_usecases.dart';
 import 'package:open_plants/pages/notifications/notification_datasource.dart';
 import 'package:open_plants/pages/notifications/notification_repository.dart';
+import 'package:open_plants/pages/notifications/notification_usecases.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 /// Global service locator (GetIt).
 ///
@@ -317,6 +319,15 @@ Future<void> init() async {
   sl.registerLazySingleton<NotificationRepository>(
     () => NotificationRepository(datasource: sl()),
   );
+  sl.registerLazySingleton<FlutterLocalNotificationsPlugin>(
+    FlutterLocalNotificationsPlugin.new,
+  );
+  sl.registerLazySingleton<NotificationUsecases>(
+    () => NotificationUsecases(
+      repository: sl(),
+      plugin: sl(),
+    ),
+  );
 
   // Aggregate wiring
   sl.registerLazySingleton<AppServices>(
@@ -343,6 +354,7 @@ Future<void> init() async {
       dateFormatter: sl(),
       plantNames: sl(),
       metric: sl(),
+      notification: sl(),
     ),
   );
 }

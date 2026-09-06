@@ -9,6 +9,7 @@ import 'package:open_plants/pages/more/more_about_page.dart';
 import 'package:open_plants/pages/more/more_item_entity.dart';
 import 'package:open_plants/pages/more/more_settings_page.dart';
 import 'package:open_plants/pages/more/more_usecases.dart';
+import 'package:open_plants/pages/notifications/notification_settings_page.dart';
 import 'package:open_plants/pages/plant_collection/plant_collection_item_entity.dart';
 import 'package:open_plants/pages/room_profiles/room_profiles_page.dart';
 import 'package:open_plants/pages/species_library/species_library_page.dart';
@@ -81,6 +82,9 @@ class _MorePageState extends State<MorePage> with AutomaticKeepAliveClientMixin<
         break;
       case 'settings':
         Navigator.of(context).push(MaterialPageRoute(builder: (_) => const MoreSettingsPage()));
+        break;
+      case 'notifications':
+        Navigator.of(context).push(MaterialPageRoute(builder: (_) => const NotificationSettingsPage()));
         break;
       case 'about':
         Navigator.of(context).push(MaterialPageRoute(builder: (_) => const MoreAboutPage()));

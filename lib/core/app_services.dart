@@ -20,6 +20,7 @@ import 'package:open_plants/pages/diagnosis/auto_diagnosis_service.dart';
 import 'package:open_plants/pages/diagnosis/diagnosis_history_usecases.dart';
 import 'package:open_plants/pages/diagnosis/diagnosis_repository.dart';
 import 'package:open_plants/pages/plant_names/plant_names_usecases.dart';
+import 'package:open_plants/pages/notifications/notification_usecases.dart';
 
 /// Aggregates feature use-cases for convenient access via `AppScope`.
 ///
@@ -48,6 +49,7 @@ class AppServices {
   final DateFormatter dateFormatter;
   final PlantNamesUsecases plantNames;
   final MetricUsecases metric;
+  final NotificationUsecases notification;
 
   const AppServices({
     required this.plantIdentification,
@@ -72,5 +74,6 @@ class AppServices {
     required this.dateFormatter,
     required this.plantNames,
     required this.metric,
+    required this.notification,
   });
 }

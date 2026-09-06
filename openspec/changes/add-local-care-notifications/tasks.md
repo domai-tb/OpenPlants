@@ -34,13 +34,13 @@
 
 ## 6. Localization and theming
 
-- [ ] 6.1 Add English and German ARB keys for notification titles, bodies, settings labels, permission guidance, and status messages
-- [ ] 6.2 Run `fvm flutter gen-l10n` and replace any new literals with generated accessors; verify no hard-coded user-facing strings remain for notification surfaces
+- [x] 6.1 Add English and German ARB keys for notification titles, bodies, settings labels, permission guidance, and status messages
+- [x] 6.2 Run `fvm flutter gen-l10n` and replace any new literals with generated accessors; verify no hard-coded user-facing strings remain for notification surfaces
 
 ## 7. Wiring and integration
 
-- [ ] 7.1 Register notification datasource/repository/usecases in `lib/core/injection.dart` and expose through `lib/core/app_services.dart` behind `AppScope`
-- [ ] 7.2 Verify existing reminder UI on custom care rules continues to work and now drives real schedules via the new reconciliation path
+- [x] 7.1 Register notification datasource/repository/usecases in `lib/core/injection.dart` and expose through `lib/core/app_services.dart` behind `AppScope`
+- [x] 7.2 Verify existing reminder UI on custom care rules continues to work and now drives real schedules via the new reconciliation path
 
 ## 8. Verification
 

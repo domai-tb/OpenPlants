@@ -13,6 +13,7 @@ class MoreDataSource {
       ),
       MoreItemEntity(id: 'log_symptom', title: 'Log Symptom', subtitle: 'Record a plant health issue'),
       MoreItemEntity(id: 'diagnosis', title: 'Plant Diagnosis', subtitle: 'Diagnose plant problems'),
+      MoreItemEntity(id: 'notifications', title: 'Notifications', subtitle: 'Configure notification settings'),
       MoreItemEntity(id: 'settings', title: 'Settings', subtitle: 'OpenPlants settings'),
       MoreItemEntity(id: 'about', title: 'About', subtitle: 'About OpenPlants'),
     ];
