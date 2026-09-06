@@ -1,5 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:timezone/data/latest_all.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 
 import 'package:open_plants/core/app_scope.dart';
 import 'package:open_plants/core/app_services.dart';
@@ -13,6 +15,9 @@ import 'package:open_plants/pages/home/onboarding.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialize timezone data
+  tz.initializeTimeZones();
 
   // Disable noisy logs in release.
   if (kReleaseMode) debugPrint = (String? message, {int? wrapWidth}) => '';
