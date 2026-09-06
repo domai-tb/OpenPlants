@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:open_plants/pages/plant_metrics/metric_definition.dart';
 import 'package:open_plants/pages/plant_metrics/metric_evaluator.dart';
+import 'package:open_plants/pages/plant_metrics/metric_history_page.dart';
 import 'package:open_plants/pages/plant_metrics/metric_usecases.dart';
 
 /// Plant-scoped metric list page.
@@ -115,7 +116,14 @@ class _MetricListPageState extends State<MetricListPage> {
   }
 
   void _navigateToMetricDetail(MetricDefinition definition) {
-    // TODO: Navigate to metric detail page
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => MetricHistoryPage(
+          definition: definition,
+          usecases: widget.usecases,
+        ),
+      ),
+    );
   }
 }
 

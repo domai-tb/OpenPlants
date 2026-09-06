@@ -646,6 +646,14 @@ class _PlantCollectionDetailPageState extends State<PlantCollectionDetailPage> {
             icon: const Icon(Icons.book_outlined),
             label: Text(context.l10n.journalTitle),
           ),
+          const SizedBox(height: 12),
+
+          // Metrics button
+          OutlinedButton.icon(
+            onPressed: _openMetrics,
+            icon: const Icon(Icons.analytics_outlined),
+            label: Text(context.l10n.metricsTitle),
+          ),
           const SizedBox(height: 24),
 
           // Latest diagnosis badge
