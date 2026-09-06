@@ -866,6 +866,18 @@ class AppLocalizationsDe extends AppLocalizations {
   String get careRulesBadgeDefault => 'Default';
 
   @override
+  String get speciesPickerTitle => 'Select Species';
+
+  @override
+  String get speciesPickerSearch => 'Search species';
+
+  @override
+  String get speciesPickerSearchHint => 'Enter common or scientific name';
+
+  @override
+  String get speciesPickerEmpty => 'No species found';
+
+  @override
   String get diagnosisTitle => 'Pflanzendiagnose';
 
   @override

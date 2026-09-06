@@ -11,6 +11,7 @@ import 'package:open_plants/pages/plant_journal/plant_journal_usecases.dart';
 import 'package:open_plants/pages/plant_photo_timeline/plant_photo_timeline_usecases.dart';
 import 'package:open_plants/pages/room_profiles/room_profiles_usecases.dart';
 import 'package:open_plants/pages/species_library/species_library_usecases.dart';
+import 'package:open_plants/pages/species_catalog/species_catalog_usecases.dart';
 import 'package:open_plants/pages/symptom_logger/symptom_logger_usecases.dart';
 import 'package:open_plants/pages/today_dashboard/today_dashboard_usecases.dart';
 import 'package:open_plants/pages/light_assessment/light_assessment_usecases.dart';
@@ -29,6 +30,7 @@ class AppServices {
   final PlantCollectionUsecases plantCollection;
   final PlantPhotoTimelineUseCases plantPhotoTimeline;
   final SpeciesLibraryUsecases speciesLibrary;
+  final SpeciesCatalogUsecases speciesCatalog;
   final TodayDashboardUsecases todayDashboard;
   final CareScheduleUsecases careSchedule;
   final CustomCareRuleUsecases customCareRules;
@@ -51,6 +53,7 @@ class AppServices {
     required this.plantCollection,
     required this.plantPhotoTimeline,
     required this.speciesLibrary,
+    required this.speciesCatalog,
     required this.todayDashboard,
     required this.careSchedule,
     required this.customCareRules,

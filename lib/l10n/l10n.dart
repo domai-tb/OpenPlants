@@ -1706,6 +1706,30 @@ abstract class AppLocalizations {
   /// **'Default'**
   String get careRulesBadgeDefault;
 
+  /// No description provided for @speciesPickerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Species'**
+  String get speciesPickerTitle;
+
+  /// No description provided for @speciesPickerSearch.
+  ///
+  /// In en, this message translates to:
+  /// **'Search species'**
+  String get speciesPickerSearch;
+
+  /// No description provided for @speciesPickerSearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter common or scientific name'**
+  String get speciesPickerSearchHint;
+
+  /// No description provided for @speciesPickerEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No species found'**
+  String get speciesPickerEmpty;
+
   /// No description provided for @diagnosisTitle.
   ///
   /// In en, this message translates to:

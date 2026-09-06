@@ -1,0 +1,436 @@
+[
+  {
+    "id": "monstera_deliciosa",
+    "scientificName": "Monstera deliciosa",
+    "aliases": [
+      "Swiss Cheese Plant",
+      "Split-Leaf Philodendron"
+    ],
+    "careMeta": {
+      "difficulty": "easy",
+      "lightNeeds": "medium",
+      "waterNeeds": "moderate",
+      "humidityPreference": "moderate",
+      "soilType": "Well-draining potting mix with peat moss",
+      "repottingIntervalMonths": 24,
+      "toxicToHumans": true,
+      "toxicToPets": true
+    }
+  },
+  {
+    "id": "sansevieria_trifasciata",
+    "scientificName": "Sansevieria trifasciata",
+    "aliases": [
+      "Snake Plant",
+      "Mother-in-Law's Tongue"
+    ],
+    "careMeta": {
+      "difficulty": "easy",
+      "lightNeeds": "low",
+      "waterNeeds": "low",
+      "humidityPreference": "low",
+      "soilType": "Sandy, well-draining cactus mix",
+      "repottingIntervalMonths": 36,
+      "toxicToHumans": true,
+      "toxicToPets": true
+    }
+  },
+  {
+    "id": "ficus_lyrata",
+    "scientificName": "Ficus lyrata",
+    "aliases": [
+      "Fiddle Leaf Fig",
+      "Banjo Fig"
+    ],
+    "careMeta": {
+      "difficulty": "moderate",
+      "lightNeeds": "bright",
+      "waterNeeds": "moderate",
+      "humidityPreference": "moderate",
+      "soilType": "Rich, well-draining potting mix with perlite",
+      "repottingIntervalMonths": 18,
+      "toxicToHumans": true,
+      "toxicToPets": true
+    }
+  },
+  {
+    "id": "chlorophytum_comosum",
+    "scientificName": "Chlorophytum comosum",
+    "aliases": [
+      "Spider Plant",
+      "Airplane Plant"
+    ],
+    "careMeta": {
+      "difficulty": "easy",
+      "lightNeeds": "medium",
+      "waterNeeds": "moderate",
+      "humidityPreference": "low",
+      "soilType": "Standard well-draining potting mix",
+      "repottingIntervalMonths": 24,
+      "toxicToHumans": false,
+      "toxicToPets": false
+    }
+  },
+  {
+    "id": "aloe_vera",
+    "scientificName": "Aloe vera",
+    "aliases": [
+      "Aloe",
+      "Barbados Aloe"
+    ],
+    "careMeta": {
+      "difficulty": "easy",
+      "lightNeeds": "bright",
+      "waterNeeds": "low",
+      "humidityPreference": "low",
+      "soilType": "Cactus and succulent mix, very well-draining",
+      "repottingIntervalMonths": 36,
+      "toxicToHumans": false,
+      "toxicToPets": true
+    }
+  },
+  {
+    "id": "calathea_orbifolia",
+    "scientificName": "Calathea orbifolia",
+    "aliases": [
+      "Calathea",
+      "Prayer Plant"
+    ],
+    "careMeta": {
+      "difficulty": "challenging",
+      "lightNeeds": "low",
+      "waterNeeds": "moderate",
+      "humidityPreference": "high",
+      "soilType": "Moisture-retentive, well-draining mix with perlite",
+      "repottingIntervalMonths": 24,
+      "toxicToHumans": false,
+      "toxicToPets": false
+    }
+  },
+  {
+    "id": "epipremnum_aureum",
+    "scientificName": "Epipremnum aureum",
+    "aliases": [
+      "Golden Pothos",
+      "Devil's Ivy"
+    ],
+    "careMeta": {
+      "difficulty": "easy",
+      "lightNeeds": "low",
+      "waterNeeds": "low",
+      "humidityPreference": "low",
+      "soilType": "General-purpose potting mix",
+      "repottingIntervalMonths": 24,
+      "toxicToHumans": true,
+      "toxicToPets": true
+    }
+  },
+  {
+    "id": "zamioculcas_zamiifolia",
+    "scientificName": "Zamioculcas zamiifolia",
+    "aliases": [
+      "ZZ Plant",
+      "Zanzibar Gem"
+    ],
+    "careMeta": {
+      "difficulty": "easy",
+      "lightNeeds": "low",
+      "waterNeeds": "low",
+      "humidityPreference": "low",
+      "soilType": "Well-draining potting mix with sand",
+      "repottingIntervalMonths": 36,
+      "toxicToHumans": true,
+      "toxicToPets": true
+    }
+  },
+  {
+    "id": "nephrolepis_exaltata",
+    "scientificName": "Nephrolepis exaltata",
+    "aliases": [
+      "Boston Fern",
+      "Sword Fern"
+    ],
+    "careMeta": {
+      "difficulty": "moderate",
+      "lightNeeds": "medium",
+      "waterNeeds": "frequent",
+      "humidityPreference": "high",
+      "soilType": "Rich, moisture-retentive mix with peat moss",
+      "repottingIntervalMonths": 18,
+      "toxicToHumans": false,
+      "toxicToPets": false
+    }
+  },
+  {
+    "id": "spathiphyllum_wallisii",
+    "scientificName": "Spathiphyllum wallisii",
+    "aliases": [
+      "Peace Lily",
+      "Spath"
+    ],
+    "careMeta": {
+      "difficulty": "easy",
+      "lightNeeds": "low",
+      "waterNeeds": "moderate",
+      "humidityPreference": "moderate",
+      "soilType": "Rich, well-draining potting mix",
+      "repottingIntervalMonths": 24,
+      "toxicToHumans": true,
+      "toxicToPets": true
+    }
+  },
+  {
+    "id": "dracaena_marginata",
+    "scientificName": "Dracaena marginata",
+    "aliases": [
+      "Dragon Tree",
+      "Madagascar Dragon Tree"
+    ],
+    "careMeta": {
+      "difficulty": "easy",
+      "lightNeeds": "medium",
+      "waterNeeds": "low",
+      "humidityPreference": "low",
+      "soilType": "Well-draining potting mix with sand",
+      "repottingIntervalMonths": 36,
+      "toxicToHumans": true,
+      "toxicToPets": true
+    }
+  },
+  {
+    "id": "peperomia_obtusifolia",
+    "scientificName": "Peperomia obtusifolia",
+    "aliases": [
+      "Baby Rubber Plant",
+      "Pepper Face"
+    ],
+    "careMeta": {
+      "difficulty": "easy",
+      "lightNeeds": "medium",
+      "waterNeeds": "low",
+      "humidityPreference": "moderate",
+      "soilType": "Well-draining potting mix with perlite",
+      "repottingIntervalMonths": 36,
+      "toxicToHumans": false,
+      "toxicToPets": false
+    }
+  },
+  {
+    "id": "strelitzia_reginae",
+    "scientificName": "Strelitzia reginae",
+    "aliases": [
+      "Bird of Paradise",
+      "Crane Flower"
+    ],
+    "careMeta": {
+      "difficulty": "moderate",
+      "lightNeeds": "bright",
+      "waterNeeds": "moderate",
+      "humidityPreference": "moderate",
+      "soilType": "Rich, free-draining potting mix",
+      "repottingIntervalMonths": 24,
+      "toxicToHumans": true,
+      "toxicToPets": true
+    }
+  },
+  {
+    "id": "maranta_leuconeura",
+    "scientificName": "Maranta leuconeura",
+    "aliases": [
+      "Prayer Plant",
+      "Red Maranta"
+    ],
+    "careMeta": {
+      "difficulty": "moderate",
+      "lightNeeds": "low",
+      "waterNeeds": "moderate",
+      "humidityPreference": "high",
+      "soilType": "Moisture-retentive, well-draining mix",
+      "repottingIntervalMonths": 24,
+      "toxicToHumans": false,
+      "toxicToPets": false
+    }
+  },
+  {
+    "id": "cactaceae_opuntia",
+    "scientificName": "Cactaceae opuntia",
+    "aliases": [
+      "Prickly Pear Cactus",
+      "Bunny Ears Cactus"
+    ],
+    "careMeta": {
+      "difficulty": "easy",
+      "lightNeeds": "direct",
+      "waterNeeds": "low",
+      "humidityPreference": "low",
+      "soilType": "Very gritty cactus mix with pumice",
+      "repottingIntervalMonths": 36,
+      "toxicToHumans": false,
+      "toxicToPets": false
+    }
+  },
+  {
+    "id": "anthurium_andraeanum",
+    "scientificName": "Anthurium andraeanum",
+    "aliases": [
+      "Flamingo Flower",
+      "Tail Flower"
+    ],
+    "careMeta": {
+      "difficulty": "challenging",
+      "lightNeeds": "bright",
+      "waterNeeds": "moderate",
+      "humidityPreference": "high",
+      "soilType": "Coarse, well-draining orchid bark mix",
+      "repottingIntervalMonths": 24,
+      "toxicToHumans": true,
+      "toxicToPets": true
+    }
+  },
+  {
+    "id": "pilea_peperomioides",
+    "scientificName": "Pilea peperomioides",
+    "aliases": [
+      "Chinese Money Plant",
+      "Pass It On Plant",
+      "UFO Plant"
+    ],
+    "careMeta": {
+      "difficulty": "easy",
+      "lightNeeds": "medium",
+      "waterNeeds": "moderate",
+      "humidityPreference": "moderate",
+      "soilType": "Well-draining potting mix with perlite",
+      "repottingIntervalMonths": 24,
+      "toxicToHumans": false,
+      "toxicToPets": false
+    }
+  },
+  {
+    "id": "ficus_elastica",
+    "scientificName": "Ficus elastica",
+    "aliases": [
+      "Rubber Tree",
+      "Rubber Plant"
+    ],
+    "careMeta": {
+      "difficulty": "easy",
+      "lightNeeds": "medium",
+      "waterNeeds": "moderate",
+      "humidityPreference": "moderate",
+      "soilType": "Rich, well-draining potting mix",
+      "repottingIntervalMonths": 24,
+      "toxicToHumans": true,
+      "toxicToPets": true
+    }
+  },
+  {
+    "id": "orchidaceae_phalaenopsis",
+    "scientificName": "Orchidaceae phalaenopsis",
+    "aliases": [
+      "Moth Orchid",
+      "Phalaenopsis Orchid"
+    ],
+    "careMeta": {
+      "difficulty": "moderate",
+      "lightNeeds": "medium",
+      "waterNeeds": "low",
+      "humidityPreference": "moderate",
+      "soilType": "Coarse orchid bark with perlite and sphagnum moss",
+      "repottingIntervalMonths": 24,
+      "toxicToHumans": false,
+      "toxicToPets": false
+    }
+  },
+  {
+    "id": "monstera_adansonii",
+    "scientificName": "Monstera adansonii",
+    "aliases": [
+      "Swiss Cheese Vine",
+      "Monkey Mask"
+    ],
+    "careMeta": {
+      "difficulty": "moderate",
+      "lightNeeds": "medium",
+      "waterNeeds": "moderate",
+      "humidityPreference": "moderate",
+      "soilType": "Aroid mix with orchid bark and perlite",
+      "repottingIntervalMonths": 24,
+      "toxicToHumans": true,
+      "toxicToPets": true
+    }
+  },
+  {
+    "id": "hoya_carnosa",
+    "scientificName": "Hoya carnosa",
+    "aliases": [
+      "Wax Plant",
+      "Porcelain Flower"
+    ],
+    "careMeta": {
+      "difficulty": "easy",
+      "lightNeeds": "bright",
+      "waterNeeds": "low",
+      "humidityPreference": "moderate",
+      "soilType": "Airy, well-draining mix with perlite and orchid bark",
+      "repottingIntervalMonths": 36,
+      "toxicToHumans": false,
+      "toxicToPets": false
+    }
+  },
+  {
+    "id": "calathea_makoyana",
+    "scientificName": "Calathea makoyana",
+    "aliases": [
+      "Peacock Plant",
+      "Cathedral Windows"
+    ],
+    "careMeta": {
+      "difficulty": "challenging",
+      "lightNeeds": "low",
+      "waterNeeds": "moderate",
+      "humidityPreference": "high",
+      "soilType": "Moisture-retentive, well-draining aroid mix",
+      "repottingIntervalMonths": 24,
+      "toxicToHumans": false,
+      "toxicToPets": false
+    }
+  },
+  {
+    "id": "crassula_ovata",
+    "scientificName": "Crassula ovata",
+    "aliases": [
+      "Jade Plant",
+      "Money Tree",
+      "Friendship Tree"
+    ],
+    "careMeta": {
+      "difficulty": "easy",
+      "lightNeeds": "bright",
+      "waterNeeds": "low",
+      "humidityPreference": "low",
+      "soilType": "Very well-draining succulent mix with coarse sand",
+      "repottingIntervalMonths": 36,
+      "toxicToHumans": false,
+      "toxicToPets": true
+    }
+  },
+  {
+    "id": "philodendron_hederaceum",
+    "scientificName": "Philodendron hederaceum",
+    "aliases": [
+      "Heartleaf Philodendron",
+      "Sweetheart Plant"
+    ],
+    "careMeta": {
+      "difficulty": "easy",
+      "lightNeeds": "low",
+      "waterNeeds": "moderate",
+      "humidityPreference": "low",
+      "soilType": "General-purpose potting mix",
+      "repottingIntervalMonths": 24,
+      "toxicToHumans": true,
+      "toxicToPets": true
+    }
+  }
+]

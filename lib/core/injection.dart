@@ -33,6 +33,9 @@ import 'package:open_plants/pages/room_profiles/room_profiles_usecases.dart';
 import 'package:open_plants/pages/species_library/species_library_datasource.dart';
 import 'package:open_plants/pages/species_library/species_library_repository.dart';
 import 'package:open_plants/pages/species_library/species_library_usecases.dart';
+import 'package:open_plants/pages/species_catalog/species_catalog_datasource.dart';
+import 'package:open_plants/pages/species_catalog/species_catalog_repository.dart';
+import 'package:open_plants/pages/species_catalog/species_catalog_usecases.dart';
 import 'package:open_plants/pages/symptom_logger/symptom_logger_datasource.dart';
 import 'package:open_plants/pages/symptom_logger/symptom_logger_repository.dart';
 import 'package:open_plants/pages/symptom_logger/symptom_logger_usecases.dart';
@@ -134,6 +137,17 @@ Future<void> init() async {
   );
   sl.registerLazySingleton<SpeciesLibraryUsecases>(
     () => SpeciesLibraryUsecases(repository: sl()),
+  );
+
+  // Species Catalog
+  sl.registerLazySingleton<SpeciesCatalogDatasource>(
+    SpeciesCatalogDatasource.new,
+  );
+  sl.registerLazySingleton<SpeciesCatalogRepository>(
+    () => SpeciesCatalogRepository(datasource: sl()),
+  );
+  sl.registerLazySingleton<SpeciesCatalogUsecases>(
+    () => SpeciesCatalogUsecases(repository: sl()),
   );
 
   // Today Dashboard
@@ -281,6 +295,7 @@ Future<void> init() async {
       plantCollection: sl(),
       plantPhotoTimeline: sl(),
       speciesLibrary: sl(),
+      speciesCatalog: sl(),
       todayDashboard: sl(),
       careSchedule: sl(),
       customCareRules: sl(),

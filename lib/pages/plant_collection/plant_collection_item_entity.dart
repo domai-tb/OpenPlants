@@ -58,6 +58,7 @@ class PlantEntity {
   final String id;
   final String name;
   final String? photoPath;
+  final String? speciesId;
   final String? speciesName;
   final String? room;
   final String? roomId;
@@ -74,6 +75,7 @@ class PlantEntity {
     required this.id,
     required this.name,
     this.photoPath,
+    this.speciesId,
     this.speciesName,
     this.room,
     this.roomId,
@@ -116,6 +118,8 @@ class PlantEntity {
     String? name,
     String? photoPath,
     bool clearPhoto = false,
+    String? speciesId,
+    bool clearSpeciesId = false,
     String? speciesName,
     bool clearSpecies = false,
     String? room,
@@ -139,6 +143,7 @@ class PlantEntity {
       id: id ?? this.id,
       name: name ?? this.name,
       photoPath: clearPhoto ? null : (photoPath ?? this.photoPath),
+      speciesId: clearSpeciesId ? null : (speciesId ?? this.speciesId),
       speciesName: clearSpecies ? null : (speciesName ?? this.speciesName),
       room: clearRoom ? null : (room ?? this.room),
       roomId: clearRoomId ? null : (roomId ?? this.roomId),
@@ -159,6 +164,7 @@ class PlantEntity {
       'id': id,
       'name': name,
       'photoPath': photoPath,
+      'speciesId': speciesId,
       'speciesName': speciesName,
       'room': room,
       'roomId': roomId,
@@ -179,6 +185,7 @@ class PlantEntity {
       id: json['id'] as String,
       name: json['name'] as String,
       photoPath: json['photoPath'] as String?,
+      speciesId: json['speciesId'] as String?,
       speciesName: json['speciesName'] as String?,
       room: json['room'] as String?,
       roomId: json['roomId'] as String?,
