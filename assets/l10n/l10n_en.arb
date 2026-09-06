@@ -288,6 +288,8 @@
   "careRulesReminderTimeHint": "09:00",
   "careRulesReminderDays": "Reminder days",
   "careRulesSaveFailed": "Failed to save rule: {error}",
+  "careRulesBadgeCustom": "Custom",
+  "careRulesBadgeDefault": "Default",
   "diagnosisTitle": "Plant Diagnosis",
   "diagnosisSubtitle": "Diagnose plant problems",
   "diagnosisStep": "Step",

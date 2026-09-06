@@ -860,6 +860,12 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
+  String get careRulesBadgeCustom => 'Custom';
+
+  @override
+  String get careRulesBadgeDefault => 'Default';
+
+  @override
   String get diagnosisTitle => 'Pflanzendiagnose';
 
   @override

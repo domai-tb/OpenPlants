@@ -3,6 +3,8 @@ import 'package:flutter/foundation.dart';
 import 'package:open_plants/pages/care_schedule/care_schedule_action.dart';
 import 'package:open_plants/pages/care_schedule/care_task.dart';
 import 'package:open_plants/pages/care_schedule/care_task_type.dart';
+import 'package:open_plants/pages/care_schedule/custom_care_rule.dart';
+import 'package:open_plants/pages/care_schedule/custom_care_rule_usecases.dart';
 import 'package:open_plants/pages/care_schedule/overdue_detector.dart';
 import 'package:open_plants/pages/care_schedule/room_config.dart';
 import 'package:open_plants/pages/care_schedule/schedule_config.dart';
@@ -285,4 +287,79 @@ class CareScheduleUsecases {
   Future<void> deleteAllScheduleActionsForPlant(String plantId) async {
     await repository.deleteAllScheduleActionsForPlant(plantId);
   }
+
+  /// Get the 8 computed rules for a plant based on its species profile.
+  ///
+  /// Each entry has: taskType name, default interval from species profile,
+  /// and whether a custom override exists.
+  Future<List<ComputedRule>> getComputedRules(String plantId) async {
+    final plants = await plantCollection.loadPlants();
+    final plant = plants.firstWhere(
+      (p) => p.id == plantId,
+      orElse: () => throw Exception('Plant not found'),
+    );
+    final profile = repository.getSpeciesProfile(plant.speciesName);
+    final customRules = await repository.getCustomCareRules(plantId);
+    final customByType = <String, CustomCareRuleEntity>{
+      for (final r in customRules) r.taskType: r,
+    };
+
+    return BuiltInTaskType.values.map((builtIn) {
+      final defaultInterval = profile.getDefaultInterval(builtIn);
+      final custom = customByType[builtIn.name];
+      return ComputedRule(
+        taskType: builtIn.name,
+        defaultIntervalDays: defaultInterval,
+        customIntervalDays: custom?.intervalDays,
+        isOverridden: custom != null,
+        isEnabled: custom?.isEnabled ?? (defaultInterval != null && defaultInterval > 0),
+      );
+    }).toList();
+  }
+
+  /// Toggle a computed rule: create or disable a custom override.
+  ///
+  /// If no custom override exists, creates one with [intervalDays].
+  /// If one exists, toggles its enabled state.
+  Future<List<ComputedRule>> toggleComputedRule({
+    required String plantId,
+    required String taskType,
+    required int intervalDays,
+  }) async {
+    final rules = await repository.getCustomCareRules(plantId);
+    final existing = rules.where((r) => r.taskType == taskType).toList();
+
+    if (existing.isNotEmpty) {
+      final rule = existing.first;
+      await repository.saveCustomCareRule(rule.copyWith(isEnabled: !rule.isEnabled));
+    } else {
+      final customRules = CustomCareRuleUsecases(repository: repository);
+      await customRules.create(
+        plantId: plantId,
+        taskType: taskType,
+        intervalDays: intervalDays,
+      );
+    }
+
+    return getComputedRules(plantId);
+  }
+}
+
+/// A computed care rule combining species defaults with custom overrides.
+class ComputedRule {
+  final String taskType;
+  final int? defaultIntervalDays;
+  final int? customIntervalDays;
+  final bool isOverridden;
+  final bool isEnabled;
+
+  const ComputedRule({
+    required this.taskType,
+    required this.defaultIntervalDays,
+    this.customIntervalDays,
+    required this.isOverridden,
+    required this.isEnabled,
+  });
+
+  int get effectiveIntervalDays => customIntervalDays ?? defaultIntervalDays ?? 0;
 }

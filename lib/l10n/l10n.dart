@@ -1694,6 +1694,18 @@ abstract class AppLocalizations {
   /// **'Failed to save rule: {error}'**
   String careRulesSaveFailed(Object error);
 
+  /// No description provided for @careRulesBadgeCustom.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom'**
+  String get careRulesBadgeCustom;
+
+  /// No description provided for @careRulesBadgeDefault.
+  ///
+  /// In en, this message translates to:
+  /// **'Default'**
+  String get careRulesBadgeDefault;
+
   /// No description provided for @diagnosisTitle.
   ///
   /// In en, this message translates to:

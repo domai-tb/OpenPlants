@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:open_plants/l10n/l10n.dart';
 
+import 'package:open_plants/pages/care_schedule/care_schedule_usecases.dart';
 import 'package:open_plants/pages/care_schedule/custom_care_rule.dart';
 import 'package:open_plants/pages/care_schedule/custom_care_rule_usecases.dart';
 
@@ -149,11 +150,13 @@ class CareRulesSection extends StatelessWidget {
 class CareRuleListSheet extends StatefulWidget {
   final String plantId;
   final CustomCareRuleUsecases usecases;
+  final CareScheduleUsecases? careScheduleUsecases;
 
   const CareRuleListSheet({
     super.key,
     required this.plantId,
     required this.usecases,
+    this.careScheduleUsecases,
   });
 
   @override
@@ -161,7 +164,7 @@ class CareRuleListSheet extends StatefulWidget {
 }
 
 class _CareRuleListSheetState extends State<CareRuleListSheet> {
-  List<CustomCareRuleEntity> _rules = [];
+  List<ComputedRule> _computedRules = [];
   bool _loading = true;
 
   @override
@@ -171,12 +174,16 @@ class _CareRuleListSheetState extends State<CareRuleListSheet> {
   }
 
   Future<void> _loadRules() async {
-    final rules = await widget.usecases.getByPlant(widget.plantId);
-    if (mounted) {
-      setState(() {
-        _rules = rules;
-        _loading = false;
-      });
+    if (widget.careScheduleUsecases != null) {
+      final computed = await widget.careScheduleUsecases!.getComputedRules(widget.plantId);
+      if (mounted) {
+        setState(() {
+          _computedRules = computed;
+          _loading = false;
+        });
+      }
+    } else {
+      if (mounted) setState(() => _loading = false);
     }
   }
 
@@ -203,14 +210,25 @@ class _CareRuleListSheetState extends State<CareRuleListSheet> {
           ),
           body: _loading
               ? const Center(child: CircularProgressIndicator())
-              : _rules.isEmpty
+              : _computedRules.isEmpty
                   ? _buildEmptyState(context, theme, l10n)
                   : ListView.builder(
                       controller: scrollController,
-                      itemCount: _rules.length,
+                      itemCount: _computedRules.length,
                       itemBuilder: (context, index) {
-                        final rule = _rules[index];
-                        return _buildRuleTile(context, theme, rule, l10n);
+                        final rule = _computedRules[index];
+                        return CareRuleItem(
+                          rule: rule,
+                          onToggle: (intervalDays) async {
+                            await widget.careScheduleUsecases?.toggleComputedRule(
+                              plantId: widget.plantId,
+                              taskType: rule.taskType,
+                              intervalDays: intervalDays,
+                            );
+                            await _loadRules();
+                          },
+                          onEdit: () => _editComputedRule(context, rule),
+                        );
                       },
                     ),
         );
@@ -257,60 +275,6 @@ class _CareRuleListSheetState extends State<CareRuleListSheet> {
     );
   }
 
-  Widget _buildRuleTile(
-    BuildContext context,
-    ThemeData theme,
-    CustomCareRuleEntity rule,
-    AppLocalizations l10n,
-  ) {
-    return Dismissible(
-      key: ValueKey(rule.id),
-      direction: DismissDirection.endToStart,
-      background: Container(
-        alignment: Alignment.centerRight,
-        padding: const EdgeInsets.only(right: 16),
-        color: Colors.red,
-        child: const Icon(Icons.delete, color: Colors.white),
-      ),
-      confirmDismiss: (direction) async {
-        return showDialog<bool>(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: Text(l10n.careRulesDeleteTitle),
-            content: Text(l10n.careRulesDeleteConfirm(rule.taskType)),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(false),
-                child: Text(l10n.cancel),
-              ),
-              FilledButton(
-                onPressed: () => Navigator.of(context).pop(true),
-                style: FilledButton.styleFrom(backgroundColor: Colors.red),
-                child: Text(l10n.confirm),
-              ),
-            ],
-          ),
-        );
-      },
-      onDismissed: (direction) async {
-        await widget.usecases.delete(rule.id);
-        await _loadRules();
-      },
-      child: ListTile(
-        title: Text(rule.taskType),
-        subtitle: Text('Every ${rule.intervalDays} days'),
-        trailing: Switch(
-          value: rule.isEnabled,
-          onChanged: (value) async {
-            await widget.usecases.toggle(rule.id);
-            await _loadRules();
-          },
-        ),
-        onTap: () => _editRule(context, rule),
-      ),
-    );
-  }
-
   void _addRule(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -323,15 +287,87 @@ class _CareRuleListSheetState extends State<CareRuleListSheet> {
     );
   }
 
-  void _editRule(BuildContext context, CustomCareRuleEntity rule) {
+  void _editComputedRule(BuildContext context, ComputedRule rule) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       builder: (_) => CareRuleFormSheet(
         plantId: widget.plantId,
         usecases: widget.usecases,
-        existingRule: rule,
+        existingTaskType: rule.taskType,
+        existingIntervalDays: rule.effectiveIntervalDays,
         onSaved: _loadRules,
+      ),
+    );
+  }
+}
+
+/// A single care rule item showing computed rules with visual badges.
+class CareRuleItem extends StatelessWidget {
+  final ComputedRule rule;
+  final ValueChanged<int> onToggle;
+  final VoidCallback? onEdit;
+
+  const CareRuleItem({
+    super.key,
+    required this.rule,
+    required this.onToggle,
+    this.onEdit,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
+
+    return ListTile(
+      leading: _buildBadge(theme, l10n),
+      title: Text(rule.taskType),
+      subtitle: Text('Every ${rule.effectiveIntervalDays} days'),
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (onEdit != null)
+            IconButton(
+              icon: const Icon(Icons.edit, size: 20),
+              onPressed: onEdit,
+            ),
+          Switch(
+            value: rule.isEnabled,
+            onChanged: (value) => onToggle(rule.effectiveIntervalDays),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildBadge(ThemeData theme, AppLocalizations l10n) {
+    if (rule.isOverridden) {
+      return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        decoration: BoxDecoration(
+          color: theme.colorScheme.primaryContainer,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Text(
+          l10n.careRulesBadgeCustom,
+          style: theme.textTheme.labelSmall?.copyWith(
+            color: theme.colorScheme.onPrimaryContainer,
+          ),
+        ),
+      );
+    }
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surfaceContainerHighest,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Text(
+        l10n.careRulesBadgeDefault,
+        style: theme.textTheme.labelSmall?.copyWith(
+          color: theme.colorScheme.onSurfaceVariant,
+        ),
       ),
     );
   }
@@ -342,6 +378,8 @@ class CareRuleFormSheet extends StatefulWidget {
   final String plantId;
   final CustomCareRuleUsecases usecases;
   final CustomCareRuleEntity? existingRule;
+  final String? existingTaskType;
+  final int? existingIntervalDays;
   final VoidCallback? onSaved;
 
   const CareRuleFormSheet({
@@ -349,6 +387,8 @@ class CareRuleFormSheet extends StatefulWidget {
     required this.plantId,
     required this.usecases,
     this.existingRule,
+    this.existingTaskType,
+    this.existingIntervalDays,
     this.onSaved,
   });
 
@@ -367,7 +407,7 @@ class _CareRuleFormSheetState extends State<CareRuleFormSheet> {
   bool _reminderEnabled = false;
   List<String> _selectedDays = [];
 
-  bool get _isEditing => widget.existingRule != null;
+  bool get _isEditing => widget.existingRule != null || widget.existingTaskType != null;
 
   static const _daysOfWeek = [
     'monday',
@@ -405,20 +445,27 @@ class _CareRuleFormSheetState extends State<CareRuleFormSheet> {
   void initState() {
     super.initState();
     if (_isEditing) {
-      final rule = widget.existingRule!;
-      _intervalController.text = rule.intervalDays.toString();
-      _reminderEnabled = rule.reminderEnabled;
-      _reminderTimeController.text = rule.reminderTime ?? '';
-      _selectedDays = rule.reminderDays != null ? List.from(rule.reminderDays!) : [];
+      final rule = widget.existingRule;
+      final taskType = rule?.taskType ?? widget.existingTaskType;
+      final interval = rule?.intervalDays ?? widget.existingIntervalDays ?? 7;
+
+      _intervalController.text = interval.toString();
+      if (rule != null) {
+        _reminderEnabled = rule.reminderEnabled;
+        _reminderTimeController.text = rule.reminderTime ?? '';
+        _selectedDays = rule.reminderDays != null ? List.from(rule.reminderDays!) : [];
+      }
 
       // Check if it's a built-in type
-      final builtInIndex = _builtInTypes.indexOf(rule.taskType);
-      if (builtInIndex >= 0) {
-        _selectedBuiltInType = rule.taskType;
-        _useCustomType = false;
-      } else {
-        _taskTypeController.text = rule.taskType;
-        _useCustomType = true;
+      if (taskType != null) {
+        final builtInIndex = _builtInTypes.indexOf(taskType);
+        if (builtInIndex >= 0) {
+          _selectedBuiltInType = taskType;
+          _useCustomType = false;
+        } else {
+          _taskTypeController.text = taskType;
+          _useCustomType = true;
+        }
       }
     }
   }

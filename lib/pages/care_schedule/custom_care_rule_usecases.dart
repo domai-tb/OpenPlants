@@ -95,4 +95,35 @@ class CustomCareRuleUsecases {
   Future<List<CustomCareRuleEntity>> getByPlant(String plantId) async {
     return repository.getCustomCareRules(plantId);
   }
+
+  /// Check if a custom rule exists for a given task type on a plant.
+  Future<bool> hasCustomRuleForTaskType(String plantId, String taskType) async {
+    final rules = await repository.getCustomCareRules(plantId);
+    return rules.any((r) => r.taskType == taskType);
+  }
+
+  /// Create or update a custom override for a computed rule.
+  ///
+  /// If a custom rule with [taskType] already exists for [plantId], it is
+  /// updated. Otherwise, a new rule is created.
+  Future<CustomCareRuleEntity> createOrUpdateOverride({
+    required String plantId,
+    required String taskType,
+    required int intervalDays,
+  }) async {
+    final rules = await repository.getCustomCareRules(plantId);
+    final existing = rules.where((r) => r.taskType == taskType);
+
+    if (existing.isNotEmpty) {
+      final updated = existing.first.copyWith(intervalDays: intervalDays);
+      await repository.saveCustomCareRule(updated);
+      return updated;
+    }
+
+    return create(
+      plantId: plantId,
+      taskType: taskType,
+      intervalDays: intervalDays,
+    );
+  }
 }

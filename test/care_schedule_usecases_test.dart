@@ -7,6 +7,9 @@ import 'package:open_plants/pages/care_schedule/care_schedule_repository.dart';
 import 'package:open_plants/pages/care_schedule/care_schedule_usecases.dart';
 import 'package:open_plants/pages/care_schedule/care_task.dart';
 import 'package:open_plants/pages/care_schedule/care_task_type.dart';
+import 'package:open_plants/pages/care_schedule/custom_care_rule.dart';
+import 'package:open_plants/pages/care_schedule/species_care_profile.dart';
+import 'package:open_plants/pages/plant_collection/plant_collection_item_entity.dart';
 import 'package:open_plants/pages/plant_collection/plant_collection_usecases.dart';
 import 'package:open_plants/pages/plant_journal/plant_journal_item_entity.dart';
 import 'package:open_plants/pages/plant_journal/plant_journal_usecases.dart';
@@ -331,6 +334,155 @@ void main() {
 
       expect(actions.length, 1);
       expect(actions['plant-1_watering'], action);
+    });
+  });
+
+  group('getComputedRules', () {
+    test('returns computed rules for a plant with species profile', () async {
+      final plant = PlantEntity(
+        id: 'plant-1',
+        name: 'Monstera',
+        speciesName: 'Monstera Deliciosa',
+        roomId: 'room-1',
+        photoPath: null,
+        createdAt: DateTime.now(),
+        updatedAt: DateTime.now(),
+      );
+
+      when(mockPlantCollection.loadPlants()).thenAnswer((_) async => [plant]);
+      when(mockRepository.getSpeciesProfile('Monstera Deliciosa')).thenReturn(
+        SpeciesCareProfile(
+          id: 'monstera',
+          name: 'Monstera Deliciosa',
+          defaultIntervals: {
+            'watering': 7,
+            'fertilizing': 14,
+            'misting': 3,
+          },
+        ),
+      );
+      when(mockRepository.getCustomCareRules('plant-1')).thenAnswer((_) async => []);
+
+      final rules = await usecases.getComputedRules('plant-1');
+
+      expect(rules.length, 8); // 8 built-in types
+      final watering = rules.firstWhere((r) => r.taskType == 'watering');
+      expect(watering.defaultIntervalDays, 7);
+      expect(watering.isOverridden, false);
+      expect(watering.isEnabled, true);
+    });
+
+    test('marks overridden rules correctly', () async {
+      final plant = PlantEntity(
+        id: 'plant-1',
+        name: 'Monstera',
+        speciesName: 'Monstera Deliciosa',
+        roomId: 'room-1',
+        photoPath: null,
+        createdAt: DateTime.now(),
+        updatedAt: DateTime.now(),
+      );
+
+      when(mockPlantCollection.loadPlants()).thenAnswer((_) async => [plant]);
+      when(mockRepository.getSpeciesProfile('Monstera Deliciosa')).thenReturn(
+        SpeciesCareProfile(
+          id: 'monstera',
+          name: 'Monstera Deliciosa',
+          defaultIntervals: {'watering': 7},
+        ),
+      );
+      when(mockRepository.getCustomCareRules('plant-1')).thenAnswer(
+        (_) async => [
+          CustomCareRuleEntity(
+            id: 'rule-1',
+            plantId: 'plant-1',
+            taskType: 'watering',
+            intervalDays: 5,
+            isEnabled: true,
+            createdAt: DateTime.now(),
+          ),
+        ],
+      );
+
+      final rules = await usecases.getComputedRules('plant-1');
+      final watering = rules.firstWhere((r) => r.taskType == 'watering');
+
+      expect(watering.isOverridden, true);
+      expect(watering.customIntervalDays, 5);
+      expect(watering.effectiveIntervalDays, 5);
+    });
+  });
+
+  group('toggleComputedRule', () {
+    test('creates new custom rule when none exists', () async {
+      final plant = PlantEntity(
+        id: 'plant-1',
+        name: 'Monstera',
+        speciesName: 'Monstera Deliciosa',
+        roomId: 'room-1',
+        photoPath: null,
+        createdAt: DateTime.now(),
+        updatedAt: DateTime.now(),
+      );
+
+      when(mockPlantCollection.loadPlants()).thenAnswer((_) async => [plant]);
+      when(mockRepository.getSpeciesProfile('Monstera Deliciosa')).thenReturn(
+        SpeciesCareProfile(
+          id: 'monstera',
+          name: 'Monstera Deliciosa',
+          defaultIntervals: {'watering': 7},
+        ),
+      );
+      when(mockRepository.getCustomCareRules('plant-1')).thenAnswer((_) async => []);
+
+      await usecases.toggleComputedRule(
+        plantId: 'plant-1',
+        taskType: 'watering',
+        intervalDays: 5,
+      );
+
+      verify(mockRepository.saveCustomCareRule(any)).called(1);
+    });
+
+    test('toggles existing custom rule', () async {
+      final plant = PlantEntity(
+        id: 'plant-1',
+        name: 'Monstera',
+        speciesName: 'Monstera Deliciosa',
+        roomId: 'room-1',
+        photoPath: null,
+        createdAt: DateTime.now(),
+        updatedAt: DateTime.now(),
+      );
+
+      final existingRule = CustomCareRuleEntity(
+        id: 'rule-1',
+        plantId: 'plant-1',
+        taskType: 'watering',
+        intervalDays: 5,
+        isEnabled: true,
+        createdAt: DateTime.now(),
+      );
+
+      when(mockPlantCollection.loadPlants()).thenAnswer((_) async => [plant]);
+      when(mockRepository.getSpeciesProfile('Monstera Deliciosa')).thenReturn(
+        SpeciesCareProfile(
+          id: 'monstera',
+          name: 'Monstera Deliciosa',
+          defaultIntervals: {'watering': 7},
+        ),
+      );
+      when(mockRepository.getCustomCareRules('plant-1')).thenAnswer(
+        (_) async => [existingRule],
+      );
+
+      await usecases.toggleComputedRule(
+        plantId: 'plant-1',
+        taskType: 'watering',
+        intervalDays: 5,
+      );
+
+      verify(mockRepository.saveCustomCareRule(any)).called(1);
     });
   });
 }
