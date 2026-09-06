@@ -2,17 +2,26 @@ import 'dart:io';
 
 import 'package:uuid/uuid.dart';
 
+import 'package:open_plants/pages/care_schedule/care_schedule_repository.dart';
+import 'package:open_plants/pages/care_schedule/species_care_presets.dart';
 import 'package:open_plants/pages/plant_collection/plant_collection_datasource.dart';
 import 'package:open_plants/pages/plant_collection/plant_collection_item_entity.dart';
+import 'package:open_plants/pages/species_library/species_library_repository.dart';
 
 /// Repository for plant collection domain operations.
 ///
 /// Maps data source CRUD to domain operations and handles ID generation.
 class PlantCollectionRepository {
   final PlantCollectionDataSource dataSource;
+  final SpeciesLibraryRepository? speciesLibrary;
+  final CareScheduleRepository? careSchedule;
   final Uuid _uuid;
 
-  PlantCollectionRepository({required this.dataSource}) : _uuid = const Uuid();
+  PlantCollectionRepository({
+    required this.dataSource,
+    this.speciesLibrary,
+    this.careSchedule,
+  }) : _uuid = const Uuid();
 
   /// Load all plants.
   Future<List<PlantEntity>> loadPlants() => dataSource.loadPlants();
@@ -21,6 +30,9 @@ class PlantCollectionRepository {
   ///
   /// If [photoFile] is provided, it will be copied to the app's documents
   /// directory and the path will be stored on the entity.
+  ///
+  /// When a species name is provided and matches a known species in the
+  /// library, preset care rules are auto-populated for the new plant.
   Future<PlantEntity> addPlant(PlantEntity plant, {File? photoFile}) async {
     final id = _uuid.v4();
     String? photoPath;
@@ -41,7 +53,24 @@ class PlantCollectionRepository {
     plants.add(newPlant);
     await dataSource.savePlants(plants);
 
+    // Apply species care presets if species is known
+    await _applySpeciesPresets(newPlant);
+
     return newPlant;
+  }
+
+  /// Look up the plant's species and persist preset care rules if found.
+  Future<void> _applySpeciesPresets(PlantEntity plant) async {
+    if (speciesLibrary == null || careSchedule == null) return;
+    if (plant.speciesName == null || plant.speciesName!.isEmpty) return;
+
+    final species = await speciesLibrary!.findByScientificName(plant.speciesName!);
+    if (species == null) return;
+
+    final presets = speciesCarePresets(species, plantId: plant.id);
+    for (final rule in presets) {
+      await careSchedule!.saveCustomCareRule(rule);
+    }
   }
 
   /// Update an existing plant.

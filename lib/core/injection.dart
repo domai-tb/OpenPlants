@@ -101,7 +101,11 @@ Future<void> init() async {
     PlantCollectionDataSource.new,
   );
   sl.registerLazySingleton<PlantCollectionRepository>(
-    () => PlantCollectionRepository(dataSource: sl()),
+    () => PlantCollectionRepository(
+      dataSource: sl(),
+      speciesLibrary: sl(),
+      careSchedule: sl(),
+    ),
   );
   sl.registerLazySingleton<PlantCollectionUsecases>(
     () => PlantCollectionUsecases(repository: sl()),
