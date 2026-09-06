@@ -1,0 +1,7 @@
+Initial F-Droid release.
+
+- Plant collection management with photos
+- Customizable care schedules and reminders
+- On-device plant identification
+- Dark mode and multi-language support
+- No account required, fully offline
