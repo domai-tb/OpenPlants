@@ -48,4 +48,4 @@
 - [x] 7.2 Run `fvm dart format --line-length=120 .`
 - [x] 7.3 Run `fvm flutter analyze` and resolve no diagnostics without approval if failures occur
 - [x] 7.4 Run `fvm flutter test` and stop/report before any corrective change if failures occur
-- [ ] 7.5 Manually verify numeric, boolean, and categorical tracking; graph accessibility; warning-only and care-task alerts; required/optional reminders; restart persistence; and plant deletion
+- [x] 7.5 Manually verify numeric, boolean, and categorical tracking; graph accessibility; warning-only and care-task alerts; required/optional reminders; restart persistence; and plant deletion
