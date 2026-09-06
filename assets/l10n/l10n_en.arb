@@ -629,5 +629,17 @@
   "metricsNoMeasurements": "No measurements yet",
   "metricsValueTypeNumeric": "Numeric",
   "metricsValueTypeBoolean": "Boolean",
-  "metricsValueTypeCategorical": "Categorical"
+  "metricsValueTypeCategorical": "Categorical",
+  "notificationsTitle": "Notifications",
+  "notificationsEnable": "Enable Notifications",
+  "notificationsEnableDescription": "Master switch for all notifications",
+  "notificationsDueTasks": "Due Task Reminders",
+  "notificationsDueTasksDescription": "Notify when care tasks are due",
+  "notificationsOverdueTasks": "Overdue Task Alerts",
+  "notificationsOverdueTasksDescription": "Alert when care tasks are overdue",
+  "notificationsPermissionStatus": "Permission Status",
+  "notificationsPermissionEnabled": "Notifications enabled",
+  "notificationsPermissionDisabled": "Notifications disabled",
+  "notificationsChannelName": "Care Reminders",
+  "notificationsChannelDescription": "Reminders for plant care tasks"
 }

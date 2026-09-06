@@ -29,7 +29,7 @@
 
 ## 5. Firebase removal and privacy hardening
 
-- [ ] 5.1 Remove or guard `FirebaseApp.configure()` from `ios/Runner/AppDelegate.swift` and verify no Firebase dependency remains required for reminders
+- [x] 5.1 Remove or guard `FirebaseApp.configure()` from `ios/Runner/AppDelegate.swift` and verify no Firebase dependency remains required for reminders
 - [ ] 5.2 Verify app builds and notifications schedule without network access; remove any leftover Firebase-related iOS pod or config if present
 
 ## 6. Localization and theming
