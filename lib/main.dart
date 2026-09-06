@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
-import 'package:timezone/timezone.dart' as tz;
 
 import 'package:open_plants/core/app_scope.dart';
 import 'package:open_plants/core/app_services.dart';
@@ -12,6 +12,7 @@ import 'package:open_plants/l10n/l10n.dart';
 import 'package:open_plants/l10n/l10n_x.dart';
 import 'package:open_plants/pages/home/home_page.dart';
 import 'package:open_plants/pages/home/onboarding.dart';
+import 'package:open_plants/pages/notifications/notification_usecases.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,6 +26,21 @@ Future<void> main() async {
   await ic.init();
   final settings = ic.sl<SettingsController>();
   final services = ic.sl<AppServices>();
+
+  // Initialize notifications if enabled
+  if (settings.settings.notificationsEnabled) {
+    try {
+      final plugin = FlutterLocalNotificationsPlugin();
+      final usecases = NotificationUsecases(
+        repository: ic.sl(),
+        plugin: plugin,
+      );
+      await usecases.initialize();
+    } catch (e) {
+      // Notification initialization failed, continue without notifications
+      debugPrint('Failed to initialize notifications: $e');
+    }
+  }
 
   runApp(
     AppScope(

@@ -57,6 +57,8 @@ import 'package:open_plants/pages/plant_metrics/metric_definition_datasource.dar
 import 'package:open_plants/pages/plant_metrics/metric_measurement_datasource.dart';
 import 'package:open_plants/pages/plant_metrics/metric_repository.dart';
 import 'package:open_plants/pages/plant_metrics/metric_usecases.dart';
+import 'package:open_plants/pages/notifications/notification_datasource.dart';
+import 'package:open_plants/pages/notifications/notification_repository.dart';
 
 /// Global service locator (GetIt).
 ///
@@ -306,6 +308,14 @@ Future<void> init() async {
   );
   sl.registerLazySingleton<MetricUsecases>(
     () => MetricUsecases(repository: sl()),
+  );
+
+  // Notifications
+  sl.registerLazySingleton<NotificationDataSource>(
+    NotificationDataSource.new,
+  );
+  sl.registerLazySingleton<NotificationRepository>(
+    () => NotificationRepository(datasource: sl()),
   );
 
   // Aggregate wiring

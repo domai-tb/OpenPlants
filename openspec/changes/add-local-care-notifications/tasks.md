@@ -15,8 +15,8 @@
 ## 3. Scheduling, reconciliation, and lifecycle
 
 - [x] 3.1 Add failing unit tests for next-occurrence computation from `reminderTime`/`reminderDays` + interval + schedule anchor, stable integer ID mapping, and stale-cancel behavior
-- [ ] 3.2 Implement `NotificationRepository` ID mapping, payload encoding (`plantId`/`ruleId`/taskType), and `zonedSchedule`/`cancel` calls using one stable channel
-- [ ] 3.3 Implement `NotificationUsecases.reconcileAll()` that reads plants/rules/settings/schedule, applies global toggles and permission state, computes next occurrence per eligible rule, schedules or updates, and cancels stale requests
+- [x] 3.2 Implement `NotificationRepository` ID mapping, payload encoding (`plantId`/`ruleId`/taskType), and `zonedSchedule`/`cancel` calls using one stable channel
+- [x] 3.3 Implement `NotificationUsecases.reconcileAll()` that reads plants/rules/settings/schedule, applies global toggles and permission state, computes next occurrence per eligible rule, schedules or updates, and cancels stale requests
 - [ ] 3.4 Wire startup reconciliation after `SettingsController.load()` and `init()` in `lib/main.dart`; wire Android boot restoration via plugin receiver and verify no always-running background service is introduced
 - [ ] 3.5 Wire reconciliation triggers into care-rule mutations, care-task completion/snooze/skip, plant deletion cleanup, schedule-config changes, global setting toggles, and time-zone/DST change handling
 
