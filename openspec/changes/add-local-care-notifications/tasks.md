@@ -8,9 +8,9 @@
 ## 2. Global notification settings and permission service
 
 - [x] 2.1 Extend `Settings` with `notificationsEnabled` master flag and `notifyDueTasks` / `notifyOverdueTasks` category flags, with additive `fromJson`/`toJson` defaults true and no migration for existing stored JSON
-- [ ] 2.2 Add failing unit tests for settings decode defaults, master-off cancellation, and per-category filtering
-- [ ] 2.3 Implement `SettingsController` persistence for new flags until settings tests pass
-- [ ] 2.4 Add notification permission helper (check/request/open OS settings) behind repository, with iOS `requestPermissions` and Android `POST_NOTIFICATIONS` handling
+- [x] 2.2 Add failing unit tests for settings decode defaults, master-off cancellation, and per-category filtering
+- [x] 2.3 Implement `SettingsController` persistence for new flags until settings tests pass
+- [x] 2.4 Add notification permission helper (check/request/open OS settings) behind repository, with iOS `requestPermissions` and Android `POST_NOTIFICATIONS` handling
 
 ## 3. Scheduling, reconciliation, and lifecycle
 
