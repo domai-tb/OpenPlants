@@ -52,6 +52,9 @@ class Settings {
   final bool didCompleteOnboarding;
   final String? localeCode;
   final TemperatureUnit temperatureUnit;
+  final bool notificationsEnabled;
+  final bool notifyDueTasks;
+  final bool notifyOverdueTasks;
 
   const Settings({
     this.useSystemDarkmode = true,
@@ -60,6 +63,9 @@ class Settings {
     this.didCompleteOnboarding = false,
     this.localeCode,
     this.temperatureUnit = TemperatureUnit.celsius,
+    this.notificationsEnabled = true,
+    this.notifyDueTasks = true,
+    this.notifyOverdueTasks = true,
   });
 
   Settings copyWith({
@@ -69,6 +75,9 @@ class Settings {
     bool? didCompleteOnboarding,
     Object? localeCode = _noChange,
     TemperatureUnit? temperatureUnit,
+    bool? notificationsEnabled,
+    bool? notifyDueTasks,
+    bool? notifyOverdueTasks,
   }) {
     return Settings(
       useSystemDarkmode: useSystemDarkmode ?? this.useSystemDarkmode,
@@ -77,6 +86,9 @@ class Settings {
       didCompleteOnboarding: didCompleteOnboarding ?? this.didCompleteOnboarding,
       localeCode: identical(localeCode, _noChange) ? this.localeCode : localeCode as String?,
       temperatureUnit: temperatureUnit ?? this.temperatureUnit,
+      notificationsEnabled: notificationsEnabled ?? this.notificationsEnabled,
+      notifyDueTasks: notifyDueTasks ?? this.notifyDueTasks,
+      notifyOverdueTasks: notifyOverdueTasks ?? this.notifyOverdueTasks,
     );
   }
 
@@ -88,6 +100,9 @@ class Settings {
       didCompleteOnboarding: json['didCompleteOnboarding'] ?? false,
       localeCode: json['localeCode'],
       temperatureUnit: json['temperatureUnit'] == 'fahrenheit' ? TemperatureUnit.fahrenheit : TemperatureUnit.celsius,
+      notificationsEnabled: json['notificationsEnabled'] ?? true,
+      notifyDueTasks: json['notifyDueTasks'] ?? true,
+      notifyOverdueTasks: json['notifyOverdueTasks'] ?? true,
     );
   }
 
@@ -99,6 +114,9 @@ class Settings {
       'didCompleteOnboarding': didCompleteOnboarding,
       'localeCode': localeCode,
       'temperatureUnit': temperatureUnit == TemperatureUnit.fahrenheit ? 'fahrenheit' : 'celsius',
+      'notificationsEnabled': notificationsEnabled,
+      'notifyDueTasks': notifyDueTasks,
+      'notifyOverdueTasks': notifyOverdueTasks,
     };
   }
 }
