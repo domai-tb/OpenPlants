@@ -1,8 +1,6 @@
 name: Release Preflight
 
 on:
-  pull_request:
-    branches: [dev, main]
   push:
     tags:
       - "v*"
