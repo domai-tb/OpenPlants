@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:open_plants/pages/care_schedule/care_schedule_action.dart';
-import 'package:open_plants/pages/care_schedule/care_task_type.dart';
+import 'package:openplants/pages/care_schedule/care_schedule_action.dart';
+import 'package:openplants/pages/care_schedule/care_task_type.dart';
 
 void main() {
   group('CareScheduleAction', () {

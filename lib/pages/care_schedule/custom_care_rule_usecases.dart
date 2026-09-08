@@ -1,6 +1,6 @@
-import 'package:open_plants/core/exceptions.dart';
-import 'package:open_plants/pages/care_schedule/care_schedule_repository.dart';
-import 'package:open_plants/pages/care_schedule/custom_care_rule.dart';
+import 'package:openplants/core/exceptions.dart';
+import 'package:openplants/pages/care_schedule/care_schedule_repository.dart';
+import 'package:openplants/pages/care_schedule/custom_care_rule.dart';
 
 import 'package:uuid/uuid.dart';
 

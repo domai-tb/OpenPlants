@@ -1,21 +1,21 @@
 import 'package:flutter/foundation.dart';
 
-import 'package:open_plants/pages/care_schedule/care_schedule_action.dart';
-import 'package:open_plants/pages/care_schedule/care_task.dart';
-import 'package:open_plants/pages/care_schedule/care_task_type.dart';
-import 'package:open_plants/pages/care_schedule/custom_care_rule.dart';
-import 'package:open_plants/pages/care_schedule/custom_care_rule_usecases.dart';
-import 'package:open_plants/pages/care_schedule/overdue_detector.dart';
-import 'package:open_plants/pages/care_schedule/room_config.dart';
-import 'package:open_plants/pages/care_schedule/schedule_config.dart';
-import 'package:open_plants/pages/care_schedule/schedule_engine.dart';
-import 'package:open_plants/pages/care_schedule/care_schedule_repository.dart';
-import 'package:open_plants/pages/care_schedule/task_completion.dart';
-import 'package:open_plants/pages/plant_collection/plant_collection_usecases.dart';
-import 'package:open_plants/pages/plant_journal/plant_journal_item_entity.dart';
-import 'package:open_plants/pages/plant_journal/plant_journal_usecases.dart';
-import 'package:open_plants/pages/room_profiles/room_profiles_entity.dart';
-import 'package:open_plants/pages/room_profiles/room_profiles_usecases.dart';
+import 'package:openplants/pages/care_schedule/care_schedule_action.dart';
+import 'package:openplants/pages/care_schedule/care_task.dart';
+import 'package:openplants/pages/care_schedule/care_task_type.dart';
+import 'package:openplants/pages/care_schedule/custom_care_rule.dart';
+import 'package:openplants/pages/care_schedule/custom_care_rule_usecases.dart';
+import 'package:openplants/pages/care_schedule/overdue_detector.dart';
+import 'package:openplants/pages/care_schedule/room_config.dart';
+import 'package:openplants/pages/care_schedule/schedule_config.dart';
+import 'package:openplants/pages/care_schedule/schedule_engine.dart';
+import 'package:openplants/pages/care_schedule/care_schedule_repository.dart';
+import 'package:openplants/pages/care_schedule/task_completion.dart';
+import 'package:openplants/pages/plant_collection/plant_collection_usecases.dart';
+import 'package:openplants/pages/plant_journal/plant_journal_item_entity.dart';
+import 'package:openplants/pages/plant_journal/plant_journal_usecases.dart';
+import 'package:openplants/pages/room_profiles/room_profiles_entity.dart';
+import 'package:openplants/pages/room_profiles/room_profiles_usecases.dart';
 
 /// Use cases for the care schedule feature.
 class CareScheduleUsecases {

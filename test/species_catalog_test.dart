@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:open_plants/pages/species_catalog/species_catalog_entity.dart';
+import 'package:openplants/pages/species_catalog/species_catalog_entity.dart';
 
 void main() {
   group('SpeciesCatalogEntry', () {

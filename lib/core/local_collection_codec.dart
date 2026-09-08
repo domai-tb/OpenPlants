@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:open_plants/core/exceptions.dart';
+import 'package:openplants/core/exceptions.dart';
 
 // ---------------------------------------------------------------------------
 // Result types

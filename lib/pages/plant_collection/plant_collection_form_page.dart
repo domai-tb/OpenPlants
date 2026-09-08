@@ -4,17 +4,17 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-import 'package:open_plants/core/app_scope.dart';
-import 'package:open_plants/core/constants.dart';
-import 'package:open_plants/l10n/l10n_x.dart';
-import 'package:open_plants/pages/plant_collection/plant_collection_item_entity.dart';
-import 'package:open_plants/pages/plant_collection/plant_collection_usecases.dart';
-import 'package:open_plants/pages/plant_identification/classifier/classification_result.dart';
-import 'package:open_plants/pages/plant_identification/classifier/plant_classifier_usecases.dart';
-import 'package:open_plants/pages/plant_identification/widgets/identification_picker.dart';
-import 'package:open_plants/pages/room_profiles/room_profiles_entity.dart';
-import 'package:open_plants/pages/room_profiles/room_profiles_form_page.dart';
-import 'package:open_plants/pages/room_profiles/room_profiles_usecases.dart';
+import 'package:openplants/core/app_scope.dart';
+import 'package:openplants/core/constants.dart';
+import 'package:openplants/l10n/l10n_x.dart';
+import 'package:openplants/pages/plant_collection/plant_collection_item_entity.dart';
+import 'package:openplants/pages/plant_collection/plant_collection_usecases.dart';
+import 'package:openplants/pages/plant_identification/classifier/classification_result.dart';
+import 'package:openplants/pages/plant_identification/classifier/plant_classifier_usecases.dart';
+import 'package:openplants/pages/plant_identification/widgets/identification_picker.dart';
+import 'package:openplants/pages/room_profiles/room_profiles_entity.dart';
+import 'package:openplants/pages/room_profiles/room_profiles_form_page.dart';
+import 'package:openplants/pages/room_profiles/room_profiles_usecases.dart';
 
 /// Identification flow states for the add-plant form.
 enum PhotoIdentificationState { idle, identifying, resultsShown, error }

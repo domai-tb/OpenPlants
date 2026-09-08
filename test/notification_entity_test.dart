@@ -2,7 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest_all.dart' as tz;
 
-import 'package:open_plants/pages/notifications/notification_entity.dart';
+import 'package:openplants/pages/notifications/notification_entity.dart';
 
 void main() {
   setUpAll(() {

@@ -1,5 +1,5 @@
-import 'package:open_plants/pages/species_catalog/species_catalog_entity.dart';
-import 'package:open_plants/pages/species_catalog/species_catalog_repository.dart';
+import 'package:openplants/pages/species_catalog/species_catalog_entity.dart';
+import 'package:openplants/pages/species_catalog/species_catalog_repository.dart';
 
 /// Use cases for the species catalog feature.
 class SpeciesCatalogUsecases {

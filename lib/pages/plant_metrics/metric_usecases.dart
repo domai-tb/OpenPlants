@@ -1,9 +1,9 @@
 import 'package:uuid/uuid.dart';
 
-import 'package:open_plants/pages/plant_metrics/metric_definition.dart';
-import 'package:open_plants/pages/plant_metrics/metric_evaluator.dart';
-import 'package:open_plants/pages/plant_metrics/metric_measurement.dart';
-import 'package:open_plants/pages/plant_metrics/metric_repository.dart';
+import 'package:openplants/pages/plant_metrics/metric_definition.dart';
+import 'package:openplants/pages/plant_metrics/metric_evaluator.dart';
+import 'package:openplants/pages/plant_metrics/metric_measurement.dart';
+import 'package:openplants/pages/plant_metrics/metric_repository.dart';
 
 /// Use cases for metric definitions and measurements.
 ///

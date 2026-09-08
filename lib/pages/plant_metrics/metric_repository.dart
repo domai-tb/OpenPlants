@@ -1,7 +1,7 @@
-import 'package:open_plants/pages/plant_metrics/metric_definition.dart';
-import 'package:open_plants/pages/plant_metrics/metric_definition_datasource.dart';
-import 'package:open_plants/pages/plant_metrics/metric_measurement.dart';
-import 'package:open_plants/pages/plant_metrics/metric_measurement_datasource.dart';
+import 'package:openplants/pages/plant_metrics/metric_definition.dart';
+import 'package:openplants/pages/plant_metrics/metric_definition_datasource.dart';
+import 'package:openplants/pages/plant_metrics/metric_measurement.dart';
+import 'package:openplants/pages/plant_metrics/metric_measurement_datasource.dart';
 
 /// Repository for metric definitions and measurements.
 ///

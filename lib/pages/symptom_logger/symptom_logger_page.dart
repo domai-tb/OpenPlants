@@ -5,13 +5,13 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 
-import 'package:open_plants/core/app_scope.dart';
-import 'package:open_plants/l10n/l10n_x.dart';
-import 'package:open_plants/pages/diagnosis/diagnosis_item_entity.dart';
-import 'package:open_plants/pages/symptom_logger/symptom_logger_extensions.dart';
-import 'package:open_plants/pages/symptom_logger/symptom_logger_item_entity.dart';
-import 'package:open_plants/pages/symptom_logger/symptom_logger_usecases.dart';
-import 'package:open_plants/widgets/inline_camera_preview.dart';
+import 'package:openplants/core/app_scope.dart';
+import 'package:openplants/l10n/l10n_x.dart';
+import 'package:openplants/pages/diagnosis/diagnosis_item_entity.dart';
+import 'package:openplants/pages/symptom_logger/symptom_logger_extensions.dart';
+import 'package:openplants/pages/symptom_logger/symptom_logger_item_entity.dart';
+import 'package:openplants/pages/symptom_logger/symptom_logger_usecases.dart';
+import 'package:openplants/widgets/inline_camera_preview.dart';
 
 /// Multi-step symptom logging form for recording plant health issues.
 class SymptomLoggerPage extends StatefulWidget {

@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/services.dart';
 
-import 'package:open_plants/pages/species_catalog/species_catalog_entity.dart';
+import 'package:openplants/pages/species_catalog/species_catalog_entity.dart';
 
 String _defaultLocalePath(String locale) => 'assets/species/locales/$locale.json';
 

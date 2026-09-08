@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:open_plants/l10n/l10n_x.dart';
-import 'package:open_plants/pages/plant_journal/plant_journal_item_entity.dart';
+import 'package:openplants/l10n/l10n_x.dart';
+import 'package:openplants/pages/plant_journal/plant_journal_item_entity.dart';
 
 /// Card widget that renders a diagnosis-type journal entry.
 ///

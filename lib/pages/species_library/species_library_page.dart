@@ -2,11 +2,11 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import 'package:open_plants/core/app_scope.dart';
-import 'package:open_plants/l10n/l10n_x.dart';
-import 'package:open_plants/pages/species_library/species_detail_page.dart';
-import 'package:open_plants/pages/species_library/species_library_item_entity.dart';
-import 'package:open_plants/pages/species_library/species_library_usecases.dart';
+import 'package:openplants/core/app_scope.dart';
+import 'package:openplants/l10n/l10n_x.dart';
+import 'package:openplants/pages/species_library/species_detail_page.dart';
+import 'package:openplants/pages/species_library/species_library_item_entity.dart';
+import 'package:openplants/pages/species_library/species_library_usecases.dart';
 
 /// Browsable, searchable list of all species in the library.
 class SpeciesLibraryPage extends StatefulWidget {

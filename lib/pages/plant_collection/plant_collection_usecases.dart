@@ -1,8 +1,8 @@
 import 'dart:io';
 
-import 'package:open_plants/core/exceptions.dart';
-import 'package:open_plants/pages/plant_collection/plant_collection_item_entity.dart';
-import 'package:open_plants/pages/plant_collection/plant_collection_repository.dart';
+import 'package:openplants/core/exceptions.dart';
+import 'package:openplants/pages/plant_collection/plant_collection_item_entity.dart';
+import 'package:openplants/pages/plant_collection/plant_collection_repository.dart';
 
 /// Use cases for plant collection business logic.
 class PlantCollectionUsecases {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:open_plants/core/app_scope.dart';
-import 'package:open_plants/l10n/l10n_x.dart';
+import 'package:openplants/core/app_scope.dart';
+import 'package:openplants/l10n/l10n_x.dart';
 
 /// Notification settings page.
 class NotificationSettingsPage extends StatelessWidget {

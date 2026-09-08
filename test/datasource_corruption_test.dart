@@ -3,14 +3,14 @@ import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:open_plants/core/exceptions.dart';
-import 'package:open_plants/pages/diagnosis/diagnosis_datasource.dart';
-import 'package:open_plants/pages/diagnosis/diagnosis_item_entity.dart';
-import 'package:open_plants/pages/diagnosis/diagnosis_result_entity.dart';
-import 'package:open_plants/pages/plant_journal/plant_journal_datasource.dart';
-import 'package:open_plants/pages/plant_journal/plant_journal_item_entity.dart';
-import 'package:open_plants/pages/symptom_logger/symptom_logger_datasource.dart';
-import 'package:open_plants/pages/symptom_logger/symptom_logger_item_entity.dart';
+import 'package:openplants/core/exceptions.dart';
+import 'package:openplants/pages/diagnosis/diagnosis_datasource.dart';
+import 'package:openplants/pages/diagnosis/diagnosis_item_entity.dart';
+import 'package:openplants/pages/diagnosis/diagnosis_result_entity.dart';
+import 'package:openplants/pages/plant_journal/plant_journal_datasource.dart';
+import 'package:openplants/pages/plant_journal/plant_journal_item_entity.dart';
+import 'package:openplants/pages/symptom_logger/symptom_logger_datasource.dart';
+import 'package:openplants/pages/symptom_logger/symptom_logger_item_entity.dart';
 
 void main() {
   group('DiagnosisDataSource corruption tests', () {

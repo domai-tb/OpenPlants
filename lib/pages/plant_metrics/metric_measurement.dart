@@ -1,4 +1,4 @@
-import 'package:open_plants/pages/plant_metrics/metric_definition.dart';
+import 'package:openplants/pages/plant_metrics/metric_definition.dart';
 
 /// Immutable measurement entity for a metric.
 ///

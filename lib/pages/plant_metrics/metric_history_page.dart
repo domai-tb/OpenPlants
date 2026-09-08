@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'package:open_plants/pages/plant_metrics/metric_definition.dart';
-import 'package:open_plants/pages/plant_metrics/metric_measurement.dart';
-import 'package:open_plants/pages/plant_metrics/metric_usecases.dart';
+import 'package:openplants/pages/plant_metrics/metric_definition.dart';
+import 'package:openplants/pages/plant_metrics/metric_measurement.dart';
+import 'package:openplants/pages/plant_metrics/metric_usecases.dart';
 
 /// Metric history page showing measurements and graph.
 class MetricHistoryPage extends StatefulWidget {

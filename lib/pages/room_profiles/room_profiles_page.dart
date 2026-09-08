@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-import 'package:open_plants/core/app_scope.dart';
-import 'package:open_plants/pages/room_profiles/room_profiles_entity.dart';
-import 'package:open_plants/pages/room_profiles/room_profiles_form_page.dart';
-import 'package:open_plants/pages/room_profiles/room_profiles_usecases.dart';
-import 'package:open_plants/pages/plant_collection/plant_collection_usecases.dart';
+import 'package:openplants/core/app_scope.dart';
+import 'package:openplants/pages/room_profiles/room_profiles_entity.dart';
+import 'package:openplants/pages/room_profiles/room_profiles_form_page.dart';
+import 'package:openplants/pages/room_profiles/room_profiles_usecases.dart';
+import 'package:openplants/pages/plant_collection/plant_collection_usecases.dart';
 
 /// Page for managing room profiles.
 class RoomProfilesPage extends StatefulWidget {

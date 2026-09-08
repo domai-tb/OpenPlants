@@ -1,7 +1,7 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:open_plants/core/local_collection_codec.dart';
-import 'package:open_plants/pages/plant_metrics/metric_measurement.dart';
+import 'package:openplants/core/local_collection_codec.dart';
+import 'package:openplants/pages/plant_metrics/metric_measurement.dart';
 
 /// Persistence layer for metric measurements.
 ///

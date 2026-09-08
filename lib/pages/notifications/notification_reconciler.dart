@@ -1,6 +1,6 @@
-import 'package:open_plants/pages/notifications/notification_entity.dart';
-import 'package:open_plants/pages/notifications/notification_repository.dart';
-import 'package:open_plants/pages/notifications/notification_usecases.dart';
+import 'package:openplants/pages/notifications/notification_entity.dart';
+import 'package:openplants/pages/notifications/notification_repository.dart';
+import 'package:openplants/pages/notifications/notification_usecases.dart';
 
 /// Reconciliation service for care task notifications.
 ///

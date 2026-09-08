@@ -1,13 +1,13 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:open_plants/pages/plant_metrics/metric_definition.dart';
-import 'package:open_plants/pages/plant_metrics/metric_definition_datasource.dart';
-import 'package:open_plants/pages/plant_metrics/metric_measurement.dart';
-import 'package:open_plants/pages/plant_metrics/metric_measurement_datasource.dart';
-import 'package:open_plants/pages/plant_metrics/metric_repository.dart';
-import 'package:open_plants/pages/plant_metrics/metric_evaluator.dart';
-import 'package:open_plants/pages/plant_metrics/metric_usecases.dart';
+import 'package:openplants/pages/plant_metrics/metric_definition.dart';
+import 'package:openplants/pages/plant_metrics/metric_definition_datasource.dart';
+import 'package:openplants/pages/plant_metrics/metric_measurement.dart';
+import 'package:openplants/pages/plant_metrics/metric_measurement_datasource.dart';
+import 'package:openplants/pages/plant_metrics/metric_repository.dart';
+import 'package:openplants/pages/plant_metrics/metric_evaluator.dart';
+import 'package:openplants/pages/plant_metrics/metric_usecases.dart';
 
 void main() {
   late SharedPreferences prefs;

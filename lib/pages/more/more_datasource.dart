@@ -1,4 +1,4 @@
-import 'package:open_plants/pages/more/more_item_entity.dart';
+import 'package:openplants/pages/more/more_item_entity.dart';
 
 class MoreDataSource {
   Future<List<MoreItemEntity>> fetchItems() async {

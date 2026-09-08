@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:open_plants/core/app_scope.dart';
-import 'package:open_plants/core/injection.dart' as ic;
-import 'package:open_plants/core/settings.dart';
-import 'package:open_plants/l10n/l10n.dart';
-import 'package:open_plants/pages/notifications/notification_settings_page.dart';
+import 'package:openplants/core/app_scope.dart';
+import 'package:openplants/core/injection.dart' as ic;
+import 'package:openplants/core/settings.dart';
+import 'package:openplants/l10n/l10n.dart';
+import 'package:openplants/pages/notifications/notification_settings_page.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();

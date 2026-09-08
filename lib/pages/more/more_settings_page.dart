@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import 'package:open_plants/core/app_scope.dart';
-import 'package:open_plants/core/settings.dart';
-import 'package:open_plants/l10n/l10n_x.dart';
-import 'package:open_plants/widgets/app_segmented_triple_control.dart';
+import 'package:openplants/core/app_scope.dart';
+import 'package:openplants/core/settings.dart';
+import 'package:openplants/l10n/l10n_x.dart';
+import 'package:openplants/widgets/app_segmented_triple_control.dart';
 
 class MoreSettingsPage extends StatelessWidget {
   const MoreSettingsPage({super.key});

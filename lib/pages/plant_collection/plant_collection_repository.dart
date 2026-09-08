@@ -2,11 +2,11 @@ import 'dart:io';
 
 import 'package:uuid/uuid.dart';
 
-import 'package:open_plants/pages/care_schedule/care_schedule_repository.dart';
-import 'package:open_plants/pages/care_schedule/species_care_presets.dart';
-import 'package:open_plants/pages/plant_collection/plant_collection_datasource.dart';
-import 'package:open_plants/pages/plant_collection/plant_collection_item_entity.dart';
-import 'package:open_plants/pages/species_library/species_library_repository.dart';
+import 'package:openplants/pages/care_schedule/care_schedule_repository.dart';
+import 'package:openplants/pages/care_schedule/species_care_presets.dart';
+import 'package:openplants/pages/plant_collection/plant_collection_datasource.dart';
+import 'package:openplants/pages/plant_collection/plant_collection_item_entity.dart';
+import 'package:openplants/pages/species_library/species_library_repository.dart';
 
 /// Repository for plant collection domain operations.
 ///

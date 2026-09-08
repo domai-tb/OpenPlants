@@ -1,7 +1,7 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:open_plants/core/local_collection_codec.dart';
-import 'package:open_plants/pages/notifications/notification_entity.dart';
+import 'package:openplants/core/local_collection_codec.dart';
+import 'package:openplants/pages/notifications/notification_entity.dart';
 
 /// Persistence layer for scheduled notifications.
 class NotificationDataSource {

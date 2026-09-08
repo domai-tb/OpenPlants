@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 
-import 'package:open_plants/pages/care_schedule/care_task_type.dart';
+import 'package:openplants/pages/care_schedule/care_task_type.dart';
 
 /// The kind of schedule action performed.
 enum CareScheduleActionKind {

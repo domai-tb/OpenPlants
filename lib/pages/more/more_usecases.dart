@@ -1,5 +1,5 @@
-import 'package:open_plants/pages/more/more_item_entity.dart';
-import 'package:open_plants/pages/more/more_repository.dart';
+import 'package:openplants/pages/more/more_item_entity.dart';
+import 'package:openplants/pages/more/more_repository.dart';
 
 class MoreUsecases {
   final MoreRepository repository;

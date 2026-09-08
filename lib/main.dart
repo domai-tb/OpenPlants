@@ -3,16 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 
-import 'package:open_plants/core/app_scope.dart';
-import 'package:open_plants/core/app_services.dart';
-import 'package:open_plants/core/injection.dart' as ic;
-import 'package:open_plants/core/settings.dart';
-import 'package:open_plants/core/themes.dart';
-import 'package:open_plants/l10n/l10n.dart';
-import 'package:open_plants/l10n/l10n_x.dart';
-import 'package:open_plants/pages/home/home_page.dart';
-import 'package:open_plants/pages/home/onboarding.dart';
-import 'package:open_plants/pages/notifications/notification_usecases.dart';
+import 'package:openplants/core/app_scope.dart';
+import 'package:openplants/core/app_services.dart';
+import 'package:openplants/core/injection.dart' as ic;
+import 'package:openplants/core/settings.dart';
+import 'package:openplants/core/themes.dart';
+import 'package:openplants/l10n/l10n.dart';
+import 'package:openplants/l10n/l10n_x.dart';
+import 'package:openplants/pages/home/home_page.dart';
+import 'package:openplants/pages/home/onboarding.dart';
+import 'package:openplants/pages/notifications/notification_usecases.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

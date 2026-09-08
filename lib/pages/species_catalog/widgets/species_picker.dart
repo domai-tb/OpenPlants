@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:open_plants/l10n/l10n.dart';
-import 'package:open_plants/pages/species_catalog/species_catalog_entity.dart';
-import 'package:open_plants/pages/species_catalog/species_catalog_usecases.dart';
+import 'package:openplants/l10n/l10n.dart';
+import 'package:openplants/pages/species_catalog/species_catalog_entity.dart';
+import 'package:openplants/pages/species_catalog/species_catalog_usecases.dart';
 
 /// Searchable species picker using the catalog.
 ///

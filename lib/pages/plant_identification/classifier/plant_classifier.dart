@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter_onnxruntime/flutter_onnxruntime.dart';
-import 'package:open_plants/pages/plant_identification/classifier/model_asset_cache.dart';
+import 'package:openplants/pages/plant_identification/classifier/model_asset_cache.dart';
 import 'package:path_provider/path_provider.dart';
 
 /// Manages the ONNX Runtime session for plant classification.

@@ -4,9 +4,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
-import 'package:open_plants/pages/plant_collection/plant_collection_datasource.dart';
-import 'package:open_plants/pages/plant_collection/plant_collection_item_entity.dart';
-import 'package:open_plants/pages/plant_collection/plant_collection_repository.dart';
+import 'package:openplants/pages/plant_collection/plant_collection_datasource.dart';
+import 'package:openplants/pages/plant_collection/plant_collection_item_entity.dart';
+import 'package:openplants/pages/plant_collection/plant_collection_repository.dart';
 
 @GenerateMocks([PlantCollectionDataSource])
 import 'plant_collection_repository_test.mocks.dart';

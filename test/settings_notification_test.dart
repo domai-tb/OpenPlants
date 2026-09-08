@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:open_plants/core/settings.dart';
+import 'package:openplants/core/settings.dart';
 
 void main() {
   group('Settings notification defaults', () {

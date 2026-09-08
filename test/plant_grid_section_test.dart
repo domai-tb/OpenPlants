@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:open_plants/core/app_scope.dart';
-import 'package:open_plants/core/injection.dart';
-import 'package:open_plants/core/settings.dart';
-import 'package:open_plants/l10n/l10n.dart';
-import 'package:open_plants/pages/today_dashboard/plant_grid_section.dart';
+import 'package:openplants/core/app_scope.dart';
+import 'package:openplants/core/injection.dart';
+import 'package:openplants/core/settings.dart';
+import 'package:openplants/l10n/l10n.dart';
+import 'package:openplants/pages/today_dashboard/plant_grid_section.dart';
 
 void main() {
   setUp(() async {

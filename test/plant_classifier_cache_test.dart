@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:open_plants/pages/plant_identification/classifier/model_asset_cache.dart';
+import 'package:openplants/pages/plant_identification/classifier/model_asset_cache.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();

@@ -1,5 +1,5 @@
-import 'package:open_plants/pages/plant_metrics/metric_definition.dart';
-import 'package:open_plants/pages/plant_metrics/metric_measurement.dart';
+import 'package:openplants/pages/plant_metrics/metric_definition.dart';
+import 'package:openplants/pages/plant_metrics/metric_measurement.dart';
 
 /// Current state of a metric based on its measurements.
 enum MetricState { normal, alert, noData }

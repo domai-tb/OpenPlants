@@ -1,8 +1,8 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/timezone.dart' as tz;
 
-import 'package:open_plants/pages/notifications/notification_entity.dart';
-import 'package:open_plants/pages/notifications/notification_repository.dart';
+import 'package:openplants/pages/notifications/notification_entity.dart';
+import 'package:openplants/pages/notifications/notification_repository.dart';
 
 /// Use cases for managing care task notifications.
 class NotificationUsecases {

@@ -1,6 +1,6 @@
-import 'package:open_plants/pages/care_schedule/care_task_type.dart';
-import 'package:open_plants/pages/care_schedule/custom_care_rule.dart';
-import 'package:open_plants/pages/species_library/species_library_item_entity.dart';
+import 'package:openplants/pages/care_schedule/care_task_type.dart';
+import 'package:openplants/pages/care_schedule/custom_care_rule.dart';
+import 'package:openplants/pages/species_library/species_library_item_entity.dart';
 
 /// Maps species characteristics to default care rule templates.
 ///

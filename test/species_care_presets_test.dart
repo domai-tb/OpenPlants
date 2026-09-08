@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:open_plants/pages/care_schedule/care_task_type.dart';
-import 'package:open_plants/pages/care_schedule/species_care_presets.dart';
-import 'package:open_plants/pages/species_library/species_library_item_entity.dart';
+import 'package:openplants/pages/care_schedule/care_task_type.dart';
+import 'package:openplants/pages/care_schedule/species_care_presets.dart';
+import 'package:openplants/pages/species_library/species_library_item_entity.dart';
 
 SpeciesEntity _makeSpecies({
   WaterNeeds waterNeeds = WaterNeeds.moderate,

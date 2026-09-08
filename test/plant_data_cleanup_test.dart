@@ -2,12 +2,12 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
-import 'package:open_plants/pages/care_schedule/care_schedule_usecases.dart';
-import 'package:open_plants/pages/diagnosis/diagnosis_history_usecases.dart';
-import 'package:open_plants/pages/plant_collection/plant_data_cleanup.dart';
-import 'package:open_plants/pages/plant_journal/plant_journal_usecases.dart';
-import 'package:open_plants/pages/plant_photo_timeline/plant_photo_timeline_usecases.dart';
-import 'package:open_plants/pages/symptom_logger/symptom_logger_usecases.dart';
+import 'package:openplants/pages/care_schedule/care_schedule_usecases.dart';
+import 'package:openplants/pages/diagnosis/diagnosis_history_usecases.dart';
+import 'package:openplants/pages/plant_collection/plant_data_cleanup.dart';
+import 'package:openplants/pages/plant_journal/plant_journal_usecases.dart';
+import 'package:openplants/pages/plant_photo_timeline/plant_photo_timeline_usecases.dart';
+import 'package:openplants/pages/symptom_logger/symptom_logger_usecases.dart';
 
 @GenerateMocks([
   PlantJournalUseCases,

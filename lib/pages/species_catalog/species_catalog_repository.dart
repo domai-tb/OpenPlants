@@ -1,5 +1,5 @@
-import 'package:open_plants/pages/species_catalog/species_catalog_datasource.dart';
-import 'package:open_plants/pages/species_catalog/species_catalog_entity.dart';
+import 'package:openplants/pages/species_catalog/species_catalog_datasource.dart';
+import 'package:openplants/pages/species_catalog/species_catalog_entity.dart';
 
 /// Repository for the species catalog with search, lookup, and locale resolution.
 class SpeciesCatalogRepository {

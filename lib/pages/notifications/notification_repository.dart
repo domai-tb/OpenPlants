@@ -1,5 +1,5 @@
-import 'package:open_plants/pages/notifications/notification_datasource.dart';
-import 'package:open_plants/pages/notifications/notification_entity.dart';
+import 'package:openplants/pages/notifications/notification_datasource.dart';
+import 'package:openplants/pages/notifications/notification_entity.dart';
 
 /// Repository for managing scheduled notifications.
 class NotificationRepository {
