@@ -1,65 +1,99 @@
-# Releasing OpenPlant
+# Releasing OpenPlants
 
 ## Overview
 
-OpenPlant is distributed through F-Droid. F-Droid independently rebuilds and signs
-the app from public source. GitHub Actions provides preflight validation only — it
-does not produce production artifacts.
+OpenPlants is distributed through F-Droid. F-Droid independently rebuilds and
+signs the app from public source. GitHub Actions provides unsigned preflight
+evidence only; it does not produce the production release.
 
-## Version Code and Name
+## Release inputs
 
-- `versionName` and `versionCode` live in `pubspec.yaml`.
-- `versionCode` must increase monotonically for every release. Never reset or reuse
-  a version code.
-- `versionName` follows semantic versioning (e.g. `1.2.0`).
+- `pubspec.yaml` contains the upstream `versionName` and `versionCode`.
+- `fastlane/metadata/android/en-US/` contains the description, graphics, and
+  numeric changelogs.
+- `metadata/com.domai_tb.openplants.yml` is a staging copy of the F-Droid
+  build recipe. The official copy is submitted to the separate `fdroiddata`
+  GitLab repository. F-Droid metadata uses `.yml`, not `.yaml`.
+- `assets/ml/plant-identification/` must contain the runtime model before a
+  release that advertises on-device identification.
 
-## Release Process
+## Release process
 
-1. **Update version in `pubspec.yaml`** — bump `versionName` and increment `versionCode`.
-2. **Update changelog** — add a file at `fastlane/metadata/android/en-US/changelogs/<versionCode>.txt`.
-3. **Commit all release inputs** — the commit that bumps the version is the release commit.
-4. **Create an immutable version tag** — `git tag v<versionName>` (e.g. `v1.2.0`).
-   Tags must never be moved or force-pushed.
-5. **Push the commit and tag** — `git push origin HEAD:dev --tags`.
-6. **GitHub Actions preflight** — the tag-triggered workflow rebuilds the unsigned APK
-   from the tagged commit, uploads the APK, checksum, and provenance as artifacts.
-7. **Review artifacts** — confirm the APK checksum, commit SHA, and version match the
-   tag before proceeding to F-Droid submission.
+1. Update `pubspec.yaml`. For this release it is `1.1.0+3`; future version
+   codes must increase monotonically.
+2. Add or review `fastlane/metadata/android/en-US/changelogs/<versionCode>.txt`.
+   Each file must stay below 500 characters.
+3. Replace the temporary feature graphic and phone screenshots with real app
+   captures before the release commit. The current files are placeholders.
+4. Ensure the model strategy below is complete and the model is present in the
+   tagged source, or remove/disable the identification feature and its store
+   claim for this release.
+5. Run the local checks:
 
-## Unsigned Builds
+   ```bash
+   fvm flutter pub get
+   fvm flutter gen-l10n
+   fvm dart format --line-length=120 .
+   fvm flutter analyze
+   fvm flutter test --dart-define=platform=vm
+   fvm flutter build apk --release --split-per-abi
+   ```
 
-CI and F-Droid builds produce unsigned APKs. The release signing config in
-`android/app/build.gradle.kts` is conditional on a local `key.properties` file.
-When absent, the build completes without signing.
+   The split build should produce `app-armeabi-v7a-release.apk`,
+   `app-arm64-v8a-release.apk`, and `app-x86_64-release.apk` under
+   `build/app/outputs/flutter-apk/`.
+6. Commit the complete release inputs on the current branch.
+7. Merge that branch into `main` manually. Do not tag a pre-merge commit.
+8. On the final `main` commit, create the immutable tag `v1.1.0`. Never move
+   or force-push a release tag.
+9. Push `main` and the tag to the public source repository. The tag workflow
+   runs the checks above and uploads the three unsigned APKs, their checksums,
+   and build provenance.
+10. Copy the F-Droid recipe to `fdroiddata/metadata/com.domai_tb.openplants.yml`,
+    replace its staging commit with the full SHA of the tagged release commit,
+    run the F-Droid lint/build checks, and open the GitLab merge request.
 
-- CI artifacts are labeled **unsigned preflight evidence**, not production releases.
-- F-Droid independently rebuilds, signs, and publishes the APK.
+## F-Droid ABI split
 
-## F-Droid Submission
+F-Droid builds each ABI as a separate build block. The upstream version code is
+`3`; the recipe maps it to `31` (armeabi-v7a), `32` (arm64-v8a), and `33`
+(x86_64). Keeping the ABI digit at the least-significant position preserves
+correct update ordering between architectures and releases.
 
-1. Ensure the release commit is immutable (no force-push, no tag movement).
-2. The F-Droid `fdroiddata` metadata must reference the full commit SHA of the
-   release commit.
-3. Submit a merge request to `fdroiddata/metadata/<applicationId>.yml` with the
-   new version and commit SHA.
-4. F-Droid will build, sign, and publish the APK. The signed F-Droid artifact is
-   the only production release.
+The split is configured in the F-Droid recipe and the tag preflight workflow.
+There is no default ABI split in `android/app/build.gradle.kts`, so ordinary
+Flutter builds remain predictable.
 
-## Toolchain Inputs
+## ML model distribution
 
-Record these for F-Droid build recipe validation:
+Do not make an F-Droid build download the model from Hugging Face during the
+build. F-Droid builds in an isolated environment and needs the tagged source and
+its build inputs to be inspectable.
 
-| Input | Value |
-|-------|-------|
-| Flutter SDK | 3.41.4 (pinned via `.fvmrc`) |
-| Gradle | 8.12 |
-| Android Gradle Plugin | 8.9.1 |
-| Kotlin | 2.1.0 |
-| Min SDK | 26 |
-| compileSdk | Set by Flutter |
+Choose one of these before submitting:
 
-## What Must Never Be Committed
+1. Preferably export a smaller, validated model (for example dynamic INT8
+   quantization), update the app to use that file, and include the exact model
+   plus `labels.json`, `preprocessor_config.json`, `config.json`, and
+   `onnx_export_info.json` in the release source or a pinned public submodule.
+2. If the model remains too large for the app repository, put it in a separate
+   public model repository, pin an immutable commit as a Git submodule, and
+   document the model, dataset, and redistribution licenses. The F-Droid recipe
+   then needs `submodules: true`; the model still has to pass maintainer review.
+3. If neither is ready, ship an F-Droid-compatible build without plant
+   identification and remove the bundled-model claim until a compliant model is
+   available.
 
-- `key.properties` or any signing keystore (`.jks`, `.keystore`)
-- Signing passwords or aliases
-- Local Android SDK paths (`local.properties`)
+The current exporter can create `model.int8.onnx` with
+`--quantize-dynamic`, but the app currently loads `model.onnx`; quantization is
+not complete until the app is changed and on-device accuracy/runtime are
+validated.
+
+## Unsigned builds
+
+The conditional release signing config in `android/app/build.gradle.kts` uses a
+local `key.properties` only when it exists. CI and F-Droid builds therefore
+produce unsigned APKs; F-Droid signs the final artifacts.
+
+Never commit `key.properties`, signing keystores, passwords, or local Android
+SDK paths.

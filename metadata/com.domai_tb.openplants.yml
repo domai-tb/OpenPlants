@@ -1,0 +1,109 @@
+# Staging copy for the separate fdroiddata merge request.
+# Replace the commit value with the full SHA of the final v1.1.0 release commit
+# after the branch has been merged to main and the tag has been pushed.
+
+Categories:
+  - Science
+License: AGPL-3.0-only
+AuthorName: Domai
+AuthorWebSite: https://github.com/domai-tb
+WebSite: https://github.com/domai-tb/OpenPlants
+SourceCode: https://github.com/domai-tb/OpenPlants
+IssueTracker: https://github.com/domai-tb/OpenPlants/issues
+Summary: 'Open-source & privacy-friendly companion app for your plants.'
+Description: |-
+  OpenPlants is an open-source, privacy-friendly plant companion app for Android.
+
+  Track your plants, manage care routines, and never miss a watering again.
+
+  Features:
+  - Plant collection with photos and care history
+  - Customizable care schedules and notifications
+  - On-device plant identification using a local model
+  - Dark mode and English/German localization
+  - No account required and no data leaves your device
+
+  Built with Clean Architecture. AGPL v3 licensed.
+
+RepoType: git
+Repo: https://github.com/domai-tb/OpenPlants.git
+
+Builds:
+  - versionName: '1.1.0'
+    versionCode: 31
+    commit: 391b3688b0e4df09a931ec692443c9ed78bba5bc
+    forcevercode: true
+    output: build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk
+    srclibs:
+      - flutter@3.41.4
+    rm:
+      - ios
+      - linux
+      - macos
+      - web
+      - windows
+    prebuild:
+      - export PUB_CACHE=$(pwd)/.pub-cache
+      - $$flutter$$/bin/flutter config --no-analytics
+      - $$flutter$$/bin/flutter pub get --enforce-lockfile
+    scandelete:
+      - .pub-cache
+    build:
+      - export PUB_CACHE=$(pwd)/.pub-cache
+      - $$flutter$$/bin/flutter build apk --release --split-per-abi --target-platform="android-arm"
+
+  - versionName: '1.1.0'
+    versionCode: 32
+    commit: 391b3688b0e4df09a931ec692443c9ed78bba5bc
+    forcevercode: true
+    output: build/app/outputs/flutter-apk/app-arm64-v8a-release.apk
+    srclibs:
+      - flutter@3.41.4
+    rm:
+      - ios
+      - linux
+      - macos
+      - web
+      - windows
+    prebuild:
+      - export PUB_CACHE=$(pwd)/.pub-cache
+      - $$flutter$$/bin/flutter config --no-analytics
+      - $$flutter$$/bin/flutter pub get --enforce-lockfile
+    scandelete:
+      - .pub-cache
+    build:
+      - export PUB_CACHE=$(pwd)/.pub-cache
+      - $$flutter$$/bin/flutter build apk --release --split-per-abi --target-platform="android-arm64"
+
+  - versionName: '1.1.0'
+    versionCode: 33
+    commit: 391b3688b0e4df09a931ec692443c9ed78bba5bc
+    forcevercode: true
+    output: build/app/outputs/flutter-apk/app-x86_64-release.apk
+    srclibs:
+      - flutter@3.41.4
+    rm:
+      - ios
+      - linux
+      - macos
+      - web
+      - windows
+    prebuild:
+      - export PUB_CACHE=$(pwd)/.pub-cache
+      - $$flutter$$/bin/flutter config --no-analytics
+      - $$flutter$$/bin/flutter pub get --enforce-lockfile
+    scandelete:
+      - .pub-cache
+    build:
+      - export PUB_CACHE=$(pwd)/.pub-cache
+      - $$flutter$$/bin/flutter build apk --release --split-per-abi --target-platform="android-x64"
+
+AutoUpdateMode: Version
+UpdateCheckMode: Tags
+VercodeOperation:
+  - '%c * 10 + 1'
+  - '%c * 10 + 2'
+  - '%c * 10 + 3'
+UpdateCheckData: 'pubspec.yaml|version:\s.+\+(\d+)|.|version:\s(.+)\+'
+CurrentVersion: '1.1.0'
+CurrentVersionCode: 33
