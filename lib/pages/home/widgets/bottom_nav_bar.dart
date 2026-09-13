@@ -1,5 +1,3 @@
-import 'dart:io' show Platform;
-
 import 'package:flutter/material.dart';
 
 import 'package:openplants/core/constants.dart';
@@ -34,7 +32,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
 
     return Container(
       height: bottomNavBarHeight,
-      padding: Platform.isIOS ? const EdgeInsets.only(bottom: 20) : null,
+      padding: const EdgeInsets.only(bottom: 20),
       decoration: BoxDecoration(
         color: theme.cardColor,
         borderRadius: const BorderRadius.only(
