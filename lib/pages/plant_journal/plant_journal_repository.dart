@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:uuid/uuid.dart';
 
 import 'package:openplants/pages/plant_journal/plant_journal_datasource.dart';
@@ -37,26 +38,29 @@ class PlantJournalRepository {
       photoPath: photoPath,
     );
 
-    await dataSource.save(newEntry);
+    try {
+      await dataSource.save(newEntry);
+    } catch (_) {
+      if (photoPath != null) {
+        await _deletePhotoBestEffort(photoPath);
+      }
+      rethrow;
+    }
     return newEntry;
   }
 
   /// Update an existing journal entry.
   ///
-  /// If [photoFile] is provided, the old photo will be deleted and the new
-  /// one will be copied to the app's documents directory.
+  /// If [photoFile] is provided, the new photo is staged before metadata is
+  /// updated; cleanup of the old photo is attempted after the update succeeds.
   Future<JournalEntry> updateEntry(
     JournalEntry entry, {
     File? photoFile,
   }) async {
     String? photoPath = entry.photoPath;
+    final oldPhotoPath = entry.photoPath;
 
     if (photoFile != null) {
-      // Delete old photo if it exists
-      if (entry.photoPath != null) {
-        await dataSource.deletePhoto(entry.photoPath!);
-      }
-      // Copy new photo
       photoPath = await dataSource.savePhoto(photoFile, entry.id);
     }
 
@@ -65,27 +69,38 @@ class PlantJournalRepository {
       clearPhoto: photoPath == null,
     );
 
-    await dataSource.update(updatedEntry);
+    try {
+      await dataSource.update(updatedEntry);
+    } catch (_) {
+      if (photoFile != null && photoPath != null) {
+        await _deletePhotoBestEffort(photoPath);
+      }
+      rethrow;
+    }
+
+    if (oldPhotoPath != null && oldPhotoPath != photoPath) {
+      await _deletePhotoBestEffort(oldPhotoPath);
+    }
     return updatedEntry;
   }
 
   /// Delete a journal entry by ID.
   ///
-  /// Also deletes the photo file from disk if it exists.
+  /// Also attempts to delete the photo file from disk if it exists.
   Future<void> deleteEntry(String id) async {
     final all = await dataSource.loadAll();
     final entry = all.where((e) => e.id == id).firstOrNull;
 
-    if (entry?.photoPath != null) {
-      await dataSource.deletePhoto(entry!.photoPath!);
-    }
-
     await dataSource.delete(id);
+    if (entry?.photoPath != null) {
+      await _deletePhotoBestEffort(entry!.photoPath!);
+    }
   }
 
   /// Delete all journal entries for a specific plant.
   ///
-  /// Also deletes associated photo files from disk.
+  /// Deletes associated photo files before removing their metadata so a retry
+  /// can resume if any file cannot be removed.
   Future<void> deleteEntriesForPlant(String plantId) async {
     final all = List<JournalEntry>.from(await dataSource.loadAll());
     final plantEntries = all.where((e) => e.plantId == plantId).toList();
@@ -96,6 +111,14 @@ class PlantJournalRepository {
     }
     all.removeWhere((e) => e.plantId == plantId);
     await dataSource.saveAll(all);
+  }
+
+  Future<void> _deletePhotoBestEffort(String photoPath) async {
+    try {
+      await dataSource.deletePhoto(photoPath);
+    } catch (error) {
+      debugPrint('Failed to delete journal photo "$photoPath": $error');
+    }
   }
 
   /// Count journal entries for a specific plant.

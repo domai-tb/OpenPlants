@@ -111,7 +111,7 @@ class SymptomLoggerDataSource {
     final prefs = _prefsOverride ?? await SharedPreferences.getInstance();
     final allDrafts = await _loadAllDrafts(prefs);
     allDrafts[plantId] = draft;
-    await prefs.setString(_draftPrefsKey, jsonEncode(allDrafts));
+    await _saveAllDrafts(prefs, allDrafts);
   }
 
   /// Loads the draft for a specific plant, or null if none exists.
@@ -126,7 +126,17 @@ class SymptomLoggerDataSource {
     final prefs = _prefsOverride ?? await SharedPreferences.getInstance();
     final allDrafts = await _loadAllDrafts(prefs);
     allDrafts.remove(plantId);
-    await prefs.setString(_draftPrefsKey, jsonEncode(allDrafts));
+    await _saveAllDrafts(prefs, allDrafts);
+  }
+
+  Future<void> _saveAllDrafts(
+    SharedPreferences prefs,
+    Map<String, dynamic> drafts,
+  ) async {
+    final didPersist = await prefs.setString(_draftPrefsKey, jsonEncode(drafts));
+    if (!didPersist) {
+      throw StateError('Failed to persist "$_draftPrefsKey" to SharedPreferences.');
+    }
   }
 
   Future<Map<String, dynamic>> _loadAllDrafts(SharedPreferences prefs) async {

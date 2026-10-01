@@ -13,14 +13,10 @@ import 'package:openplants/pages/symptom_logger/symptom_logger_item_entity.dart'
 /// affected parts, and resolved/unresolved status.
 class JournalSymptomCard extends StatelessWidget {
   final JournalEntry entry;
-  final VoidCallback? onResolvedTap;
-  final VoidCallback? onTap;
 
   const JournalSymptomCard({
     super.key,
     required this.entry,
-    this.onResolvedTap,
-    this.onTap,
   });
 
   @override
@@ -41,7 +37,6 @@ class JournalSymptomCard extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 12),
       child: InkWell(
         borderRadius: BorderRadius.circular(12),
-        onTap: onTap,
         child: Padding(
           padding: const EdgeInsets.all(12),
           child: Column(
@@ -155,15 +150,6 @@ class JournalSymptomCard extends StatelessWidget {
                       ),
                     ),
                   ],
-                )
-              else if (onResolvedTap != null)
-                TextButton.icon(
-                  onPressed: onResolvedTap,
-                  icon: const Icon(Icons.check_circle_outline, size: 16),
-                  label: Text(
-                    context.l10n.healthTimelineMarkResolved,
-                    style: theme.textTheme.labelSmall,
-                  ),
                 ),
             ],
           ),

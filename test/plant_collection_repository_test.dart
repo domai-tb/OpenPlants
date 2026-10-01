@@ -45,6 +45,29 @@ void main() {
       verify(mockDataSource.deletePhoto('/old/photo.jpg')).called(1);
     });
 
+    test('returns updated plant when old photo cleanup fails after save', () async {
+      final plant = PlantEntity(
+        id: 'plant-1',
+        name: 'My Plant',
+        photoPath: '/old/photo.jpg',
+        createdAt: DateTime(2025),
+        updatedAt: DateTime(2025),
+      );
+
+      when(mockDataSource.loadPlants()).thenAnswer((_) async => [plant]);
+      when(mockDataSource.savePlants(any)).thenAnswer((_) async {});
+      when(mockDataSource.savePhoto(any, any)).thenAnswer((_) async => '/new/photo.jpg');
+      when(mockDataSource.deletePhoto(any)).thenThrow(StateError('Cleanup failed'));
+
+      final updated = await repository.updatePlant(plant, photoFile: File('/tmp/new_photo.jpg'));
+
+      expect(updated.photoPath, '/new/photo.jpg');
+      verifyInOrder([
+        mockDataSource.savePlants(any),
+        mockDataSource.deletePhoto('/old/photo.jpg'),
+      ]);
+    });
+
     test('clears photo: deletes old file after persistence', () async {
       final plant = PlantEntity(
         id: 'plant-1',
@@ -79,16 +102,17 @@ void main() {
       );
 
       when(mockDataSource.loadPlants()).thenAnswer((_) async => [plant]);
-      when(mockDataSource.savePlants(any)).thenThrow(Exception('Storage failure'));
+      final storageError = StateError('Storage failure');
+      when(mockDataSource.savePlants(any)).thenThrow(storageError);
       when(mockDataSource.savePhoto(any, any)).thenAnswer((_) async => '/new/photo.jpg');
-      when(mockDataSource.deletePhoto(any)).thenAnswer((_) async {});
+      when(mockDataSource.deletePhoto(any)).thenThrow(Exception('Cleanup failure'));
 
       final newPhotoFile = File('/tmp/new_photo.jpg');
 
       // Should throw but not delete old photo
       await expectLater(
         () => repository.updatePlant(plant, photoFile: newPhotoFile),
-        throwsException,
+        throwsA(same(storageError)),
       );
 
       // Old photo should NOT be deleted
@@ -146,8 +170,33 @@ void main() {
     });
   });
 
+  group('addPlant photo cleanup', () {
+    test('load failure removes staged photo and preserves storage error', () async {
+      final storageError = StateError('Corrupt plant storage');
+      when(mockDataSource.savePhoto(any, any)).thenAnswer((_) async => '/new/photo.jpg');
+      when(mockDataSource.loadPlants()).thenThrow(storageError);
+      when(mockDataSource.deletePhoto(any)).thenAnswer((_) async {});
+
+      await expectLater(
+        () => repository.addPlant(
+          PlantEntity(
+            id: 'unused',
+            name: 'My Plant',
+            createdAt: DateTime(2025),
+            updatedAt: DateTime(2025),
+          ),
+          photoFile: File('/tmp/new_photo.jpg'),
+        ),
+        throwsA(same(storageError)),
+      );
+
+      verify(mockDataSource.deletePhoto('/new/photo.jpg')).called(1);
+      verifyNever(mockDataSource.savePlants(any));
+    });
+  });
+
   group('deletePlant photo cleanup', () {
-    test('deletes photo file before removing record', () async {
+    test('removes record before deleting photo file', () async {
       final plant = PlantEntity(
         id: 'plant-1',
         name: 'My Plant',
@@ -162,8 +211,48 @@ void main() {
 
       await repository.deletePlant('plant-1');
 
-      verify(mockDataSource.deletePhoto('/photo.jpg')).called(1);
-      verify(mockDataSource.savePlants(any)).called(1);
+      verifyInOrder([
+        mockDataSource.savePlants(any),
+        mockDataSource.deletePhoto('/photo.jpg'),
+      ]);
+    });
+
+    test('succeeds when photo cleanup fails after removing the record', () async {
+      final plant = PlantEntity(
+        id: 'plant-1',
+        name: 'My Plant',
+        photoPath: '/photo.jpg',
+        createdAt: DateTime(2025),
+        updatedAt: DateTime(2025),
+      );
+
+      when(mockDataSource.loadPlants()).thenAnswer((_) async => [plant]);
+      when(mockDataSource.savePlants(any)).thenAnswer((_) async {});
+      when(mockDataSource.deletePhoto(any)).thenThrow(StateError('Cleanup failed'));
+
+      await repository.deletePlant('plant-1');
+
+      verifyInOrder([
+        mockDataSource.savePlants(any),
+        mockDataSource.deletePhoto('/photo.jpg'),
+      ]);
+    });
+
+    test('retains photo when removing the record fails', () async {
+      final plant = PlantEntity(
+        id: 'plant-1',
+        name: 'My Plant',
+        photoPath: '/photo.jpg',
+        createdAt: DateTime(2025),
+        updatedAt: DateTime(2025),
+      );
+
+      when(mockDataSource.loadPlants()).thenAnswer((_) async => [plant]);
+      when(mockDataSource.savePlants(any)).thenThrow(Exception('Storage failure'));
+
+      await expectLater(() => repository.deletePlant('plant-1'), throwsException);
+
+      verifyNever(mockDataSource.deletePhoto(any));
     });
 
     test('deleting plant without photo succeeds', () async {

@@ -41,6 +41,7 @@ class _PlantJournalPageState extends State<PlantJournalPage> {
 
   List<JournalEntry> _entries = [];
   bool _loading = true;
+  bool _loadFailed = false;
 
   @override
   void didChangeDependencies() {
@@ -52,13 +53,19 @@ class _PlantJournalPageState extends State<PlantJournalPage> {
   }
 
   Future<void> _load() async {
-    setState(() => _loading = true);
-    final entries = await _usecases.getUnifiedTimeline(widget.plantId);
-    if (!mounted) return;
     setState(() {
-      _entries = entries;
-      _loading = false;
+      _loading = true;
+      _loadFailed = false;
     });
+    try {
+      final entries = await _usecases.getUnifiedTimeline(widget.plantId);
+      if (!mounted) return;
+      setState(() => _entries = entries);
+    } catch (_) {
+      if (mounted) setState(() => _loadFailed = true);
+    } finally {
+      if (mounted) setState(() => _loading = false);
+    }
   }
 
   Future<void> _addEntry() async {
@@ -169,16 +176,34 @@ class _PlantJournalPageState extends State<PlantJournalPage> {
       ),
       body: _loading
           ? const Center(child: CircularProgressIndicator())
-          : _entries.isEmpty
-              ? _buildEmptyState(context)
-              : ListView.builder(
-                  padding: const EdgeInsets.all(16),
-                  itemCount: _entries.length,
-                  itemBuilder: (context, index) => _buildEntryCard(context, _entries[index]),
-                ),
+          : _loadFailed
+              ? _buildLoadError(context)
+              : _entries.isEmpty
+                  ? _buildEmptyState(context)
+                  : ListView.builder(
+                      padding: const EdgeInsets.all(16),
+                      itemCount: _entries.length,
+                      itemBuilder: (context, index) => _buildEntryCard(context, _entries[index]),
+                    ),
       floatingActionButton: FloatingActionButton(
         onPressed: _addEntry,
         child: const Icon(Icons.add),
+      ),
+    );
+  }
+
+  Widget _buildLoadError(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(context.l10n.unexpectedError),
+          TextButton.icon(
+            onPressed: _load,
+            icon: const Icon(Icons.refresh),
+            label: Text(context.l10n.retry),
+          ),
+        ],
       ),
     );
   }
@@ -234,7 +259,6 @@ class _PlantJournalPageState extends State<PlantJournalPage> {
       case JournalEntryType.symptom:
         return JournalSymptomCard(
           entry: entry,
-          onTap: () => _editEntry(entry),
         );
       case JournalEntryType.diagnosis:
         return JournalDiagnosisCard(

@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 import 'package:openplants/pages/diagnosis/auto_diagnosis_service.dart';
 import 'package:openplants/pages/diagnosis/diagnosis_result_entity.dart';
 import 'package:openplants/pages/plant_collection/plant_collection_item_entity.dart';
@@ -29,24 +31,33 @@ class SymptomLoggerUseCases {
 
     // Auto-update plant care status for severe symptoms
     if (entry.severity == Severity.severe) {
-      final plants = await _plantCollection.loadPlants();
-      final plant = plants.where((p) => p.id == entry.plantId).firstOrNull;
-      if (plant != null && plant.careStatus != CareStatus.needsAttention) {
-        final updated = plant.copyWith(careStatus: CareStatus.needsAttention);
-        await _plantCollection.updatePlant(updated);
+      try {
+        final plants = await _plantCollection.loadPlants();
+        final plant = plants.where((p) => p.id == entry.plantId).firstOrNull;
+        if (plant != null && plant.careStatus != CareStatus.needsAttention) {
+          final updated = plant.copyWith(careStatus: CareStatus.needsAttention);
+          await _plantCollection.updatePlant(updated);
+        }
+      } catch (e) {
+        debugPrint('Failed to update plant status after symptom was saved: $e');
       }
     }
 
     if (_autoDiagnosis == null) return savedEntry;
 
-    final diagnosisResultId = await _autoDiagnosis.diagnoseAndSave(savedEntry);
-    if (diagnosisResultId == null) return savedEntry;
+    try {
+      final diagnosisResultId = await _autoDiagnosis.diagnoseAndSave(savedEntry);
+      if (diagnosisResultId == null) return savedEntry;
 
-    final linkedEntry = savedEntry.copyWith(
-      diagnosisResultId: diagnosisResultId,
-    );
-    await _repository.updateEntry(linkedEntry);
-    return linkedEntry;
+      final linkedEntry = savedEntry.copyWith(
+        diagnosisResultId: diagnosisResultId,
+      );
+      await _repository.updateEntry(linkedEntry);
+      return linkedEntry;
+    } catch (e) {
+      debugPrint('Failed to diagnose symptom after it was saved: $e');
+      return savedEntry;
+    }
   }
 
   /// Returns symptom history for a plant, newest first.

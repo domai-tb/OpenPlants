@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:uuid/uuid.dart';
 
 import 'package:openplants/core/exceptions.dart';
 import 'package:openplants/core/local_collection_codec.dart';
@@ -115,7 +116,8 @@ class PlantJournalDataSource {
     final entries = await loadAll();
     final toRemove = entries.where((e) => e.plantId == plantId).toList();
 
-    // Delete photo files for entries being removed
+    // Keep entry paths persisted until every photo is deleted so a retry can
+    // find any file that failed to delete.
     for (final entry in toRemove) {
       if (entry.photoPath != null) {
         await deletePhoto(entry.photoPath!);
@@ -139,7 +141,7 @@ class PlantJournalDataSource {
 
     final parts = sourceFile.path.split('.');
     final extension = parts.length > 1 ? parts.last : 'jpg';
-    final targetPath = '${photoDir.path}/$entryId.$extension';
+    final targetPath = '${photoDir.path}/${entryId}_${const Uuid().v4()}.$extension';
 
     await sourceFile.copy(targetPath);
     return targetPath;

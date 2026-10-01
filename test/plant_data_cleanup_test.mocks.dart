@@ -581,7 +581,7 @@ class MockCareScheduleUsecases extends _i1.Mock implements _i16.CareScheduleUsec
           })>);
 
   @override
-  _i10.Future<List<_i17.CareTask>> completeTask({
+  _i10.Future<void> completeTask({
     required _i17.CareTask? task,
     String? note,
   }) =>
@@ -594,11 +594,11 @@ class MockCareScheduleUsecases extends _i1.Mock implements _i16.CareScheduleUsec
             #note: note,
           },
         ),
-        returnValue: _i10.Future<List<_i17.CareTask>>.value(<_i17.CareTask>[]),
-      ) as _i10.Future<List<_i17.CareTask>>);
+        returnValue: _i10.Future<void>.value(),
+      ) as _i10.Future<void>);
 
   @override
-  _i10.Future<List<_i17.CareTask>> snoozeTask({
+  _i10.Future<void> snoozeTask({
     required _i17.CareTask? task,
     required int? days,
   }) =>
@@ -611,18 +611,18 @@ class MockCareScheduleUsecases extends _i1.Mock implements _i16.CareScheduleUsec
             #days: days,
           },
         ),
-        returnValue: _i10.Future<List<_i17.CareTask>>.value(<_i17.CareTask>[]),
-      ) as _i10.Future<List<_i17.CareTask>>);
+        returnValue: _i10.Future<void>.value(),
+      ) as _i10.Future<void>);
 
   @override
-  _i10.Future<List<_i17.CareTask>> skipTask({required _i17.CareTask? task}) => (super.noSuchMethod(
+  _i10.Future<void> skipTask({required _i17.CareTask? task}) => (super.noSuchMethod(
         Invocation.method(
           #skipTask,
           [],
           {#task: task},
         ),
-        returnValue: _i10.Future<List<_i17.CareTask>>.value(<_i17.CareTask>[]),
-      ) as _i10.Future<List<_i17.CareTask>>);
+        returnValue: _i10.Future<void>.value(),
+      ) as _i10.Future<void>);
 
   @override
   _i10.Future<List<_i17.CareTask>> updateScheduleConfig({

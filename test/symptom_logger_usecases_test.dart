@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:openplants/pages/diagnosis/auto_diagnosis_service.dart';
 import 'package:openplants/pages/diagnosis/diagnosis_datasource.dart';
+import 'package:openplants/pages/diagnosis/diagnosis_result_entity.dart';
 import 'package:openplants/pages/diagnosis/diagnosis_item_entity.dart';
 import 'package:openplants/pages/diagnosis/diagnosis_repository.dart';
 import 'package:openplants/pages/diagnosis/diagnosis_usecases.dart';
@@ -52,4 +53,39 @@ void main() {
     expect(persistedEntry.diagnosisResultId, savedEntry.diagnosisResultId);
     expect(diagnosis?.symptomLogEntryId, savedEntry.id);
   });
+
+  test('diagnosis failure does not report failure after the symptom is saved', () async {
+    SharedPreferences.setMockInitialValues({});
+    final symptomDataSource = SymptomLoggerDataSource();
+    final useCases = SymptomLoggerUseCases(
+      repository: SymptomLoggerRepository(dataSource: symptomDataSource),
+      plantCollection: PlantCollectionUsecases(
+        repository: PlantCollectionRepository(dataSource: PlantCollectionDataSource()),
+      ),
+      autoDiagnosis: _FailingAutoDiagnosisService(),
+    );
+    final entry = SymptomLogEntry(
+      id: '',
+      plantId: 'plant-1',
+      symptomTypes: const [PlantSymptom.yellowingLeaves],
+      severity: Severity.moderate,
+      affectedParts: const [AffectedPart.leaves],
+      onsetTiming: OnsetTiming.today,
+      createdAt: DateTime(2026),
+    );
+
+    final savedEntry = await useCases.logSymptom(entry);
+
+    expect(savedEntry.id, isNotEmpty);
+    expect(savedEntry.diagnosisResultId, isNull);
+    expect((await symptomDataSource.loadAllEntries()).single.id, savedEntry.id);
+  });
+}
+
+class _FailingAutoDiagnosisService implements AutoDiagnosisService {
+  @override
+  Future<String?> diagnoseAndSave(SymptomLogEntry entry) async => throw StateError('diagnosis unavailable');
+
+  @override
+  Future<DiagnosisResultEntity?> getLatestDiagnosis(String plantId) async => null;
 }
