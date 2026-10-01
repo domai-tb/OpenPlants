@@ -27,4 +27,4 @@ Feature modules live under `lib/pages/`; app-wide services and dependency setup 
 
 ## License
 
-AGPL v3 — See [LICENSE](LICENSE).
+AGPL v3 — See [LICENSE](LICENSE.md).

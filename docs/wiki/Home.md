@@ -34,4 +34,4 @@ fvm flutter run
 
 ## License
 
-AGPL v3 — See [LICENSE](LICENSE).
+AGPL v3 — See [LICENSE](LICENSE.md).
