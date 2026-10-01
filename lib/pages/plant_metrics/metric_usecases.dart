@@ -32,14 +32,16 @@ class MetricUsecases {
     String? notes,
     String? entryInstructions,
   }) async {
+    final cleanedCategoryOptions = categoryOptions.map((option) => option.trim()).toList();
+    final cleanedUnit = unit?.trim();
     final now = DateTime.now();
     final definition = MetricDefinition(
       id: _uuid.v4(),
       plantId: plantId,
-      name: name,
+      name: name.trim(),
       valueType: valueType,
-      unit: unit,
-      categoryOptions: categoryOptions,
+      unit: cleanedUnit,
+      categoryOptions: cleanedCategoryOptions,
       numericBounds: numericBounds,
       alertValues: alertValues,
       alertResponse: alertResponse,
@@ -48,14 +50,51 @@ class MetricUsecases {
       createdAt: now,
       updatedAt: now,
     );
+    _validateDefinition(definition);
     await repository.saveDefinition(definition);
     return definition;
   }
 
   Future<MetricDefinition> updateDefinition(MetricDefinition definition) async {
     final updated = definition.copyWith(updatedAt: DateTime.now());
+    _validateDefinition(updated);
     await repository.saveDefinition(updated);
     return updated;
+  }
+
+  void _validateDefinition(MetricDefinition definition) {
+    if (definition.name.trim().isEmpty) throw ArgumentError('Metric name is required');
+    if (definition.unit?.trim().isNotEmpty != true) throw ArgumentError('Metric unit is required');
+
+    final bounds = definition.numericBounds;
+    if (bounds != null) {
+      if (bounds.lower?.isFinite == false || bounds.upper?.isFinite == false) {
+        throw ArgumentError('Alert thresholds must be finite numbers');
+      }
+      if (bounds.lower != null && bounds.upper != null && bounds.lower! > bounds.upper!) {
+        throw ArgumentError('Minimum cannot exceed maximum');
+      }
+    }
+
+    if (definition.valueType == MetricValueType.categorical) {
+      final options = definition.categoryOptions;
+      final normalizedOptions = options.map((option) => option.trim().toLowerCase()).toSet();
+      if (options.isEmpty ||
+          options.any((option) => option.trim().isEmpty) ||
+          normalizedOptions.length != options.length) {
+        throw ArgumentError('Categorical metrics need non-blank, unique options');
+      }
+      if (!(definition.alertValues ?? {}).every(options.contains)) {
+        throw ArgumentError('Alert values must be configured categories');
+      }
+    }
+
+    if (definition.valueType == MetricValueType.boolean) {
+      const booleanValues = {'true', 'false'};
+      if (!(definition.alertValues ?? {}).every(booleanValues.contains)) {
+        throw ArgumentError('Boolean alert values must be true or false');
+      }
+    }
   }
 
   Future<void> toggleDefinition(String id) async {
@@ -96,6 +135,9 @@ class MetricUsecases {
     final definition = await repository.getDefinitionById(metricId);
     if (definition == null) {
       throw ArgumentError('Metric definition not found: $metricId');
+    }
+    if (!definition.isEnabled) {
+      throw ArgumentError('Metric is disabled: $metricId');
     }
 
     final measurement = MetricMeasurement(

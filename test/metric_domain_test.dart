@@ -42,9 +42,9 @@ void main() {
         name: 'Temperature',
         valueType: MetricValueType.numeric,
         unit: '°C',
-        numericBounds: const NumericBounds(lower: 15.0, upper: 30.0),
-        createdAt: DateTime(2026, 1, 1),
-        updatedAt: DateTime(2026, 1, 1),
+        numericBounds: const NumericBounds(lower: 15, upper: 30),
+        createdAt: DateTime(2026),
+        updatedAt: DateTime(2026),
       );
 
       final json = def.toJson();
@@ -60,8 +60,8 @@ void main() {
         plantId: 'plant-1',
         name: 'Test',
         valueType: MetricValueType.boolean,
-        createdAt: DateTime(2026, 1, 1),
-        updatedAt: DateTime(2026, 1, 1),
+        createdAt: DateTime(2026),
+        updatedAt: DateTime(2026),
       );
 
       final copy = def.copyWith(name: 'Updated');
@@ -95,8 +95,8 @@ void main() {
         name: 'Test',
         valueType: MetricValueType.numeric,
         numericBounds: const NumericBounds(lower: 0, upper: 100),
-        createdAt: DateTime(2026, 1, 1),
-        updatedAt: DateTime(2026, 1, 1),
+        createdAt: DateTime(2026),
+        updatedAt: DateTime(2026),
       );
 
       final meas = MetricMeasurement(
@@ -104,21 +104,21 @@ void main() {
         metricId: 'metric-1',
         plantId: 'plant-1',
         value: 50,
-        measuredAt: DateTime(2026, 1, 1),
+        measuredAt: DateTime(2026),
       );
 
       expect(meas.validate(def), isNull);
     });
 
-    test('validate rejects out-of-bounds numeric value', () {
+    test('validate accepts out-of-bounds numeric value so it can trigger an alert', () {
       final def = MetricDefinition(
         id: 'metric-1',
         plantId: 'plant-1',
         name: 'Test',
         valueType: MetricValueType.numeric,
         numericBounds: const NumericBounds(lower: 0, upper: 100),
-        createdAt: DateTime(2026, 1, 1),
-        updatedAt: DateTime(2026, 1, 1),
+        createdAt: DateTime(2026),
+        updatedAt: DateTime(2026),
       );
 
       final meas = MetricMeasurement(
@@ -126,10 +126,10 @@ void main() {
         metricId: 'metric-1',
         plantId: 'plant-1',
         value: 150,
-        measuredAt: DateTime(2026, 1, 1),
+        measuredAt: DateTime(2026),
       );
 
-      expect(meas.validate(def), isNotNull);
+      expect(meas.validate(def), isNull);
     });
 
     test('validate accepts valid categorical value', () {
@@ -139,8 +139,8 @@ void main() {
         name: 'Test',
         valueType: MetricValueType.categorical,
         categoryOptions: const ['Good', 'Fair', 'Poor'],
-        createdAt: DateTime(2026, 1, 1),
-        updatedAt: DateTime(2026, 1, 1),
+        createdAt: DateTime(2026),
+        updatedAt: DateTime(2026),
       );
 
       final meas = MetricMeasurement(
@@ -148,7 +148,7 @@ void main() {
         metricId: 'metric-1',
         plantId: 'plant-1',
         value: 'Good',
-        measuredAt: DateTime(2026, 1, 1),
+        measuredAt: DateTime(2026),
       );
 
       expect(meas.validate(def), isNull);
@@ -161,8 +161,8 @@ void main() {
         name: 'Test',
         valueType: MetricValueType.categorical,
         categoryOptions: const ['Good', 'Fair', 'Poor'],
-        createdAt: DateTime(2026, 1, 1),
-        updatedAt: DateTime(2026, 1, 1),
+        createdAt: DateTime(2026),
+        updatedAt: DateTime(2026),
       );
 
       final meas = MetricMeasurement(
@@ -170,7 +170,7 @@ void main() {
         metricId: 'metric-1',
         plantId: 'plant-1',
         value: 'Excellent',
-        measuredAt: DateTime(2026, 1, 1),
+        measuredAt: DateTime(2026),
       );
 
       expect(meas.validate(def), isNotNull);
@@ -184,8 +184,8 @@ void main() {
         plantId: 'plant-1',
         name: 'Test',
         valueType: MetricValueType.numeric,
-        createdAt: DateTime(2026, 1, 1),
-        updatedAt: DateTime(2026, 1, 1),
+        createdAt: DateTime(2026),
+        updatedAt: DateTime(2026),
       );
 
       final result = MetricEvaluator.evaluate(def, []);
@@ -200,8 +200,8 @@ void main() {
         valueType: MetricValueType.numeric,
         numericBounds: const NumericBounds(lower: 0, upper: 100),
         alertValues: const {'low', 'high'},
-        createdAt: DateTime(2026, 1, 1),
-        updatedAt: DateTime(2026, 1, 1),
+        createdAt: DateTime(2026),
+        updatedAt: DateTime(2026),
       );
 
       final measurements = [
@@ -210,13 +210,60 @@ void main() {
           metricId: 'metric-1',
           plantId: 'plant-1',
           value: 50,
-          measuredAt: DateTime(2026, 1, 1),
+          measuredAt: DateTime(2026),
         ),
       ];
 
       final result = MetricEvaluator.evaluate(def, measurements);
       expect(result.state, MetricState.normal);
       expect(result.lastMeasurement, measurements.first);
+    });
+
+    test('numeric bounds alert without alert values and start a new episode after recovery', () {
+      final def = MetricDefinition(
+        id: 'metric-1',
+        plantId: 'plant-1',
+        name: 'Moisture',
+        valueType: MetricValueType.numeric,
+        numericBounds: const NumericBounds(lower: 20, upper: 80),
+        createdAt: DateTime(2026),
+        updatedAt: DateTime(2026),
+      );
+      final measurements = [
+        MetricMeasurement(
+          id: 'first-alert',
+          metricId: def.id,
+          plantId: def.plantId,
+          value: 10,
+          measuredAt: DateTime(2026),
+        ),
+        MetricMeasurement(
+          id: 'recovered',
+          metricId: def.id,
+          plantId: def.plantId,
+          value: 50,
+          measuredAt: DateTime(2026, 1, 2),
+        ),
+        MetricMeasurement(
+          id: 'new-alert',
+          metricId: def.id,
+          plantId: def.plantId,
+          value: 90,
+          measuredAt: DateTime(2026, 1, 3),
+        ),
+        MetricMeasurement(
+          id: 'continued-alert',
+          metricId: def.id,
+          plantId: def.plantId,
+          value: 95,
+          measuredAt: DateTime(2026, 1, 4),
+        ),
+      ];
+
+      final result = MetricEvaluator.evaluate(def, measurements);
+
+      expect(result.state, MetricState.alert);
+      expect(result.alertEpisodeId, 'metric-1:new-alert');
     });
 
     test('returns normal for disabled metric', () {
@@ -226,8 +273,8 @@ void main() {
         name: 'Test',
         valueType: MetricValueType.numeric,
         isEnabled: false,
-        createdAt: DateTime(2026, 1, 1),
-        updatedAt: DateTime(2026, 1, 1),
+        createdAt: DateTime(2026),
+        updatedAt: DateTime(2026),
       );
 
       final measurements = [
@@ -236,7 +283,7 @@ void main() {
           metricId: 'metric-1',
           plantId: 'plant-1',
           value: 150,
-          measuredAt: DateTime(2026, 1, 1),
+          measuredAt: DateTime(2026),
         ),
       ];
 

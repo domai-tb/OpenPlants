@@ -204,9 +204,13 @@ class _AddMetricDefinitionSheet extends StatefulWidget {
 class _AddMetricDefinitionSheetState extends State<_AddMetricDefinitionSheet> {
   final _nameController = TextEditingController();
   final _unitController = TextEditingController();
+  final _lowerController = TextEditingController();
+  final _upperController = TextEditingController();
+  final _categoryController = TextEditingController();
+  final Set<String> _alertValues = {};
+  String? _unitError;
   MetricValueType _valueType = MetricValueType.numeric;
-  double? _lowerBound;
-  double? _upperBound;
+  AlertResponse _alertResponse = AlertResponse.warning;
 
   @override
   Widget build(BuildContext context) {
@@ -217,58 +221,162 @@ class _AddMetricDefinitionSheetState extends State<_AddMetricDefinitionSheet> {
         right: 16,
         top: 16,
       ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Text('Add Metric', style: Theme.of(context).textTheme.headlineSmall),
-          const SizedBox(height: 16),
-          TextField(
-            controller: _nameController,
-            decoration: const InputDecoration(
-              labelText: 'Name',
-              hintText: 'e.g., Soil Moisture',
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text('Add Metric', style: Theme.of(context).textTheme.headlineSmall),
+            const SizedBox(height: 16),
+            TextField(
+              controller: _nameController,
+              decoration: const InputDecoration(
+                labelText: 'Name',
+                hintText: 'e.g., Soil Moisture',
+              ),
             ),
-          ),
-          const SizedBox(height: 8),
-          TextField(
-            controller: _unitController,
-            decoration: const InputDecoration(
-              labelText: 'Unit (optional)',
-              hintText: 'e.g., %, °C',
+            const SizedBox(height: 8),
+            TextField(
+              controller: _unitController,
+              decoration: InputDecoration(
+                labelText: 'Unit',
+                hintText: 'e.g., %, °C',
+                errorText: _unitError,
+              ),
+              onChanged: (value) {
+                if (value.trim().isNotEmpty && _unitError != null) {
+                  setState(() => _unitError = null);
+                }
+              },
             ),
-          ),
-          const SizedBox(height: 8),
-          DropdownButtonFormField<MetricValueType>(
-            value: _valueType,
-            decoration: const InputDecoration(labelText: 'Value Type'),
-            items: MetricValueType.values.map((t) {
-              return DropdownMenuItem(value: t, child: Text(t.name));
-            }).toList(),
-            onChanged: (v) => setState(() => _valueType = v!),
-          ),
-          const SizedBox(height: 16),
-          ElevatedButton(
-            onPressed: _save,
-            child: const Text('Save'),
-          ),
-          const SizedBox(height: 16),
-        ],
+            const SizedBox(height: 8),
+            DropdownButtonFormField<MetricValueType>(
+              initialValue: _valueType,
+              decoration: const InputDecoration(labelText: 'Value Type'),
+              items: MetricValueType.values.map((t) {
+                return DropdownMenuItem(value: t, child: Text(t.name));
+              }).toList(),
+              onChanged: (v) {
+                if (v != null) setState(() => _valueType = v);
+              },
+            ),
+            const SizedBox(height: 8),
+            if (_valueType == MetricValueType.numeric) ...[
+              TextField(
+                controller: _lowerController,
+                keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
+                decoration: const InputDecoration(labelText: 'Minimum alert value (optional)'),
+                onChanged: (_) => setState(() {}),
+              ),
+              const SizedBox(height: 8),
+              TextField(
+                controller: _upperController,
+                keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
+                decoration: const InputDecoration(labelText: 'Maximum alert value (optional)'),
+                onChanged: (_) => setState(() {}),
+              ),
+            ] else if (_valueType == MetricValueType.categorical) ...[
+              TextField(
+                controller: _categoryController,
+                decoration: const InputDecoration(
+                  labelText: 'Options',
+                  hintText: 'Comma-separated, e.g., Good, Fair, Poor',
+                ),
+                onChanged: (_) {
+                  final options = _categoryOptions.toSet();
+                  setState(() => _alertValues.removeWhere((value) => !options.contains(value)));
+                },
+              ),
+              ..._categoryOptions.map(
+                (option) => CheckboxListTile(
+                  contentPadding: EdgeInsets.zero,
+                  title: Text('Alert on $option'),
+                  value: _alertValues.contains(option),
+                  onChanged: (selected) => _setAlertValue(option, selected),
+                ),
+              ),
+            ] else ...[
+              CheckboxListTile(
+                contentPadding: EdgeInsets.zero,
+                title: const Text('Alert when Yes'),
+                value: _alertValues.contains('true'),
+                onChanged: (selected) => _setAlertValue('true', selected),
+              ),
+              CheckboxListTile(
+                contentPadding: EdgeInsets.zero,
+                title: const Text('Alert when No'),
+                value: _alertValues.contains('false'),
+                onChanged: (selected) => _setAlertValue('false', selected),
+              ),
+            ],
+            const SizedBox(height: 8),
+            DropdownButtonFormField<AlertResponse>(
+              initialValue: _alertResponse,
+              decoration: const InputDecoration(labelText: 'Alert response'),
+              items: AlertResponse.values
+                  .map((response) => DropdownMenuItem(value: response, child: Text(response.name)))
+                  .toList(),
+              onChanged: (response) {
+                if (response != null) setState(() => _alertResponse = response);
+              },
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: _save,
+              child: const Text('Save'),
+            ),
+            const SizedBox(height: 16),
+          ],
+        ),
       ),
     );
   }
 
-  Future<void> _save() async {
-    if (_nameController.text.isEmpty) return;
+  List<String> get _categoryOptions =>
+      _categoryController.text.split(',').map((option) => option.trim()).where((option) => option.isNotEmpty).toList();
 
-    await widget.usecases.createDefinition(
-      plantId: widget.plantId,
-      name: _nameController.text,
-      valueType: _valueType,
-      unit: _unitController.text.isEmpty ? null : _unitController.text,
-      numericBounds:
-          (_lowerBound != null || _upperBound != null) ? NumericBounds(lower: _lowerBound, upper: _upperBound) : null,
-    );
+  void _setAlertValue(String value, bool? selected) {
+    setState(() {
+      if (selected == true) {
+        _alertValues.add(value);
+      } else {
+        _alertValues.remove(value);
+      }
+    });
+  }
+
+  Future<void> _save() async {
+    if (_unitController.text.trim().isEmpty) {
+      setState(() => _unitError = 'Unit is required');
+      return;
+    }
+
+    final lowerText = _lowerController.text.trim();
+    final upperText = _upperController.text.trim();
+    final lower = lowerText.isEmpty ? null : double.tryParse(lowerText);
+    final upper = upperText.isEmpty ? null : double.tryParse(upperText);
+    if ((lowerText.isNotEmpty && lower == null) || (upperText.isNotEmpty && upper == null)) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Alert thresholds must be numbers')));
+      return;
+    }
+
+    try {
+      await widget.usecases.createDefinition(
+        plantId: widget.plantId,
+        name: _nameController.text,
+        valueType: _valueType,
+        unit: _unitController.text.trim(),
+        categoryOptions: _valueType == MetricValueType.categorical ? _categoryOptions : const [],
+        numericBounds: lower != null || upper != null ? NumericBounds(lower: lower, upper: upper) : null,
+        alertValues: _valueType == MetricValueType.numeric ? null : Set.of(_alertValues),
+        alertResponse: _alertResponse,
+      );
+    } catch (error) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error.toString())));
+      }
+      return;
+    }
 
     widget.onSaved();
     if (mounted) Navigator.of(context).pop();
@@ -278,6 +386,9 @@ class _AddMetricDefinitionSheetState extends State<_AddMetricDefinitionSheet> {
   void dispose() {
     _nameController.dispose();
     _unitController.dispose();
+    _lowerController.dispose();
+    _upperController.dispose();
+    _categoryController.dispose();
     super.dispose();
   }
 }

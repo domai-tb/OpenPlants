@@ -3,7 +3,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:openplants/pages/plant_metrics/metric_definition.dart';
 import 'package:openplants/pages/plant_metrics/metric_definition_datasource.dart';
-import 'package:openplants/pages/plant_metrics/metric_measurement.dart';
 import 'package:openplants/pages/plant_metrics/metric_measurement_datasource.dart';
 import 'package:openplants/pages/plant_metrics/metric_repository.dart';
 import 'package:openplants/pages/plant_metrics/metric_usecases.dart';
@@ -34,16 +33,19 @@ void main() {
         plantId: 'plant-1',
         name: 'Metric A',
         valueType: MetricValueType.numeric,
+        unit: 'value',
       );
       final def2 = await usecases.createDefinition(
         plantId: 'plant-1',
         name: 'Metric B',
         valueType: MetricValueType.boolean,
+        unit: 'state',
       );
       final def3 = await usecases.createDefinition(
         plantId: 'plant-2',
         name: 'Metric C',
         valueType: MetricValueType.categorical,
+        unit: 'state',
         categoryOptions: const ['Good', 'Fair', 'Poor'],
       );
 
@@ -92,6 +94,7 @@ void main() {
         plantId: 'plant-1',
         name: 'Test',
         valueType: MetricValueType.numeric,
+        unit: 'value',
       );
 
       // Delete twice - should not throw
@@ -107,6 +110,7 @@ void main() {
         plantId: 'plant-1',
         name: 'Test',
         valueType: MetricValueType.numeric,
+        unit: 'value',
       );
 
       await usecases.recordMeasurement(
@@ -139,6 +143,7 @@ void main() {
         plantId: 'plant-1',
         name: 'Soil Moisture',
         valueType: MetricValueType.numeric,
+        unit: '%',
       );
 
       // Simulate a custom rule linked to this metric

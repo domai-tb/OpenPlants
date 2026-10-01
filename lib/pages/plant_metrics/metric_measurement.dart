@@ -73,21 +73,15 @@ class MetricMeasurement {
     if (metricId != definition.id) {
       return 'Measurement metric ID does not match definition';
     }
+    if (plantId != definition.plantId) {
+      return 'Measurement plant ID does not match definition';
+    }
 
     switch (definition.valueType) {
       case MetricValueType.numeric:
         if (value is! num) return 'Value must be a number';
         final numVal = (value as num).toDouble();
         if (!numVal.isFinite) return 'Value must be finite';
-        if (definition.numericBounds != null) {
-          final bounds = definition.numericBounds!;
-          if (bounds.lower != null && numVal < bounds.lower!) {
-            return 'Value below minimum (${bounds.lower})';
-          }
-          if (bounds.upper != null && numVal > bounds.upper!) {
-            return 'Value above maximum (${bounds.upper})';
-          }
-        }
       case MetricValueType.boolean:
         if (value is! bool) return 'Value must be a boolean';
       case MetricValueType.categorical:

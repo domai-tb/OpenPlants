@@ -42,8 +42,8 @@ void main() {
         valueType: MetricValueType.numeric,
         unit: '%',
         numericBounds: const NumericBounds(lower: 20, upper: 80),
-        createdAt: DateTime(2026, 1, 1),
-        updatedAt: DateTime(2026, 1, 1),
+        createdAt: DateTime(2026),
+        updatedAt: DateTime(2026),
       );
 
       await definitionDataSource.addDefinition(definition);
@@ -98,16 +98,16 @@ void main() {
         plantId: 'plant-1',
         name: 'Metric A',
         valueType: MetricValueType.numeric,
-        createdAt: DateTime(2026, 1, 1),
-        updatedAt: DateTime(2026, 1, 1),
+        createdAt: DateTime(2026),
+        updatedAt: DateTime(2026),
       );
       final def2 = MetricDefinition(
         id: 'def-2',
         plantId: 'plant-2',
         name: 'Metric B',
         valueType: MetricValueType.boolean,
-        createdAt: DateTime(2026, 1, 1),
-        updatedAt: DateTime(2026, 1, 1),
+        createdAt: DateTime(2026),
+        updatedAt: DateTime(2026),
       );
 
       await repository.saveDefinition(def1);
@@ -124,8 +124,8 @@ void main() {
         plantId: 'plant-1',
         name: 'Test',
         valueType: MetricValueType.numeric,
-        createdAt: DateTime(2026, 1, 1),
-        updatedAt: DateTime(2026, 1, 1),
+        createdAt: DateTime(2026),
+        updatedAt: DateTime(2026),
       );
       await repository.saveDefinition(def);
 
@@ -134,7 +134,7 @@ void main() {
         metricId: 'def-1',
         plantId: 'plant-1',
         value: 50,
-        measuredAt: DateTime(2026, 1, 1),
+        measuredAt: DateTime(2026),
       );
       await repository.saveMeasurement(meas);
 
@@ -162,7 +162,7 @@ void main() {
         await repository.saveMeasurement(m);
       }
 
-      final page1 = await repository.getMeasurementsForMetricPaged('def-1', limit: 3, offset: 0);
+      final page1 = await repository.getMeasurementsForMetricPaged('def-1', limit: 3);
       expect(page1, hasLength(3));
       expect(page1.first.id, 'meas-0');
 
@@ -193,11 +193,35 @@ void main() {
       expect(loaded!.name, 'Temperature');
     });
 
+    test('createDefinition rejects invalid range and categorical options', () async {
+      await expectLater(
+        () => usecases.createDefinition(
+          plantId: 'plant-1',
+          name: 'Moisture',
+          valueType: MetricValueType.numeric,
+          unit: '%',
+          numericBounds: const NumericBounds(lower: 10, upper: 5),
+        ),
+        throwsArgumentError,
+      );
+      await expectLater(
+        () => usecases.createDefinition(
+          plantId: 'plant-1',
+          name: 'Leaf color',
+          valueType: MetricValueType.categorical,
+          unit: 'state',
+        ),
+        throwsArgumentError,
+      );
+      expect(await usecases.getDefinitionsForPlant('plant-1'), isEmpty);
+    });
+
     test('recordMeasurement validates and persists', () async {
       final def = await usecases.createDefinition(
         plantId: 'plant-1',
         name: 'Moisture',
         valueType: MetricValueType.numeric,
+        unit: '%',
         numericBounds: const NumericBounds(lower: 0, upper: 100),
       );
 
@@ -215,11 +239,12 @@ void main() {
       expect(loaded!.value, 65.0);
     });
 
-    test('recordMeasurement rejects invalid value', () async {
+    test('recordMeasurement rejects a value with the wrong type', () async {
       final def = await usecases.createDefinition(
         plantId: 'plant-1',
         name: 'Moisture',
         valueType: MetricValueType.numeric,
+        unit: '%',
         numericBounds: const NumericBounds(lower: 0, upper: 100),
       );
 
@@ -227,10 +252,24 @@ void main() {
         () => usecases.recordMeasurement(
           metricId: def.id,
           plantId: 'plant-1',
-          value: 150.0,
+          value: 'not a number',
         ),
         throwsA(isA<ArgumentError>()),
       );
+    });
+
+    test('out-of-range measurements are saved and trigger numeric alerts', () async {
+      final def = await usecases.createDefinition(
+        plantId: 'plant-1',
+        name: 'Moisture',
+        valueType: MetricValueType.numeric,
+        unit: '%',
+        numericBounds: const NumericBounds(lower: 0, upper: 100),
+      );
+
+      await usecases.recordMeasurement(metricId: def.id, plantId: 'plant-1', value: 150.0);
+
+      expect((await usecases.evaluateMetric(def.id)).state, MetricState.alert);
     });
 
     test('toggleDefinition flips isEnabled', () async {
@@ -238,6 +277,7 @@ void main() {
         plantId: 'plant-1',
         name: 'Test',
         valueType: MetricValueType.boolean,
+        unit: 'state',
       );
 
       expect(def.isEnabled, isTrue);
@@ -261,6 +301,7 @@ void main() {
         plantId: 'plant-1',
         name: 'Test',
         valueType: MetricValueType.numeric,
+        unit: 'value',
         numericBounds: const NumericBounds(lower: 0, upper: 100),
       );
 
@@ -279,6 +320,7 @@ void main() {
         plantId: 'plant-1',
         name: 'Test',
         valueType: MetricValueType.numeric,
+        unit: 'value',
       );
 
       await usecases.recordMeasurement(
