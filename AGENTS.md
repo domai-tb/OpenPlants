@@ -16,7 +16,7 @@ fvm flutter gen-l10n         # regenerate localization (lib/l10n/)
 fvm dart format --line-length=120 .  # format everything
 ```
 
-No `Makefile` or task runner is configured. Build helpers live in `scripts/`.
+No `Makefile`, no `taskfile`, no scripts beyond the above.
 
 ## Flutter Version
 
@@ -26,8 +26,12 @@ Pinned to **3.41.4** via FVM (`.fvmrc`). Never use bare `flutter` or `dart` — 
 
 Layered Clean Architecture, no BLoC. Dependency flow: **Page → UseCase → Repository → DataSource**.
 
-Feature modules live in `lib/pages/<feature>/`. Their files follow the feature's needs; do not add empty layers just to
-match a template. Keep UI, use-cases, repositories, and data sources in the existing dependency direction.
+Each feature module lives in `lib/pages/pageN/` with a fixed file set:
+- `pageN_datasource.dart` — external data access (HTTP, DB, platform)
+- `pageN_repository.dart` — maps raw data to domain entities
+- `pageN_usecases.dart` — business logic orchestration
+- `pageN_item_entity.dart` — immutable data model
+- `pageN_page.dart` — Flutter widget (StatefulWidget)
 
 **DI**: GetIt via `lib/core/injection.dart`. UI accesses deps through `AppScope.of(context).services` — never import GetIt directly in widgets.
 
@@ -64,24 +68,25 @@ After editing ARB files, run `fvm flutter gen-l10n` to regenerate. Access transl
 
 ## Adding a New Feature
 
-1. Follow the closest existing feature's structure and add only the layers the feature needs.
-2. Register required dependencies in `lib/core/injection.dart` and expose UI dependencies through `AppServices`/`AppScope`.
-3. Add navigation where the feature is user-facing.
-4. Run `fvm flutter analyze` and the relevant `fvm flutter test` checks.
+1. Create `lib/pages/myFeature/` with the 5-file pattern (datasource, repository, usecases, entity, page).
+2. Register all three classes in `lib/core/injection.dart` (lazy singletons).
+3. Add the use-case to `AppServices` constructor and its field in `app_services.dart`.
+4. Add navigation entry in `lib/pages/home/home_page.dart`.
+5. Run `fvm flutter analyze` and `fvm flutter test`.
 
 ## Testing
 
-Tests live under `test/` and use `flutter_test` plus the existing `test` and `mockito` dependencies. Add focused tests with behavior changes.
+Only one test file exists (`test/page1_usecases_test.dart`). No test infrastructure beyond `flutter_test`. Add unit tests for use-cases and repositories as you build features.
 
 ## CI
 
-Workflows are in `.github/workflows/`: documentation updates publish the wiki, and tagged releases run formatting, analysis, tests, and unsigned APK preflight builds.
+Single GitHub Actions workflow (`.github/workflows/docs.yml`) — auto-generates GitHub Wiki from `docs/wiki/` on push to `main`. No build/lint/test CI exists yet.
 
 ## Gotchas
 
-- **Android is the primary platform** (minSdk 26). iOS project files are maintained but are not covered by release preflight.
+- **No web support** — Android-only (minSdk 26, Cronet HTTP, no Play Services). iOS configs are maintained but not actively tested.
 - **No `opencode.json`** exists — no custom OpenCode config in this repo.
 - **`TODO` comments are ignored** by the analyzer (`errors: todo: ignore`).
 - `close_sinks` and `no_default_cases` are also ignored.
 - `implicit-casts` and `implicit-dynamic` are enabled (not strict null-safety everywhere).
-- Release builds use ProGuard (`android/app/proguard-rules.pro`); keep rules must match dependencies used by the app.
+- Release builds use ProGuard (`android/app/proguard-rules.pro`) — keep Flutter, Gson, Firebase, coroutines.
