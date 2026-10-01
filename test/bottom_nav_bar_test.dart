@@ -78,6 +78,22 @@ void main() {
     expect(selected, equals(PageItem.careSchedule));
   });
 
+  testWidgets('tapping an inactive item label calls onSelectedPage', (tester) async {
+    PageItem? selected;
+    await tester.pumpWidget(
+      buildNavBar(
+        currentPage: PageItem.dashboard,
+        onSelectedPage: (page) => selected = page,
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Care Schedule'));
+    await tester.pumpAndSettle();
+
+    expect(selected, PageItem.careSchedule);
+  });
+
   testWidgets('BottomNavBarItem shows active icon when isActive is true', (tester) async {
     await tester.pumpWidget(
       MaterialApp(

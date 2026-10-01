@@ -50,17 +50,16 @@ class _BottomNavBarItemState extends State<BottomNavBarItem> {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
-    return AnimatedPadding(
-      padding: widget.isActive ? const EdgeInsets.only(top: 2) : const EdgeInsets.only(top: 7),
-      duration: animationDuration,
-      curve: animationCurve,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          // Icon-button
-          CustomButton(
-            tapHandler: () => widget.onTap(),
-            child: Padding(
+    return CustomButton(
+      tapHandler: widget.onTap,
+      child: AnimatedPadding(
+        padding: widget.isActive ? const EdgeInsets.only(top: 2) : const EdgeInsets.only(top: 7),
+        duration: animationDuration,
+        curve: animationCurve,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
               padding: EdgeInsets.only(
                 top: widget.iconVerticalPadding,
                 bottom: widget.iconVerticalPadding,
@@ -71,21 +70,20 @@ class _BottomNavBarItemState extends State<BottomNavBarItem> {
                 color: widget.isActive ? colorScheme.secondary : colorScheme.onSurfaceVariant,
               ),
             ),
-          ),
-          // Text
-          AnimatedPadding(
-            padding: widget.isActive ? EdgeInsets.zero : const EdgeInsets.only(top: 6),
-            duration: animationDuration,
-            curve: animationCurve,
-            child: Center(
-              child: Text(
-                widget.title,
-                style: theme.textTheme.labelSmall,
-                textAlign: TextAlign.center,
+            AnimatedPadding(
+              padding: widget.isActive ? EdgeInsets.zero : const EdgeInsets.only(top: 6),
+              duration: animationDuration,
+              curve: animationCurve,
+              child: Center(
+                child: Text(
+                  widget.title,
+                  style: theme.textTheme.labelSmall,
+                  textAlign: TextAlign.center,
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
