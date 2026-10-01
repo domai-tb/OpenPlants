@@ -19,13 +19,11 @@ import 'package:openplants/pages/light_assessment/interactive_light_assessment_p
 import 'package:openplants/widgets/scroll_to_top_button.dart';
 
 class MorePage extends StatefulWidget {
-  final GlobalKey<NavigatorState> mainNavigatorKey;
   final GlobalKey<AnimatedEntryState> pageEntryAnimationKey;
   final GlobalKey<AnimatedExitState> pageExitAnimationKey;
 
   const MorePage({
     super.key,
-    required this.mainNavigatorKey,
     required this.pageEntryAnimationKey,
     required this.pageExitAnimationKey,
   });
@@ -61,12 +59,20 @@ class _MorePageState extends State<MorePage> with AutomaticKeepAliveClientMixin<
 
   Future<void> _load() async {
     setState(() => _loading = true);
-    final items = await _usecases.getMenuItems();
-    if (!mounted) return;
-    setState(() {
-      _items = items;
-      _loading = false;
-    });
+    try {
+      final items = await _usecases.getMenuItems();
+      if (!mounted) return;
+      setState(() {
+        _items = items;
+        _loading = false;
+      });
+    } catch (_) {
+      if (!mounted) return;
+      setState(() => _loading = false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(context.l10n.generalFailureMessage)),
+      );
+    }
   }
 
   void _open(MoreItemEntity item) {
@@ -120,7 +126,16 @@ class _MorePageState extends State<MorePage> with AutomaticKeepAliveClientMixin<
 
   Future<void> _logSymptom() async {
     final plantCollection = AppScope.of(context).services.plantCollection;
-    final plants = await plantCollection.loadPlants();
+    final List<PlantEntity> plants;
+    try {
+      plants = await plantCollection.loadPlants();
+    } catch (_) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(context.l10n.generalFailureMessage)),
+      );
+      return;
+    }
 
     if (!mounted || plants.isEmpty) return;
 
@@ -205,12 +220,22 @@ class _MorePageState extends State<MorePage> with AutomaticKeepAliveClientMixin<
       switch (item.id) {
         case 'species_list':
           return context.l10n.moreSpeciesListTitle;
+        case 'rooms':
+          return context.l10n.moreRoomsTitle;
+        case 'light_assessment':
+          return context.l10n.moreLightAssessmentTitle;
+        case 'log_symptom':
+          return context.l10n.moreLogSymptomTitle;
+        case 'diagnosis':
+          return context.l10n.moreDiagnosisTitle;
+        case 'notifications':
+          return context.l10n.moreNotificationsTitle;
         case 'settings':
           return context.l10n.settingsTitle;
         case 'about':
           return context.l10n.aboutTitle;
         default:
-          return item.title;
+          return item.id;
       }
     }
 
@@ -218,12 +243,22 @@ class _MorePageState extends State<MorePage> with AutomaticKeepAliveClientMixin<
       switch (item.id) {
         case 'species_list':
           return context.l10n.moreSpeciesListSubtitle;
+        case 'rooms':
+          return context.l10n.moreRoomsSubtitle;
+        case 'light_assessment':
+          return context.l10n.moreLightAssessmentSubtitle;
+        case 'log_symptom':
+          return context.l10n.moreLogSymptomSubtitle;
+        case 'diagnosis':
+          return context.l10n.moreDiagnosisSubtitle;
+        case 'notifications':
+          return context.l10n.moreNotificationsSubtitle;
         case 'settings':
           return context.l10n.menuSettingsSubtitle;
         case 'about':
           return context.l10n.menuAboutSubtitle;
         default:
-          return item.subtitle;
+          return '';
       }
     }
 
@@ -253,6 +288,7 @@ class _MorePageState extends State<MorePage> with AutomaticKeepAliveClientMixin<
                         onRefresh: _load,
                         child: ListView.builder(
                           controller: _scrollController,
+                          physics: const AlwaysScrollableScrollPhysics(),
                           padding: const EdgeInsets.only(top: 10),
                           itemCount: _loading ? 2 : _items.length,
                           itemBuilder: (context, index) {

@@ -5,6 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'package:openplants/core/app_scope.dart';
+import 'package:openplants/core/app_services.dart';
+import 'package:openplants/core/settings.dart';
+import 'package:openplants/l10n/l10n.dart';
 import 'package:openplants/pages/light_assessment/brightness_mapper.dart';
 import 'package:openplants/pages/light_assessment/interactive_light_assessment_page.dart';
 import 'package:openplants/pages/light_assessment/camera_estimation_service.dart';
@@ -12,6 +16,7 @@ import 'package:openplants/pages/light_assessment/light_assessment_usecases.dart
 import 'package:openplants/pages/light_assessment/light_assessment_repository.dart';
 import 'package:openplants/pages/light_assessment/light_assessment_datasource.dart';
 import 'package:openplants/pages/plant_collection/plant_collection_item_entity.dart';
+import 'package:openplants/pages/plant_collection/plant_collection_usecases.dart';
 import 'package:openplants/pages/plant_photo_timeline/plant_photo_timeline_item_entity.dart';
 
 // ---------------------------------------------------------------------------
@@ -54,7 +59,6 @@ class FakeCameraService extends CameraEstimationService {
   @override
   Future<void> stopFrameStream() async {}
 
-  @override
   @override
   Future<CameraEstimationResult> estimate() async {
     return const CameraEstimationResult(
@@ -99,6 +103,36 @@ class _InMemoryLightDataSource implements LightAssessmentDataSource {
   Future<void> clearLightLevel(String plantId) async {
     _store[plantId] = null;
   }
+}
+
+class _TestServices implements AppServices {
+  @override
+  final PlantCollectionUsecases plantCollection;
+
+  @override
+  final LightAssessmentUseCases lightAssessment;
+
+  _TestServices({required this.plantCollection, required this.lightAssessment});
+
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
+}
+
+class _TestPlantCollectionUsecases implements PlantCollectionUsecases {
+  final List<PlantEntity> plants;
+
+  _TestPlantCollectionUsecases(this.plants);
+
+  @override
+  Future<List<PlantEntity>> loadPlants() async => plants;
+
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
+}
+
+class _TestSettingsController extends ChangeNotifier implements SettingsController {
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }
 
 // ---------------------------------------------------------------------------
@@ -184,17 +218,30 @@ void main() {
     String? plantId,
     String? plantName,
     ValueChanged<LightLevel>? onLightLevelSet,
+    AppServices? services,
+    Locale locale = const Locale('en'),
   }) {
     return MaterialApp(
-      home: InteractiveLightAssessmentPage(
-        plantId: plantId,
-        plantName: plantName,
-        usecases: usecases,
-        onLightLevelSet: onLightLevelSet,
-        cameraService: fakeCamera,
+      locale: locale,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+      home: AppScope(
+        settings: _TestSettingsController(),
+        services:
+            services ?? _TestServices(plantCollection: _TestPlantCollectionUsecases([]), lightAssessment: usecases),
+        child: InteractiveLightAssessmentPage(
+          plantId: plantId,
+          plantName: plantName,
+          usecases: usecases,
+          onLightLevelSet: onLightLevelSet,
+          cameraService: fakeCamera,
+        ),
       ),
     );
   }
+
+  AppLocalizations stringsFor(WidgetTester tester) =>
+      AppLocalizations.of(tester.element(find.byType(InteractiveLightAssessmentPage)))!;
 
   // ---------------------------------------------------------------------------
   // Loading and initialization
@@ -236,9 +283,9 @@ void main() {
       await pumpUntilCameraReady(tester);
 
       // Fake calls onFrame(0.5, brightIndirect, 0.8) synchronously
-      expect(find.text('Bright Indirect'), findsOneWidget);
-      expect(find.text('50%'), findsOneWidget);
-      expect(find.text('Confidence: 80%'), findsOneWidget);
+      expect(find.text('Bright indirect'), findsOneWidget);
+      expect(find.text(stringsFor(tester).lightAssessmentBrightness(50)), findsOneWidget);
+      expect(find.text(stringsFor(tester).lightAssessmentConfidence(80)), findsOneWidget);
     });
 
     testWidgets('updates light level indicator when new frame arrives', (tester) async {
@@ -246,14 +293,14 @@ void main() {
       await pumpUntilCameraReady(tester);
 
       // Initial state: fake onFrame set brightIndirect
-      expect(find.text('Bright Indirect'), findsOneWidget);
+      expect(find.text('Bright indirect'), findsOneWidget);
 
       // Emit a new frame with low light
       fakeCamera.emitFrame(0.1, LightLevel.low, 0.7);
       await tester.pump();
 
-      expect(find.text('Low'), findsOneWidget);
-      expect(find.text('10%'), findsOneWidget);
+      expect(find.text('Low light'), findsOneWidget);
+      expect(find.text(stringsFor(tester).lightAssessmentBrightness(10)), findsOneWidget);
     });
 
     testWidgets('shows close button and bottom controls', (tester) async {
@@ -285,8 +332,8 @@ void main() {
       );
       await pumpUntilCameraReady(tester);
 
-      // Tap "Set this level (Bright Indirect)"
-      await tester.tap(find.text('Set this level (Bright Indirect)'));
+      // Tap "Set this level (Bright indirect)"
+      await tester.tap(find.text('Set this level (Bright indirect)'));
       await tester.pump();
       // Let the async _setCurrentLevel + Navigator.pop() complete
       for (int i = 0; i < 10; i++) {
@@ -320,10 +367,10 @@ void main() {
 
       // Result view visible
       expect(find.text('Assessment Result'), findsOneWidget);
-      expect(find.text('Bright, indirect light'), findsOneWidget);
+      expect(find.text('Looks like bright indirect light'), findsOneWidget);
       expect(find.text('Brightness: 65%'), findsOneWidget);
       expect(find.text('Accept & Save'), findsOneWidget);
-      expect(find.text('Retake'), findsOneWidget);
+      expect(find.text('Take new photo'), findsOneWidget);
     });
 
     testWidgets('retake returns to camera view', (tester) async {
@@ -338,8 +385,8 @@ void main() {
 
       expect(find.text('Assessment Result'), findsOneWidget);
 
-      // Tap Retake
-      await tester.tap(find.text('Retake'));
+      // Take a new photo
+      await tester.tap(find.text('Take new photo'));
       await tester.pump();
 
       // Result view gone, back to camera view
@@ -377,6 +424,36 @@ void main() {
 
       // Page popped
       expect(find.byType(InteractiveLightAssessmentPage), findsNothing);
+    });
+
+    testWidgets('standalone accept saves to the only available plant', (tester) async {
+      final plant = PlantEntity(
+        id: 'plant-1',
+        name: 'Monstera',
+        createdAt: DateTime(2026),
+        updatedAt: DateTime(2026),
+      );
+
+      await tester.pumpWidget(
+        buildPage(
+          services: _TestServices(
+            plantCollection: _TestPlantCollectionUsecases([plant]),
+            lightAssessment: usecases,
+          ),
+        ),
+      );
+      await pumpUntilCameraReady(tester);
+
+      await tester.tap(find.byKey(const Key('capture_button')));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 250));
+      await tester.pump();
+      await tester.tap(find.text('Accept & Save'));
+      for (int i = 0; i < 10; i++) {
+        await tester.pump(const Duration(milliseconds: 50));
+      }
+
+      expect(await usecases.getLightLevel('plant-1'), LightLevel.brightIndirect);
     });
   });
 
@@ -450,12 +527,10 @@ void main() {
       await tester.pumpWidget(buildPage(plantId: 'plant-1'));
       await pumpUntilCameraReady(tester);
 
-      expect(
-        find.textContaining('Camera permission was permanently denied'),
-        findsOneWidget,
-      );
-      expect(find.text('Open settings'), findsOneWidget);
-      expect(find.text('Go back'), findsOneWidget);
+      final l10n = stringsFor(tester);
+      expect(find.text(l10n.cameraPermissionPermanentlyDenied), findsOneWidget);
+      expect(find.text(l10n.cameraOpenSettings), findsOneWidget);
+      expect(find.text(l10n.back), findsOneWidget);
     });
   });
 
@@ -464,16 +539,15 @@ void main() {
   // ---------------------------------------------------------------------------
 
   group('Error handling', () {
-    testWidgets('camera init failure falls back to camera view', (tester) async {
+    testWidgets('camera init failure prevents saving a default light estimate', (tester) async {
       fakeCamera.shouldThrowOnInitialize = true;
 
       await tester.pumpWidget(buildPage(plantId: 'plant-1'));
       await pumpUntilCameraReady(tester);
 
-      // After init failure, page shows camera view (no error banner)
-      // The page sets _hasPermission = true on error as fallback
-      expect(find.textContaining('Light Assessment'), findsOneWidget);
-      expect(find.byKey(const Key('capture_button')), findsOneWidget);
+      expect(find.text('Camera could not be initialized.'), findsOneWidget);
+      expect(find.text('Set this level (Medium)'), findsNothing);
+      expect(await usecases.getLightLevel('plant-1'), isNull);
     });
   });
 
@@ -494,6 +568,47 @@ void main() {
       await pumpUntilCameraReady(tester);
 
       expect(find.text('Light Assessment — Monstera'), findsOneWidget);
+    });
+  });
+
+  group('German localization', () {
+    testWidgets('localizes live camera, permission, and result surfaces', (tester) async {
+      await tester.pumpWidget(
+        buildPage(plantId: 'plant-1', plantName: 'Monstera', locale: const Locale('de')),
+      );
+      await pumpUntilCameraReady(tester);
+
+      expect(find.text('Lichtmessung — Monstera'), findsOneWidget);
+      expect(find.text('Hell indirekt'), findsOneWidget);
+      expect(find.text('Helligkeit: 50%'), findsOneWidget);
+      expect(find.text('Sicherheit: 80%'), findsOneWidget);
+      expect(find.textContaining('Bewege die Kamera'), findsOneWidget);
+      expect(find.text('Diese Stufe einstellen (Hell indirekt)'), findsOneWidget);
+      expect(find.text('Galerie'), findsOneWidget);
+
+      await tester.tap(find.byKey(const Key('capture_button')));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 250));
+      await tester.pump();
+
+      expect(find.text('Messergebnis'), findsOneWidget);
+      expect(find.text('Sieht nach hellem, indirektem Licht aus'), findsOneWidget);
+      expect(find.text('Helligkeit: 65%'), findsOneWidget);
+      expect(find.textContaining('Du kannst diese Einschätzung übernehmen'), findsOneWidget);
+      expect(find.text('Übernehmen und speichern'), findsOneWidget);
+      expect(find.text('Neues Foto aufnehmen'), findsOneWidget);
+    });
+
+    testWidgets('localizes camera permission prompt and actions', (tester) async {
+      mockCameraPermission(status: 0);
+
+      await tester.pumpWidget(buildPage(plantId: 'plant-1', locale: const Locale('de')));
+      await pumpUntilCameraReady(tester);
+
+      expect(find.textContaining('Für die Echtzeitmessung der Lichtstärke'), findsOneWidget);
+      expect(find.text('Zugriff erlauben'), findsOneWidget);
+      expect(find.text('Stattdessen Galerie verwenden'), findsOneWidget);
+      expect(find.text('Abbrechen'), findsOneWidget);
     });
   });
 
@@ -523,9 +638,10 @@ void main() {
       await tester.pumpWidget(buildPage(plantId: 'plant-1'));
       await pumpUntilCameraReady(tester);
 
-      expect(find.text('Go back'), findsOneWidget);
+      final back = stringsFor(tester).back;
+      expect(find.text(back), findsOneWidget);
 
-      await tester.tap(find.text('Go back'));
+      await tester.tap(find.text(back));
       await tester.pumpAndSettle();
 
       // Page should be popped

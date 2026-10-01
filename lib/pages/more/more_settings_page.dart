@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:openplants/core/app_scope.dart';
 import 'package:openplants/core/settings.dart';
+import 'package:openplants/l10n/l10n.dart';
 import 'package:openplants/l10n/l10n_x.dart';
 import 'package:openplants/widgets/app_segmented_triple_control.dart';
 
@@ -24,6 +25,7 @@ class MoreSettingsPage extends StatelessWidget {
         animation: Listenable.merge([settingsController, services.localeService]),
         builder: (context, _) {
           final settings = settingsController.settings;
+          final supportedLocaleCodes = AppLocalizations.supportedLocales.map((locale) => locale.languageCode).toSet();
 
           // 0 = system, 1 = light, 2 = dark
           final initialSelection = settings.useSystemDarkmode
@@ -41,18 +43,21 @@ class MoreSettingsPage extends StatelessWidget {
               ),
               const SizedBox(height: 10),
               AppSegmentedTripleControl(
-                leftTitle: 'System',
-                centerTitle: 'Light',
-                rightTitle: 'Dark',
+                leftTitle: context.l10n.themeSystem,
+                centerTitle: context.l10n.themeLight,
+                rightTitle: context.l10n.themeDark,
                 initialSelection: initialSelection,
-                onChanged: (selected) {
+                onChanged: (selected) async {
                   final useSystemDarkmode = selected == 0;
                   final useDarkmode = selected == 2;
 
-                  settingsController.update(
-                    settings.copyWith(
-                      useSystemDarkmode: useSystemDarkmode,
-                      useDarkmode: useDarkmode,
+                  await _saveSettings(
+                    context,
+                    () => settingsController.update(
+                      settings.copyWith(
+                        useSystemDarkmode: useSystemDarkmode,
+                        useDarkmode: useDarkmode,
+                      ),
                     ),
                   );
                 },
@@ -64,7 +69,9 @@ class MoreSettingsPage extends StatelessWidget {
               ),
               const SizedBox(height: 10),
               DropdownButtonFormField<String>(
-                initialValue: settings.localeCode ?? 'system',
+                initialValue: settings.localeCode != null && supportedLocaleCodes.contains(settings.localeCode)
+                    ? settings.localeCode
+                    : 'system',
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
@@ -74,18 +81,25 @@ class MoreSettingsPage extends StatelessWidget {
                     value: 'system',
                     child: Text(context.l10n.languageSystem),
                   ),
-                  DropdownMenuItem(
-                    value: 'en',
-                    child: Text(context.l10n.languageEnglish),
-                  ),
-                  DropdownMenuItem(
-                    value: 'de',
-                    child: Text(context.l10n.languageGerman),
+                  ...AppLocalizations.supportedLocales.map(
+                    (locale) => DropdownMenuItem(
+                      value: locale.languageCode,
+                      child: Text(
+                        switch (locale.languageCode) {
+                          'en' => context.l10n.languageEnglish,
+                          'de' => context.l10n.languageGerman,
+                          _ => locale.languageCode,
+                        },
+                      ),
+                    ),
                   ),
                 ],
-                onChanged: (val) {
+                onChanged: (val) async {
                   if (val == null) return;
-                  services.localeService.setLocale(val == 'system' ? null : val);
+                  await _saveSettings(
+                    context,
+                    () => services.localeService.setLocale(val == 'system' ? null : val),
+                  );
                 },
               ),
               const SizedBox(height: 24),
@@ -106,10 +120,13 @@ class MoreSettingsPage extends StatelessWidget {
                   ),
                 ],
                 selected: {settings.temperatureUnit},
-                onSelectionChanged: (selected) {
+                onSelectionChanged: (selected) async {
                   if (selected.isEmpty) return;
-                  settingsController.update(
-                    settings.copyWith(temperatureUnit: selected.first),
+                  await _saveSettings(
+                    context,
+                    () => settingsController.update(
+                      settings.copyWith(temperatureUnit: selected.first),
+                    ),
                   );
                 },
               ),
@@ -123,8 +140,11 @@ class MoreSettingsPage extends StatelessWidget {
                 contentPadding: EdgeInsets.zero,
                 title: Text(context.l10n.useSystemTextScaling),
                 value: settings.useSystemTextScaling,
-                onChanged: (val) {
-                  settingsController.update(settings.copyWith(useSystemTextScaling: val));
+                onChanged: (val) async {
+                  await _saveSettings(
+                    context,
+                    () => settingsController.update(settings.copyWith(useSystemTextScaling: val)),
+                  );
                 },
               ),
             ],
@@ -132,5 +152,17 @@ class MoreSettingsPage extends StatelessWidget {
         },
       ),
     );
+  }
+}
+
+Future<void> _saveSettings(BuildContext context, Future<void> Function() save) async {
+  try {
+    await save();
+  } catch (error) {
+    debugPrint('Failed to save app settings: $error');
+    if (!context.mounted) return;
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(SnackBar(content: Text(context.l10n.unexpectedError)));
   }
 }

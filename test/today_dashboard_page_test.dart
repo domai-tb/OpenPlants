@@ -56,7 +56,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('Plant Collection'), findsOneWidget);
-      expect(find.byIcon(Icons.search), findsOneWidget);
+      expect(find.widgetWithIcon(IconButton, Icons.search), findsOneWidget);
       expect(find.byType(AppSearchBar), findsNothing);
       expect(find.text('All'), findsOneWidget);
       expect(find.text('Needs Water'), findsOneWidget);
@@ -67,17 +67,17 @@ void main() {
       await tester.pumpWidget(buildPage());
       await tester.pumpAndSettle();
 
-      await tester.tap(find.byIcon(Icons.search));
+      await tester.tap(find.widgetWithIcon(IconButton, Icons.search));
       await tester.pump();
 
       expect(find.byType(AppSearchBar), findsOneWidget);
       expect(find.byIcon(Icons.close), findsOneWidget);
 
-      await tester.tap(find.byIcon(Icons.close));
+      await tester.tap(find.widgetWithIcon(IconButton, Icons.close));
       await tester.pump();
 
       expect(find.byType(AppSearchBar), findsNothing);
-      expect(find.byIcon(Icons.search), findsOneWidget);
+      expect(find.widgetWithIcon(IconButton, Icons.search), findsOneWidget);
     });
   });
 }

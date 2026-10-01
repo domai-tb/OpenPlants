@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 
-import 'package:openplants/pages/light_assessment/brightness_mapper.dart';
+import 'package:openplants/l10n/l10n_x.dart';
 import 'package:openplants/pages/light_assessment/camera_estimation_service.dart';
 import 'package:openplants/pages/light_assessment/interactive_light_assessment_page.dart';
 import 'package:openplants/pages/light_assessment/light_assessment_item_entity.dart';
@@ -38,6 +38,7 @@ class LightAssessmentPage extends StatefulWidget {
 class _LightAssessmentPageState extends State<LightAssessmentPage> {
   LightLevel? _currentLevel;
   bool _loading = true;
+  bool _loadFailed = false;
   PlantPhoto? _latestPhoto;
   bool _hasPhoto = false;
 
@@ -64,52 +65,81 @@ class _LightAssessmentPageState extends State<LightAssessmentPage> {
   }
 
   Future<void> _loadData() async {
-    final level = await widget.usecases.getLightLevel(widget.plantId);
-    final photo = await widget.usecases.getLatestPhoto(widget.plantId);
-    if (!mounted) return;
-    setState(() {
-      _currentLevel = level;
-      _latestPhoto = photo;
-      _hasPhoto = photo != null;
-      _loading = false;
-    });
+    if (mounted) {
+      setState(() {
+        _loading = true;
+        _loadFailed = false;
+      });
+    }
+    try {
+      final level = await widget.usecases.getLightLevel(widget.plantId);
+      final photo = await widget.usecases.getLatestPhoto(widget.plantId);
+      if (!mounted) return;
+      setState(() {
+        _currentLevel = level;
+        _latestPhoto = photo;
+        _hasPhoto = photo != null;
+        _loading = false;
+      });
 
-    // Auto-analyze if photo exists
-    if (photo != null) {
-      unawaited(_analyzePhoto(File(photo.filePath)));
+      // Auto-analyze if photo exists
+      if (photo != null) {
+        unawaited(_analyzePhoto(File(photo.filePath)));
+      }
+    } catch (e) {
+      if (!mounted) return;
+      debugPrint('Failed to load light assessment: $e');
+      setState(() {
+        _loading = false;
+        _loadFailed = true;
+      });
     }
   }
 
-  Future<void> _selectLevel(LightLevel level) async {
-    await widget.usecases.setLightLevel(widget.plantId, level);
-    if (!mounted) return;
-    setState(() => _currentLevel = level);
-    if (mounted) {
+  Future<bool> _selectLevel(LightLevel level) async {
+    try {
+      await widget.usecases.setLightLevel(widget.plantId, level);
+      if (!mounted) return false;
+      setState(() => _currentLevel = level);
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Light level set to ${level.label}')),
+        SnackBar(content: Text(context.l10n.lightAssessmentLevelSet(_lightLevelLabel(context, level)))),
       );
+      return true;
+    } catch (e) {
+      if (mounted) _showSaveError('set', e);
+      return false;
     }
   }
 
   Future<void> _clearLevel() async {
-    await widget.usecases.clearLightLevel(widget.plantId);
-    if (!mounted) return;
-    setState(() => _currentLevel = null);
-    if (mounted) {
+    try {
+      await widget.usecases.clearLightLevel(widget.plantId);
+      if (!mounted) return;
+      setState(() => _currentLevel = null);
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Light level cleared')),
+        SnackBar(content: Text(context.l10n.lightAssessmentLevelCleared)),
       );
+    } catch (e) {
+      if (mounted) _showSaveError('clear', e);
     }
   }
 
-  void _acceptEstimate() {
+  Future<void> _acceptEstimate() async {
     if (_estimatedLevel != null) {
-      _selectLevel(_estimatedLevel!);
+      final saved = await _selectLevel(_estimatedLevel!);
+      if (!saved || !mounted) return;
       setState(() {
         _estimatedLevel = null;
         _estimatedBrightness = null;
       });
     }
+  }
+
+  void _showSaveError(String action, Object error) {
+    debugPrint('Failed to $action light level: $error');
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(context.l10n.generalFailureMessage)),
+    );
   }
 
   void _dismissEstimate() {
@@ -139,9 +169,10 @@ class _LightAssessmentPageState extends State<LightAssessmentPage> {
       });
     } catch (e) {
       if (!mounted) return;
+      debugPrint('Failed to analyze light-assessment photo: $e');
       setState(() {
         _estimating = false;
-        _estimationError = 'Failed to analyze photo: $e';
+        _estimationError = context.l10n.generalFailureMessage;
       });
     }
   }
@@ -177,9 +208,10 @@ class _LightAssessmentPageState extends State<LightAssessmentPage> {
       await _analyzePhoto(file);
     } catch (e) {
       if (!mounted) return;
+      debugPrint('Failed to process light-assessment photo: $e');
       setState(() {
         _estimating = false;
-        _estimationError = 'Failed to process photo: $e';
+        _estimationError = context.l10n.generalFailureMessage;
       });
     }
   }
@@ -246,9 +278,10 @@ class _LightAssessmentPageState extends State<LightAssessmentPage> {
       await _analyzePhoto(file);
     } catch (e) {
       if (!mounted) return;
+      debugPrint('Failed to pick light-assessment photo: $e');
       setState(() {
         _estimating = false;
-        _estimationError = 'Failed to pick photo: $e';
+        _estimationError = context.l10n.generalFailureMessage;
       });
     }
   }
@@ -259,336 +292,378 @@ class _LightAssessmentPageState extends State<LightAssessmentPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Light Assessment — ${widget.plantName}'),
+        title: Text(context.l10n.lightAssessmentPageTitle(widget.plantName)),
       ),
       body: _loading
           ? const Center(child: CircularProgressIndicator())
-          : ListView(
-              padding: const EdgeInsets.all(16),
-              children: [
-                // Current status
-                Card(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.light_mode,
-                          color: theme.colorScheme.primary,
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Current Light Level',
-                                style: theme.textTheme.labelMedium,
-                              ),
-                              const SizedBox(height: 4),
-                              Text(
-                                _currentLevel?.label ?? 'Not set',
-                                style: theme.textTheme.titleMedium,
-                              ),
-                            ],
-                          ),
-                        ),
-                        if (_currentLevel != null)
-                          TextButton(
-                            onPressed: _clearLevel,
-                            child: const Text('Clear'),
-                          ),
-                      ],
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 24),
-
-                // Light level options
-                Text(
-                  'Select Light Level',
-                  style: theme.textTheme.titleMedium,
-                ),
-                const SizedBox(height: 12),
-
-                ...LightAssessmentItem.options.map((option) {
-                  final isSelected = _currentLevel == option.level;
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 8),
-                    child: Card(
-                      color: isSelected ? theme.colorScheme.primaryContainer : null,
-                      child: ListTile(
-                        leading: Icon(
-                          option.icon,
-                          color: isSelected ? theme.colorScheme.onPrimaryContainer : theme.colorScheme.onSurfaceVariant,
-                        ),
-                        title: Text(
-                          option.label,
-                          style: TextStyle(
-                            fontWeight: isSelected ? FontWeight.bold : null,
-                          ),
-                        ),
-                        subtitle: Text(option.description),
-                        trailing: isSelected
-                            ? Icon(
-                                Icons.check_circle,
-                                color: theme.colorScheme.onPrimaryContainer,
-                              )
-                            : null,
-                        onTap: () => _selectLevel(option.level),
+          : _loadFailed
+              ? Center(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(context.l10n.generalFailureMessage),
+                      TextButton(
+                        onPressed: _loadData,
+                        child: Text(context.l10n.retry),
                       ),
-                    ),
-                  );
-                }),
-
-                const SizedBox(height: 24),
-
-                // Interactive Camera section
-                Card(
-                  color: theme.colorScheme.primaryContainer.withValues(alpha: 0.3),
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
+                    ],
+                  ),
+                )
+              : ListView(
+                  padding: const EdgeInsets.all(16),
+                  children: [
+                    // Current status
+                    Card(
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Row(
                           children: [
                             Icon(
-                              Icons.videocam,
+                              Icons.light_mode,
                               color: theme.colorScheme.primary,
                             ),
-                            const SizedBox(width: 8),
-                            Text(
-                              'Interactive Camera',
-                              style: theme.textTheme.titleSmall,
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          'Move around in real time to see how light levels change '
-                          'before setting the level or capturing a photo.',
-                          style: theme.textTheme.bodySmall?.copyWith(
-                            color: theme.colorScheme.onSurfaceVariant,
-                          ),
-                        ),
-                        const SizedBox(height: 12),
-                        SizedBox(
-                          width: double.infinity,
-                          child: FilledButton.icon(
-                            onPressed: _openInteractiveCamera,
-                            icon: const Icon(Icons.camera_alt),
-                            label: const Text('Assess with camera'),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 24),
-
-                // Photo-based estimation section
-                Card(
-                  color: theme.colorScheme.surfaceContainerHighest,
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.photo_camera,
-                              color: theme.colorScheme.onSurfaceVariant,
-                            ),
-                            const SizedBox(width: 8),
-                            Text(
-                              'Estimate from Photo',
-                              style: theme.textTheme.titleSmall,
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 8),
-
-                        // Info message
-                        Container(
-                          width: double.infinity,
-                          padding: const EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            color: theme.colorScheme.primaryContainer.withValues(alpha: 0.3),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.info_outline,
-                                size: 16,
-                                color: theme.colorScheme.primary,
-                              ),
-                              const SizedBox(width: 8),
-                              Expanded(
-                                child: Text(
-                                  "Light level is estimated from your plant's photo. "
-                                  'For best results, use a photo that shows the plant '
-                                  'in its usual spot.',
-                                  style: theme.textTheme.bodySmall?.copyWith(
-                                    color: theme.colorScheme.onSurfaceVariant,
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    context.l10n.lightAssessmentCurrentLevel,
+                                    style: theme.textTheme.labelMedium,
                                   ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 12),
-
-                        // Error message
-                        if (_estimationError != null) ...[
-                          Container(
-                            width: double.infinity,
-                            padding: const EdgeInsets.all(12),
-                            decoration: BoxDecoration(
-                              color: theme.colorScheme.errorContainer,
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Text(
-                              _estimationError!,
-                              style: theme.textTheme.bodySmall?.copyWith(
-                                color: theme.colorScheme.onErrorContainer,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 12),
-                        ],
-
-                        // Photo preview (if available)
-                        if (_latestPhoto != null && !_estimating) ...[
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(8),
-                            child: Image.file(
-                              File(_latestPhoto!.filePath),
-                              height: 150,
-                              width: double.infinity,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                          const SizedBox(height: 12),
-                        ],
-
-                        // Estimation result
-                        if (_estimatedLevel != null) ...[
-                          Container(
-                            width: double.infinity,
-                            padding: const EdgeInsets.all(12),
-                            decoration: BoxDecoration(
-                              color: theme.colorScheme.primaryContainer,
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  BrightnessMapper.describeEstimate(_estimatedLevel!),
-                                  style: theme.textTheme.bodyLarge?.copyWith(
-                                    color: theme.colorScheme.onPrimaryContainer,
-                                  ),
-                                ),
-                                if (_estimatedBrightness != null) ...[
                                   const SizedBox(height: 4),
                                   Text(
-                                    'Brightness: ${(_estimatedBrightness! * 100).round()}%',
-                                    style: theme.textTheme.bodySmall?.copyWith(
-                                      color: theme.colorScheme.onPrimaryContainer,
-                                    ),
+                                    _currentLevel == null
+                                        ? context.l10n.lightAssessmentNotSet
+                                        : _lightLevelLabel(context, _currentLevel!),
+                                    style: theme.textTheme.titleMedium,
                                   ),
                                 ],
-                                const SizedBox(height: 8),
-                                Row(
-                                  children: [
-                                    FilledButton(
-                                      onPressed: _acceptEstimate,
-                                      child: const Text('Use this'),
-                                    ),
-                                    const SizedBox(width: 8),
-                                    OutlinedButton(
-                                      onPressed: _dismissEstimate,
-                                      child: const Text('Dismiss'),
-                                    ),
-                                  ],
+                              ),
+                            ),
+                            if (_currentLevel != null)
+                              TextButton(
+                                onPressed: _clearLevel,
+                                child: Text(context.l10n.lightAssessmentClear),
+                              ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+
+                    // Light level options
+                    Text(
+                      context.l10n.lightAssessmentSelectLevel,
+                      style: theme.textTheme.titleMedium,
+                    ),
+                    const SizedBox(height: 12),
+
+                    ...LightAssessmentItem.options.map((option) {
+                      final isSelected = _currentLevel == option.level;
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 8),
+                        child: Card(
+                          color: isSelected ? theme.colorScheme.primaryContainer : null,
+                          child: ListTile(
+                            leading: Icon(
+                              option.icon,
+                              color: isSelected
+                                  ? theme.colorScheme.onPrimaryContainer
+                                  : theme.colorScheme.onSurfaceVariant,
+                            ),
+                            title: Text(
+                              _lightLevelLabel(context, option.level),
+                              style: TextStyle(
+                                fontWeight: isSelected ? FontWeight.bold : null,
+                              ),
+                            ),
+                            subtitle: Text(_lightLevelDescription(context, option.level)),
+                            trailing: isSelected
+                                ? Icon(
+                                    Icons.check_circle,
+                                    color: theme.colorScheme.onPrimaryContainer,
+                                  )
+                                : null,
+                            onTap: () => unawaited(_selectLevel(option.level)),
+                          ),
+                        ),
+                      );
+                    }),
+
+                    const SizedBox(height: 24),
+
+                    // Interactive Camera section
+                    Card(
+                      color: theme.colorScheme.primaryContainer.withValues(alpha: 0.3),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.videocam,
+                                  color: theme.colorScheme.primary,
+                                ),
+                                const SizedBox(width: 8),
+                                Text(
+                                  context.l10n.lightAssessmentCameraHeading,
+                                  style: theme.textTheme.titleSmall,
                                 ),
                               ],
                             ),
-                          ),
-                          const SizedBox(height: 12),
-                        ],
-
-                        // Action buttons
-                        if (_estimating) ...[
-                          const SizedBox(height: 8),
-                          const Center(
-                            child: CircularProgressIndicator(),
-                          ),
-                        ] else if (_showCamera) ...[
-                          // Show inline camera preview
-                          const SizedBox(height: 8),
-                          SizedBox(
-                            height: 300,
-                            child: InlineCameraPreview(
-                              onCaptured: _onCaptured,
+                            const SizedBox(height: 8),
+                            Text(
+                              context.l10n.lightAssessmentCameraDescription,
+                              style: theme.textTheme.bodySmall?.copyWith(
+                                color: theme.colorScheme.onSurfaceVariant,
+                              ),
                             ),
-                          ),
-                        ] else if (_hasPhoto) ...[
-                          // Has photo: show retake options
-                          SizedBox(
-                            width: double.infinity,
-                            child: OutlinedButton.icon(
-                              onPressed: () => setState(() => _showCamera = true),
-                              icon: const Icon(Icons.camera_alt),
-                              label: const Text('Take new photo'),
+                            const SizedBox(height: 12),
+                            SizedBox(
+                              width: double.infinity,
+                              child: FilledButton.icon(
+                                onPressed: _openInteractiveCamera,
+                                icon: const Icon(Icons.camera_alt),
+                                label: Text(context.l10n.lightAssessmentCameraButton),
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: 8),
-                          SizedBox(
-                            width: double.infinity,
-                            child: OutlinedButton.icon(
-                              onPressed: _pickPhotoAndEstimate,
-                              icon: const Icon(Icons.photo_library),
-                              label: const Text('Choose from gallery'),
-                            ),
-                          ),
-                        ] else ...[
-                          // No photo: prompt to take one
-                          Text(
-                            'No photo yet. Take a photo of your plant to estimate '
-                            'its light level.',
-                            style: theme.textTheme.bodyMedium?.copyWith(
-                              color: theme.colorScheme.onSurfaceVariant,
-                            ),
-                          ),
-                          const SizedBox(height: 12),
-                          SizedBox(
-                            width: double.infinity,
-                            child: FilledButton.icon(
-                              onPressed: () => setState(() => _showCamera = true),
-                              icon: const Icon(Icons.camera_alt),
-                              label: const Text('Take photo'),
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          SizedBox(
-                            width: double.infinity,
-                            child: OutlinedButton.icon(
-                              onPressed: _pickPhotoAndEstimate,
-                              icon: const Icon(Icons.photo_library),
-                              label: const Text('Choose from gallery'),
-                            ),
-                          ),
-                        ],
-                      ],
+                          ],
+                        ),
+                      ),
                     ),
-                  ),
+                    const SizedBox(height: 24),
+
+                    // Photo-based estimation section
+                    Card(
+                      color: theme.colorScheme.surfaceContainerHighest,
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.photo_camera,
+                                  color: theme.colorScheme.onSurfaceVariant,
+                                ),
+                                const SizedBox(width: 8),
+                                Text(
+                                  context.l10n.lightAssessmentPhotoHeading,
+                                  style: theme.textTheme.titleSmall,
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 8),
+
+                            // Info message
+                            Container(
+                              width: double.infinity,
+                              padding: const EdgeInsets.all(12),
+                              decoration: BoxDecoration(
+                                color: theme.colorScheme.primaryContainer.withValues(alpha: 0.3),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.info_outline,
+                                    size: 16,
+                                    color: theme.colorScheme.primary,
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Expanded(
+                                    child: Text(
+                                      context.l10n.lightAssessmentPhotoDescription,
+                                      style: theme.textTheme.bodySmall?.copyWith(
+                                        color: theme.colorScheme.onSurfaceVariant,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(height: 12),
+
+                            // Error message
+                            if (_estimationError != null) ...[
+                              Container(
+                                width: double.infinity,
+                                padding: const EdgeInsets.all(12),
+                                decoration: BoxDecoration(
+                                  color: theme.colorScheme.errorContainer,
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Text(
+                                  _estimationError!,
+                                  style: theme.textTheme.bodySmall?.copyWith(
+                                    color: theme.colorScheme.onErrorContainer,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 12),
+                            ],
+
+                            // Photo preview (if available)
+                            if (_latestPhoto != null && !_estimating) ...[
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(8),
+                                child: Image.file(
+                                  File(_latestPhoto!.filePath),
+                                  height: 150,
+                                  width: double.infinity,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              const SizedBox(height: 12),
+                            ],
+
+                            // Estimation result
+                            if (_estimatedLevel != null) ...[
+                              Container(
+                                width: double.infinity,
+                                padding: const EdgeInsets.all(12),
+                                decoration: BoxDecoration(
+                                  color: theme.colorScheme.primaryContainer,
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      _estimateDescription(context, _estimatedLevel!),
+                                      style: theme.textTheme.bodyLarge?.copyWith(
+                                        color: theme.colorScheme.onPrimaryContainer,
+                                      ),
+                                    ),
+                                    if (_estimatedBrightness != null) ...[
+                                      const SizedBox(height: 4),
+                                      Text(
+                                        context.l10n.lightAssessmentBrightness(
+                                          (_estimatedBrightness! * 100).round(),
+                                        ),
+                                        style: theme.textTheme.bodySmall?.copyWith(
+                                          color: theme.colorScheme.onPrimaryContainer,
+                                        ),
+                                      ),
+                                    ],
+                                    const SizedBox(height: 8),
+                                    Row(
+                                      children: [
+                                        FilledButton(
+                                          onPressed: _acceptEstimate,
+                                          child: Text(context.l10n.lightAssessmentUseEstimate),
+                                        ),
+                                        const SizedBox(width: 8),
+                                        OutlinedButton(
+                                          onPressed: _dismissEstimate,
+                                          child: Text(context.l10n.lightAssessmentDismissEstimate),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(height: 12),
+                            ],
+
+                            // Action buttons
+                            if (_estimating) ...[
+                              const SizedBox(height: 8),
+                              const Center(
+                                child: CircularProgressIndicator(),
+                              ),
+                            ] else if (_showCamera) ...[
+                              // Show inline camera preview
+                              const SizedBox(height: 8),
+                              SizedBox(
+                                height: 300,
+                                child: InlineCameraPreview(
+                                  onCaptured: _onCaptured,
+                                ),
+                              ),
+                            ] else if (_hasPhoto) ...[
+                              // Has photo: show retake options
+                              SizedBox(
+                                width: double.infinity,
+                                child: OutlinedButton.icon(
+                                  onPressed: () => setState(() => _showCamera = true),
+                                  icon: const Icon(Icons.camera_alt),
+                                  label: Text(context.l10n.lightAssessmentTakeNewPhoto),
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              SizedBox(
+                                width: double.infinity,
+                                child: OutlinedButton.icon(
+                                  onPressed: _pickPhotoAndEstimate,
+                                  icon: const Icon(Icons.photo_library),
+                                  label: Text(context.l10n.lightAssessmentChooseFromGallery),
+                                ),
+                              ),
+                            ] else ...[
+                              // No photo: prompt to take one
+                              Text(
+                                context.l10n.lightAssessmentNoPhoto,
+                                style: theme.textTheme.bodyMedium?.copyWith(
+                                  color: theme.colorScheme.onSurfaceVariant,
+                                ),
+                              ),
+                              const SizedBox(height: 12),
+                              SizedBox(
+                                width: double.infinity,
+                                child: FilledButton.icon(
+                                  onPressed: () => setState(() => _showCamera = true),
+                                  icon: const Icon(Icons.camera_alt),
+                                  label: Text(context.l10n.cameraCapturePhoto),
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              SizedBox(
+                                width: double.infinity,
+                                child: OutlinedButton.icon(
+                                  onPressed: _pickPhotoAndEstimate,
+                                  icon: const Icon(Icons.photo_library),
+                                  label: Text(context.l10n.lightAssessmentChooseFromGallery),
+                                ),
+                              ),
+                            ],
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
     );
+  }
+
+  String _lightLevelLabel(BuildContext context, LightLevel level) {
+    return switch (level) {
+      LightLevel.low => context.l10n.speciesLibraryLightLow,
+      LightLevel.medium => context.l10n.speciesLibraryLightMedium,
+      LightLevel.brightIndirect => context.l10n.speciesLibraryLightBright,
+      LightLevel.direct => context.l10n.speciesLibraryLightDirect,
+    };
+  }
+
+  String _lightLevelDescription(BuildContext context, LightLevel level) {
+    return switch (level) {
+      LightLevel.low => context.l10n.lightAssessmentLowDescription,
+      LightLevel.medium => context.l10n.lightAssessmentMediumDescription,
+      LightLevel.brightIndirect => context.l10n.lightAssessmentBrightDescription,
+      LightLevel.direct => context.l10n.lightAssessmentDirectDescription,
+    };
+  }
+
+  String _estimateDescription(BuildContext context, LightLevel level) {
+    return switch (level) {
+      LightLevel.low => context.l10n.lightAssessmentEstimateLow,
+      LightLevel.medium => context.l10n.lightAssessmentEstimateMedium,
+      LightLevel.brightIndirect => context.l10n.lightAssessmentEstimateBright,
+      LightLevel.direct => context.l10n.lightAssessmentEstimateDirect,
+    };
   }
 }

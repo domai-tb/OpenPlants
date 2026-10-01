@@ -2,24 +2,20 @@ import 'package:flutter/material.dart';
 
 import 'package:openplants/l10n/l10n_x.dart';
 import 'package:openplants/pages/species_library/species_library_item_entity.dart';
-import 'package:openplants/pages/species_library/species_library_usecases.dart';
 
 /// Detail page showing all species fields in structured layout with care plan,
 /// toxicity highlights, and difficulty badge.
 class SpeciesDetailPage extends StatelessWidget {
   final SpeciesEntity species;
-  final SpeciesLibraryUsecases usecases;
 
   const SpeciesDetailPage({
     super.key,
     required this.species,
-    required this.usecases,
   });
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final carePlan = usecases.generateCarePlan(species);
 
     return Scaffold(
       appBar: AppBar(
@@ -122,31 +118,48 @@ class SpeciesDetailPage extends StatelessWidget {
             _CarePlanSection(
               icon: Icons.water_drop,
               title: context.l10n.speciesLibraryWatering,
-              guidance: carePlan.wateringGuidance,
+              guidance: switch (species.waterNeeds) {
+                WaterNeeds.low => context.l10n.speciesCarePlanWaterLow,
+                WaterNeeds.moderate => context.l10n.speciesCarePlanWaterModerate,
+                WaterNeeds.frequent => context.l10n.speciesCarePlanWaterFrequent,
+              },
             ),
             const SizedBox(height: 12),
             _CarePlanSection(
               icon: Icons.light_mode,
               title: context.l10n.speciesLibraryLight,
-              guidance: carePlan.lightGuidance,
+              guidance: switch (species.lightNeeds) {
+                LightNeeds.low => context.l10n.speciesCarePlanLightLow,
+                LightNeeds.medium => context.l10n.speciesCarePlanLightMedium,
+                LightNeeds.bright => context.l10n.speciesCarePlanLightBright,
+                LightNeeds.direct => context.l10n.speciesCarePlanLightDirect,
+              },
             ),
             const SizedBox(height: 12),
             _CarePlanSection(
               icon: Icons.air,
               title: context.l10n.speciesLibraryHumidity,
-              guidance: carePlan.humidityGuidance,
+              guidance: switch (species.humidityPreference) {
+                HumidityPreference.low => context.l10n.speciesCarePlanHumidityLow,
+                HumidityPreference.moderate => context.l10n.speciesCarePlanHumidityModerate,
+                HumidityPreference.high => context.l10n.speciesCarePlanHumidityHigh,
+              },
             ),
             const SizedBox(height: 12),
             _CarePlanSection(
               icon: Icons.landscape,
               title: context.l10n.speciesLibrarySoil,
-              guidance: carePlan.soilRecommendation,
+              guidance: context.l10n.speciesCarePlanSoil(_soilTypeLabel(context, species.soilType)),
             ),
             const SizedBox(height: 12),
             _CarePlanSection(
               icon: Icons.repeat,
               title: context.l10n.speciesLibraryRepotting,
-              guidance: carePlan.repottingAdvice,
+              guidance: species.repottingIntervalMonths <= 12
+                  ? context.l10n.speciesCarePlanRepotAnnual
+                  : species.repottingIntervalMonths <= 24
+                      ? context.l10n.speciesCarePlanRepotEveryTwoYears
+                      : context.l10n.speciesCarePlanRepotWhenRootBound,
             ),
             const SizedBox(height: 24),
 
@@ -170,7 +183,7 @@ class SpeciesDetailPage extends StatelessWidget {
             ),
             _QuickFactRow(
               label: context.l10n.speciesLibrarySoilType,
-              value: species.soilType,
+              value: _soilTypeLabel(context, species.soilType),
             ),
             _QuickFactRow(
               label: context.l10n.speciesLibraryRepottingInterval,
@@ -206,6 +219,18 @@ class SpeciesDetailPage extends StatelessWidget {
       HumidityPreference.high => context.l10n.speciesLibraryHumidityHigh,
     };
   }
+}
+
+String _soilTypeLabel(BuildContext context, String soilType) {
+  final type = soilType.toLowerCase();
+  final l10n = context.l10n;
+  if (type.contains('cactus') || type.contains('succulent')) return l10n.speciesSoilCactus;
+  if (type.contains('orchid')) return l10n.speciesSoilOrchid;
+  if (type.contains('aroid')) return l10n.speciesSoilAroid;
+  if (type.contains('peat-free')) return l10n.speciesSoilPeatFree;
+  if (type.contains('peat moss')) return l10n.speciesSoilPeatMoss;
+  if (type.contains('moisture-retentive')) return l10n.speciesSoilMoistureRetentive;
+  return l10n.speciesSoilPottingMix;
 }
 
 class _DifficultyBadgeLarge extends StatelessWidget {

@@ -5,9 +5,7 @@ import 'package:openplants/l10n/l10n_x.dart';
 import 'package:openplants/widgets/app_segmented_triple_control.dart';
 
 class OnboardingPage extends StatefulWidget {
-  final GlobalKey<NavigatorState> mainNavigatorKey;
-
-  const OnboardingPage({super.key, required this.mainNavigatorKey});
+  const OnboardingPage({super.key});
 
   @override
   State<OnboardingPage> createState() => _OnboardingPageState();
@@ -22,37 +20,53 @@ class _OnboardingPageState extends State<OnboardingPage> {
   int _selectedTheme = 0;
   bool _useSystemTextScaling = false;
 
-  void _applySettings() {
+  Future<void> _applySettings() async {
     final settingsController = AppScope.of(context).settings;
     final settings = settingsController.settings;
 
     final useSystemDarkmode = _selectedTheme == 0;
     final useDarkmode = _selectedTheme == 2;
 
-    settingsController.update(
-      settings.copyWith(
-        useSystemDarkmode: useSystemDarkmode,
-        useDarkmode: useDarkmode,
-        useSystemTextScaling: _useSystemTextScaling,
-        didCompleteOnboarding: true,
+    await _saveSettings(
+      () => settingsController.update(
+        settings.copyWith(
+          useSystemDarkmode: useSystemDarkmode,
+          useDarkmode: useDarkmode,
+          useSystemTextScaling: _useSystemTextScaling,
+          didCompleteOnboarding: true,
+        ),
       ),
     );
   }
 
-  void _applyPreviewSettings() {
+  Future<void> _applyPreviewSettings() async {
     final settingsController = AppScope.of(context).settings;
     final settings = settingsController.settings;
 
     final useSystemDarkmode = _selectedTheme == 0;
     final useDarkmode = _selectedTheme == 2;
 
-    settingsController.update(
-      settings.copyWith(
-        useSystemDarkmode: useSystemDarkmode,
-        useDarkmode: useDarkmode,
-        useSystemTextScaling: _useSystemTextScaling,
+    await _saveSettings(
+      () => settingsController.update(
+        settings.copyWith(
+          useSystemDarkmode: useSystemDarkmode,
+          useDarkmode: useDarkmode,
+          useSystemTextScaling: _useSystemTextScaling,
+        ),
       ),
     );
+  }
+
+  Future<void> _saveSettings(Future<void> Function() save) async {
+    try {
+      await save();
+    } catch (error) {
+      debugPrint('Failed to save app settings: $error');
+      if (!mounted) return;
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(SnackBar(content: Text(context.l10n.unexpectedError)));
+    }
   }
 
   @override
@@ -134,13 +148,13 @@ class _OnboardingPageState extends State<OnboardingPage> {
                               ),
                               const SizedBox(height: 10),
                               AppSegmentedTripleControl(
-                                leftTitle: 'System',
-                                centerTitle: 'Light',
-                                rightTitle: 'Dark',
+                                leftTitle: context.l10n.themeSystem,
+                                centerTitle: context.l10n.themeLight,
+                                rightTitle: context.l10n.themeDark,
                                 initialSelection: _selectedTheme,
-                                onChanged: (selected) {
+                                onChanged: (selected) async {
                                   setState(() => _selectedTheme = selected);
-                                  _applyPreviewSettings();
+                                  await _applyPreviewSettings();
                                 },
                               ),
                               const SizedBox(height: 24),
@@ -153,9 +167,9 @@ class _OnboardingPageState extends State<OnboardingPage> {
                                 contentPadding: EdgeInsets.zero,
                                 title: Text(context.l10n.useSystemTextScaling),
                                 value: _useSystemTextScaling,
-                                onChanged: (val) {
+                                onChanged: (val) async {
                                   setState(() => _useSystemTextScaling = val);
-                                  _applyPreviewSettings();
+                                  await _applyPreviewSettings();
                                 },
                               ),
                             ],
@@ -180,15 +194,15 @@ class _OnboardingPageState extends State<OnboardingPage> {
                       ),
                       const Spacer(),
                       FilledButton(
-                        onPressed: () {
+                        onPressed: () async {
                           if (_pageIndex < 2) {
-                            _pageController.nextPage(
+                            await _pageController.nextPage(
                               duration: const Duration(milliseconds: 200),
                               curve: Curves.easeOut,
                             );
                             return;
                           }
-                          _applySettings();
+                          await _applySettings();
                         },
                         child: Text(
                           _pageIndex == 2 ? context.l10n.finish : context.l10n.next,

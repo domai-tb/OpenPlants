@@ -55,7 +55,7 @@ void main() {
         plantId: 'p1',
       );
       final moderate = speciesCarePresets(
-        _makeSpecies(waterNeeds: WaterNeeds.moderate),
+        _makeSpecies(),
         plantId: 'p1',
       );
       final low = speciesCarePresets(
@@ -83,7 +83,7 @@ void main() {
         plantId: 'p1',
       );
       final moderate = speciesCarePresets(
-        _makeSpecies(waterNeeds: WaterNeeds.moderate),
+        _makeSpecies(),
         plantId: 'p1',
       );
       final low = speciesCarePresets(
@@ -117,7 +117,7 @@ void main() {
 
     test('moderate-humidity species gets misting with 5d interval', () {
       final rules = speciesCarePresets(
-        _makeSpecies(humidityPreference: HumidityPreference.moderate),
+        _makeSpecies(),
         plantId: 'p1',
       );
 
@@ -142,7 +142,7 @@ void main() {
         plantId: 'p1',
       );
       final rules12 = speciesCarePresets(
-        _makeSpecies(repottingIntervalMonths: 12),
+        _makeSpecies(),
         plantId: 'p1',
       );
 

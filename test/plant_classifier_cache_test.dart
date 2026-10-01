@@ -17,11 +17,7 @@ void main() {
     cacheDir = Directory('${tempDir.path}/cache');
     await cacheDir.create();
 
-    cache = ModelAssetCache(
-      modelAssetPath: 'assets/ml/plant-identification/model.onnx',
-      dataAssetPath: 'assets/ml/plant-identification/model.onnx.data',
-      identityAssetPath: 'assets/ml/plant-identification/onnx_export_info.json',
-    );
+    cache = const ModelAssetCache();
   });
 
   tearDown(() async {
@@ -31,6 +27,21 @@ void main() {
   });
 
   group('ModelAssetCache', () {
+    test('writes model files into the required caller-provided directory', () async {
+      final result = await cache.ensureModelCached(
+        assetLoader: MockAssetLoader(
+          modelBytes: [1, 2, 3],
+          dataBytes: [4, 5, 6],
+          identityContent: '{"version":"1"}',
+        ),
+        cacheDir: cacheDir,
+      );
+
+      expect(result.path, cacheDir.path);
+      expect(File('${cacheDir.path}/model.onnx').existsSync(), isTrue);
+      expect(File('${cacheDir.path}/model.onnx.data').existsSync(), isTrue);
+    });
+
     test('returns cached files when identity matches', () async {
       // Setup: Create cached files with matching identity
       final modelFile = File('${cacheDir.path}/model.onnx');

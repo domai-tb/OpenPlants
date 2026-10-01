@@ -72,10 +72,9 @@ class _PlantIdentificationPageState extends State<PlantIdentificationPage> {
       });
     } catch (e) {
       if (!mounted) return;
+      debugPrint('Plant identification failed: $e');
       setState(() {
-        _state = IdentificationError(
-          message: '${context.l10n.plantIdIdentificationFailed}: $e',
-        );
+        _state = IdentificationError(message: context.l10n.plantIdIdentificationFailed);
       });
     }
   }
@@ -304,7 +303,6 @@ class _PlantIdentificationPageState extends State<PlantIdentificationPage> {
       MaterialPageRoute(
         builder: (_) => SpeciesDetailPage(
           species: species,
-          usecases: _speciesUsecases,
         ),
       ),
     );

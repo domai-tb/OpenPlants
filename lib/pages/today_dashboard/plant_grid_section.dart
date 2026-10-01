@@ -82,19 +82,23 @@ class PlantGridSectionState extends State<PlantGridSection> {
     setState(() => _loading = true);
 
     try {
-      final rooms = await _roomUsecases.getAll();
       final roomNames = <String, String>{};
-      for (final room in rooms) {
-        roomNames[room.id] = room.name;
+      try {
+        final rooms = await _roomUsecases.getAll();
+        for (final room in rooms) {
+          roomNames[room.id] = room.name;
+        }
+      } catch (_) {
+        // Keep the plant collection visible even if room metadata is corrupt.
       }
 
-      List<PlantEntity> plants;
-      if (widget.query.isNotEmpty) {
-        plants = await _usecases.searchPlants(widget.query);
-      } else if (widget.filterStatus != null) {
-        plants = await _usecases.filterByCareStatus(widget.filterStatus);
-      } else {
-        plants = await _usecases.loadPlants();
+      var plants = await _usecases.loadPlants();
+      final query = widget.query.trim().toLowerCase();
+      if (query.isNotEmpty) {
+        plants = plants.where((plant) => plant.name.toLowerCase().contains(query)).toList();
+      }
+      if (widget.filterStatus != null) {
+        plants = plants.where((plant) => plant.effectiveCareStatus == widget.filterStatus).toList();
       }
 
       // Apply room filter.

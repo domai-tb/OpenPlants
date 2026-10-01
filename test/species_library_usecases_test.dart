@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:openplants/pages/species_library/care_plan.dart';
 import 'package:openplants/pages/species_library/species_library_datasource.dart';
 import 'package:openplants/pages/species_library/species_library_item_entity.dart';
 import 'package:openplants/pages/species_library/species_library_repository.dart';
@@ -94,64 +93,6 @@ void main() {
   });
 
   group('SpeciesLibraryUsecases', () {
-    test('generateCarePlan returns CarePlan with all sections', () async {
-      final species = (await usecases.getAllSpecies()).first;
-      final plan = usecases.generateCarePlan(species);
-
-      expect(plan, isA<CarePlan>());
-      expect(plan.wateringGuidance, isNotEmpty);
-      expect(plan.lightGuidance, isNotEmpty);
-      expect(plan.humidityGuidance, isNotEmpty);
-      expect(plan.soilRecommendation, isNotEmpty);
-      expect(plan.repottingAdvice, isNotEmpty);
-    });
-
-    test('generateCarePlan low water guidance', () async {
-      const lowWaterSpecies = SpeciesEntity(
-        scientificName: 'Test plant',
-        commonNames: ['Test'],
-        difficulty: Difficulty.easy,
-        lightNeeds: LightNeeds.medium,
-        waterNeeds: WaterNeeds.low,
-        humidityPreference: HumidityPreference.low,
-        soilType: 'Well-draining mix',
-        repottingIntervalMonths: 12,
-        toxicToHumans: false,
-        toxicToPets: false,
-        description: 'Test species',
-        careSummary: 'Easy care',
-      );
-
-      final plan = usecases.generateCarePlan(lowWaterSpecies);
-      expect(
-        plan.wateringGuidance,
-        contains('every 2-3 weeks'),
-      );
-    });
-
-    test('generateCarePlan frequent water guidance', () async {
-      const freqWaterSpecies = SpeciesEntity(
-        scientificName: 'Test plant 2',
-        commonNames: ['Test 2'],
-        difficulty: Difficulty.moderate,
-        lightNeeds: LightNeeds.direct,
-        waterNeeds: WaterNeeds.frequent,
-        humidityPreference: HumidityPreference.high,
-        soilType: 'Moist mix',
-        repottingIntervalMonths: 24,
-        toxicToHumans: false,
-        toxicToPets: true,
-        description: 'Test species 2',
-        careSummary: 'Needs care',
-      );
-
-      final plan = usecases.generateCarePlan(freqWaterSpecies);
-      expect(
-        plan.wateringGuidance,
-        contains('2-3 times per week'),
-      );
-    });
-
     test('speciesForIdentifiedPlant returns matching species', () async {
       final result = await usecases.speciesForIdentifiedPlant('Monstera deliciosa');
       expect(result, isNotNull);

@@ -51,15 +51,7 @@ class BundleAssetLoader implements AssetLoader {
 /// - Any cached file is empty
 /// - The identity content changes
 class ModelAssetCache {
-  final String modelAssetPath;
-  final String dataAssetPath;
-  final String identityAssetPath;
-
-  ModelAssetCache({
-    required this.modelAssetPath,
-    required this.dataAssetPath,
-    required this.identityAssetPath,
-  });
+  const ModelAssetCache();
 
   /// Ensures the model is cached and returns the cache directory.
   ///
@@ -67,9 +59,9 @@ class ModelAssetCache {
   /// Otherwise, copies all assets to the cache directory.
   Future<Directory> ensureModelCached({
     required AssetLoader assetLoader,
-    Directory? cacheDir,
+    required Directory cacheDir,
   }) async {
-    final dir = cacheDir ?? await _getDefaultCacheDir();
+    final dir = cacheDir;
     final modelFile = File('${dir.path}/model.onnx');
     final dataFile = File('${dir.path}/model.onnx.data');
     final identityFile = File('${dir.path}/onnx_export_info.json');
@@ -86,12 +78,6 @@ class ModelAssetCache {
     await _copyAssetsToCache(dir, assetLoader);
 
     return dir;
-  }
-
-  Future<Directory> _getDefaultCacheDir() async {
-    // This will be injected via path_provider in production
-    // For testing, we pass cacheDir directly
-    throw StateError('cacheDir must be provided in production');
   }
 
   Future<bool> _isCacheValid(

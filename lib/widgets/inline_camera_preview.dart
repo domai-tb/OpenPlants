@@ -1,9 +1,12 @@
+import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
+
+import 'package:openplants/l10n/l10n_x.dart';
 
 /// A reusable inline camera preview widget with capture and gallery support.
 ///
@@ -16,14 +19,14 @@ import 'package:permission_handler/permission_handler.dart';
 /// Usage:
 /// ```dart
 /// InlineCameraPreview(
-///   onCaptured: (Uint8List bytes) {
+///   onCaptured: (Uint8List bytes) async {
 ///     // Handle captured image bytes
 ///   },
 /// )
 /// ```
 class InlineCameraPreview extends StatefulWidget {
   /// Callback invoked when a photo is captured or selected from gallery.
-  final ValueChanged<Uint8List> onCaptured;
+  final Future<void> Function(Uint8List) onCaptured;
 
   /// Optional height constraint for the preview. Defaults to filling available space.
   final double? height;
@@ -61,7 +64,14 @@ class _InlineCameraPreviewState extends State<InlineCameraPreview> {
 
   @override
   void dispose() {
-    _cameraController?.dispose();
+    final controller = _cameraController;
+    if (controller != null) {
+      unawaited(
+        controller.dispose().catchError(
+              (Object error) => debugPrint('Failed to dispose camera controller: $error'),
+            ),
+      );
+    }
     super.dispose();
   }
 
@@ -76,6 +86,7 @@ class _InlineCameraPreviewState extends State<InlineCameraPreview> {
     try {
       // Check permission status
       final status = await Permission.camera.status;
+      if (!mounted) return;
 
       if (status.isGranted) {
         await _setupCamera();
@@ -102,10 +113,10 @@ class _InlineCameraPreviewState extends State<InlineCameraPreview> {
           });
         }
       }
-    } catch (e) {
+    } catch (_) {
       if (mounted) {
         setState(() {
-          _errorMessage = 'Failed to initialize camera: $e';
+          _errorMessage = context.l10n.cameraInitializationFailed;
           _isInitializing = false;
         });
       }
@@ -113,7 +124,12 @@ class _InlineCameraPreviewState extends State<InlineCameraPreview> {
   }
 
   Future<void> _setupCamera() async {
+    final previousController = _cameraController;
+    _cameraController = null;
+    if (previousController != null) await previousController.dispose();
+
     final cameras = await availableCameras();
+    if (!mounted) return;
     if (cameras.isEmpty) {
       throw Exception('No cameras available');
     }
@@ -124,30 +140,52 @@ class _InlineCameraPreviewState extends State<InlineCameraPreview> {
       orElse: () => cameras.first,
     );
 
-    _cameraController = CameraController(
+    final controller = CameraController(
       backCamera,
       ResolutionPreset.low,
       enableAudio: false,
     );
-
-    await _cameraController!.initialize();
+    _cameraController = controller;
+    try {
+      await controller.initialize();
+    } catch (_) {
+      if (identical(_cameraController, controller)) _cameraController = null;
+      await controller.dispose();
+      rethrow;
+    }
   }
 
   Future<void> _requestPermission() async {
-    final status = await Permission.camera.request();
+    if (!mounted || _isInitializing) return;
+    setState(() {
+      _isInitializing = true;
+      _errorMessage = null;
+    });
 
-    if (status.isGranted) {
-      await _setupCamera();
-      if (mounted) {
+    try {
+      final status = await Permission.camera.request();
+      if (!mounted) return;
+
+      if (status.isGranted) {
+        await _setupCamera();
+        if (!mounted) return;
         setState(() {
           _hasPermission = true;
           _permissionPermanentlyDenied = false;
+          _isInitializing = false;
+        });
+      } else {
+        setState(() {
+          _hasPermission = false;
+          _permissionPermanentlyDenied = status.isPermanentlyDenied;
+          _isInitializing = false;
         });
       }
-    } else if (status.isPermanentlyDenied) {
+    } catch (_) {
       if (mounted) {
         setState(() {
-          _permissionPermanentlyDenied = true;
+          _errorMessage = context.l10n.cameraInitializationFailed;
+          _isInitializing = false;
         });
       }
     }
@@ -165,11 +203,11 @@ class _InlineCameraPreviewState extends State<InlineCameraPreview> {
     try {
       final XFile photo = await _cameraController!.takePicture();
       final bytes = await photo.readAsBytes();
-      widget.onCaptured(bytes);
-    } catch (e) {
+      if (mounted) await widget.onCaptured(bytes);
+    } catch (_) {
       if (mounted) {
         setState(() {
-          _errorMessage = 'Failed to capture photo: $e';
+          _errorMessage = context.l10n.plantIdFailedToCapture;
         });
       }
     }
@@ -181,12 +219,12 @@ class _InlineCameraPreviewState extends State<InlineCameraPreview> {
       final image = await picker.pickImage(source: ImageSource.gallery);
       if (image != null) {
         final bytes = await image.readAsBytes();
-        widget.onCaptured(bytes);
+        if (mounted) await widget.onCaptured(bytes);
       }
-    } catch (e) {
+    } catch (_) {
       if (mounted) {
         setState(() {
-          _errorMessage = 'Failed to pick image: $e';
+          _errorMessage = context.l10n.plantIdFailedToPick;
         });
       }
     }
@@ -256,7 +294,7 @@ class _InlineCameraPreviewState extends State<InlineCameraPreview> {
             ),
             const SizedBox(height: 16),
             Text(
-              'Camera access is needed to take photos of your plants.',
+              context.l10n.cameraAccessNeeded,
               style: theme.textTheme.bodyLarge?.copyWith(
                 color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
               ),
@@ -266,12 +304,12 @@ class _InlineCameraPreviewState extends State<InlineCameraPreview> {
             FilledButton.icon(
               onPressed: _requestPermission,
               icon: const Icon(Icons.camera_alt),
-              label: const Text('Grant access'),
+              label: Text(context.l10n.cameraGrantAccess),
             ),
             const SizedBox(height: 12),
             TextButton(
               onPressed: _pickFromGallery,
-              child: const Text('Use gallery instead'),
+              child: Text(context.l10n.cameraUseGalleryInstead),
             ),
           ],
         ),
@@ -293,7 +331,7 @@ class _InlineCameraPreviewState extends State<InlineCameraPreview> {
             ),
             const SizedBox(height: 16),
             Text(
-              'Camera permission was permanently denied. Please enable it in system settings.',
+              context.l10n.cameraPermissionPermanentlyDenied,
               style: theme.textTheme.bodyLarge?.copyWith(
                 color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
               ),
@@ -303,12 +341,12 @@ class _InlineCameraPreviewState extends State<InlineCameraPreview> {
             FilledButton.icon(
               onPressed: _openSettings,
               icon: const Icon(Icons.settings),
-              label: const Text('Open settings'),
+              label: Text(context.l10n.cameraOpenSettings),
             ),
             const SizedBox(height: 12),
             TextButton(
               onPressed: _pickFromGallery,
-              child: const Text('Use gallery instead'),
+              child: Text(context.l10n.cameraUseGalleryInstead),
             ),
           ],
         ),
@@ -327,7 +365,7 @@ class _InlineCameraPreviewState extends State<InlineCameraPreview> {
               const CircularProgressIndicator(),
               const SizedBox(height: 16),
               Text(
-                'Initializing camera...',
+                context.l10n.cameraInitializing,
                 style: theme.textTheme.bodyMedium?.copyWith(
                   color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                 ),
@@ -365,7 +403,7 @@ class _InlineCameraPreviewState extends State<InlineCameraPreview> {
                 const SizedBox(height: 16),
                 FilledButton(
                   onPressed: _initializeCamera,
-                  child: const Text('Retry'),
+                  child: Text(context.l10n.plantIdTryAgain),
                 ),
               ],
             ),
@@ -387,7 +425,7 @@ class _InlineCameraPreviewState extends State<InlineCameraPreview> {
           if (widget.showGalleryButton) ...[
             _ControlButton(
               icon: Icons.photo_library,
-              label: 'Gallery',
+              label: context.l10n.plantIdGallery,
               onTap: _pickFromGallery,
             ),
             const SizedBox(width: 24),
@@ -396,6 +434,7 @@ class _InlineCameraPreviewState extends State<InlineCameraPreview> {
           // Capture button
           if (widget.showCaptureButton)
             _CaptureButton(
+              label: context.l10n.cameraCapturePhoto,
               onTap: _capturePhoto,
             ),
         ],
@@ -406,29 +445,37 @@ class _InlineCameraPreviewState extends State<InlineCameraPreview> {
 
 /// Circular capture button with white border.
 class _CaptureButton extends StatelessWidget {
+  final String label;
   final VoidCallback onTap;
 
-  const _CaptureButton({required this.onTap});
+  const _CaptureButton({required this.label, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return Semantics(
+      button: true,
+      label: label,
       onTap: onTap,
-      child: Container(
-        width: 72,
-        height: 72,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          border: Border.all(
-            color: Colors.white,
-            width: 4,
-          ),
-        ),
-        child: Container(
-          margin: const EdgeInsets.all(4),
-          decoration: const BoxDecoration(
-            shape: BoxShape.circle,
-            color: Colors.white,
+      child: ExcludeSemantics(
+        child: GestureDetector(
+          onTap: onTap,
+          child: Container(
+            width: 72,
+            height: 72,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(
+                color: Colors.white,
+                width: 4,
+              ),
+            ),
+            child: Container(
+              margin: const EdgeInsets.all(4),
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.white,
+              ),
+            ),
           ),
         ),
       ),
@@ -452,32 +499,39 @@ class _ControlButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return GestureDetector(
+    return Semantics(
+      button: true,
+      label: label,
       onTap: onTap,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            width: 48,
-            height: 48,
-            decoration: BoxDecoration(
-              color: theme.colorScheme.surface.withValues(alpha: 0.8),
-              shape: BoxShape.circle,
-            ),
-            child: Icon(
-              icon,
-              size: 24,
-              color: theme.colorScheme.onSurface,
-            ),
+      child: ExcludeSemantics(
+        child: GestureDetector(
+          onTap: onTap,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 48,
+                height: 48,
+                decoration: BoxDecoration(
+                  color: theme.colorScheme.surface.withValues(alpha: 0.8),
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  icon,
+                  size: 24,
+                  color: theme.colorScheme.onSurface,
+                ),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                label,
+                style: theme.textTheme.labelSmall?.copyWith(
+                  color: Colors.white,
+                ),
+              ),
+            ],
           ),
-          const SizedBox(height: 4),
-          Text(
-            label,
-            style: theme.textTheme.labelSmall?.copyWith(
-              color: Colors.white,
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }

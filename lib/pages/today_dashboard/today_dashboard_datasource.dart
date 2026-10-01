@@ -1,30 +1,25 @@
+import 'package:openplants/pages/care_schedule/care_schedule_usecases.dart';
+import 'package:openplants/pages/care_schedule/care_task.dart';
 import 'package:openplants/pages/plant_collection/plant_collection_usecases.dart';
 import 'package:openplants/pages/today_dashboard/today_dashboard_entity.dart';
 
 /// Data source for the today dashboard.
-///
-/// Delegates plant queries to [PlantCollectionUsecases] and task queries
-/// to a downstream care schedule (when wired). Each downstream capability
-/// is nullable so the dashboard works even when a capability is not yet
-/// registered.
-///
-/// TODO: Wire care-schedule use-cases once the care-schedule-system feature
-/// is implemented. For now, task lists return empty gracefully.
 class TodayDashboardDataSource {
   final PlantCollectionUsecases plantCollection;
+  final CareScheduleUsecases careSchedule;
 
   const TodayDashboardDataSource({
     required this.plantCollection,
+    required this.careSchedule,
   });
 
-  /// Fetches dashboard data by orchestrating parallel calls to downstream
-  /// data sources and composing the results into [DashboardData].
   Future<DashboardData> fetchDashboardData() async {
     final plants = await plantCollection.loadPlants();
+    final schedule = await careSchedule.getSchedule();
 
     return DashboardData(
-      dueToday: const [],
-      overdue: const [],
+      dueToday: schedule.tasks.where((task) => task.status == CareTaskStatus.dueToday).toList(),
+      overdue: schedule.tasks.where((task) => task.status == CareTaskStatus.overdue).toList(),
       totalPlantCount: plants.length,
     );
   }

@@ -70,14 +70,23 @@ class _DiagnosisResultPageState extends State<DiagnosisResultPage> {
 
     final loader = widget.linkedSymptomLoader;
     final symptomLogger = loader == null ? AppScope.of(context).services.symptomLogger : null;
-    final symptom = loader != null
-        ? await loader(symptomId)
-        : (await symptomLogger!.getSymptomHistory(widget.entity!.plantId))
-            .where((entry) => entry.id == symptomId)
-            .firstOrNull;
-    if (!mounted) return;
+    try {
+      final symptom = loader != null
+          ? await loader(symptomId)
+          : (await symptomLogger!.getSymptomHistory(widget.entity!.plantId))
+              .where((entry) => entry.id == symptomId)
+              .firstOrNull;
+      if (!mounted) return;
 
-    setState(() => _linkedSymptom = symptom);
+      setState(() => _linkedSymptom = symptom);
+    } catch (e) {
+      debugPrint('Failed to load linked symptom for diagnosis: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(context.l10n.generalFailureMessage)),
+        );
+      }
+    }
   }
 
   @override

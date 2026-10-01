@@ -7,6 +7,7 @@ import 'package:openplants/pages/home/page_navigator.dart';
 import 'package:openplants/pages/home/widgets/page_navigation_animation.dart';
 import 'package:openplants/pages/home/widgets/bottom_nav_bar.dart';
 import 'package:openplants/pages/home/widgets/side_nav_bar.dart';
+import 'package:openplants/pages/notifications/notification_entity.dart';
 
 /// The [HomePage] displays all general UI elements like the bottom nav-menu and
 /// handles the switching between the different pages.
@@ -45,6 +46,7 @@ class HomePageState extends State<HomePage> {
 
   /// Notifies child pages when a tab switch completes so they can reload data.
   final ValueNotifier<int> tabSwitchNotifier = ValueNotifier<int>(0);
+  final ValueNotifier<NotificationPayload?> notificationPayloadNotifier = ValueNotifier<NotificationPayload?>(null);
 
   /// Controls the Page View
   final PageController pageController = PageController();
@@ -102,6 +104,12 @@ class HomePageState extends State<HomePage> {
     return true;
   }
 
+  /// Opens the care schedule and focuses the task named in a notification.
+  Future<void> openNotification(NotificationPayload payload) async {
+    await selectedPage(PageItem.careSchedule);
+    notificationPayloadNotifier.value = payload;
+  }
+
   /// Returns the [NavBarNavigator] for the specified PageItem on phones
   Widget buildNavigator(PageItem tabItem) {
     return NavBarNavigator(
@@ -111,6 +119,7 @@ class HomePageState extends State<HomePage> {
       pageEntryAnimationKey: entryAnimationKeys[tabItem]!,
       pageExitAnimationKey: exitAnimationKeys[tabItem]!,
       tabSwitchNotifier: tabSwitchNotifier,
+      notificationPayloadNotifier: notificationPayloadNotifier,
     );
   }
 
@@ -127,6 +136,7 @@ class HomePageState extends State<HomePage> {
         pageEntryAnimationKey: entryAnimationKeys[tabItem]!,
         pageExitAnimationKey: exitAnimationKeys[tabItem]!,
         tabSwitchNotifier: tabSwitchNotifier,
+        notificationPayloadNotifier: notificationPayloadNotifier,
       ),
     );
   }
@@ -138,6 +148,14 @@ class HomePageState extends State<HomePage> {
     pageController.addListener(() {
       setState(() => pagePosition = pageController.page ?? 0);
     });
+  }
+
+  @override
+  void dispose() {
+    pageController.dispose();
+    tabSwitchNotifier.dispose();
+    notificationPayloadNotifier.dispose();
+    super.dispose();
   }
 
   @override

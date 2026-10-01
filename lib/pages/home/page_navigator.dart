@@ -5,6 +5,7 @@ import 'package:openplants/pages/home/widgets/page_navigation_animation.dart';
 import 'package:openplants/pages/care_schedule/care_schedule_page.dart';
 import 'package:openplants/pages/today_dashboard/today_dashboard_page.dart';
 import 'package:openplants/pages/more/more_page.dart';
+import 'package:openplants/pages/notifications/notification_entity.dart';
 
 enum PageItem { dashboard, careSchedule, more }
 
@@ -63,6 +64,7 @@ class NavBarNavigator extends StatelessWidget {
   final GlobalKey<AnimatedEntryState> pageEntryAnimationKey;
   final GlobalKey<AnimatedExitState> pageExitAnimationKey;
   final ValueNotifier<int>? tabSwitchNotifier;
+  final ValueNotifier<NotificationPayload?>? notificationPayloadNotifier;
 
   const NavBarNavigator({
     super.key,
@@ -72,6 +74,7 @@ class NavBarNavigator extends StatelessWidget {
     required this.pageEntryAnimationKey,
     required this.pageExitAnimationKey,
     this.tabSwitchNotifier,
+    this.notificationPayloadNotifier,
   });
 
   Map<String, WidgetBuilder> _routeBuilders(BuildContext context) {
@@ -89,10 +92,10 @@ class NavBarNavigator extends StatelessWidget {
           pageEntryAnimationKey: pageEntryAnimationKey,
           pageExitAnimationKey: pageExitAnimationKey,
           tabSwitchNotifier: tabSwitchNotifier,
+          notificationPayloadNotifier: notificationPayloadNotifier,
         );
       case PageItem.more:
         rootPage = MorePage(
-          mainNavigatorKey: mainNavigatorKey,
           pageEntryAnimationKey: pageEntryAnimationKey,
           pageExitAnimationKey: pageExitAnimationKey,
         );

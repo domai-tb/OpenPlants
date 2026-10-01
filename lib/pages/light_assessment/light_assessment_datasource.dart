@@ -22,7 +22,7 @@ class LightAssessmentDataSource {
   Future<void> saveLightLevel(String plantId, LightLevel level) async {
     final plants = await _plantDataSource.loadPlants();
     final index = plants.indexWhere((p) => p.id == plantId);
-    if (index == -1) return;
+    if (index == -1) throw StateError('Plant not found: $plantId');
 
     plants[index] = plants[index].copyWith(lightLevel: level);
     await _plantDataSource.savePlants(plants);
@@ -32,7 +32,7 @@ class LightAssessmentDataSource {
   Future<void> clearLightLevel(String plantId) async {
     final plants = await _plantDataSource.loadPlants();
     final index = plants.indexWhere((p) => p.id == plantId);
-    if (index == -1) return;
+    if (index == -1) throw StateError('Plant not found: $plantId');
 
     plants[index] = plants[index].copyWith(clearLightLevel: true);
     await _plantDataSource.savePlants(plants);
