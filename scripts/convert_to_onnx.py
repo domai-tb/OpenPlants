@@ -9,6 +9,7 @@ Default target:
 Outputs:
   output_dir/
     model.onnx
+    model.onnx.data
     labels.json
     preprocessor_config.json
     config.json
@@ -40,6 +41,7 @@ from transformers import AutoConfig, AutoImageProcessor, AutoModelForImageClassi
 
 
 DEFAULT_MODEL_ID = "domai-tb/OpenPlants-Identification-ViT-Base-Patch16-224"
+DEFAULT_MODEL_REVISION = "30794da002827ad922366fe88840c5a2d8a4a31d"
 
 
 class LogitsOnlyWrapper(nn.Module):
@@ -88,6 +90,7 @@ def save_json(path: Path, data: Any) -> None:
 
 def export_onnx(
     model_id_or_path: str,
+    revision: str,
     out_dir: Path,
     hf_token: str | None,
     opset: int,
@@ -100,6 +103,7 @@ def export_onnx(
     print(f"[1/7] Loading config: {model_id_or_path}")
     config = AutoConfig.from_pretrained(
         model_id_or_path,
+        revision=revision,
         token=hf_token,
         trust_remote_code=False,
     )
@@ -107,6 +111,7 @@ def export_onnx(
     print("[2/7] Loading image processor")
     processor = AutoImageProcessor.from_pretrained(
         model_id_or_path,
+        revision=revision,
         token=hf_token,
         trust_remote_code=False,
     )
@@ -114,6 +119,7 @@ def export_onnx(
     print("[3/7] Loading model weights")
     model = AutoModelForImageClassification.from_pretrained(
         model_id_or_path,
+        revision=revision,
         token=hf_token,
         trust_remote_code=False,
         use_safetensors=True,
@@ -159,6 +165,14 @@ def export_onnx(
     print("[5/7] Checking ONNX graph")
     exported = onnx.load(str(onnx_path))
     onnx.checker.check_model(exported)
+    onnx.save_model(
+        exported,
+        str(onnx_path),
+        save_as_external_data=True,
+        all_tensors_to_one_file=True,
+        location="model.onnx.data",
+        size_threshold=0,
+    )
 
     print("[6/7] Saving metadata")
     processor.save_pretrained(out_dir)
@@ -170,6 +184,7 @@ def export_onnx(
 
     export_info = {
         "source_model": model_id_or_path,
+        "source_revision": revision,
         "onnx_file": "model.onnx",
         "input_name": "pixel_values",
         "input_shape": [1, 3, height, width],
@@ -244,6 +259,11 @@ def parse_args() -> argparse.Namespace:
         help="Hugging Face model ID or local model directory.",
     )
     parser.add_argument(
+        "--revision",
+        default=DEFAULT_MODEL_REVISION,
+        help="Immutable Hugging Face model revision.",
+    )
+    parser.add_argument(
         "--out",
         default="onnx_export/plant-identification-2m-vit-b",
         help="Output directory.",
@@ -282,6 +302,7 @@ def main() -> None:
 
     export_onnx(
         model_id_or_path=args.model,
+        revision=args.revision,
         out_dir=Path(args.out),
         hf_token=args.hf_token,
         opset=args.opset,

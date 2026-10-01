@@ -51,6 +51,14 @@ jobs:
       - name: Test
         run: fvm flutter test --dart-define=platform=vm
 
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Export plant-identification model
+        run: ./scripts/run_export.sh
+
       - name: Build unsigned split-ABI release APKs
         run: fvm flutter build apk --release --split-per-abi
 
