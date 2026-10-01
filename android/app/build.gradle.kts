@@ -43,11 +43,6 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
-
-        // Add the Dart define flag for Cronet HTTP without Play Services
-        applicationVariants.all { 
-            mergedFlavor.manifestPlaceholders["cronetHttpNoPlay"] = "true"
-        }
     }
 
     if (keystorePropertiesFile.exists()) {
@@ -94,17 +89,4 @@ dependencies {
     // enables you to use modern Java features and APIs in your app 
     // even on older Android devices with lower API levels. 
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.5")
-
-    // Keep Android config minimal; avoid unnecessary Play Services requirements.
-    //
-    // The Dio packages uses [cronet_http] libary to perform network requests. 
-    // At default, this libary depends on Google Play services instead of 
-    // of the embedded version of Cronet. Setting the embedded version (based on
-    // native libaries) here will remove the dependency on Google Play services.
-    //
-    // Note: https://github.com/cfug/dio/issues/2042
-    // Note: https://github.com/dart-lang/http/blob/master/pkgs/cronet_http/android/build.gradle
-    // Note: https://mvnrepository.com/artifact/org.chromium.net/cronet-embedded
-    //
-    implementation("org.chromium.net:cronet-embedded:119.6045.31")
 }
