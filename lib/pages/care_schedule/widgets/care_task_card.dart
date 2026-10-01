@@ -49,7 +49,9 @@ class CareTaskCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          task.taskType.label,
+                          task.alertMetricName == null
+                              ? task.taskType.label
+                              : context.l10n.careScheduleMetricAlert(task.alertMetricName!),
                           style: theme.textTheme.titleSmall?.copyWith(
                             fontWeight: FontWeight.bold,
                           ),
@@ -90,39 +92,41 @@ class CareTaskCard extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(width: 8),
-                  PopupMenuButton<int>(
-                    onSelected: onSnooze,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 8,
-                      ),
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: theme.colorScheme.outline,
+                  if (task.alertEpisodeId == null) ...[
+                    const SizedBox(width: 8),
+                    PopupMenuButton<int>(
+                      onSelected: onSnooze,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 8,
                         ),
-                        borderRadius: BorderRadius.circular(4),
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: theme.colorScheme.outline,
+                          ),
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(context.l10n.careScheduleSnooze),
+                            const Icon(Icons.arrow_drop_down),
+                          ],
+                        ),
                       ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(context.l10n.careScheduleSnooze),
-                          const Icon(Icons.arrow_drop_down),
-                        ],
-                      ),
+                      itemBuilder: (context) => [
+                        const PopupMenuItem(value: 1, child: Text('1 day')),
+                        const PopupMenuItem(value: 3, child: Text('3 days')),
+                        const PopupMenuItem(value: 7, child: Text('7 days')),
+                      ],
                     ),
-                    itemBuilder: (context) => [
-                      const PopupMenuItem(value: 1, child: Text('1 day')),
-                      const PopupMenuItem(value: 3, child: Text('3 days')),
-                      const PopupMenuItem(value: 7, child: Text('7 days')),
-                    ],
-                  ),
-                  const SizedBox(width: 8),
-                  OutlinedButton(
-                    onPressed: onSkip,
-                    child: Text(context.l10n.careScheduleSkip),
-                  ),
+                    const SizedBox(width: 8),
+                    OutlinedButton(
+                      onPressed: onSkip,
+                      child: Text(context.l10n.careScheduleSkip),
+                    ),
+                  ],
                 ],
               ),
             ],
