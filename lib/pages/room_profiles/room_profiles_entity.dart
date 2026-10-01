@@ -11,10 +11,7 @@ extension RoomLightLevelExtension on RoomLightLevel {
   String toJson() => name;
 
   static RoomLightLevel fromJson(String json) {
-    return RoomLightLevel.values.firstWhere(
-      (e) => e.name == json,
-      orElse: () => RoomLightLevel.medium,
-    );
+    return RoomLightLevel.values.byName(json);
   }
 
   /// Human-readable label for display.
@@ -38,10 +35,7 @@ extension RoomHumidityLevelExtension on RoomHumidityLevel {
   String toJson() => name;
 
   static RoomHumidityLevel fromJson(String json) {
-    return RoomHumidityLevel.values.firstWhere(
-      (e) => e.name == json,
-      orElse: () => RoomHumidityLevel.medium,
-    );
+    return RoomHumidityLevel.values.byName(json);
   }
 
   /// Human-readable label for display.

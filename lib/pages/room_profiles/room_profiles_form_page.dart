@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 
 import 'package:openplants/core/app_scope.dart';
+import 'package:openplants/l10n/l10n_x.dart';
 import 'package:openplants/pages/room_profiles/room_profiles_entity.dart';
 import 'package:openplants/pages/room_profiles/room_profiles_repository.dart';
 import 'package:openplants/pages/room_profiles/room_profiles_usecases.dart';
 
 /// Room presets with pre-filled environment attributes.
 class _RoomPreset {
-  final String name;
+  final _RoomPresetName name;
   final RoomLightLevel lightLevel;
   final RoomHumidityLevel humidityLevel;
 
@@ -19,13 +20,26 @@ class _RoomPreset {
 }
 
 const List<_RoomPreset> _presets = [
-  _RoomPreset(name: 'Bedroom', lightLevel: RoomLightLevel.medium, humidityLevel: RoomHumidityLevel.medium),
-  _RoomPreset(name: 'Kitchen', lightLevel: RoomLightLevel.bright, humidityLevel: RoomHumidityLevel.medium),
-  _RoomPreset(name: 'Bathroom', lightLevel: RoomLightLevel.low, humidityLevel: RoomHumidityLevel.high),
-  _RoomPreset(name: 'Living Room', lightLevel: RoomLightLevel.bright, humidityLevel: RoomHumidityLevel.medium),
-  _RoomPreset(name: 'Balcony', lightLevel: RoomLightLevel.directSun, humidityLevel: RoomHumidityLevel.low),
-  _RoomPreset(name: 'Office', lightLevel: RoomLightLevel.medium, humidityLevel: RoomHumidityLevel.low),
+  _RoomPreset(name: _RoomPresetName.bedroom, lightLevel: RoomLightLevel.medium, humidityLevel: RoomHumidityLevel.medium),
+  _RoomPreset(name: _RoomPresetName.kitchen, lightLevel: RoomLightLevel.bright, humidityLevel: RoomHumidityLevel.medium),
+  _RoomPreset(name: _RoomPresetName.bathroom, lightLevel: RoomLightLevel.low, humidityLevel: RoomHumidityLevel.high),
+  _RoomPreset(name: _RoomPresetName.livingRoom, lightLevel: RoomLightLevel.bright, humidityLevel: RoomHumidityLevel.medium),
+  _RoomPreset(name: _RoomPresetName.balcony, lightLevel: RoomLightLevel.directSun, humidityLevel: RoomHumidityLevel.low),
+  _RoomPreset(name: _RoomPresetName.office, lightLevel: RoomLightLevel.medium, humidityLevel: RoomHumidityLevel.low),
 ];
+
+enum _RoomPresetName { bedroom, kitchen, bathroom, livingRoom, balcony, office }
+
+extension on _RoomPreset {
+  String label(BuildContext context) => switch (name) {
+        _RoomPresetName.bedroom => context.l10n.roomPresetBedroom,
+        _RoomPresetName.kitchen => context.l10n.roomPresetKitchen,
+        _RoomPresetName.bathroom => context.l10n.roomPresetBathroom,
+        _RoomPresetName.livingRoom => context.l10n.roomPresetLivingRoom,
+        _RoomPresetName.balcony => context.l10n.roomPresetBalcony,
+        _RoomPresetName.office => context.l10n.roomPresetOffice,
+      };
+}
 
 /// Form page for creating or editing a room.
 class RoomProfilesFormPage extends StatefulWidget {
@@ -76,7 +90,7 @@ class _RoomProfilesFormPageState extends State<RoomProfilesFormPage> {
 
   void _applyPreset(_RoomPreset preset) {
     setState(() {
-      _nameController.text = preset.name;
+      _nameController.text = preset.label(context);
       _lightLevel = preset.lightLevel;
       _humidityLevel = preset.humidityLevel;
     });
@@ -116,14 +130,15 @@ class _RoomProfilesFormPageState extends State<RoomProfilesFormPage> {
     } on RoomNameDuplicateException {
       if (mounted) {
         setState(() {
-          _nameError = 'A room with this name already exists';
+          _nameError = context.l10n.roomNameDuplicate;
           _saving = false;
         });
       }
-    } catch (e) {
+    } catch (error, stackTrace) {
+      debugPrint('Failed to save room profile: $error\n$stackTrace');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error saving room: $e')),
+          SnackBar(content: Text(context.l10n.generalFailureMessage)),
         );
         setState(() => _saving = false);
       }
@@ -136,7 +151,7 @@ class _RoomProfilesFormPageState extends State<RoomProfilesFormPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(_isEditing ? 'Edit Room' : 'New Room'),
+        title: Text(_isEditing ? context.l10n.roomFormTitleEdit : context.l10n.roomFormTitleNew),
         actions: [
           TextButton(
             onPressed: _saving ? null : _save,
@@ -146,7 +161,7 @@ class _RoomProfilesFormPageState extends State<RoomProfilesFormPage> {
                     height: 20,
                     child: CircularProgressIndicator(strokeWidth: 2),
                   )
-                : const Text('Save'),
+                : Text(context.l10n.save),
           ),
         ],
       ),
@@ -158,7 +173,7 @@ class _RoomProfilesFormPageState extends State<RoomProfilesFormPage> {
             // Presets (only shown when creating)
             if (!_isEditing) ...[
               Text(
-                'Quick Start',
+                context.l10n.roomFormQuickStart,
                 style: theme.textTheme.titleMedium,
               ),
               const SizedBox(height: 8),
@@ -167,7 +182,7 @@ class _RoomProfilesFormPageState extends State<RoomProfilesFormPage> {
                 runSpacing: 8,
                 children: _presets.map((preset) {
                   return ActionChip(
-                    label: Text(preset.name),
+                    label: Text(preset.label(context)),
                     onPressed: () => _applyPreset(preset),
                   );
                 }).toList(),
@@ -179,13 +194,13 @@ class _RoomProfilesFormPageState extends State<RoomProfilesFormPage> {
             TextFormField(
               controller: _nameController,
               decoration: InputDecoration(
-                labelText: 'Room name *',
+                labelText: context.l10n.nameRequired,
                 border: const OutlineInputBorder(),
                 errorText: _nameError,
               ),
               validator: (value) {
                 if (value == null || value.trim().isEmpty) {
-                  return 'Room name is required';
+                  return context.l10n.nameIsRequired;
                 }
                 return null;
               },
@@ -193,31 +208,28 @@ class _RoomProfilesFormPageState extends State<RoomProfilesFormPage> {
             const SizedBox(height: 16),
 
             // Light level
-            Text(
-              'Light Level',
-              style: theme.textTheme.titleMedium,
-            ),
+            Text(context.l10n.speciesLibraryLight, style: theme.textTheme.titleMedium),
             const SizedBox(height: 8),
             SegmentedButton<RoomLightLevel>(
-              segments: const [
+              segments: [
                 ButtonSegment(
                   value: RoomLightLevel.low,
-                  label: Text('Low'),
-                  icon: Icon(Icons.dark_mode),
+                  label: Text(context.l10n.speciesLibraryLightLow),
+                  icon: const Icon(Icons.dark_mode),
                 ),
                 ButtonSegment(
                   value: RoomLightLevel.medium,
-                  label: Text('Medium'),
+                  label: Text(context.l10n.speciesLibraryLightMedium),
                 ),
                 ButtonSegment(
                   value: RoomLightLevel.bright,
-                  label: Text('Bright'),
-                  icon: Icon(Icons.light_mode),
+                  label: Text(context.l10n.speciesLibraryLightBright),
+                  icon: const Icon(Icons.light_mode),
                 ),
                 ButtonSegment(
                   value: RoomLightLevel.directSun,
-                  label: Text('Direct Sun'),
-                  icon: Icon(Icons.wb_sunny),
+                  label: Text(context.l10n.speciesLibraryLightDirect),
+                  icon: const Icon(Icons.wb_sunny),
                 ),
               ],
               selected: {_lightLevel},
@@ -228,25 +240,22 @@ class _RoomProfilesFormPageState extends State<RoomProfilesFormPage> {
             const SizedBox(height: 16),
 
             // Humidity level
-            Text(
-              'Humidity Level',
-              style: theme.textTheme.titleMedium,
-            ),
+            Text(context.l10n.speciesLibraryHumidity, style: theme.textTheme.titleMedium),
             const SizedBox(height: 8),
             SegmentedButton<RoomHumidityLevel>(
-              segments: const [
+              segments: [
                 ButtonSegment(
                   value: RoomHumidityLevel.low,
-                  label: Text('Low'),
+                  label: Text(context.l10n.diagnosisHumidityLow),
                 ),
                 ButtonSegment(
                   value: RoomHumidityLevel.medium,
-                  label: Text('Medium'),
+                  label: Text(context.l10n.diagnosisHumidityModerate),
                 ),
                 ButtonSegment(
                   value: RoomHumidityLevel.high,
-                  label: Text('High'),
-                  icon: Icon(Icons.water_drop),
+                  label: Text(context.l10n.diagnosisHumidityHigh),
+                  icon: const Icon(Icons.water_drop),
                 ),
               ],
               selected: {_humidityLevel},
@@ -259,9 +268,9 @@ class _RoomProfilesFormPageState extends State<RoomProfilesFormPage> {
             // Notes field
             TextFormField(
               controller: _notesController,
-              decoration: const InputDecoration(
-                labelText: 'Notes',
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                labelText: context.l10n.notes,
+                border: const OutlineInputBorder(),
               ),
               maxLines: 3,
             ),

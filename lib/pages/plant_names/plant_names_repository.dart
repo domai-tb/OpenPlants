@@ -25,13 +25,9 @@ class PlantNamesRepository {
       final exactMatch = entry.localizedNames[localeCode];
       if (exactMatch != null) return exactMatch;
 
-      final languageCode = localeCode.split('_').first;
+      final languageCode = localeCode.replaceAll('-', '_').split('_').first;
       final langMatch = entry.localizedNames[languageCode];
       if (langMatch != null) return langMatch;
-
-      // Try English as fallback within the entry
-      final enFallback = entry.localizedNames['en'];
-      if (enFallback != null) return enFallback;
     }
 
     return scientificName ?? speciesId;

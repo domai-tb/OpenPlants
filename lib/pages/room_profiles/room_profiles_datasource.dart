@@ -1,36 +1,40 @@
-import 'dart:convert';
-
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:openplants/core/local_collection_codec.dart';
 import 'package:openplants/pages/room_profiles/room_profiles_entity.dart';
 
 /// Data source for room profiles persistence.
-///
-/// Stores rooms as a JSON list in shared_preferences.
 class RoomProfilesDatasource {
   static const String _prefsKey = 'room_profiles_v1';
 
-  /// Load all rooms from shared_preferences.
-  Future<List<RoomEntity>> loadRooms() async {
-    final prefs = await SharedPreferences.getInstance();
-    final raw = prefs.getString(_prefsKey);
+  final SharedPreferences? _prefsOverride;
+  LocalCollectionCodec<RoomEntity>? _codec;
 
-    if (raw == null || raw.trim().isEmpty) {
-      return [];
-    }
+  RoomProfilesDatasource({SharedPreferences? prefs}) : _prefsOverride = prefs;
 
-    try {
-      final decoded = jsonDecode(raw) as List<dynamic>;
-      return decoded.map((item) => RoomEntity.fromJson(item as Map<String, dynamic>)).toList();
-    } catch (_) {
-      return [];
+  Future<LocalCollectionCodec<RoomEntity>> _getCodec() async {
+    if (_codec == null) {
+      final prefs = _prefsOverride ?? await SharedPreferences.getInstance();
+      _codec = LocalCollectionCodec<RoomEntity>(
+        prefs: prefs,
+        key: _prefsKey,
+        fromJson: RoomEntity.fromJson,
+        toJson: (room) => room.toJson(),
+        keyExtractor: (room) => room.id,
+      );
     }
+    return _codec!;
   }
 
-  /// Save room list to shared_preferences.
+  /// Loads rooms, throwing when stored JSON or any room record is malformed.
+  Future<List<RoomEntity>> loadRooms() async {
+    final result = await (await _getCodec()).load();
+    if (result.isFailure) throw result.asFailure!;
+    return result.asSuccess;
+  }
+
+  /// Saves rooms unless a previous load detected corrupt stored data.
   Future<void> saveRooms(List<RoomEntity> rooms) async {
-    final prefs = await SharedPreferences.getInstance();
-    final json = rooms.map((r) => r.toJson()).toList();
-    await prefs.setString(_prefsKey, jsonEncode(json));
+    await (await _getCodec()).save(rooms);
   }
 }
