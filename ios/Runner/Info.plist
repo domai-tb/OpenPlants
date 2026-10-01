@@ -69,5 +69,9 @@
 	<false/>
 	<key>NSUserNotificationsUsageDescription</key>
 	<string>OpenPlants uses notifications to remind you about plant care tasks.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>OpenPlants uses the camera to photograph plants and assess room light.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>OpenPlants uses selected photos to add plant images and assess room light.</string>
 </dict>
 </plist>
