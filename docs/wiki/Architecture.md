@@ -8,7 +8,7 @@ OpenPlants is a Flutter plant companion app organised around a lightweight Clean
 - `lib/pages/` — feature modules, including collection management, care scheduling, diagnosis, journals, identification, and species data.
 - `lib/widgets/` — reusable UI components shared by features.
 - `assets/l10n/` — source ARB localization files; generated Dart output is in `lib/l10n/`.
-- `assets/ml/plant-identification/` and `assets/species/` — bundled identification and species-reference assets.
+- `assets/ml/plant-identification/` — location for identification model files, which are not included in this checkout; `assets/species/` contains bundled species-reference data.
 
 ## Feature Boundaries
 
