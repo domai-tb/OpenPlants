@@ -36,6 +36,18 @@ class PlantScheduleInput {
   /// Used to suppress completed alert tasks until recovery.
   final Set<String>? completedAlertEpisodeIds;
 
+  /// Metric IDs configured to create care tasks for active alerts.
+  final Set<String>? careTaskMetricIds;
+
+  /// Metric IDs whose definition is missing, disabled, or belongs to another plant.
+  final Set<String>? disabledMetricIds;
+
+  /// Current active alert episode ID by metric ID.
+  final Map<String, String>? activeAlertEpisodeIds;
+
+  /// Display names for metrics that may generate care tasks.
+  final Map<String, String>? metricNamesById;
+
   const PlantScheduleInput({
     required this.plantId,
     required this.plantName,
@@ -50,6 +62,10 @@ class PlantScheduleInput {
     this.lightLevel,
     this.metricLatestMeasurementTimes,
     this.completedAlertEpisodeIds,
+    this.careTaskMetricIds,
+    this.disabledMetricIds,
+    this.activeAlertEpisodeIds,
+    this.metricNamesById,
   });
 }
 
@@ -64,6 +80,7 @@ class ScheduleEngine {
     required DateTime today,
   }) {
     final tasks = <CareTask>[];
+    final calendarToday = calendarDate(today);
 
     // All custom rules by taskType, including disabled overrides so they can
     // suppress the computed default rather than falling back to it.
@@ -117,6 +134,9 @@ class ScheduleEngine {
       int? effectiveInterval;
       DateTime? measurementAnchor;
       if (matchingRule != null) {
+        if (matchingRule.metricId != null && (input.disabledMetricIds ?? {}).contains(matchingRule.metricId)) {
+          continue;
+        }
         // Custom rule found: use rule interval directly, skip all modifiers
         effectiveInterval = matchingRule.intervalDays;
 
@@ -132,18 +152,18 @@ class ScheduleEngine {
           taskType: taskType,
           config: input.config,
           profile: input.profile,
-          today: today,
+          today: calendarToday,
         );
 
         if (effectiveInterval != null && effectiveInterval > 0 && taskType.isBuiltIn) {
           // Compute light modifier: plant light level takes precedence over room sunlight
-          double lightMod;
-          if (input.lightLevel != null) {
+          var lightMod = 1.0;
+          if (taskType.builtIn == BuiltInTaskType.watering && input.lightLevel != null) {
             lightMod = LightLevelModifier.compute(
               taskType: taskType.builtIn!,
               lightLevel: input.lightLevel,
             );
-          } else {
+          } else if (taskType.builtIn == BuiltInTaskType.watering) {
             // Fall back to room's light modifier
             lightMod = RoomModifier.computeLightModifier(
               taskType: taskType.builtIn!,
@@ -182,11 +202,11 @@ class ScheduleEngine {
       // otherwise use completion history
       DateTime baseDueDate;
       if (measurementAnchor != null) {
-        baseDueDate = measurementAnchor.add(Duration(days: effectiveInterval));
+        baseDueDate = addCalendarDays(measurementAnchor, effectiveInterval);
       } else if (lastCompletion != null) {
-        baseDueDate = lastCompletion.completedAt.add(Duration(days: effectiveInterval));
+        baseDueDate = addCalendarDays(lastCompletion.completedAt, effectiveInterval);
       } else {
-        baseDueDate = today;
+        baseDueDate = calendarToday;
       }
 
       // Apply schedule action override if active
@@ -198,17 +218,18 @@ class ScheduleEngine {
         taskType,
         input.plantId,
         baseDueDate,
+        keepUntilCompletion: lastCompletion == null && measurementAnchor == null,
       );
 
       if (activeAction != null) {
         // Apply the override due date
-        dueDate = activeAction.overriddenDueDate;
+        dueDate = calendarDate(activeAction.overriddenDueDate);
       }
 
       // Determine status using the final due date
       status = OverdueDetector.detect(
-        today: today,
-        lastCompletedAt: lastCompletion?.completedAt,
+        today: calendarToday,
+        lastCompletedAt: measurementAnchor ?? lastCompletion?.completedAt,
         effectiveIntervalDays: effectiveInterval,
         overriddenDueDate: activeAction != null ? dueDate : null,
       );
@@ -222,27 +243,40 @@ class ScheduleEngine {
           status: status,
           effectiveIntervalDays: effectiveInterval,
           completedAt: lastCompletion?.completedAt,
+          occurrenceDueDate: activeAction?.targetedOccurrenceDueDate ?? baseDueDate,
         ),
       );
     }
 
-    // Generate alert tasks for metric-linked rules with active alert episodes
+    // Generate at most one care task per active metric alert.
+    final generatedMetricAlerts = <String>{};
     for (final rule in input.customCareRules) {
-      if (!rule.isEnabled || rule.metricId == null) continue;
+      final metricId = rule.metricId;
+      if (!rule.isEnabled ||
+          metricId == null ||
+          (input.disabledMetricIds ?? {}).contains(metricId) ||
+          !(input.careTaskMetricIds ?? {}).contains(metricId)) {
+        continue;
+      }
 
-      // Check if there's a completed alert episode for this metric
-      final completedEpisodes = input.completedAlertEpisodeIds ?? {};
-      if (completedEpisodes.contains(rule.metricId)) continue;
+      final episodeId = input.activeAlertEpisodeIds?[metricId];
+      if (episodeId == null ||
+          (input.completedAlertEpisodeIds ?? {}).contains(episodeId) ||
+          !generatedMetricAlerts.add(metricId)) {
+        continue;
+      }
 
-      // Add alert task for this metric rule
+      // Linked care rules configure measurement reminders, not alert labels.
       tasks.add(
         CareTask(
-          taskType: CareTaskType.custom('${rule.taskType}_alert'),
+          taskType: CareTaskType.custom('metric_alert:$metricId'),
           plantId: input.plantId,
           plantName: input.plantName,
-          dueDate: today,
+          dueDate: calendarToday,
           status: CareTaskStatus.dueToday,
           effectiveIntervalDays: 0,
+          alertEpisodeId: episodeId,
+          alertMetricName: input.metricNamesById?[metricId] ?? metricId,
         ),
       );
     }
@@ -293,13 +327,14 @@ class ScheduleEngine {
     List<CareScheduleAction> actions,
     CareTaskType taskType,
     String plantId,
-    DateTime baseDueDate,
-  ) {
+    DateTime baseDueDate, {
+    required bool keepUntilCompletion,
+  }) {
     for (final action in actions) {
       if (action.plantId == plantId && action.taskType == taskType) {
         // Check if the action targets the current occurrence
         // An action is stale if its targeted due date doesn't match the current base due date
-        if (action.targetedOccurrenceDueDate == baseDueDate) {
+        if (calendarDate(action.targetedOccurrenceDueDate) == baseDueDate || keepUntilCompletion) {
           return action;
         }
       }

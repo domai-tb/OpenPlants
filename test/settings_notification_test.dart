@@ -26,7 +26,6 @@ void main() {
     test('toJson includes notification fields', () {
       const settings = Settings(
         notificationsEnabled: false,
-        notifyDueTasks: true,
         notifyOverdueTasks: false,
       );
       final json = settings.toJson();
@@ -39,7 +38,6 @@ void main() {
       const settings = Settings(
         notificationsEnabled: false,
         notifyDueTasks: false,
-        notifyOverdueTasks: true,
       );
       final updated = settings.copyWith(notificationsEnabled: true);
       expect(updated.notificationsEnabled, true);
@@ -50,7 +48,6 @@ void main() {
     test('round trip preserves notification settings', () {
       const settings = Settings(
         notificationsEnabled: false,
-        notifyDueTasks: true,
         notifyOverdueTasks: false,
       );
       final json = settings.toJson();
@@ -74,16 +71,39 @@ void main() {
       SharedPreferences.setMockInitialValues({});
       final controller = await SettingsController.load();
 
-      controller.update(controller.settings.copyWith(
-        notificationsEnabled: false,
-        notifyDueTasks: false,
-        notifyOverdueTasks: false,
-      ));
+      await controller.update(
+        controller.settings.copyWith(
+          notificationsEnabled: false,
+          notifyDueTasks: false,
+          notifyOverdueTasks: false,
+        ),
+      );
 
       final reloaded = await SettingsController.load();
       expect(reloaded.settings.notificationsEnabled, false);
       expect(reloaded.settings.notifyDueTasks, false);
       expect(reloaded.settings.notifyOverdueTasks, false);
     });
+
+    test('reports a rejected settings write without changing in-memory settings', () async {
+      final controller = await SettingsController.load(prefs: _RejectingPreferences());
+
+      await expectLater(
+        controller.update(controller.settings.copyWith(notificationsEnabled: false)),
+        throwsA(isA<StateError>()),
+      );
+      expect(controller.settings.notificationsEnabled, true);
+    });
   });
+}
+
+class _RejectingPreferences implements SharedPreferences {
+  @override
+  String? getString(String key) => null;
+
+  @override
+  Future<bool> setString(String key, String value) async => false;
+
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }

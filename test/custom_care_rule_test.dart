@@ -103,6 +103,46 @@ void main() {
       expect(rule.isMeasurementRequired, false);
     });
 
+    test('create rejects a duplicate rule for the same plant and task type', () async {
+      await usecases.create(plantId: 'plant-1', taskType: 'watering', intervalDays: 7);
+
+      await expectLater(
+        usecases.create(plantId: 'plant-1', taskType: 'watering', intervalDays: 14),
+        throwsA(isA<StateError>()),
+      );
+
+      final rules = await usecases.getByPlant('plant-1');
+      expect(rules, hasLength(1));
+      expect(rules.single.intervalDays, 7);
+    });
+
+    test('computed override saves and updates reminder settings without changing task type', () async {
+      final created = await usecases.createOrUpdateOverride(
+        plantId: 'plant-1',
+        taskType: 'watering',
+        intervalDays: 7,
+        reminderEnabled: true,
+        reminderTime: '08:30',
+        reminderDays: ['monday', 'friday'],
+      );
+      final updated = await usecases.createOrUpdateOverride(
+        plantId: 'plant-1',
+        taskType: 'watering',
+        intervalDays: 10,
+        reminderEnabled: true,
+        reminderTime: '09:15',
+        reminderDays: ['tuesday'],
+      );
+
+      expect(updated.id, created.id);
+      expect(updated.taskType, 'watering');
+      expect(updated.intervalDays, 10);
+      expect(updated.reminderEnabled, true);
+      expect(updated.reminderTime, '09:15');
+      expect(updated.reminderDays, ['tuesday']);
+      expect(await usecases.getByPlant('plant-1'), hasLength(1));
+    });
+
     test('create with metric linkage persists metric fields', () async {
       final rule = await usecases.create(
         plantId: 'plant-1',
@@ -132,6 +172,7 @@ void main() {
 
       expect(updated.metricId, 'metric-1');
       expect(updated.isMeasurementRequired, true);
+      expect(updated.taskType, created.taskType);
     });
 
     test('update can clear metric linkage', () async {

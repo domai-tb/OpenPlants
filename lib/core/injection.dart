@@ -21,6 +21,8 @@ import 'package:openplants/pages/more/more_usecases.dart';
 import 'package:openplants/pages/plant_collection/plant_collection_datasource.dart';
 import 'package:openplants/pages/plant_collection/plant_collection_repository.dart';
 import 'package:openplants/pages/plant_collection/plant_collection_usecases.dart';
+import 'package:openplants/pages/plant_collection/plant_data_cleanup.dart';
+import 'package:openplants/pages/plant_collection/plant_deletion_coordinator.dart';
 import 'package:openplants/pages/plant_journal/plant_journal_datasource.dart';
 import 'package:openplants/pages/plant_journal/plant_journal_repository.dart';
 import 'package:openplants/pages/plant_journal/plant_journal_usecases.dart';
@@ -33,9 +35,6 @@ import 'package:openplants/pages/room_profiles/room_profiles_usecases.dart';
 import 'package:openplants/pages/species_library/species_library_datasource.dart';
 import 'package:openplants/pages/species_library/species_library_repository.dart';
 import 'package:openplants/pages/species_library/species_library_usecases.dart';
-import 'package:openplants/pages/species_catalog/species_catalog_datasource.dart';
-import 'package:openplants/pages/species_catalog/species_catalog_repository.dart';
-import 'package:openplants/pages/species_catalog/species_catalog_usecases.dart';
 import 'package:openplants/pages/symptom_logger/symptom_logger_datasource.dart';
 import 'package:openplants/pages/symptom_logger/symptom_logger_repository.dart';
 import 'package:openplants/pages/symptom_logger/symptom_logger_usecases.dart';
@@ -60,6 +59,7 @@ import 'package:openplants/pages/plant_metrics/metric_usecases.dart';
 import 'package:openplants/pages/notifications/notification_datasource.dart';
 import 'package:openplants/pages/notifications/notification_repository.dart';
 import 'package:openplants/pages/notifications/notification_usecases.dart';
+import 'package:openplants/pages/notifications/notification_reconciler.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 /// Global service locator (GetIt).
@@ -119,7 +119,10 @@ Future<void> init() async {
     ),
   );
   sl.registerLazySingleton<PlantCollectionUsecases>(
-    () => PlantCollectionUsecases(repository: sl()),
+    () => PlantCollectionUsecases(
+      repository: sl(),
+      onNotificationsChanged: () => sl<NotificationReconciler>().reconcileSafely(),
+    ),
   );
 
   // Plant Photo Timeline
@@ -147,20 +150,9 @@ Future<void> init() async {
     () => SpeciesLibraryUsecases(repository: sl()),
   );
 
-  // Species Catalog
-  sl.registerLazySingleton<SpeciesCatalogDatasource>(
-    SpeciesCatalogDatasource.new,
-  );
-  sl.registerLazySingleton<SpeciesCatalogRepository>(
-    () => SpeciesCatalogRepository(datasource: sl()),
-  );
-  sl.registerLazySingleton<SpeciesCatalogUsecases>(
-    () => SpeciesCatalogUsecases(repository: sl()),
-  );
-
   // Today Dashboard
   sl.registerLazySingleton<TodayDashboardDataSource>(
-    () => TodayDashboardDataSource(plantCollection: sl()),
+    () => TodayDashboardDataSource(plantCollection: sl(), careSchedule: sl()),
   );
   sl.registerLazySingleton<TodayDashboardRepository>(
     () => TodayDashboardRepository(dataSource: sl()),
@@ -182,10 +174,15 @@ Future<void> init() async {
       plantCollection: sl(),
       plantJournal: sl(),
       roomProfiles: sl(),
+      metricUsecases: sl(),
+      onNotificationsChanged: () => sl<NotificationReconciler>().reconcileSafely(),
     ),
   );
   sl.registerLazySingleton<CustomCareRuleUsecases>(
-    () => CustomCareRuleUsecases(repository: sl()),
+    () => CustomCareRuleUsecases(
+      repository: sl(),
+      onNotificationsChanged: () => sl<NotificationReconciler>().reconcileSafely(),
+    ),
   );
 
   // Symptom Logger
@@ -285,15 +282,14 @@ Future<void> init() async {
   );
 
   // Plant Names
-  sl.registerLazySingleton<PlantNamesDatasource>(
-    PlantNamesDatasource.new,
-  );
+  sl.registerLazySingleton<PlantNamesDatasource>(PlantNamesDatasource.new);
   sl.registerLazySingleton<PlantNamesRepository>(
     () => PlantNamesRepository(datasource: sl()),
   );
   sl.registerLazySingleton<PlantNamesUsecases>(
-    () => PlantNamesUsecases(repository: sl()),
+    () => PlantNamesUsecases(repository: sl(), localeService: sl()),
   );
+  await sl<PlantNamesDatasource>().loadPlantNames();
 
   // Plant Metrics
   sl.registerLazySingleton<MetricDefinitionDataSource>(
@@ -309,7 +305,12 @@ Future<void> init() async {
     ),
   );
   sl.registerLazySingleton<MetricUsecases>(
-    () => MetricUsecases(repository: sl()),
+    () => MetricUsecases(
+      repository: sl(),
+      deleteLinkedCareRules: (metricId, deleteMetric) =>
+          sl<CustomCareRuleUsecases>().deleteForMetric(metricId, deleteMetric),
+      onNotificationsChanged: () => sl<NotificationReconciler>().reconcileSafely(),
+    ),
   );
 
   // Notifications
@@ -328,6 +329,35 @@ Future<void> init() async {
       plugin: sl(),
     ),
   );
+  sl.registerLazySingleton<NotificationReconciler>(
+    () => NotificationReconciler(
+      repository: sl(),
+      usecases: sl(),
+      careRepository: sl(),
+      careSchedule: sl(),
+      settings: sl(),
+      localeService: sl(),
+    ),
+  );
+
+  sl.registerLazySingleton<PendingPlantDeletionDataSource>(PendingPlantDeletionDataSource.new);
+  sl.registerLazySingleton<PlantDataCleanup>(
+    () => PlantDataCleanup(
+      journalUsecases: sl(),
+      symptomUsecases: sl(),
+      diagnosisHistoryUsecases: sl(),
+      photoTimelineUsecases: sl(),
+      careScheduleUsecases: sl(),
+      metricUsecases: sl(),
+    ),
+  );
+  sl.registerLazySingleton<PlantDeletionCoordinator>(
+    () => PlantDeletionCoordinator(
+      plantCollection: sl(),
+      dataCleanup: sl(),
+      pendingDeletes: sl(),
+    ),
+  );
 
   // Aggregate wiring
   sl.registerLazySingleton<AppServices>(
@@ -335,9 +365,9 @@ Future<void> init() async {
       plantIdentification: sl(),
       more: sl(),
       plantCollection: sl(),
+      plantDeletion: sl(),
       plantPhotoTimeline: sl(),
       speciesLibrary: sl(),
-      speciesCatalog: sl(),
       todayDashboard: sl(),
       careSchedule: sl(),
       customCareRules: sl(),
@@ -355,6 +385,7 @@ Future<void> init() async {
       plantNames: sl(),
       metric: sl(),
       notification: sl(),
+      notificationReconciler: sl(),
     ),
   );
 }

@@ -35,7 +35,7 @@ class NotificationPayload {
   static NotificationPayload? decode(String? encoded) {
     if (encoded == null || encoded.isEmpty) return null;
     try {
-      final json = jsonDecode(Uri.decodeComponent(encoded)) as Map<String, dynamic>;
+      final json = jsonDecode(encoded) as Map<String, dynamic>;
       return NotificationPayload.fromJson(json);
     } catch (_) {
       return null;
@@ -51,7 +51,8 @@ class ScheduledNotification {
   final String taskType;
   final String? metricId;
   final DateTime scheduledTime;
-  final bool isActive;
+  final String title;
+  final String body;
 
   const ScheduledNotification({
     required this.id,
@@ -60,7 +61,8 @@ class ScheduledNotification {
     required this.taskType,
     this.metricId,
     required this.scheduledTime,
-    this.isActive = true,
+    this.title = '',
+    this.body = '',
   });
 
   ScheduledNotification copyWith({
@@ -70,7 +72,8 @@ class ScheduledNotification {
     String? taskType,
     String? metricId,
     DateTime? scheduledTime,
-    bool? isActive,
+    String? title,
+    String? body,
   }) {
     return ScheduledNotification(
       id: id ?? this.id,
@@ -79,7 +82,8 @@ class ScheduledNotification {
       taskType: taskType ?? this.taskType,
       metricId: metricId ?? this.metricId,
       scheduledTime: scheduledTime ?? this.scheduledTime,
-      isActive: isActive ?? this.isActive,
+      title: title ?? this.title,
+      body: body ?? this.body,
     );
   }
 
@@ -91,7 +95,8 @@ class ScheduledNotification {
       taskType: json['taskType'] as String,
       metricId: json['metricId'] as String?,
       scheduledTime: DateTime.parse(json['scheduledTime'] as String),
-      isActive: json['isActive'] as bool? ?? true,
+      title: json['title'] as String? ?? '',
+      body: json['body'] as String? ?? '',
     );
   }
 
@@ -102,6 +107,7 @@ class ScheduledNotification {
         'taskType': taskType,
         if (metricId != null) 'metricId': metricId,
         'scheduledTime': scheduledTime.toIso8601String(),
-        'isActive': isActive,
+        'title': title,
+        'body': body,
       };
 }

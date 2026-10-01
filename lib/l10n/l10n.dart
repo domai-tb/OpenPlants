@@ -374,6 +374,24 @@ abstract class AppLocalizations {
   /// **'Theme'**
   String get themeLabel;
 
+  /// No description provided for @themeSystem.
+  ///
+  /// In en, this message translates to:
+  /// **'System'**
+  String get themeSystem;
+
+  /// No description provided for @themeLight.
+  ///
+  /// In en, this message translates to:
+  /// **'Light'**
+  String get themeLight;
+
+  /// No description provided for @themeDark.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark'**
+  String get themeDark;
+
   /// No description provided for @languageLabel.
   ///
   /// In en, this message translates to:
@@ -509,8 +527,14 @@ abstract class AppLocalizations {
   /// No description provided for @unexpectedError.
   ///
   /// In en, this message translates to:
-  /// **'An unexpected error occured...'**
+  /// **'An unexpected error occurred.'**
   String get unexpectedError;
+
+  /// No description provided for @retry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get retry;
 
   /// No description provided for @invalid2FATokenFailureMessage.
   ///
@@ -595,6 +619,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Camera'**
   String get plantIdCamera;
+
+  /// No description provided for @cameraAccessNeeded.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera access is needed to take photos of your plants.'**
+  String get cameraAccessNeeded;
+
+  /// No description provided for @cameraGrantAccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Grant access'**
+  String get cameraGrantAccess;
+
+  /// No description provided for @cameraPermissionPermanentlyDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera permission was permanently denied. Enable it in system settings.'**
+  String get cameraPermissionPermanentlyDenied;
+
+  /// No description provided for @cameraOpenSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Open settings'**
+  String get cameraOpenSettings;
+
+  /// No description provided for @cameraUseGalleryInstead.
+  ///
+  /// In en, this message translates to:
+  /// **'Use gallery instead'**
+  String get cameraUseGalleryInstead;
+
+  /// No description provided for @cameraInitializing.
+  ///
+  /// In en, this message translates to:
+  /// **'Initializing camera...'**
+  String get cameraInitializing;
+
+  /// No description provided for @cameraInitializationFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera could not be initialized.'**
+  String get cameraInitializationFailed;
+
+  /// No description provided for @cameraCapturePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Take photo'**
+  String get cameraCapturePhoto;
 
   /// No description provided for @plantIdGallery.
   ///
@@ -3074,6 +3146,396 @@ abstract class AppLocalizations {
   /// **'Browse all plant species'**
   String get moreSpeciesListSubtitle;
 
+  /// No description provided for @moreRoomsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Rooms'**
+  String get moreRoomsTitle;
+
+  /// No description provided for @moreRoomsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage room locations'**
+  String get moreRoomsSubtitle;
+
+  /// No description provided for @roomEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No rooms yet'**
+  String get roomEmptyTitle;
+
+  /// No description provided for @roomAddAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Room'**
+  String get roomAddAction;
+
+  /// No description provided for @roomFormTitleNew.
+  ///
+  /// In en, this message translates to:
+  /// **'New Room'**
+  String get roomFormTitleNew;
+
+  /// No description provided for @roomFormTitleEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Room'**
+  String get roomFormTitleEdit;
+
+  /// No description provided for @roomFormQuickStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Quick Start'**
+  String get roomFormQuickStart;
+
+  /// No description provided for @roomNameDuplicate.
+  ///
+  /// In en, this message translates to:
+  /// **'A room with this name already exists'**
+  String get roomNameDuplicate;
+
+  /// No description provided for @roomDeleteTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete \"{roomName}\"?'**
+  String roomDeleteTitle(String roomName);
+
+  /// No description provided for @roomDeleteAssignedPlants.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, one {This room has 1 plant assigned. It will be unassigned when the room is deleted.} other {This room has {count} plants assigned. They will be unassigned when the room is deleted.}}'**
+  String roomDeleteAssignedPlants(int count);
+
+  /// No description provided for @roomDeleteNoAssignments.
+  ///
+  /// In en, this message translates to:
+  /// **'This room has no plants assigned.'**
+  String get roomDeleteNoAssignments;
+
+  /// No description provided for @roomPresetBedroom.
+  ///
+  /// In en, this message translates to:
+  /// **'Bedroom'**
+  String get roomPresetBedroom;
+
+  /// No description provided for @roomPresetKitchen.
+  ///
+  /// In en, this message translates to:
+  /// **'Kitchen'**
+  String get roomPresetKitchen;
+
+  /// No description provided for @roomPresetBathroom.
+  ///
+  /// In en, this message translates to:
+  /// **'Bathroom'**
+  String get roomPresetBathroom;
+
+  /// No description provided for @roomPresetLivingRoom.
+  ///
+  /// In en, this message translates to:
+  /// **'Living Room'**
+  String get roomPresetLivingRoom;
+
+  /// No description provided for @roomPresetBalcony.
+  ///
+  /// In en, this message translates to:
+  /// **'Balcony'**
+  String get roomPresetBalcony;
+
+  /// No description provided for @roomPresetOffice.
+  ///
+  /// In en, this message translates to:
+  /// **'Office'**
+  String get roomPresetOffice;
+
+  /// No description provided for @moreLightAssessmentTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Light Assessment'**
+  String get moreLightAssessmentTitle;
+
+  /// No description provided for @moreLightAssessmentSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Assess light levels for your plants'**
+  String get moreLightAssessmentSubtitle;
+
+  /// No description provided for @lightAssessmentPageTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Light Assessment — {plantName}'**
+  String lightAssessmentPageTitle(String plantName);
+
+  /// No description provided for @lightAssessmentCurrentLevel.
+  ///
+  /// In en, this message translates to:
+  /// **'Current Light Level'**
+  String get lightAssessmentCurrentLevel;
+
+  /// No description provided for @lightAssessmentNotSet.
+  ///
+  /// In en, this message translates to:
+  /// **'Not set'**
+  String get lightAssessmentNotSet;
+
+  /// No description provided for @lightAssessmentClear.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear'**
+  String get lightAssessmentClear;
+
+  /// No description provided for @lightAssessmentSelectLevel.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Light Level'**
+  String get lightAssessmentSelectLevel;
+
+  /// No description provided for @lightAssessmentLowDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark corners, north-facing windows, interior rooms'**
+  String get lightAssessmentLowDescription;
+
+  /// No description provided for @lightAssessmentMediumDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'East-facing windows, indirect light most of the day'**
+  String get lightAssessmentMediumDescription;
+
+  /// No description provided for @lightAssessmentBrightDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Near south or west windows, but outside direct sun rays'**
+  String get lightAssessmentBrightDescription;
+
+  /// No description provided for @lightAssessmentDirectDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Direct sun rays reach the plant for at least 4 hours'**
+  String get lightAssessmentDirectDescription;
+
+  /// No description provided for @lightAssessmentCameraHeading.
+  ///
+  /// In en, this message translates to:
+  /// **'Interactive Camera'**
+  String get lightAssessmentCameraHeading;
+
+  /// No description provided for @lightAssessmentCameraDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Move around in real time to see how light levels change before setting the level or taking a photo.'**
+  String get lightAssessmentCameraDescription;
+
+  /// No description provided for @lightAssessmentCameraButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Assess with camera'**
+  String get lightAssessmentCameraButton;
+
+  /// No description provided for @lightAssessmentPhotoHeading.
+  ///
+  /// In en, this message translates to:
+  /// **'Estimate from Photo'**
+  String get lightAssessmentPhotoHeading;
+
+  /// No description provided for @lightAssessmentPhotoDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Light level is estimated from your plant\'s photo. For best results, use a photo that shows the plant in its usual spot.'**
+  String get lightAssessmentPhotoDescription;
+
+  /// No description provided for @lightAssessmentEstimateLow.
+  ///
+  /// In en, this message translates to:
+  /// **'Looks like low light'**
+  String get lightAssessmentEstimateLow;
+
+  /// No description provided for @lightAssessmentEstimateMedium.
+  ///
+  /// In en, this message translates to:
+  /// **'Looks like medium light'**
+  String get lightAssessmentEstimateMedium;
+
+  /// No description provided for @lightAssessmentEstimateBright.
+  ///
+  /// In en, this message translates to:
+  /// **'Looks like bright indirect light'**
+  String get lightAssessmentEstimateBright;
+
+  /// No description provided for @lightAssessmentEstimateDirect.
+  ///
+  /// In en, this message translates to:
+  /// **'Looks like direct sunlight'**
+  String get lightAssessmentEstimateDirect;
+
+  /// No description provided for @lightAssessmentBrightness.
+  ///
+  /// In en, this message translates to:
+  /// **'Brightness: {percentage}%'**
+  String lightAssessmentBrightness(int percentage);
+
+  /// No description provided for @lightAssessmentUseEstimate.
+  ///
+  /// In en, this message translates to:
+  /// **'Use this'**
+  String get lightAssessmentUseEstimate;
+
+  /// No description provided for @lightAssessmentDismissEstimate.
+  ///
+  /// In en, this message translates to:
+  /// **'Dismiss'**
+  String get lightAssessmentDismissEstimate;
+
+  /// No description provided for @lightAssessmentTakeNewPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Take new photo'**
+  String get lightAssessmentTakeNewPhoto;
+
+  /// No description provided for @lightAssessmentChooseFromGallery.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose from gallery'**
+  String get lightAssessmentChooseFromGallery;
+
+  /// No description provided for @lightAssessmentNoPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'No photo yet. Take a photo of your plant to estimate its light level.'**
+  String get lightAssessmentNoPhoto;
+
+  /// No description provided for @lightAssessmentLevelSet.
+  ///
+  /// In en, this message translates to:
+  /// **'Light level set to {level}'**
+  String lightAssessmentLevelSet(String level);
+
+  /// No description provided for @lightAssessmentLevelCleared.
+  ///
+  /// In en, this message translates to:
+  /// **'Light level cleared'**
+  String get lightAssessmentLevelCleared;
+
+  /// No description provided for @lightAssessmentPlantLevelSet.
+  ///
+  /// In en, this message translates to:
+  /// **'{plantName}: Light level set to {level}'**
+  String lightAssessmentPlantLevelSet(String plantName, String level);
+
+  /// No description provided for @lightAssessmentNoPlants.
+  ///
+  /// In en, this message translates to:
+  /// **'No plants to save to. Add a plant first.'**
+  String get lightAssessmentNoPlants;
+
+  /// No description provided for @lightAssessmentSaveToPlant.
+  ///
+  /// In en, this message translates to:
+  /// **'Save light level to…'**
+  String get lightAssessmentSaveToPlant;
+
+  /// No description provided for @lightAssessmentSetToLevel.
+  ///
+  /// In en, this message translates to:
+  /// **'Set to {level}'**
+  String lightAssessmentSetToLevel(String level);
+
+  /// No description provided for @lightAssessmentCameraPermissionNeeded.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera access is needed to assess light levels in real time.'**
+  String get lightAssessmentCameraPermissionNeeded;
+
+  /// No description provided for @lightAssessmentConfidence.
+  ///
+  /// In en, this message translates to:
+  /// **'Confidence: {percentage}%'**
+  String lightAssessmentConfidence(int percentage);
+
+  /// No description provided for @lightAssessmentLiveGuidance.
+  ///
+  /// In en, this message translates to:
+  /// **'Move around to see how light levels change. For best results, hold the camera steady for a moment.'**
+  String get lightAssessmentLiveGuidance;
+
+  /// No description provided for @lightAssessmentCameraTimedOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera timed out'**
+  String get lightAssessmentCameraTimedOut;
+
+  /// No description provided for @lightAssessmentCameraTimeoutDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'The camera will close automatically to save battery.'**
+  String get lightAssessmentCameraTimeoutDescription;
+
+  /// No description provided for @lightAssessmentContinueAssessing.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue assessing'**
+  String get lightAssessmentContinueAssessing;
+
+  /// No description provided for @lightAssessmentSetThisLevel.
+  ///
+  /// In en, this message translates to:
+  /// **'Set this level ({level})'**
+  String lightAssessmentSetThisLevel(String level);
+
+  /// No description provided for @lightAssessmentResultTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Assessment Result'**
+  String get lightAssessmentResultTitle;
+
+  /// No description provided for @lightAssessmentResultGuidance.
+  ///
+  /// In en, this message translates to:
+  /// **'You can accept this estimate or go back to the camera for a different reading.'**
+  String get lightAssessmentResultGuidance;
+
+  /// No description provided for @lightAssessmentAcceptAndSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Accept & Save'**
+  String get lightAssessmentAcceptAndSave;
+
+  /// No description provided for @moreLogSymptomTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Log Symptom'**
+  String get moreLogSymptomTitle;
+
+  /// No description provided for @moreLogSymptomSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Record a plant health issue'**
+  String get moreLogSymptomSubtitle;
+
+  /// No description provided for @moreDiagnosisTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Plant Diagnosis'**
+  String get moreDiagnosisTitle;
+
+  /// No description provided for @moreDiagnosisSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Diagnose plant problems'**
+  String get moreDiagnosisSubtitle;
+
+  /// No description provided for @moreNotificationsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get moreNotificationsTitle;
+
+  /// No description provided for @moreNotificationsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Configure notification settings'**
+  String get moreNotificationsSubtitle;
+
   /// No description provided for @careScheduleCompletedEarly.
   ///
   /// In en, this message translates to:
@@ -3143,7 +3605,7 @@ abstract class AppLocalizations {
   /// No description provided for @metricsUnit.
   ///
   /// In en, this message translates to:
-  /// **'Unit (optional)'**
+  /// **'Unit'**
   String get metricsUnit;
 
   /// No description provided for @metricsUnitHint.
@@ -3218,6 +3680,294 @@ abstract class AppLocalizations {
   /// **'Categorical'**
   String get metricsValueTypeCategorical;
 
+  /// No description provided for @metricsDeleteTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete \"{name}\"?'**
+  String metricsDeleteTitle(String name);
+
+  /// No description provided for @metricsDeleteBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this metric and all its measurements? This cannot be undone.'**
+  String get metricsDeleteBody;
+
+  /// No description provided for @metricsActions.
+  ///
+  /// In en, this message translates to:
+  /// **'Metric actions'**
+  String get metricsActions;
+
+  /// No description provided for @metricsEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get metricsEdit;
+
+  /// No description provided for @metricsEnable.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable'**
+  String get metricsEnable;
+
+  /// No description provided for @metricsDisable.
+  ///
+  /// In en, this message translates to:
+  /// **'Disable'**
+  String get metricsDisable;
+
+  /// No description provided for @metricsDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get metricsDelete;
+
+  /// No description provided for @metricsInvalidMeasurement.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid measurement'**
+  String get metricsInvalidMeasurement;
+
+  /// No description provided for @metricsYes.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes'**
+  String get metricsYes;
+
+  /// No description provided for @metricsNo.
+  ///
+  /// In en, this message translates to:
+  /// **'No'**
+  String get metricsNo;
+
+  /// No description provided for @metricsMinimumAlert.
+  ///
+  /// In en, this message translates to:
+  /// **'Minimum alert value (optional)'**
+  String get metricsMinimumAlert;
+
+  /// No description provided for @metricsMaximumAlert.
+  ///
+  /// In en, this message translates to:
+  /// **'Maximum alert value (optional)'**
+  String get metricsMaximumAlert;
+
+  /// No description provided for @metricsOptions.
+  ///
+  /// In en, this message translates to:
+  /// **'Options'**
+  String get metricsOptions;
+
+  /// No description provided for @metricsOptionsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Comma-separated, e.g., Good, Fair, Poor'**
+  String get metricsOptionsHint;
+
+  /// No description provided for @metricsAlertOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Alert on {option}'**
+  String metricsAlertOn(String option);
+
+  /// No description provided for @metricsAlertWhenYes.
+  ///
+  /// In en, this message translates to:
+  /// **'Alert when Yes'**
+  String get metricsAlertWhenYes;
+
+  /// No description provided for @metricsAlertWhenNo.
+  ///
+  /// In en, this message translates to:
+  /// **'Alert when No'**
+  String get metricsAlertWhenNo;
+
+  /// No description provided for @metricsAlertResponse.
+  ///
+  /// In en, this message translates to:
+  /// **'Alert response'**
+  String get metricsAlertResponse;
+
+  /// No description provided for @metricsAlertResponseWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'Warning only'**
+  String get metricsAlertResponseWarning;
+
+  /// No description provided for @metricsAlertResponseCareTask.
+  ///
+  /// In en, this message translates to:
+  /// **'Create care task'**
+  String get metricsAlertResponseCareTask;
+
+  /// No description provided for @metricsUnitRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Unit is required'**
+  String get metricsUnitRequired;
+
+  /// No description provided for @metricsNameRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Metric name is required'**
+  String get metricsNameRequired;
+
+  /// No description provided for @metricsCategoryOptionsRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Add at least one option'**
+  String get metricsCategoryOptionsRequired;
+
+  /// No description provided for @metricsCategoryOptionsUnique.
+  ///
+  /// In en, this message translates to:
+  /// **'Options must be unique'**
+  String get metricsCategoryOptionsUnique;
+
+  /// No description provided for @metricsMinimumMustBeFinite.
+  ///
+  /// In en, this message translates to:
+  /// **'Minimum must be a finite number'**
+  String get metricsMinimumMustBeFinite;
+
+  /// No description provided for @metricsMaximumMustBeFinite.
+  ///
+  /// In en, this message translates to:
+  /// **'Maximum must be a finite number'**
+  String get metricsMaximumMustBeFinite;
+
+  /// No description provided for @metricsMinimumCannotExceedMaximum.
+  ///
+  /// In en, this message translates to:
+  /// **'Minimum cannot exceed maximum'**
+  String get metricsMinimumCannotExceedMaximum;
+
+  /// No description provided for @speciesCarePlanWaterLow.
+  ///
+  /// In en, this message translates to:
+  /// **'Water every 2–3 weeks and let the soil dry completely between waterings.'**
+  String get speciesCarePlanWaterLow;
+
+  /// No description provided for @speciesCarePlanWaterModerate.
+  ///
+  /// In en, this message translates to:
+  /// **'Water weekly and let the top inch of soil dry between waterings.'**
+  String get speciesCarePlanWaterModerate;
+
+  /// No description provided for @speciesCarePlanWaterFrequent.
+  ///
+  /// In en, this message translates to:
+  /// **'Water 2–3 times a week and keep the soil evenly moist.'**
+  String get speciesCarePlanWaterFrequent;
+
+  /// No description provided for @speciesCarePlanLightLow.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep in low light and away from direct sun. North-facing rooms are suitable.'**
+  String get speciesCarePlanLightLow;
+
+  /// No description provided for @speciesCarePlanLightMedium.
+  ///
+  /// In en, this message translates to:
+  /// **'Provide bright indirect light. East- or west-facing windows are suitable.'**
+  String get speciesCarePlanLightMedium;
+
+  /// No description provided for @speciesCarePlanLightBright.
+  ///
+  /// In en, this message translates to:
+  /// **'Provide bright indirect light, such as at a south-facing window with a sheer curtain.'**
+  String get speciesCarePlanLightBright;
+
+  /// No description provided for @speciesCarePlanLightDirect.
+  ///
+  /// In en, this message translates to:
+  /// **'Provide direct sunlight, such as at a south-facing windowsill, or use a grow light.'**
+  String get speciesCarePlanLightDirect;
+
+  /// No description provided for @speciesCarePlanHumidityLow.
+  ///
+  /// In en, this message translates to:
+  /// **'Average household humidity (30–40%) is suitable.'**
+  String get speciesCarePlanHumidityLow;
+
+  /// No description provided for @speciesCarePlanHumidityModerate.
+  ///
+  /// In en, this message translates to:
+  /// **'Higher humidity (40–60%) is preferred. Try a pebble tray or occasional misting.'**
+  String get speciesCarePlanHumidityModerate;
+
+  /// No description provided for @speciesCarePlanHumidityHigh.
+  ///
+  /// In en, this message translates to:
+  /// **'High humidity (60%+) is needed. Use a humidifier or terrarium.'**
+  String get speciesCarePlanHumidityHigh;
+
+  /// No description provided for @speciesCarePlanSoil.
+  ///
+  /// In en, this message translates to:
+  /// **'Use {soilType} and a pot with drainage to help prevent root rot.'**
+  String speciesCarePlanSoil(String soilType);
+
+  /// No description provided for @speciesSoilCactus.
+  ///
+  /// In en, this message translates to:
+  /// **'a very well-draining cactus or succulent mix'**
+  String get speciesSoilCactus;
+
+  /// No description provided for @speciesSoilOrchid.
+  ///
+  /// In en, this message translates to:
+  /// **'a coarse orchid-bark mix'**
+  String get speciesSoilOrchid;
+
+  /// No description provided for @speciesSoilAroid.
+  ///
+  /// In en, this message translates to:
+  /// **'an airy aroid mix'**
+  String get speciesSoilAroid;
+
+  /// No description provided for @speciesSoilPeatFree.
+  ///
+  /// In en, this message translates to:
+  /// **'a peat-free mix'**
+  String get speciesSoilPeatFree;
+
+  /// No description provided for @speciesSoilPeatMoss.
+  ///
+  /// In en, this message translates to:
+  /// **'a moisture-retentive mix with peat moss'**
+  String get speciesSoilPeatMoss;
+
+  /// No description provided for @speciesSoilMoistureRetentive.
+  ///
+  /// In en, this message translates to:
+  /// **'a moisture-retentive mix'**
+  String get speciesSoilMoistureRetentive;
+
+  /// No description provided for @speciesSoilPottingMix.
+  ///
+  /// In en, this message translates to:
+  /// **'a well-draining potting mix'**
+  String get speciesSoilPottingMix;
+
+  /// No description provided for @speciesCarePlanRepotAnnual.
+  ///
+  /// In en, this message translates to:
+  /// **'Annual repotting is recommended.'**
+  String get speciesCarePlanRepotAnnual;
+
+  /// No description provided for @speciesCarePlanRepotEveryTwoYears.
+  ///
+  /// In en, this message translates to:
+  /// **'Repot every 1–2 years.'**
+  String get speciesCarePlanRepotEveryTwoYears;
+
+  /// No description provided for @speciesCarePlanRepotWhenRootBound.
+  ///
+  /// In en, this message translates to:
+  /// **'Repot only when the roots fill the pot.'**
+  String get speciesCarePlanRepotWhenRootBound;
+
   /// No description provided for @notificationsTitle.
   ///
   /// In en, this message translates to:
@@ -3289,6 +4039,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Reminders for plant care tasks'**
   String get notificationsChannelDescription;
+
+  /// No description provided for @notificationsPermissionExplanation.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow notifications so OpenPlants can send local reminders for your care rules.'**
+  String get notificationsPermissionExplanation;
+
+  /// No description provided for @notificationsRequestPermission.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow notifications'**
+  String get notificationsRequestPermission;
+
+  /// No description provided for @notificationsOpenSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Open app settings'**
+  String get notificationsOpenSettings;
+
+  /// No description provided for @notificationsPermissionBlocked.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications are blocked by the operating system.'**
+  String get notificationsPermissionBlocked;
+
+  /// No description provided for @notificationReminderTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Plant care reminder'**
+  String get notificationReminderTitle;
+
+  /// No description provided for @notificationReminderBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{taskType} for {plantName} is due.'**
+  String notificationReminderBody(String taskType, String plantName);
+
+  /// No description provided for @careScheduleMetricAlert.
+  ///
+  /// In en, this message translates to:
+  /// **'Metric alert: {metricName}'**
+  String careScheduleMetricAlert(String metricName);
 }
 
 class _AppLocalizationsDelegate

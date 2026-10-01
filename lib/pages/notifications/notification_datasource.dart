@@ -27,7 +27,7 @@ class NotificationDataSource {
   Future<List<ScheduledNotification>> loadNotifications() async {
     final codec = await _getCodec();
     final decoded = await codec.load();
-    if (decoded.isFailure) return [];
+    if (decoded.isFailure) throw decoded.asFailure!;
     return decoded.asSuccess;
   }
 
@@ -47,20 +47,6 @@ class NotificationDataSource {
     final codec = await _getCodec();
     final current = await loadNotifications();
     current.removeWhere((n) => n.id == id);
-    await codec.save(current);
-  }
-
-  Future<void> deleteNotificationsForRule(String ruleId) async {
-    final codec = await _getCodec();
-    final current = await loadNotifications();
-    current.removeWhere((n) => n.ruleId == ruleId);
-    await codec.save(current);
-  }
-
-  Future<void> deleteNotificationsForPlant(String plantId) async {
-    final codec = await _getCodec();
-    final current = await loadNotifications();
-    current.removeWhere((n) => n.plantId == plantId);
     await codec.save(current);
   }
 

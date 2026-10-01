@@ -34,8 +34,8 @@ class LocaleService extends ChangeNotifier {
   }
 
   /// Updates the locale preference. Pass `null` to revert to system default.
-  void setLocale(String? localeCode) {
-    _settingsController.update(
+  Future<void> setLocale(String? localeCode) {
+    return _settingsController.update(
       _settingsController.settings.copyWith(
         localeCode: localeCode,
       ),

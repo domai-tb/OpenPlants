@@ -136,6 +136,25 @@ class CareScheduleRepository {
     await dataSource.saveCustomCareRules(all);
   }
 
+  /// Removes and returns rules linked to a metric.
+  Future<List<CustomCareRuleEntity>> deleteCustomCareRulesForMetric(String metricId) async {
+    final all = await dataSource.loadCustomCareRules();
+    final linked = all.where((rule) => rule.metricId == metricId).toList();
+    if (linked.isEmpty) return [];
+    final remaining = all.where((rule) => rule.metricId != metricId).toList();
+    await dataSource.saveCustomCareRules(remaining);
+    return linked;
+  }
+
+  /// Restores rules removed while a linked metric deletion was being attempted.
+  Future<void> restoreCustomCareRules(List<CustomCareRuleEntity> rules) async {
+    if (rules.isEmpty) return;
+    final current = await dataSource.loadCustomCareRules();
+    final restoredIds = rules.map((rule) => rule.id).toSet();
+    final remaining = current.where((rule) => !restoredIds.contains(rule.id));
+    await dataSource.saveCustomCareRules([...remaining, ...rules]);
+  }
+
   // --- Species Profile ---
 
   /// Get a species care profile by ID.

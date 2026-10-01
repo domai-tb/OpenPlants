@@ -11,10 +11,32 @@ import 'package:openplants/pages/care_schedule/schedule_config.dart';
 import 'package:openplants/pages/care_schedule/schedule_engine.dart';
 import 'package:openplants/pages/care_schedule/species_care_profile.dart';
 import 'package:openplants/pages/care_schedule/task_completion.dart';
+import 'package:openplants/pages/plant_collection/plant_collection_item_entity.dart';
 import 'package:openplants/pages/room_profiles/room_profiles_entity.dart';
 
 void main() {
   final today = DateTime(2025, 7, 1); // ignore: avoid_redundant_argument_values
+
+  group('TaskCompletion', () {
+    test('alert episode ID persists and older records remain readable', () {
+      final completion = TaskCompletion(
+        taskType: const CareTaskType.custom('watering_alert'),
+        plantId: 'plant-1',
+        completedAt: today,
+        alertEpisodeId: 'metric-1:episode-1',
+      );
+
+      final restored = TaskCompletion.fromJson(completion.toJson());
+      final older = TaskCompletion.fromJson({
+        'taskType': 'watering',
+        'plantId': 'plant-1',
+        'completedAt': today.toIso8601String(),
+      });
+
+      expect(restored.alertEpisodeId, 'metric-1:episode-1');
+      expect(older.alertEpisodeId, isNull);
+    });
+  });
 
   group('OverdueDetector', () {
     test('never completed task is due today', () {
@@ -33,6 +55,29 @@ void main() {
         effectiveIntervalDays: 7,
       );
       expect(status, CareTaskStatus.upcoming);
+    });
+
+    test('elapsed interval uses calendar dates instead of time of day', () {
+      final status = OverdueDetector.detect(
+        today: DateTime(2025, 7, 1, 0, 5),
+        lastCompletedAt: DateTime(2025, 6, 30, 23, 55),
+        effectiveIntervalDays: 1,
+      );
+
+      expect(status, CareTaskStatus.dueToday);
+    });
+
+    test('due date labels use calendar dates instead of elapsed hours', () {
+      final task = CareTask(
+        taskType: const CareTaskType.builtIn(BuiltInTaskType.watering),
+        plantId: 'plant-1',
+        plantName: 'My Pothos',
+        dueDate: DateTime(2025, 7, 2, 23, 59),
+        status: CareTaskStatus.upcoming,
+        effectiveIntervalDays: 1,
+      );
+
+      expect(task.daysUntilDue(DateTime(2025, 7, 1, 0, 1)), 1);
     });
 
     test('task past interval is due today', () {
@@ -439,6 +484,29 @@ void main() {
       expect(watering.effectiveIntervalDays, 10);
     });
 
+    test('room and plant light do not change misting intervals', () {
+      final tasks = ScheduleEngine.computeForPlant(
+        input: PlantScheduleInput(
+          plantId: 'plant-1',
+          plantName: 'My Pothos',
+          config: ScheduleConfig.defaults(),
+          profile: testProfile,
+          lightLevel: LightLevel.direct,
+          roomEntity: RoomEntity(
+            id: 'room-1',
+            name: 'Sunny room',
+            lightLevel: RoomLightLevel.directSun,
+            createdAt: DateTime(2025),
+            updatedAt: DateTime(2025),
+          ),
+        ),
+        today: today,
+      );
+
+      final misting = tasks.firstWhere((task) => task.taskType.builtIn == BuiltInTaskType.misting);
+      expect(misting.effectiveIntervalDays, 3);
+    });
+
     group('schedule actions', () {
       test('snooze overrides due date', () {
         final action = CareScheduleAction(
@@ -512,6 +580,13 @@ void main() {
             plantName: 'My Pothos',
             config: ScheduleConfig.defaults(),
             profile: testProfile,
+            completionHistory: [
+              TaskCompletion(
+                taskType: const CareTaskType.builtIn(BuiltInTaskType.watering),
+                plantId: 'plant-1',
+                completedAt: DateTime(2025, 6, 28),
+              ),
+            ],
             activeScheduleActions: [action],
           ),
           today: today,
@@ -520,8 +595,35 @@ void main() {
         final watering = tasks.firstWhere(
           (t) => t.taskType.builtIn == BuiltInTaskType.watering,
         );
-        // Action is stale, so default schedule applies (no completion → due today)
-        expect(watering.status, CareTaskStatus.dueToday);
+        // Action is stale, so the due date is based on the latest completion.
+        expect(watering.dueDate, DateTime(2025, 7, 5));
+        expect(watering.status, CareTaskStatus.upcoming);
+      });
+
+      test('keeps action on the same uncompleted occurrence across days', () {
+        final action = CareScheduleAction(
+          plantId: 'plant-1',
+          taskType: const CareTaskType.builtIn(BuiltInTaskType.watering),
+          actionKind: CareScheduleActionKind.snooze,
+          actionTime: DateTime(2025, 7, 1, 10),
+          targetedOccurrenceDueDate: DateTime(2025, 7, 1, 8),
+          overriddenDueDate: DateTime(2025, 7, 4, 10),
+        );
+
+        final tasks = ScheduleEngine.computeForPlant(
+          input: PlantScheduleInput(
+            plantId: 'plant-1',
+            plantName: 'My Pothos',
+            config: ScheduleConfig.defaults(),
+            profile: testProfile,
+            activeScheduleActions: [action],
+          ),
+          today: DateTime(2025, 7, 2, 14),
+        );
+
+        final watering = tasks.firstWhere((task) => task.taskType.builtIn == BuiltInTaskType.watering);
+        expect(watering.dueDate, DateTime(2025, 7, 4));
+        expect(watering.scheduleOccurrenceDueDate, DateTime(2025, 7));
       });
 
       test('action does not replace completion anchor', () {
@@ -563,6 +665,47 @@ void main() {
     });
 
     group('Metric-linked rules', () {
+      test('metric care task is generated once for an active care-task alert', () {
+        final rules = [
+          CustomCareRuleEntity(
+            id: 'rule-1',
+            plantId: 'plant-1',
+            taskType: 'watering',
+            intervalDays: 7,
+            metricId: 'metric-1',
+            createdAt: today,
+          ),
+          CustomCareRuleEntity(
+            id: 'rule-2',
+            plantId: 'plant-1',
+            taskType: 'fertilizing',
+            intervalDays: 14,
+            metricId: 'metric-1',
+            createdAt: today,
+          ),
+        ];
+
+        final tasks = ScheduleEngine.computeForPlant(
+          input: PlantScheduleInput(
+            plantId: 'plant-1',
+            plantName: 'Test Plant',
+            config: const ScheduleConfig(),
+            profile: testProfile,
+            customCareRules: rules,
+            careTaskMetricIds: {'metric-1'},
+            activeAlertEpisodeIds: {'metric-1': 'metric-1:episode-1'},
+            metricNamesById: {'metric-1': 'Soil moisture'},
+          ),
+          today: today,
+        );
+
+        final alertTasks = tasks.where((task) => task.alertEpisodeId != null).toList();
+        expect(alertTasks, hasLength(1));
+        expect(alertTasks.single.alertEpisodeId, 'metric-1:episode-1');
+        expect(alertTasks.single.taskType, const CareTaskType.custom('metric_alert:metric-1'));
+        expect(alertTasks.single.alertMetricName, 'Soil moisture');
+      });
+
       test('metric-linked rule anchors from newest measurement', () {
         final rule = CustomCareRuleEntity(
           id: 'rule-1',
@@ -592,6 +735,7 @@ void main() {
         );
         // Due date = measurement time + interval = 6/25 + 3 = 6/28
         expect(watering.dueDate, DateTime(2025, 6, 28));
+        expect(watering.status, CareTaskStatus.overdue);
       });
 
       test('metric-linked rule without measurement uses today', () {
@@ -623,7 +767,7 @@ void main() {
         expect(watering.dueDate, today);
       });
 
-      test('alert task generated for metric-linked rule', () {
+      test('metric-linked rule without an active care-task alert emits no alert task', () {
         final rule = CustomCareRuleEntity(
           id: 'rule-1',
           plantId: 'plant-1',
@@ -640,17 +784,40 @@ void main() {
             config: const ScheduleConfig(),
             profile: testProfile,
             customCareRules: [rule],
+            careTaskMetricIds: {'metric-1'},
+            activeAlertEpisodeIds: {},
           ),
           today: today,
         );
 
-        // Should have both the regular watering task and an alert task
-        expect(tasks.length, greaterThanOrEqualTo(2));
-        final alertTask = tasks.firstWhere(
-          (t) => t.taskType.customName == 'watering_alert',
+        expect(tasks.where((task) => task.alertEpisodeId != null), isEmpty);
+      });
+
+      test('warning-configured metric does not emit a care task', () {
+        final rule = CustomCareRuleEntity(
+          id: 'rule-1',
+          plantId: 'plant-1',
+          taskType: 'watering',
+          intervalDays: 7,
+          metricId: 'metric-1',
+          createdAt: today,
         );
-        expect(alertTask.dueDate, today);
-        expect(alertTask.status, CareTaskStatus.dueToday);
+
+        final tasks = ScheduleEngine.computeForPlant(
+          input: PlantScheduleInput(
+            plantId: 'plant-1',
+            plantName: 'Test Plant',
+            config: const ScheduleConfig(),
+            profile: testProfile,
+            customCareRules: [rule],
+            // The active episode map can be populated for warning metrics too;
+            // only metrics configured for care tasks should create a task.
+            activeAlertEpisodeIds: {'metric-1': 'metric-1:episode-1'},
+          ),
+          today: today,
+        );
+
+        expect(tasks.where((task) => task.alertEpisodeId != null), isEmpty);
       });
 
       test('completed alert episode suppresses alert task', () {
@@ -670,7 +837,9 @@ void main() {
             config: const ScheduleConfig(),
             profile: testProfile,
             customCareRules: [rule],
-            completedAlertEpisodeIds: {'metric-1'},
+            careTaskMetricIds: {'metric-1'},
+            activeAlertEpisodeIds: {'metric-1': 'metric-1:episode-1'},
+            completedAlertEpisodeIds: {'metric-1:episode-1'},
           ),
           today: today,
         );
@@ -680,6 +849,64 @@ void main() {
           (t) => t.taskType.customName == 'watering_alert',
         );
         expect(alertTasks, isEmpty);
+      });
+
+      test('new alert episode creates a task after an earlier episode was completed', () {
+        final rule = CustomCareRuleEntity(
+          id: 'rule-1',
+          plantId: 'plant-1',
+          taskType: 'watering',
+          intervalDays: 7,
+          metricId: 'metric-1',
+          createdAt: today,
+        );
+
+        final tasks = ScheduleEngine.computeForPlant(
+          input: PlantScheduleInput(
+            plantId: 'plant-1',
+            plantName: 'Test Plant',
+            config: const ScheduleConfig(),
+            profile: testProfile,
+            customCareRules: [rule],
+            careTaskMetricIds: {'metric-1'},
+            activeAlertEpisodeIds: {'metric-1': 'metric-1:episode-2'},
+            completedAlertEpisodeIds: {'metric-1:episode-1'},
+          ),
+          today: today,
+        );
+
+        final alertTasks = tasks.where((task) => task.alertEpisodeId != null).toList();
+        expect(alertTasks, hasLength(1));
+        expect(alertTasks.single.alertEpisodeId, 'metric-1:episode-2');
+      });
+
+      test('disabled metric suppresses its measurement reminder and alert task', () {
+        final rule = CustomCareRuleEntity(
+          id: 'rule-1',
+          plantId: 'plant-1',
+          taskType: 'watering',
+          intervalDays: 7,
+          metricId: 'metric-1',
+          createdAt: today,
+        );
+
+        final tasks = ScheduleEngine.computeForPlant(
+          input: PlantScheduleInput(
+            plantId: 'plant-1',
+            plantName: 'Test Plant',
+            config: const ScheduleConfig(),
+            profile: testProfile,
+            customCareRules: [rule],
+            metricLatestMeasurementTimes: {'metric-1': DateTime(2025, 6, 20)},
+            careTaskMetricIds: {'metric-1'},
+            activeAlertEpisodeIds: {'metric-1': 'metric-1:episode-1'},
+            disabledMetricIds: {'metric-1'},
+          ),
+          today: today,
+        );
+
+        expect(tasks.where((task) => task.taskType.builtIn == BuiltInTaskType.watering), isEmpty);
+        expect(tasks.where((task) => task.alertEpisodeId != null), isEmpty);
       });
     });
   });

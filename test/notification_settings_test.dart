@@ -36,6 +36,9 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('Notifications'), findsOneWidget);
+      expect(find.text('Notifications disabled'), findsOneWidget);
+      expect(find.text('Allow notifications'), findsOneWidget);
+      expect(find.text('Open app settings'), findsOneWidget);
       expect(find.byType(SwitchListTile), findsWidgets);
     });
   });

@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 import 'package:openplants/core/exceptions.dart';
 import 'package:openplants/pages/care_schedule/care_schedule_repository.dart';
 import 'package:openplants/pages/care_schedule/custom_care_rule.dart';
@@ -7,8 +9,9 @@ import 'package:uuid/uuid.dart';
 /// Use cases for managing custom care rules.
 class CustomCareRuleUsecases {
   final CareScheduleRepository repository;
+  final Future<void> Function()? onNotificationsChanged;
 
-  const CustomCareRuleUsecases({required this.repository});
+  const CustomCareRuleUsecases({required this.repository, this.onNotificationsChanged});
 
   /// Create a new custom care rule for a plant.
   Future<CustomCareRuleEntity> create({
@@ -22,6 +25,11 @@ class CustomCareRuleUsecases {
     bool isMeasurementRequired = false,
     bool isEnabled = true,
   }) async {
+    final existing = await repository.getCustomCareRules(plantId);
+    if (existing.any((rule) => rule.taskType == taskType)) {
+      throw StateError('A care rule for "$taskType" already exists on plant "$plantId".');
+    }
+
     final rule = CustomCareRuleEntity(
       id: const Uuid().v4(),
       plantId: plantId,
@@ -37,6 +45,7 @@ class CustomCareRuleUsecases {
     );
 
     await repository.saveCustomCareRule(rule);
+    await _syncNotifications();
     return rule;
   }
 
@@ -45,7 +54,6 @@ class CustomCareRuleUsecases {
   /// Throws [RuleNotFoundException] if no rule with [ruleId] exists.
   Future<CustomCareRuleEntity> update(
     String ruleId, {
-    String? taskType,
     int? intervalDays,
     bool? reminderEnabled,
     String? reminderTime,
@@ -62,7 +70,6 @@ class CustomCareRuleUsecases {
     if (existing == null) throw RuleNotFoundException();
 
     final updated = existing.copyWith(
-      taskType: taskType,
       intervalDays: intervalDays,
       reminderEnabled: reminderEnabled,
       reminderTime: reminderTime,
@@ -75,6 +82,7 @@ class CustomCareRuleUsecases {
     );
 
     await repository.saveCustomCareRule(updated);
+    await _syncNotifications();
     return updated;
   }
 
@@ -87,6 +95,26 @@ class CustomCareRuleUsecases {
     if (!exists) throw RuleNotFoundException();
 
     await repository.deleteCustomCareRule(ruleId);
+    await _syncNotifications();
+  }
+
+  /// Deletes rules linked to [metricId] around the metric deletion.
+  ///
+  /// If metric persistence fails, the linked rules are restored before the
+  /// original error is rethrown.
+  Future<void> deleteForMetric(String metricId, Future<void> Function() deleteMetric) async {
+    final removedRules = await repository.deleteCustomCareRulesForMetric(metricId);
+    try {
+      await deleteMetric();
+    } catch (error, stackTrace) {
+      try {
+        await repository.restoreCustomCareRules(removedRules);
+      } catch (rollbackError) {
+        debugPrint('Failed to restore metric-linked care rules after delete failure: $rollbackError');
+      }
+      Error.throwWithStackTrace(error, stackTrace);
+    }
+    if (removedRules.isNotEmpty) await _syncNotifications();
   }
 
   /// Toggle the enabled state of a custom care rule.
@@ -100,6 +128,7 @@ class CustomCareRuleUsecases {
 
     final updated = existing.copyWith(isEnabled: !existing.isEnabled);
     await repository.saveCustomCareRule(updated);
+    await _syncNotifications();
     return updated;
   }
 
@@ -123,6 +152,11 @@ class CustomCareRuleUsecases {
     required String taskType,
     required int intervalDays,
     bool? isEnabled,
+    bool? reminderEnabled,
+    String? reminderTime,
+    bool clearReminderTime = false,
+    List<String>? reminderDays,
+    bool clearReminderDays = false,
   }) async {
     final rules = await repository.getCustomCareRules(plantId);
     final existing = rules.where((r) => r.taskType == taskType);
@@ -131,8 +165,14 @@ class CustomCareRuleUsecases {
       final updated = existing.first.copyWith(
         intervalDays: intervalDays,
         isEnabled: isEnabled,
+        reminderEnabled: reminderEnabled,
+        reminderTime: reminderTime,
+        clearReminderTime: clearReminderTime,
+        reminderDays: reminderDays,
+        clearReminderDays: clearReminderDays,
       );
       await repository.saveCustomCareRule(updated);
+      await _syncNotifications();
       return updated;
     }
 
@@ -141,6 +181,17 @@ class CustomCareRuleUsecases {
       taskType: taskType,
       intervalDays: intervalDays,
       isEnabled: isEnabled ?? true,
+      reminderEnabled: reminderEnabled ?? false,
+      reminderTime: reminderTime,
+      reminderDays: reminderDays,
     );
+  }
+
+  Future<void> _syncNotifications() async {
+    try {
+      await onNotificationsChanged?.call();
+    } catch (error) {
+      debugPrint('Failed to sync notifications after care rule change: $error');
+    }
   }
 }

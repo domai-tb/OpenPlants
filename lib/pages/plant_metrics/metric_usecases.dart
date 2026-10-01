@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:uuid/uuid.dart';
 
 import 'package:openplants/pages/plant_metrics/metric_definition.dart';
@@ -10,9 +11,11 @@ import 'package:openplants/pages/plant_metrics/metric_repository.dart';
 /// Orchestrates business logic for metric CRUD, validation, and evaluation.
 class MetricUsecases {
   final MetricRepository repository;
+  final Future<void> Function(String metricId, Future<void> Function() deleteMetric)? deleteLinkedCareRules;
+  final Future<void> Function()? onNotificationsChanged;
   static const _uuid = Uuid();
 
-  const MetricUsecases({required this.repository});
+  const MetricUsecases({required this.repository, this.deleteLinkedCareRules, this.onNotificationsChanged});
 
   // --- Definition operations ---
 
@@ -52,13 +55,22 @@ class MetricUsecases {
     );
     _validateDefinition(definition);
     await repository.saveDefinition(definition);
+    await _syncNotifications();
     return definition;
   }
 
   Future<MetricDefinition> updateDefinition(MetricDefinition definition) async {
     final updated = definition.copyWith(updatedAt: DateTime.now());
     _validateDefinition(updated);
+    final measurements = await repository.getMeasurementsForMetric(updated.id);
+    for (final measurement in measurements) {
+      final validationError = measurement.validate(updated);
+      if (validationError != null) {
+        throw ArgumentError('Existing measurements prevent this definition change: $validationError');
+      }
+    }
     await repository.saveDefinition(updated);
+    await _syncNotifications();
     return updated;
   }
 
@@ -106,21 +118,22 @@ class MetricUsecases {
         updatedAt: DateTime.now(),
       ),
     );
+    await _syncNotifications();
   }
 
-  Future<void> deleteDefinition(String id) => repository.deleteDefinition(id);
+  Future<void> deleteDefinition(String id) async {
+    final deleteLinkedCareRules = this.deleteLinkedCareRules;
+    if (deleteLinkedCareRules == null) {
+      await repository.deleteDefinition(id);
+      return;
+    }
+    await deleteLinkedCareRules(id, () => repository.deleteDefinition(id));
+  }
 
   // --- Measurement operations ---
 
   Future<List<MetricMeasurement>> getMeasurementsForMetric(String metricId) =>
       repository.getMeasurementsForMetric(metricId);
-
-  Future<List<MetricMeasurement>> getMeasurementsForMetricPaged(
-    String metricId, {
-    int limit = 50,
-    int offset = 0,
-  }) =>
-      repository.getMeasurementsForMetricPaged(metricId, limit: limit, offset: offset);
 
   Future<MetricMeasurement?> getLatestMeasurement(String metricId) => repository.getLatestMeasurement(metricId);
 
@@ -155,6 +168,7 @@ class MetricUsecases {
     }
 
     await repository.saveMeasurement(measurement);
+    await _syncNotifications();
     return measurement;
   }
 
@@ -170,9 +184,13 @@ class MetricUsecases {
     }
 
     await repository.saveMeasurement(measurement);
+    await _syncNotifications();
   }
 
-  Future<void> deleteMeasurement(String id) => repository.deleteMeasurement(id);
+  Future<void> deleteMeasurement(String id) async {
+    await repository.deleteMeasurement(id);
+    await _syncNotifications();
+  }
 
   // --- Evaluation ---
 
@@ -199,4 +217,12 @@ class MetricUsecases {
   // --- Cleanup ---
 
   Future<void> deleteAllForPlant(String plantId) => repository.deleteDefinitionsForPlant(plantId);
+
+  Future<void> _syncNotifications() async {
+    try {
+      await onNotificationsChanged?.call();
+    } catch (error) {
+      debugPrint('Failed to sync notifications after metric change: $error');
+    }
+  }
 }

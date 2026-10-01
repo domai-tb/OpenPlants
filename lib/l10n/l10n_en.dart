@@ -153,6 +153,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get themeLabel => 'Theme';
 
   @override
+  String get themeSystem => 'System';
+
+  @override
+  String get themeLight => 'Light';
+
+  @override
+  String get themeDark => 'Dark';
+
+  @override
   String get languageLabel => 'Language';
 
   @override
@@ -220,7 +229,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get errorMessage => 'Error.';
 
   @override
-  String get unexpectedError => 'An unexpected error occured...';
+  String get unexpectedError => 'An unexpected error occurred.';
+
+  @override
+  String get retry => 'Retry';
 
   @override
   String get invalid2FATokenFailureMessage =>
@@ -265,6 +277,32 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get plantIdCamera => 'Camera';
+
+  @override
+  String get cameraAccessNeeded =>
+      'Camera access is needed to take photos of your plants.';
+
+  @override
+  String get cameraGrantAccess => 'Grant access';
+
+  @override
+  String get cameraPermissionPermanentlyDenied =>
+      'Camera permission was permanently denied. Enable it in system settings.';
+
+  @override
+  String get cameraOpenSettings => 'Open settings';
+
+  @override
+  String get cameraUseGalleryInstead => 'Use gallery instead';
+
+  @override
+  String get cameraInitializing => 'Initializing camera...';
+
+  @override
+  String get cameraInitializationFailed => 'Camera could not be initialized.';
+
+  @override
+  String get cameraCapturePhoto => 'Take photo';
 
   @override
   String get plantIdGallery => 'Gallery';
@@ -1636,6 +1674,241 @@ class AppLocalizationsEn extends AppLocalizations {
   String get moreSpeciesListSubtitle => 'Browse all plant species';
 
   @override
+  String get moreRoomsTitle => 'Rooms';
+
+  @override
+  String get moreRoomsSubtitle => 'Manage room locations';
+
+  @override
+  String get roomEmptyTitle => 'No rooms yet';
+
+  @override
+  String get roomAddAction => 'Add Room';
+
+  @override
+  String get roomFormTitleNew => 'New Room';
+
+  @override
+  String get roomFormTitleEdit => 'Edit Room';
+
+  @override
+  String get roomFormQuickStart => 'Quick Start';
+
+  @override
+  String get roomNameDuplicate => 'A room with this name already exists';
+
+  @override
+  String roomDeleteTitle(String roomName) {
+    return 'Delete \"$roomName\"?';
+  }
+
+  @override
+  String roomDeleteAssignedPlants(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          'This room has $count plants assigned. They will be unassigned when the room is deleted.',
+      one:
+          'This room has 1 plant assigned. It will be unassigned when the room is deleted.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get roomDeleteNoAssignments => 'This room has no plants assigned.';
+
+  @override
+  String get roomPresetBedroom => 'Bedroom';
+
+  @override
+  String get roomPresetKitchen => 'Kitchen';
+
+  @override
+  String get roomPresetBathroom => 'Bathroom';
+
+  @override
+  String get roomPresetLivingRoom => 'Living Room';
+
+  @override
+  String get roomPresetBalcony => 'Balcony';
+
+  @override
+  String get roomPresetOffice => 'Office';
+
+  @override
+  String get moreLightAssessmentTitle => 'Light Assessment';
+
+  @override
+  String get moreLightAssessmentSubtitle =>
+      'Assess light levels for your plants';
+
+  @override
+  String lightAssessmentPageTitle(String plantName) {
+    return 'Light Assessment — $plantName';
+  }
+
+  @override
+  String get lightAssessmentCurrentLevel => 'Current Light Level';
+
+  @override
+  String get lightAssessmentNotSet => 'Not set';
+
+  @override
+  String get lightAssessmentClear => 'Clear';
+
+  @override
+  String get lightAssessmentSelectLevel => 'Select Light Level';
+
+  @override
+  String get lightAssessmentLowDescription =>
+      'Dark corners, north-facing windows, interior rooms';
+
+  @override
+  String get lightAssessmentMediumDescription =>
+      'East-facing windows, indirect light most of the day';
+
+  @override
+  String get lightAssessmentBrightDescription =>
+      'Near south or west windows, but outside direct sun rays';
+
+  @override
+  String get lightAssessmentDirectDescription =>
+      'Direct sun rays reach the plant for at least 4 hours';
+
+  @override
+  String get lightAssessmentCameraHeading => 'Interactive Camera';
+
+  @override
+  String get lightAssessmentCameraDescription =>
+      'Move around in real time to see how light levels change before setting the level or taking a photo.';
+
+  @override
+  String get lightAssessmentCameraButton => 'Assess with camera';
+
+  @override
+  String get lightAssessmentPhotoHeading => 'Estimate from Photo';
+
+  @override
+  String get lightAssessmentPhotoDescription =>
+      'Light level is estimated from your plant\'s photo. For best results, use a photo that shows the plant in its usual spot.';
+
+  @override
+  String get lightAssessmentEstimateLow => 'Looks like low light';
+
+  @override
+  String get lightAssessmentEstimateMedium => 'Looks like medium light';
+
+  @override
+  String get lightAssessmentEstimateBright =>
+      'Looks like bright indirect light';
+
+  @override
+  String get lightAssessmentEstimateDirect => 'Looks like direct sunlight';
+
+  @override
+  String lightAssessmentBrightness(int percentage) {
+    return 'Brightness: $percentage%';
+  }
+
+  @override
+  String get lightAssessmentUseEstimate => 'Use this';
+
+  @override
+  String get lightAssessmentDismissEstimate => 'Dismiss';
+
+  @override
+  String get lightAssessmentTakeNewPhoto => 'Take new photo';
+
+  @override
+  String get lightAssessmentChooseFromGallery => 'Choose from gallery';
+
+  @override
+  String get lightAssessmentNoPhoto =>
+      'No photo yet. Take a photo of your plant to estimate its light level.';
+
+  @override
+  String lightAssessmentLevelSet(String level) {
+    return 'Light level set to $level';
+  }
+
+  @override
+  String get lightAssessmentLevelCleared => 'Light level cleared';
+
+  @override
+  String lightAssessmentPlantLevelSet(String plantName, String level) {
+    return '$plantName: Light level set to $level';
+  }
+
+  @override
+  String get lightAssessmentNoPlants =>
+      'No plants to save to. Add a plant first.';
+
+  @override
+  String get lightAssessmentSaveToPlant => 'Save light level to…';
+
+  @override
+  String lightAssessmentSetToLevel(String level) {
+    return 'Set to $level';
+  }
+
+  @override
+  String get lightAssessmentCameraPermissionNeeded =>
+      'Camera access is needed to assess light levels in real time.';
+
+  @override
+  String lightAssessmentConfidence(int percentage) {
+    return 'Confidence: $percentage%';
+  }
+
+  @override
+  String get lightAssessmentLiveGuidance =>
+      'Move around to see how light levels change. For best results, hold the camera steady for a moment.';
+
+  @override
+  String get lightAssessmentCameraTimedOut => 'Camera timed out';
+
+  @override
+  String get lightAssessmentCameraTimeoutDescription =>
+      'The camera will close automatically to save battery.';
+
+  @override
+  String get lightAssessmentContinueAssessing => 'Continue assessing';
+
+  @override
+  String lightAssessmentSetThisLevel(String level) {
+    return 'Set this level ($level)';
+  }
+
+  @override
+  String get lightAssessmentResultTitle => 'Assessment Result';
+
+  @override
+  String get lightAssessmentResultGuidance =>
+      'You can accept this estimate or go back to the camera for a different reading.';
+
+  @override
+  String get lightAssessmentAcceptAndSave => 'Accept & Save';
+
+  @override
+  String get moreLogSymptomTitle => 'Log Symptom';
+
+  @override
+  String get moreLogSymptomSubtitle => 'Record a plant health issue';
+
+  @override
+  String get moreDiagnosisTitle => 'Plant Diagnosis';
+
+  @override
+  String get moreDiagnosisSubtitle => 'Diagnose plant problems';
+
+  @override
+  String get moreNotificationsTitle => 'Notifications';
+
+  @override
+  String get moreNotificationsSubtitle => 'Configure notification settings';
+
+  @override
   String get careScheduleCompletedEarly => 'Completed early';
 
   @override
@@ -1675,7 +1948,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get metricsNameHint => 'e.g., Soil Moisture';
 
   @override
-  String get metricsUnit => 'Unit (optional)';
+  String get metricsUnit => 'Unit';
 
   @override
   String get metricsUnitHint => 'e.g., %, °C';
@@ -1716,6 +1989,170 @@ class AppLocalizationsEn extends AppLocalizations {
   String get metricsValueTypeCategorical => 'Categorical';
 
   @override
+  String metricsDeleteTitle(String name) {
+    return 'Delete \"$name\"?';
+  }
+
+  @override
+  String get metricsDeleteBody =>
+      'Delete this metric and all its measurements? This cannot be undone.';
+
+  @override
+  String get metricsActions => 'Metric actions';
+
+  @override
+  String get metricsEdit => 'Edit';
+
+  @override
+  String get metricsEnable => 'Enable';
+
+  @override
+  String get metricsDisable => 'Disable';
+
+  @override
+  String get metricsDelete => 'Delete';
+
+  @override
+  String get metricsInvalidMeasurement => 'Invalid measurement';
+
+  @override
+  String get metricsYes => 'Yes';
+
+  @override
+  String get metricsNo => 'No';
+
+  @override
+  String get metricsMinimumAlert => 'Minimum alert value (optional)';
+
+  @override
+  String get metricsMaximumAlert => 'Maximum alert value (optional)';
+
+  @override
+  String get metricsOptions => 'Options';
+
+  @override
+  String get metricsOptionsHint => 'Comma-separated, e.g., Good, Fair, Poor';
+
+  @override
+  String metricsAlertOn(String option) {
+    return 'Alert on $option';
+  }
+
+  @override
+  String get metricsAlertWhenYes => 'Alert when Yes';
+
+  @override
+  String get metricsAlertWhenNo => 'Alert when No';
+
+  @override
+  String get metricsAlertResponse => 'Alert response';
+
+  @override
+  String get metricsAlertResponseWarning => 'Warning only';
+
+  @override
+  String get metricsAlertResponseCareTask => 'Create care task';
+
+  @override
+  String get metricsUnitRequired => 'Unit is required';
+
+  @override
+  String get metricsNameRequired => 'Metric name is required';
+
+  @override
+  String get metricsCategoryOptionsRequired => 'Add at least one option';
+
+  @override
+  String get metricsCategoryOptionsUnique => 'Options must be unique';
+
+  @override
+  String get metricsMinimumMustBeFinite => 'Minimum must be a finite number';
+
+  @override
+  String get metricsMaximumMustBeFinite => 'Maximum must be a finite number';
+
+  @override
+  String get metricsMinimumCannotExceedMaximum =>
+      'Minimum cannot exceed maximum';
+
+  @override
+  String get speciesCarePlanWaterLow =>
+      'Water every 2–3 weeks and let the soil dry completely between waterings.';
+
+  @override
+  String get speciesCarePlanWaterModerate =>
+      'Water weekly and let the top inch of soil dry between waterings.';
+
+  @override
+  String get speciesCarePlanWaterFrequent =>
+      'Water 2–3 times a week and keep the soil evenly moist.';
+
+  @override
+  String get speciesCarePlanLightLow =>
+      'Keep in low light and away from direct sun. North-facing rooms are suitable.';
+
+  @override
+  String get speciesCarePlanLightMedium =>
+      'Provide bright indirect light. East- or west-facing windows are suitable.';
+
+  @override
+  String get speciesCarePlanLightBright =>
+      'Provide bright indirect light, such as at a south-facing window with a sheer curtain.';
+
+  @override
+  String get speciesCarePlanLightDirect =>
+      'Provide direct sunlight, such as at a south-facing windowsill, or use a grow light.';
+
+  @override
+  String get speciesCarePlanHumidityLow =>
+      'Average household humidity (30–40%) is suitable.';
+
+  @override
+  String get speciesCarePlanHumidityModerate =>
+      'Higher humidity (40–60%) is preferred. Try a pebble tray or occasional misting.';
+
+  @override
+  String get speciesCarePlanHumidityHigh =>
+      'High humidity (60%+) is needed. Use a humidifier or terrarium.';
+
+  @override
+  String speciesCarePlanSoil(String soilType) {
+    return 'Use $soilType and a pot with drainage to help prevent root rot.';
+  }
+
+  @override
+  String get speciesSoilCactus =>
+      'a very well-draining cactus or succulent mix';
+
+  @override
+  String get speciesSoilOrchid => 'a coarse orchid-bark mix';
+
+  @override
+  String get speciesSoilAroid => 'an airy aroid mix';
+
+  @override
+  String get speciesSoilPeatFree => 'a peat-free mix';
+
+  @override
+  String get speciesSoilPeatMoss => 'a moisture-retentive mix with peat moss';
+
+  @override
+  String get speciesSoilMoistureRetentive => 'a moisture-retentive mix';
+
+  @override
+  String get speciesSoilPottingMix => 'a well-draining potting mix';
+
+  @override
+  String get speciesCarePlanRepotAnnual => 'Annual repotting is recommended.';
+
+  @override
+  String get speciesCarePlanRepotEveryTwoYears => 'Repot every 1–2 years.';
+
+  @override
+  String get speciesCarePlanRepotWhenRootBound =>
+      'Repot only when the roots fill the pot.';
+
+  @override
   String get notificationsTitle => 'Notifications';
 
   @override
@@ -1754,4 +2191,31 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get notificationsChannelDescription =>
       'Reminders for plant care tasks';
+
+  @override
+  String get notificationsPermissionExplanation =>
+      'Allow notifications so OpenPlants can send local reminders for your care rules.';
+
+  @override
+  String get notificationsRequestPermission => 'Allow notifications';
+
+  @override
+  String get notificationsOpenSettings => 'Open app settings';
+
+  @override
+  String get notificationsPermissionBlocked =>
+      'Notifications are blocked by the operating system.';
+
+  @override
+  String get notificationReminderTitle => 'Plant care reminder';
+
+  @override
+  String notificationReminderBody(String taskType, String plantName) {
+    return '$taskType for $plantName is due.';
+  }
+
+  @override
+  String careScheduleMetricAlert(String metricName) {
+    return 'Metric alert: $metricName';
+  }
 }

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:openplants/l10n/l10n.dart';
 
@@ -49,7 +51,17 @@ class CareRulesSection extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 8),
-            if (rules.isEmpty)
+            if (snapshot.hasError)
+              Row(
+                children: [
+                  Expanded(child: Text(l10n.generalFailureMessage)),
+                  TextButton(
+                    onPressed: () => _openRuleList(context),
+                    child: Text(l10n.careRulesManage),
+                  ),
+                ],
+              )
+            else if (rules.isEmpty)
               _buildEmptyState(context, theme, l10n)
             else
               _buildSummary(context, theme, activeCount, l10n),
@@ -169,6 +181,7 @@ class CareRuleListSheet extends StatefulWidget {
 class _CareRuleListSheetState extends State<CareRuleListSheet> {
   List<ComputedRule> _computedRules = [];
   bool _loading = true;
+  bool _loadFailed = false;
 
   @override
   void initState() {
@@ -177,16 +190,32 @@ class _CareRuleListSheetState extends State<CareRuleListSheet> {
   }
 
   Future<void> _loadRules() async {
-    if (widget.careScheduleUsecases != null) {
+    if (widget.careScheduleUsecases == null) {
+      if (mounted) setState(() => _loading = false);
+      return;
+    }
+
+    if (mounted) {
+      setState(() {
+        _loading = true;
+        _loadFailed = false;
+      });
+    }
+    try {
       final computed = await widget.careScheduleUsecases!.getComputedRules(widget.plantId);
+      if (!mounted) return;
+      setState(() {
+        _computedRules = computed;
+        _loading = false;
+      });
+    } catch (e) {
+      debugPrint('Failed to load care rules: $e');
       if (mounted) {
         setState(() {
-          _computedRules = computed;
           _loading = false;
+          _loadFailed = true;
         });
       }
-    } else {
-      if (mounted) setState(() => _loading = false);
     }
   }
 
@@ -213,27 +242,49 @@ class _CareRuleListSheetState extends State<CareRuleListSheet> {
           ),
           body: _loading
               ? const Center(child: CircularProgressIndicator())
-              : _computedRules.isEmpty
-                  ? _buildEmptyState(context, theme, l10n)
-                  : ListView.builder(
-                      controller: scrollController,
-                      itemCount: _computedRules.length,
-                      itemBuilder: (context, index) {
-                        final rule = _computedRules[index];
-                        return CareRuleItem(
-                          rule: rule,
-                          onToggle: (intervalDays) async {
-                            await widget.careScheduleUsecases?.toggleComputedRule(
-                              plantId: widget.plantId,
-                              taskType: rule.taskType,
-                              intervalDays: intervalDays,
+              : _loadFailed
+                  ? Center(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(l10n.generalFailureMessage),
+                          TextButton(
+                            onPressed: _loadRules,
+                            child: Text(l10n.plantIdTryAgain),
+                          ),
+                        ],
+                      ),
+                    )
+                  : _computedRules.isEmpty
+                      ? _buildEmptyState(context, theme, l10n)
+                      : ListView.builder(
+                          controller: scrollController,
+                          itemCount: _computedRules.length,
+                          itemBuilder: (context, index) {
+                            final rule = _computedRules[index];
+                            return CareRuleItem(
+                              rule: rule,
+                              onToggle: (intervalDays) async {
+                                try {
+                                  await widget.careScheduleUsecases?.toggleComputedRule(
+                                    plantId: widget.plantId,
+                                    taskType: rule.taskType,
+                                    intervalDays: intervalDays,
+                                  );
+                                  await _loadRules();
+                                } catch (e) {
+                                  debugPrint('Failed to update care rule: $e');
+                                  if (context.mounted) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(content: Text(l10n.generalFailureMessage)),
+                                    );
+                                  }
+                                }
+                              },
+                              onEdit: () => unawaited(_editComputedRule(context, rule)),
                             );
-                            await _loadRules();
                           },
-                          onEdit: () => _editComputedRule(context, rule),
-                        );
-                      },
-                    ),
+                        ),
         );
       },
     );
@@ -290,13 +341,30 @@ class _CareRuleListSheetState extends State<CareRuleListSheet> {
     );
   }
 
-  void _editComputedRule(BuildContext context, ComputedRule rule) {
-    showModalBottomSheet(
+  Future<void> _editComputedRule(BuildContext context, ComputedRule rule) async {
+    CustomCareRuleEntity? existingRule;
+    try {
+      final rules = await widget.usecases.getByPlant(widget.plantId);
+      final matches = rules.where((candidate) => candidate.taskType == rule.taskType);
+      existingRule = matches.isEmpty ? null : matches.first;
+    } catch (error) {
+      debugPrint('Failed to load care rule for editing: $error');
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(AppLocalizations.of(context)!.generalFailureMessage)),
+        );
+      }
+      return;
+    }
+    if (!context.mounted) return;
+
+    await showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       builder: (_) => CareRuleFormSheet(
         plantId: widget.plantId,
         usecases: widget.usecases,
+        existingRule: existingRule,
         existingTaskType: rule.taskType,
         existingIntervalDays: rule.effectiveIntervalDays,
         onSaved: _loadRules,
@@ -491,7 +559,7 @@ class _CareRuleFormSheetState extends State<CareRuleFormSheet> {
   Future<void> _save() async {
     if (!_formKey.currentState!.validate()) return;
 
-    final taskType = _effectiveTaskType;
+    final taskType = widget.existingRule?.taskType ?? widget.existingTaskType ?? _effectiveTaskType;
     if (taskType == null) return;
 
     final interval = int.tryParse(_intervalController.text) ?? 7;
@@ -500,7 +568,6 @@ class _CareRuleFormSheetState extends State<CareRuleFormSheet> {
       if (widget.existingRule != null) {
         await widget.usecases.update(
           widget.existingRule!.id,
-          taskType: taskType,
           intervalDays: interval,
           reminderEnabled: _reminderEnabled,
           reminderTime:
@@ -516,9 +583,13 @@ class _CareRuleFormSheetState extends State<CareRuleFormSheet> {
           plantId: widget.plantId,
           taskType: taskType,
           intervalDays: interval,
+          reminderEnabled: _reminderEnabled,
+          reminderTime:
+              _reminderEnabled && _reminderTimeController.text.isNotEmpty ? _reminderTimeController.text : null,
+          clearReminderTime: !_reminderEnabled || _reminderTimeController.text.isEmpty,
+          reminderDays: _reminderEnabled && _selectedDays.isNotEmpty ? _selectedDays : null,
+          clearReminderDays: !_reminderEnabled || _selectedDays.isEmpty,
         );
-        // Reminder fields for computed overrides are not part of the
-        // original contract; if needed, a follow-up update could apply them.
       } else {
         await widget.usecases.create(
           plantId: widget.plantId,
@@ -535,8 +606,9 @@ class _CareRuleFormSheetState extends State<CareRuleFormSheet> {
       if (mounted) Navigator.of(context).pop();
     } catch (e) {
       if (mounted) {
+        final l10n = AppLocalizations.of(context)!;
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to save rule: $e')),
+          SnackBar(content: Text(l10n.careRulesSaveFailed(e.toString()))),
         );
       }
     }
@@ -562,68 +634,75 @@ class _CareRuleFormSheetState extends State<CareRuleFormSheet> {
         child: ListView(
           padding: const EdgeInsets.all(16),
           children: [
-            // Task Type
-            Text(
-              l10n.careRulesTaskType,
-              style: theme.textTheme.titleSmall,
-            ),
-            const SizedBox(height: 8),
-            SegmentedButton<bool>(
-              segments: [
-                ButtonSegment(
-                  value: false,
-                  label: Text(l10n.careRulesBuiltIn),
-                ),
-                ButtonSegment(
-                  value: true,
-                  label: Text(l10n.careRulesCustom),
-                ),
-              ],
-              selected: {_useCustomType},
-              onSelectionChanged: (selected) {
-                setState(() => _useCustomType = selected.first);
-              },
-            ),
-            const SizedBox(height: 12),
-            if (!_useCustomType)
-              DropdownButtonFormField<String>(
-                initialValue: _selectedBuiltInType,
-                decoration: InputDecoration(
-                  border: const OutlineInputBorder(),
-                  labelText: l10n.careRulesSelectType,
-                ),
-                items: List.generate(
-                  _builtInTypes.length,
-                  (i) => DropdownMenuItem(
-                    value: _builtInTypes[i],
-                    child: Text(_builtInLabels[i]),
-                  ),
-                ),
-                onChanged: (value) {
-                  setState(() => _selectedBuiltInType = value);
-                },
-                validator: (value) {
-                  if (!_useCustomType && value == null) {
-                    return l10n.careRulesSelectTypeRequired;
-                  }
-                  return null;
-                },
+            if (_isEditing)
+              ListTile(
+                title: Text(l10n.careRulesTaskType),
+                subtitle: Text(widget.existingRule?.taskType ?? widget.existingTaskType!),
+                contentPadding: EdgeInsets.zero,
               )
-            else
-              TextFormField(
-                controller: _taskTypeController,
-                decoration: InputDecoration(
-                  border: const OutlineInputBorder(),
-                  labelText: l10n.careRulesCustomType,
-                  hintText: l10n.careRulesCustomTypeHint,
-                ),
-                validator: (value) {
-                  if (_useCustomType && (value == null || value.trim().isEmpty)) {
-                    return l10n.careRulesCustomTypeRequired;
-                  }
-                  return null;
+            else ...[
+              Text(
+                l10n.careRulesTaskType,
+                style: theme.textTheme.titleSmall,
+              ),
+              const SizedBox(height: 8),
+              SegmentedButton<bool>(
+                segments: [
+                  ButtonSegment(
+                    value: false,
+                    label: Text(l10n.careRulesBuiltIn),
+                  ),
+                  ButtonSegment(
+                    value: true,
+                    label: Text(l10n.careRulesCustom),
+                  ),
+                ],
+                selected: {_useCustomType},
+                onSelectionChanged: (selected) {
+                  setState(() => _useCustomType = selected.first);
                 },
               ),
+              const SizedBox(height: 12),
+              if (!_useCustomType)
+                DropdownButtonFormField<String>(
+                  initialValue: _selectedBuiltInType,
+                  decoration: InputDecoration(
+                    border: const OutlineInputBorder(),
+                    labelText: l10n.careRulesSelectType,
+                  ),
+                  items: List.generate(
+                    _builtInTypes.length,
+                    (i) => DropdownMenuItem(
+                      value: _builtInTypes[i],
+                      child: Text(_builtInLabels[i]),
+                    ),
+                  ),
+                  onChanged: (value) {
+                    setState(() => _selectedBuiltInType = value);
+                  },
+                  validator: (value) {
+                    if (!_useCustomType && value == null) {
+                      return l10n.careRulesSelectTypeRequired;
+                    }
+                    return null;
+                  },
+                )
+              else
+                TextFormField(
+                  controller: _taskTypeController,
+                  decoration: InputDecoration(
+                    border: const OutlineInputBorder(),
+                    labelText: l10n.careRulesCustomType,
+                    hintText: l10n.careRulesCustomTypeHint,
+                  ),
+                  validator: (value) {
+                    if (_useCustomType && (value == null || value.trim().isEmpty)) {
+                      return l10n.careRulesCustomTypeRequired;
+                    }
+                    return null;
+                  },
+                ),
+            ],
             const SizedBox(height: 24),
 
             // Interval

@@ -7,12 +7,12 @@ import 'package:openplants/pages/model_info/model_info_usecases.dart';
 import 'package:openplants/pages/plant_identification/classifier/plant_classifier_usecases.dart';
 import 'package:openplants/pages/more/more_usecases.dart';
 import 'package:openplants/pages/plant_collection/plant_collection_usecases.dart';
+import 'package:openplants/pages/plant_collection/plant_deletion_coordinator.dart';
 import 'package:openplants/pages/plant_journal/plant_journal_usecases.dart';
 import 'package:openplants/pages/plant_metrics/metric_usecases.dart';
 import 'package:openplants/pages/plant_photo_timeline/plant_photo_timeline_usecases.dart';
 import 'package:openplants/pages/room_profiles/room_profiles_usecases.dart';
 import 'package:openplants/pages/species_library/species_library_usecases.dart';
-import 'package:openplants/pages/species_catalog/species_catalog_usecases.dart';
 import 'package:openplants/pages/symptom_logger/symptom_logger_usecases.dart';
 import 'package:openplants/pages/today_dashboard/today_dashboard_usecases.dart';
 import 'package:openplants/pages/light_assessment/light_assessment_usecases.dart';
@@ -21,6 +21,7 @@ import 'package:openplants/pages/diagnosis/diagnosis_history_usecases.dart';
 import 'package:openplants/pages/diagnosis/diagnosis_repository.dart';
 import 'package:openplants/pages/plant_names/plant_names_usecases.dart';
 import 'package:openplants/pages/notifications/notification_usecases.dart';
+import 'package:openplants/pages/notifications/notification_reconciler.dart';
 
 /// Aggregates feature use-cases for convenient access via `AppScope`.
 ///
@@ -30,9 +31,9 @@ class AppServices {
   final PlantClassifierUsecases plantIdentification;
   final MoreUsecases more;
   final PlantCollectionUsecases plantCollection;
+  final PlantDeletionCoordinator plantDeletion;
   final PlantPhotoTimelineUseCases plantPhotoTimeline;
   final SpeciesLibraryUsecases speciesLibrary;
-  final SpeciesCatalogUsecases speciesCatalog;
   final TodayDashboardUsecases todayDashboard;
   final CareScheduleUsecases careSchedule;
   final CustomCareRuleUsecases customCareRules;
@@ -50,14 +51,15 @@ class AppServices {
   final PlantNamesUsecases plantNames;
   final MetricUsecases metric;
   final NotificationUsecases notification;
+  final NotificationReconciler notificationReconciler;
 
   const AppServices({
     required this.plantIdentification,
     required this.more,
     required this.plantCollection,
+    required this.plantDeletion,
     required this.plantPhotoTimeline,
     required this.speciesLibrary,
-    required this.speciesCatalog,
     required this.todayDashboard,
     required this.careSchedule,
     required this.customCareRules,
@@ -75,5 +77,6 @@ class AppServices {
     required this.plantNames,
     required this.metric,
     required this.notification,
+    required this.notificationReconciler,
   });
 }

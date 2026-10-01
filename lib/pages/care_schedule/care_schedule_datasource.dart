@@ -40,6 +40,11 @@ class CareScheduleDataSource {
     return _prefsOverride ?? await SharedPreferences.getInstance();
   }
 
+  Future<void> _saveJson(SharedPreferences prefs, String key, Object json) async {
+    final saved = await prefs.setString(key, jsonEncode(json));
+    if (!saved) throw StateError('Failed to persist "$key" to SharedPreferences.');
+  }
+
   Future<LocalCollectionCodec<TaskCompletion>> _getCompletionsCodec() async {
     if (_completionsCodec == null) {
       final prefs = await _getPrefs();
@@ -106,7 +111,7 @@ class CareScheduleDataSource {
     configs[plantId] = config;
     final prefs = await _getPrefs();
     final json = configs.map((key, value) => MapEntry(key, value.toJson()));
-    await prefs.setString(_scheduleConfigsKey, jsonEncode(json));
+    await _saveJson(prefs, _scheduleConfigsKey, json);
   }
 
   /// Delete a schedule config for a specific plant.
@@ -115,7 +120,7 @@ class CareScheduleDataSource {
     configs.remove(plantId);
     final prefs = await _getPrefs();
     final json = configs.map((key, value) => MapEntry(key, value.toJson()));
-    await prefs.setString(_scheduleConfigsKey, jsonEncode(json));
+    await _saveJson(prefs, _scheduleConfigsKey, json);
   }
 
   // --- Room Configs ---
@@ -156,7 +161,7 @@ class CareScheduleDataSource {
     configs[config.roomName] = config;
     final prefs = await _getPrefs();
     final json = configs.map((key, value) => MapEntry(key, value.toJson()));
-    await prefs.setString(_roomConfigsKey, jsonEncode(json));
+    await _saveJson(prefs, _roomConfigsKey, json);
   }
 
   /// Delete a room config by name.
@@ -165,7 +170,7 @@ class CareScheduleDataSource {
     configs.remove(roomName);
     final prefs = await _getPrefs();
     final json = configs.map((key, value) => MapEntry(key, value.toJson()));
-    await prefs.setString(_roomConfigsKey, jsonEncode(json));
+    await _saveJson(prefs, _roomConfigsKey, json);
   }
 
   // --- Task Completions ---
@@ -293,7 +298,7 @@ class CareScheduleDataSource {
     actions[key] = action;
     final prefs = await _getPrefs();
     final json = actions.map((k, v) => MapEntry(k, v.toJson()));
-    await prefs.setString(_scheduleActionsKey, jsonEncode(json));
+    await _saveJson(prefs, _scheduleActionsKey, json);
   }
 
   /// Delete the schedule action for a specific plant and task type.
@@ -302,7 +307,7 @@ class CareScheduleDataSource {
     actions.remove('${plantId}_${taskType.key}');
     final prefs = await _getPrefs();
     final json = actions.map((k, v) => MapEntry(k, v.toJson()));
-    await prefs.setString(_scheduleActionsKey, jsonEncode(json));
+    await _saveJson(prefs, _scheduleActionsKey, json);
   }
 
   /// Delete all schedule actions for a specific plant.
@@ -311,6 +316,6 @@ class CareScheduleDataSource {
     actions.removeWhere((key, _) => key.startsWith('${plantId}_'));
     final prefs = await _getPrefs();
     final json = actions.map((k, v) => MapEntry(k, v.toJson()));
-    await prefs.setString(_scheduleActionsKey, jsonEncode(json));
+    await _saveJson(prefs, _scheduleActionsKey, json);
   }
 }
