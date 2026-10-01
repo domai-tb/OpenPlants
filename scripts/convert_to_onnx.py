@@ -28,7 +28,6 @@ from __future__ import annotations
 import argparse
 import json
 import os
-import shutil
 from pathlib import Path
 from typing import Any
 
@@ -85,16 +84,6 @@ def resolve_image_size(processor: Any, config: Any) -> tuple[int, int]:
 
 def save_json(path: Path, data: Any) -> None:
     path.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
-
-
-def copy_if_exists(src_dir_or_model_id: str, filename: str, out_dir: Path) -> None:
-    """
-    If the model is a local directory, copy config/preprocessor files directly.
-    For Hub models, save_pretrained handles this better.
-    """
-    src_path = Path(src_dir_or_model_id) / filename
-    if src_path.exists():
-        shutil.copy2(src_path, out_dir / filename)
 
 
 def export_onnx(
