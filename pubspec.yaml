@@ -38,3 +38,4 @@ flutter:
   assets:
     - assets/ml/plant-identification/
     - assets/species/
+    - assets/data/plant_names.json
