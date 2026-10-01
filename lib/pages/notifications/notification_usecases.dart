@@ -27,7 +27,7 @@ class NotificationUsecases {
       android: androidSettings,
       iOS: iosSettings,
     );
-    await _plugin.initialize(settings);
+    await _plugin.initialize(settings: settings);
   }
 
   /// Check if notifications are enabled.
@@ -87,13 +87,12 @@ class NotificationUsecases {
     );
 
     await _plugin.zonedSchedule(
-      id,
-      title,
-      body,
-      tzScheduled,
-      details,
+      id: id,
+      title: title,
+      body: body,
+      scheduledDate: tzScheduled,
+      notificationDetails: details,
       androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
-      uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
       payload: payload.encode(),
     );
 
@@ -112,7 +111,7 @@ class NotificationUsecases {
 
   /// Cancel a scheduled notification.
   Future<void> cancelNotification(int id) async {
-    await _plugin.cancel(id);
+    await _plugin.cancel(id: id);
     await _repository.deleteNotification(id);
   }
 
@@ -121,7 +120,7 @@ class NotificationUsecases {
     final notifications = await _repository.loadNotifications();
     for (final n in notifications) {
       if (n.ruleId == ruleId) {
-        await _plugin.cancel(n.id);
+        await _plugin.cancel(id: n.id);
       }
     }
     await _repository.deleteNotificationsForRule(ruleId);
@@ -132,7 +131,7 @@ class NotificationUsecases {
     final notifications = await _repository.loadNotifications();
     for (final n in notifications) {
       if (n.plantId == plantId) {
-        await _plugin.cancel(n.id);
+        await _plugin.cancel(id: n.id);
       }
     }
     await _repository.deleteNotificationsForPlant(plantId);
