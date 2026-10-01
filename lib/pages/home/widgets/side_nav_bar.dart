@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:openplants/pages/home/page_navigator.dart';
 import 'package:openplants/pages/home/widgets/side_nav_bar_item.dart';
 
-class SideNavBar extends StatefulWidget {
+class SideNavBar extends StatelessWidget {
   /// Needs the currently active page in order to highlight it
   final PageItem currentPage;
   final List<PageItem> pages;
 
   /// Calls this function when an item of the navigation bar is selected.
-  final Function(PageItem) onSelectedPage;
+  final ValueChanged<PageItem> onSelectedPage;
 
   const SideNavBar({
     super.key,
@@ -18,11 +18,6 @@ class SideNavBar extends StatefulWidget {
     required this.onSelectedPage,
   });
 
-  @override
-  State<SideNavBar> createState() => _SideNavBarState();
-}
-
-class _SideNavBarState extends State<SideNavBar> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
@@ -34,15 +29,15 @@ class _SideNavBarState extends State<SideNavBar> {
         color: colorScheme.surfaceContainerHighest,
       ),
       child: Column(
-        children: widget.pages.map((page) {
+        children: pages.map((page) {
           final presentation = pageItemPresentation(context, page);
 
           return SideNavBarItem(
             title: presentation.title,
             activeIcon: presentation.activeIcon,
             inactiveIcon: presentation.inactiveIcon,
-            onTap: () => widget.onSelectedPage(page),
-            isActive: widget.currentPage == page,
+            onTap: () => onSelectedPage(page),
+            isActive: currentPage == page,
           );
         }).toList(),
       ),

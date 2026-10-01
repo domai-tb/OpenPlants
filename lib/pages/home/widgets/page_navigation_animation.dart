@@ -1,7 +1,8 @@
 // ignore_for_file: prefer_int_literals
 
-import 'package:flutter/material.dart';
 import 'dart:async';
+
+import 'package:flutter/material.dart';
 
 /// Wrap a child with this widget in order to animate the child on build.
 /// Can be used in combination by setting a different offset.
@@ -37,17 +38,16 @@ class AnimatedEntry extends StatefulWidget {
   State<AnimatedEntry> createState() => AnimatedEntryState();
 }
 
-class AnimatedEntryState extends State<AnimatedEntry> with TickerProviderStateMixin {
+class AnimatedEntryState extends State<AnimatedEntry> with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _fadeAnimation;
   late Animation<double> _positionAnimation;
+  Timer? _startTimer;
 
   /// Can be called from outside in order to manually start the entry animation (again).
-  Future<bool> startEntryAnimation() async {
+  Future<void> startEntryAnimation() async {
     _animationController.reset();
     await _animationController.forward();
-
-    return true;
   }
 
   @override
@@ -75,12 +75,14 @@ class AnimatedEntryState extends State<AnimatedEntry> with TickerProviderStateMi
 
     // Start the animation on end of the first frame
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+
       // Only animate when on tablet
       if (MediaQuery.of(context).size.shortestSide >= 600) {
         if (widget.offsetDuration == Duration.zero) {
           _animationController.forward();
         } else {
-          Timer(widget.offsetDuration, () => _animationController.forward());
+          _startTimer = Timer(widget.offsetDuration, () => _animationController.forward());
         }
       } else {
         // Directly set the animation to its endpoint (show the page), when on phone
@@ -91,6 +93,7 @@ class AnimatedEntryState extends State<AnimatedEntry> with TickerProviderStateMi
 
   @override
   void dispose() {
+    _startTimer?.cancel();
     _animationController.dispose();
 
     super.dispose();
@@ -137,21 +140,19 @@ class AnimatedExit extends StatefulWidget {
   State<AnimatedExit> createState() => AnimatedExitState();
 }
 
-class AnimatedExitState extends State<AnimatedExit> with TickerProviderStateMixin {
+class AnimatedExitState extends State<AnimatedExit> with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _scaleAnimation;
 
   double _animationOpacity = 1;
 
   /// Can be called from outside in order to manually start the exit animation (again).
-  Future<bool> startExitAnimation() async {
+  Future<void> startExitAnimation() async {
     setState(() => _animationOpacity = 0);
     await _animationController.reverse();
 
     // Optional delay
     if (widget.delayAfterAnimation != Duration.zero) await Future.delayed(widget.delayAfterAnimation);
-
-    return true;
   }
 
   /// Must be called everytime the animation should be started again.
