@@ -145,34 +145,6 @@ void main() {
       expect(defs, isEmpty);
       expect(measList, isEmpty);
     });
-
-    test('getMeasurementsForMetricPaged returns paginated results', () async {
-      final measurements = List.generate(
-        10,
-        (i) => MetricMeasurement(
-          id: 'meas-$i',
-          metricId: 'def-1',
-          plantId: 'plant-1',
-          value: i * 10.0,
-          measuredAt: DateTime(2026, 1, 1, i),
-        ),
-      );
-
-      for (final m in measurements) {
-        await repository.saveMeasurement(m);
-      }
-
-      final page1 = await repository.getMeasurementsForMetricPaged('def-1', limit: 3);
-      expect(page1, hasLength(3));
-      expect(page1.first.id, 'meas-0');
-
-      final page2 = await repository.getMeasurementsForMetricPaged('def-1', limit: 3, offset: 3);
-      expect(page2, hasLength(3));
-      expect(page2.first.id, 'meas-3');
-
-      final pageEnd = await repository.getMeasurementsForMetricPaged('def-1', limit: 3, offset: 9);
-      expect(pageEnd, hasLength(1));
-    });
   });
 
   group('MetricUsecases', () {
@@ -237,6 +209,34 @@ void main() {
       final loaded = await usecases.getLatestMeasurement(def.id);
       expect(loaded, isNotNull);
       expect(loaded!.value, 65.0);
+    });
+
+    test('resyncs care reminders after measurement changes', () async {
+      var notificationSyncs = 0;
+      final notifyingUsecases = MetricUsecases(
+        repository: repository,
+        onNotificationsChanged: () async {
+          notificationSyncs++;
+        },
+      );
+      final definition = await notifyingUsecases.createDefinition(
+        plantId: 'plant-1',
+        name: 'Moisture',
+        valueType: MetricValueType.numeric,
+        unit: '%',
+        numericBounds: const NumericBounds(lower: 0, upper: 100),
+      );
+      notificationSyncs = 0;
+
+      final measurement = await notifyingUsecases.recordMeasurement(
+        metricId: definition.id,
+        plantId: 'plant-1',
+        value: 65.0,
+      );
+      await notifyingUsecases.updateMeasurement(measurement.copyWith(value: 70.0));
+      await notifyingUsecases.deleteMeasurement(measurement.id);
+
+      expect(notificationSyncs, 3);
     });
 
     test('recordMeasurement rejects a value with the wrong type', () async {

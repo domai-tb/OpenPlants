@@ -1,6 +1,10 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:openplants/pages/care_schedule/care_schedule_datasource.dart';
+import 'package:openplants/pages/care_schedule/care_schedule_repository.dart';
+import 'package:openplants/pages/care_schedule/custom_care_rule.dart';
+import 'package:openplants/pages/care_schedule/custom_care_rule_usecases.dart';
 import 'package:openplants/pages/plant_metrics/metric_definition.dart';
 import 'package:openplants/pages/plant_metrics/metric_definition_datasource.dart';
 import 'package:openplants/pages/plant_metrics/metric_measurement_datasource.dart';
@@ -13,17 +17,30 @@ void main() {
   late MetricMeasurementDataSource measurementDataSource;
   late MetricRepository repository;
   late MetricUsecases usecases;
+  late CareScheduleRepository careRepository;
+  var notificationSyncCount = 0;
 
   setUp(() async {
     SharedPreferences.setMockInitialValues({});
+    notificationSyncCount = 0;
     prefs = await SharedPreferences.getInstance();
     definitionDataSource = MetricDefinitionDataSource(prefs: prefs);
     measurementDataSource = MetricMeasurementDataSource(prefs: prefs);
+    careRepository = CareScheduleRepository(dataSource: CareScheduleDataSource(prefs: prefs));
+    final careRuleUsecases = CustomCareRuleUsecases(
+      repository: careRepository,
+      onNotificationsChanged: () async {
+        notificationSyncCount++;
+      },
+    );
     repository = MetricRepository(
       definitionDataSource: definitionDataSource,
       measurementDataSource: measurementDataSource,
     );
-    usecases = MetricUsecases(repository: repository);
+    usecases = MetricUsecases(
+      repository: repository,
+      deleteLinkedCareRules: careRuleUsecases.deleteForMetric,
+    );
   });
 
   group('Metric deletion cascade', () {
@@ -105,6 +122,33 @@ void main() {
       expect(defs, isEmpty);
     });
 
+    test('deleteAllForPlant restores definitions and measurements after a failed cascade', () async {
+      final definition = await usecases.createDefinition(
+        plantId: 'plant-1',
+        name: 'Soil Moisture',
+        valueType: MetricValueType.numeric,
+        unit: '%',
+      );
+      await usecases.recordMeasurement(
+        metricId: definition.id,
+        plantId: 'plant-1',
+        value: 42,
+      );
+
+      final failingRepository = MetricRepository(
+        definitionDataSource: definitionDataSource,
+        measurementDataSource: _FailingAfterPlantMeasurementDeleteDataSource(prefs: prefs),
+      );
+
+      await expectLater(
+        () => failingRepository.deleteDefinitionsForPlant('plant-1'),
+        throwsA(isA<StateError>()),
+      );
+
+      expect(await usecases.getDefinitionsForPlant('plant-1'), hasLength(1));
+      expect(await usecases.getMeasurementsForMetric(definition.id), hasLength(1));
+    });
+
     test('deleteDefinition cascades to measurements', () async {
       final def = await usecases.createDefinition(
         plantId: 'plant-1',
@@ -138,7 +182,7 @@ void main() {
   });
 
   group('Metric custom rule linkage cleanup', () {
-    test('custom rules with metric linkage can be deleted', () async {
+    test('deleting a metric removes its linked rules and preserves unrelated rules', () async {
       final def = await usecases.createDefinition(
         plantId: 'plant-1',
         name: 'Soil Moisture',
@@ -146,17 +190,85 @@ void main() {
         unit: '%',
       );
 
-      // Simulate a custom rule linked to this metric
-      // (In real code, this would be via CustomCareRuleUsecases)
-      final defs = await usecases.getDefinitionsForPlant('plant-1');
-      expect(defs, hasLength(1));
+      final linkedRule = CustomCareRuleEntity(
+        id: 'linked-rule',
+        plantId: 'plant-1',
+        taskType: 'measure-moisture',
+        intervalDays: 7,
+        createdAt: DateTime(2026),
+        metricId: def.id,
+      );
+      final unrelatedRule = CustomCareRuleEntity(
+        id: 'unrelated-rule',
+        plantId: 'plant-1',
+        taskType: 'watering',
+        intervalDays: 5,
+        createdAt: DateTime(2026),
+      );
+      await careRepository.saveCustomCareRule(linkedRule);
+      await careRepository.saveCustomCareRule(unrelatedRule);
+      await usecases.recordMeasurement(metricId: def.id, plantId: 'plant-1', value: 30);
 
-      // Delete the plant's metrics
-      await usecases.deleteAllForPlant('plant-1');
+      await usecases.deleteDefinition(def.id);
 
-      // Verify everything is clean
-      final afterDefs = await usecases.getDefinitionsForPlant('plant-1');
-      expect(afterDefs, isEmpty);
+      expect(await usecases.getDefinitionsForPlant('plant-1'), isEmpty);
+      expect(await usecases.getMeasurementsForMetric(def.id), isEmpty);
+      expect((await careRepository.getAllCustomCareRules()).map((rule) => rule.id), ['unrelated-rule']);
+      expect(notificationSyncCount, 1);
+    });
+
+    test('restores linked rules and keeps the definition when measurement deletion fails', () async {
+      final failingRepository = MetricRepository(
+        definitionDataSource: definitionDataSource,
+        measurementDataSource: _FailingDeleteMeasurementDataSource(prefs: prefs),
+      );
+      final careRuleUsecases = CustomCareRuleUsecases(repository: careRepository);
+      final failingUsecases = MetricUsecases(
+        repository: failingRepository,
+        deleteLinkedCareRules: careRuleUsecases.deleteForMetric,
+      );
+      final def = await failingUsecases.createDefinition(
+        plantId: 'plant-1',
+        name: 'Soil Moisture',
+        valueType: MetricValueType.numeric,
+        unit: '%',
+      );
+      final linkedRule = CustomCareRuleEntity(
+        id: 'linked-rule',
+        plantId: 'plant-1',
+        taskType: 'measure-moisture',
+        intervalDays: 7,
+        createdAt: DateTime(2026),
+        metricId: def.id,
+      );
+      await careRepository.saveCustomCareRule(linkedRule);
+
+      await expectLater(
+        () => failingUsecases.deleteDefinition(def.id),
+        throwsA(isA<StateError>()),
+      );
+
+      expect(await failingUsecases.getDefinitionById(def.id), isNotNull);
+      expect((await careRepository.getAllCustomCareRules()).map((rule) => rule.id), ['linked-rule']);
     });
   });
+}
+
+class _FailingDeleteMeasurementDataSource extends MetricMeasurementDataSource {
+  _FailingDeleteMeasurementDataSource({required super.prefs});
+
+  @override
+  Future<void> deleteMeasurementsForMetric(String metricId) async {
+    throw StateError('measurement storage unavailable');
+  }
+}
+
+class _FailingAfterPlantMeasurementDeleteDataSource extends MetricMeasurementDataSource {
+  _FailingAfterPlantMeasurementDeleteDataSource({required super.prefs});
+
+  @override
+  Future<void> deleteMeasurementsForPlant(String plantId) async {
+    await super.deleteMeasurementsForPlant(plantId);
+    throw StateError('measurement storage unavailable after delete');
+  }
 }

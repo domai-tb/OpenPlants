@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:openplants/l10n/l10n_x.dart';
 import 'package:openplants/pages/plant_metrics/metric_definition.dart';
 import 'package:openplants/pages/plant_metrics/metric_evaluator.dart';
 import 'package:openplants/pages/plant_metrics/metric_history_page.dart';
@@ -28,6 +29,7 @@ class _MetricListPageState extends State<MetricListPage> {
   List<MetricDefinition> _definitions = [];
   Map<String, MetricEvaluation> _evaluations = {};
   bool _loading = true;
+  bool _loadFailed = false;
 
   @override
   void initState() {
@@ -36,29 +38,64 @@ class _MetricListPageState extends State<MetricListPage> {
   }
 
   Future<void> _loadData() async {
-    final definitions = await widget.usecases.getDefinitionsForPlant(widget.plantId);
-    final evaluations = await widget.usecases.evaluateAllForPlant(widget.plantId);
-    setState(() {
-      _definitions = definitions;
-      _evaluations = evaluations;
-      _loading = false;
-    });
+    if (mounted) {
+      setState(() {
+        _loading = true;
+        _loadFailed = false;
+      });
+    }
+    try {
+      final definitions = await widget.usecases.getDefinitionsForPlant(widget.plantId);
+      final evaluations = await widget.usecases.evaluateAllForPlant(widget.plantId);
+      if (!mounted) return;
+      setState(() {
+        _definitions = definitions;
+        _evaluations = evaluations;
+        _loading = false;
+      });
+    } catch (_) {
+      if (!mounted) return;
+      setState(() {
+        _loading = false;
+        _loadFailed = true;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('${widget.plantName} Metrics'),
+        title: Text('${widget.plantName} ${context.l10n.metricsTitle}'),
       ),
       body: _loading
           ? const Center(child: CircularProgressIndicator())
-          : _definitions.isEmpty
-              ? _buildEmptyState()
-              : _buildMetricList(),
+          : _loadFailed
+              ? _buildLoadError(context)
+              : _definitions.isEmpty
+                  ? _buildEmptyState()
+                  : _buildMetricList(),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => _showAddDefinitionDialog(context),
+        onPressed: () => _showDefinitionSheet(context),
+        tooltip: context.l10n.metricsAdd,
         child: const Icon(Icons.add),
+      ),
+    );
+  }
+
+  Widget _buildLoadError(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(context.l10n.generalFailureMessage),
+          const SizedBox(height: 12),
+          OutlinedButton.icon(
+            onPressed: _loadData,
+            icon: const Icon(Icons.refresh),
+            label: Text(context.l10n.retry),
+          ),
+        ],
       ),
     );
   }
@@ -71,12 +108,12 @@ class _MetricListPageState extends State<MetricListPage> {
           Icon(Icons.analytics_outlined, size: 64, color: Colors.grey[400]),
           const SizedBox(height: 16),
           Text(
-            'No metrics yet',
+            context.l10n.metricsEmpty,
             style: Theme.of(context).textTheme.headlineSmall,
           ),
           const SizedBox(height: 8),
           Text(
-            'Add a metric to track things like soil moisture, temperature, or leaf health.',
+            context.l10n.metricsEmptyDescription,
             textAlign: TextAlign.center,
             style: TextStyle(color: Colors.grey[600]),
           ),
@@ -97,21 +134,68 @@ class _MetricListPageState extends State<MetricListPage> {
             definition: def,
             evaluation: evaluation,
             onTap: () => _navigateToMetricDetail(def),
+            onEdit: () => _showDefinitionSheet(context, definition: def),
+            onToggleEnabled: () => _toggleDefinition(def),
+            onDelete: () => _confirmDelete(def),
           );
         },
       ),
     );
   }
 
-  void _showAddDefinitionDialog(BuildContext context) {
-    showModalBottomSheet(
+  Future<void> _showDefinitionSheet(BuildContext context, {MetricDefinition? definition}) async {
+    await showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
       builder: (context) => _AddMetricDefinitionSheet(
         plantId: widget.plantId,
         usecases: widget.usecases,
+        definition: definition,
         onSaved: _loadData,
       ),
+    );
+  }
+
+  Future<void> _toggleDefinition(MetricDefinition definition) async {
+    try {
+      await widget.usecases.toggleDefinition(definition.id);
+      await _loadData();
+    } catch (_) {
+      if (mounted) _showActionFailure();
+    }
+  }
+
+  Future<void> _confirmDelete(MetricDefinition definition) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(context.l10n.metricsDeleteTitle(definition.name)),
+        content: Text(context.l10n.metricsDeleteBody),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: Text(context.l10n.cancel),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: Text(context.l10n.confirm),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true || !mounted) return;
+
+    try {
+      await widget.usecases.deleteDefinition(definition.id);
+      await _loadData();
+    } catch (_) {
+      if (mounted) _showActionFailure();
+    }
+  }
+
+  void _showActionFailure() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(context.l10n.generalFailureMessage)),
     );
   }
 
@@ -127,15 +211,23 @@ class _MetricListPageState extends State<MetricListPage> {
   }
 }
 
+enum _MetricAction { edit, toggleEnabled, delete }
+
 class _MetricTile extends StatelessWidget {
   final MetricDefinition definition;
   final MetricEvaluation? evaluation;
   final VoidCallback onTap;
+  final VoidCallback onEdit;
+  final VoidCallback onToggleEnabled;
+  final VoidCallback onDelete;
 
   const _MetricTile({
     required this.definition,
     this.evaluation,
     required this.onTap,
+    required this.onEdit,
+    required this.onToggleEnabled,
+    required this.onDelete,
   });
 
   @override
@@ -146,8 +238,34 @@ class _MetricTile extends StatelessWidget {
       child: ListTile(
         leading: _buildIcon(),
         title: Text(definition.name),
-        subtitle: _buildSubtitle(),
-        trailing: hasAlert ? const Icon(Icons.warning, color: Colors.orange) : const Icon(Icons.chevron_right),
+        subtitle: _buildSubtitle(context),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (hasAlert) const Icon(Icons.warning, color: Colors.orange),
+            PopupMenuButton<_MetricAction>(
+              tooltip: context.l10n.metricsActions,
+              onSelected: (action) {
+                switch (action) {
+                  case _MetricAction.edit:
+                    onEdit();
+                  case _MetricAction.toggleEnabled:
+                    onToggleEnabled();
+                  case _MetricAction.delete:
+                    onDelete();
+                }
+              },
+              itemBuilder: (context) => [
+                PopupMenuItem(value: _MetricAction.edit, child: Text(context.l10n.metricsEdit)),
+                PopupMenuItem(
+                  value: _MetricAction.toggleEnabled,
+                  child: Text(definition.isEnabled ? context.l10n.metricsDisable : context.l10n.metricsEnable),
+                ),
+                PopupMenuItem(value: _MetricAction.delete, child: Text(context.l10n.metricsDelete)),
+              ],
+            ),
+          ],
+        ),
         onTap: onTap,
       ),
     );
@@ -164,12 +282,13 @@ class _MetricTile extends StatelessWidget {
     }
   }
 
-  Widget? _buildSubtitle() {
-    if (evaluation == null) return const Text('No data');
-    if (evaluation!.state == MetricState.noData) return const Text('No data');
+  Widget? _buildSubtitle(BuildContext context) {
+    if (evaluation == null) return Text(context.l10n.metricsNoData);
+    if (evaluation!.state == MetricState.noData) return Text(context.l10n.metricsNoData);
 
     final last = evaluation!.lastMeasurement;
-    if (last == null) return const Text('No data');
+    if (last == null) return Text(context.l10n.metricsNoData);
+    if (last.validate(definition) != null) return Text(context.l10n.metricsInvalidMeasurement);
 
     String valueStr;
     switch (definition.valueType) {
@@ -177,7 +296,7 @@ class _MetricTile extends StatelessWidget {
         final val = (last.value as num).toDouble();
         valueStr = '${val.toStringAsFixed(1)}${definition.unit ?? ''}';
       case MetricValueType.boolean:
-        valueStr = last.value == true ? 'Yes' : 'No';
+        valueStr = last.value == true ? context.l10n.metricsYes : context.l10n.metricsNo;
       case MetricValueType.categorical:
         valueStr = last.value.toString();
     }
@@ -189,11 +308,13 @@ class _MetricTile extends StatelessWidget {
 class _AddMetricDefinitionSheet extends StatefulWidget {
   final String plantId;
   final MetricUsecases usecases;
-  final VoidCallback onSaved;
+  final MetricDefinition? definition;
+  final Future<void> Function() onSaved;
 
   const _AddMetricDefinitionSheet({
     required this.plantId,
     required this.usecases,
+    this.definition,
     required this.onSaved,
   });
 
@@ -202,15 +323,33 @@ class _AddMetricDefinitionSheet extends StatefulWidget {
 }
 
 class _AddMetricDefinitionSheetState extends State<_AddMetricDefinitionSheet> {
-  final _nameController = TextEditingController();
-  final _unitController = TextEditingController();
-  final _lowerController = TextEditingController();
-  final _upperController = TextEditingController();
-  final _categoryController = TextEditingController();
-  final Set<String> _alertValues = {};
+  late final TextEditingController _nameController;
+  late final TextEditingController _unitController;
+  late final TextEditingController _lowerController;
+  late final TextEditingController _upperController;
+  late final TextEditingController _categoryController;
+  late final Set<String> _alertValues;
+  String? _nameError;
   String? _unitError;
-  MetricValueType _valueType = MetricValueType.numeric;
-  AlertResponse _alertResponse = AlertResponse.warning;
+  String? _lowerError;
+  String? _upperError;
+  String? _categoryError;
+  late MetricValueType _valueType;
+  late AlertResponse _alertResponse;
+
+  @override
+  void initState() {
+    super.initState();
+    final definition = widget.definition;
+    _nameController = TextEditingController(text: definition?.name ?? '');
+    _unitController = TextEditingController(text: definition?.unit ?? '');
+    _lowerController = TextEditingController(text: definition?.numericBounds?.lower?.toString() ?? '');
+    _upperController = TextEditingController(text: definition?.numericBounds?.upper?.toString() ?? '');
+    _categoryController = TextEditingController(text: definition?.categoryOptions.join(', ') ?? '');
+    _alertValues = {...?definition?.alertValues};
+    _valueType = definition?.valueType ?? MetricValueType.numeric;
+    _alertResponse = definition?.alertResponse ?? AlertResponse.warning;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -226,21 +365,28 @@ class _AddMetricDefinitionSheetState extends State<_AddMetricDefinitionSheet> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text('Add Metric', style: Theme.of(context).textTheme.headlineSmall),
+            Text(
+              widget.definition == null ? context.l10n.metricsAdd : context.l10n.metricsEdit,
+              style: Theme.of(context).textTheme.headlineSmall,
+            ),
             const SizedBox(height: 16),
             TextField(
               controller: _nameController,
-              decoration: const InputDecoration(
-                labelText: 'Name',
-                hintText: 'e.g., Soil Moisture',
+              decoration: InputDecoration(
+                labelText: context.l10n.metricsName,
+                hintText: context.l10n.metricsNameHint,
+                errorText: _nameError,
               ),
+              onChanged: (_) {
+                if (_nameError != null) setState(() => _nameError = null);
+              },
             ),
             const SizedBox(height: 8),
             TextField(
               controller: _unitController,
               decoration: InputDecoration(
-                labelText: 'Unit',
-                hintText: 'e.g., %, °C',
+                labelText: context.l10n.metricsUnit,
+                hintText: context.l10n.metricsUnitHint,
                 errorText: _unitError,
               ),
               onChanged: (value) {
@@ -252,9 +398,9 @@ class _AddMetricDefinitionSheetState extends State<_AddMetricDefinitionSheet> {
             const SizedBox(height: 8),
             DropdownButtonFormField<MetricValueType>(
               initialValue: _valueType,
-              decoration: const InputDecoration(labelText: 'Value Type'),
+              decoration: InputDecoration(labelText: context.l10n.metricsValueType),
               items: MetricValueType.values.map((t) {
-                return DropdownMenuItem(value: t, child: Text(t.name));
+                return DropdownMenuItem(value: t, child: Text(_valueTypeLabel(context, t)));
               }).toList(),
               onChanged: (v) {
                 if (v != null) setState(() => _valueType = v);
@@ -265,32 +411,42 @@ class _AddMetricDefinitionSheetState extends State<_AddMetricDefinitionSheet> {
               TextField(
                 controller: _lowerController,
                 keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
-                decoration: const InputDecoration(labelText: 'Minimum alert value (optional)'),
-                onChanged: (_) => setState(() {}),
+                decoration: InputDecoration(
+                  labelText: context.l10n.metricsMinimumAlert,
+                  errorText: _lowerError,
+                ),
+                onChanged: (_) => setState(() => _lowerError = null),
               ),
               const SizedBox(height: 8),
               TextField(
                 controller: _upperController,
                 keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
-                decoration: const InputDecoration(labelText: 'Maximum alert value (optional)'),
-                onChanged: (_) => setState(() {}),
+                decoration: InputDecoration(
+                  labelText: context.l10n.metricsMaximumAlert,
+                  errorText: _upperError,
+                ),
+                onChanged: (_) => setState(() => _upperError = null),
               ),
             ] else if (_valueType == MetricValueType.categorical) ...[
               TextField(
                 controller: _categoryController,
-                decoration: const InputDecoration(
-                  labelText: 'Options',
-                  hintText: 'Comma-separated, e.g., Good, Fair, Poor',
+                decoration: InputDecoration(
+                  labelText: context.l10n.metricsOptions,
+                  hintText: context.l10n.metricsOptionsHint,
+                  errorText: _categoryError,
                 ),
                 onChanged: (_) {
                   final options = _categoryOptions.toSet();
-                  setState(() => _alertValues.removeWhere((value) => !options.contains(value)));
+                  setState(() {
+                    _categoryError = null;
+                    _alertValues.removeWhere((value) => !options.contains(value));
+                  });
                 },
               ),
               ..._categoryOptions.map(
                 (option) => CheckboxListTile(
                   contentPadding: EdgeInsets.zero,
-                  title: Text('Alert on $option'),
+                  title: Text(context.l10n.metricsAlertOn(option)),
                   value: _alertValues.contains(option),
                   onChanged: (selected) => _setAlertValue(option, selected),
                 ),
@@ -298,13 +454,13 @@ class _AddMetricDefinitionSheetState extends State<_AddMetricDefinitionSheet> {
             ] else ...[
               CheckboxListTile(
                 contentPadding: EdgeInsets.zero,
-                title: const Text('Alert when Yes'),
+                title: Text(context.l10n.metricsAlertWhenYes),
                 value: _alertValues.contains('true'),
                 onChanged: (selected) => _setAlertValue('true', selected),
               ),
               CheckboxListTile(
                 contentPadding: EdgeInsets.zero,
-                title: const Text('Alert when No'),
+                title: Text(context.l10n.metricsAlertWhenNo),
                 value: _alertValues.contains('false'),
                 onChanged: (selected) => _setAlertValue('false', selected),
               ),
@@ -312,9 +468,14 @@ class _AddMetricDefinitionSheetState extends State<_AddMetricDefinitionSheet> {
             const SizedBox(height: 8),
             DropdownButtonFormField<AlertResponse>(
               initialValue: _alertResponse,
-              decoration: const InputDecoration(labelText: 'Alert response'),
+              decoration: InputDecoration(labelText: context.l10n.metricsAlertResponse),
               items: AlertResponse.values
-                  .map((response) => DropdownMenuItem(value: response, child: Text(response.name)))
+                  .map(
+                    (response) => DropdownMenuItem(
+                      value: response,
+                      child: Text(_alertResponseLabel(context, response)),
+                    ),
+                  )
                   .toList(),
               onChanged: (response) {
                 if (response != null) setState(() => _alertResponse = response);
@@ -323,7 +484,7 @@ class _AddMetricDefinitionSheetState extends State<_AddMetricDefinitionSheet> {
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: _save,
-              child: const Text('Save'),
+              child: Text(context.l10n.metricsSave),
             ),
             const SizedBox(height: 16),
           ],
@@ -334,6 +495,24 @@ class _AddMetricDefinitionSheetState extends State<_AddMetricDefinitionSheet> {
 
   List<String> get _categoryOptions =>
       _categoryController.text.split(',').map((option) => option.trim()).where((option) => option.isNotEmpty).toList();
+
+  String _valueTypeLabel(BuildContext context, MetricValueType valueType) {
+    switch (valueType) {
+      case MetricValueType.numeric:
+        return context.l10n.metricsValueTypeNumeric;
+      case MetricValueType.boolean:
+        return context.l10n.metricsValueTypeBoolean;
+      case MetricValueType.categorical:
+        return context.l10n.metricsValueTypeCategorical;
+    }
+  }
+
+  String _alertResponseLabel(BuildContext context, AlertResponse response) {
+    return switch (response) {
+      AlertResponse.warning => context.l10n.metricsAlertResponseWarning,
+      AlertResponse.careTask => context.l10n.metricsAlertResponseCareTask,
+    };
+  }
 
   void _setAlertValue(String value, bool? selected) {
     setState(() {
@@ -346,39 +525,85 @@ class _AddMetricDefinitionSheetState extends State<_AddMetricDefinitionSheet> {
   }
 
   Future<void> _save() async {
-    if (_unitController.text.trim().isEmpty) {
-      setState(() => _unitError = 'Unit is required');
+    final name = _nameController.text.trim();
+    final unit = _unitController.text.trim();
+    final categoryOptions = _categoryOptions;
+    final hasDuplicateCategory =
+        categoryOptions.map((option) => option.toLowerCase()).toSet().length != categoryOptions.length;
+    setState(() {
+      _nameError = name.isEmpty ? context.l10n.metricsNameRequired : null;
+      _unitError = unit.isEmpty ? context.l10n.metricsUnitRequired : null;
+      _categoryError = _valueType == MetricValueType.categorical
+          ? categoryOptions.isEmpty
+              ? context.l10n.metricsCategoryOptionsRequired
+              : hasDuplicateCategory
+                  ? context.l10n.metricsCategoryOptionsUnique
+                  : null
+          : null;
+    });
+    if (_nameError != null || _unitError != null || _categoryError != null) {
       return;
     }
 
-    final lowerText = _lowerController.text.trim();
-    final upperText = _upperController.text.trim();
+    final lowerText = _valueType == MetricValueType.numeric ? _lowerController.text.trim() : '';
+    final upperText = _valueType == MetricValueType.numeric ? _upperController.text.trim() : '';
     final lower = lowerText.isEmpty ? null : double.tryParse(lowerText);
     final upper = upperText.isEmpty ? null : double.tryParse(upperText);
-    if ((lowerText.isNotEmpty && lower == null) || (upperText.isNotEmpty && upper == null)) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Alert thresholds must be numbers')));
+    final lowerInvalid = lowerText.isNotEmpty && (lower == null || !lower.isFinite);
+    final upperInvalid = upperText.isNotEmpty && (upper == null || !upper.isFinite);
+    final boundsInvalid = lower != null && upper != null && lower > upper;
+    setState(() {
+      _lowerError = lowerInvalid
+          ? context.l10n.metricsMinimumMustBeFinite
+          : boundsInvalid
+              ? context.l10n.metricsMinimumCannotExceedMaximum
+              : null;
+      _upperError = upperInvalid ? context.l10n.metricsMaximumMustBeFinite : null;
+    });
+    if (_lowerError != null || _upperError != null) {
       return;
     }
 
+    final numericBounds = _valueType == MetricValueType.numeric && (lower != null || upper != null)
+        ? NumericBounds(lower: lower, upper: upper)
+        : null;
+
     try {
-      await widget.usecases.createDefinition(
-        plantId: widget.plantId,
-        name: _nameController.text,
-        valueType: _valueType,
-        unit: _unitController.text.trim(),
-        categoryOptions: _valueType == MetricValueType.categorical ? _categoryOptions : const [],
-        numericBounds: lower != null || upper != null ? NumericBounds(lower: lower, upper: upper) : null,
-        alertValues: _valueType == MetricValueType.numeric ? null : Set.of(_alertValues),
-        alertResponse: _alertResponse,
-      );
-    } catch (error) {
+      final definition = widget.definition;
+      if (definition == null) {
+        await widget.usecases.createDefinition(
+          plantId: widget.plantId,
+          name: name,
+          valueType: _valueType,
+          unit: unit,
+          categoryOptions: _valueType == MetricValueType.categorical ? categoryOptions : const [],
+          numericBounds: numericBounds,
+          alertValues: _valueType == MetricValueType.numeric ? null : Set.of(_alertValues),
+          alertResponse: _alertResponse,
+        );
+      } else {
+        await widget.usecases.updateDefinition(
+          definition.copyWith(
+            name: name,
+            valueType: _valueType,
+            unit: unit,
+            categoryOptions: _valueType == MetricValueType.categorical ? categoryOptions : const [],
+            numericBounds: numericBounds,
+            clearNumericBounds: numericBounds == null,
+            alertValues: _valueType == MetricValueType.numeric ? null : Set.of(_alertValues),
+            clearAlertValues: _valueType == MetricValueType.numeric,
+            alertResponse: _alertResponse,
+          ),
+        );
+      }
+    } catch (_) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error.toString())));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(context.l10n.generalFailureMessage)));
       }
       return;
     }
 
-    widget.onSaved();
+    await widget.onSaved();
     if (mounted) Navigator.of(context).pop();
   }
 

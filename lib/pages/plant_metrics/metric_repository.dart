@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 import 'package:openplants/pages/plant_metrics/metric_definition.dart';
 import 'package:openplants/pages/plant_metrics/metric_definition_datasource.dart';
 import 'package:openplants/pages/plant_metrics/metric_measurement.dart';
@@ -42,18 +44,52 @@ class MetricRepository {
 
   Future<void> deleteDefinition(String id) async {
     final all = await definitionDataSource.loadDefinitions();
-    all.removeWhere((d) => d.id == id);
-    await definitionDataSource.saveDefinitions(all);
-    // Cascade: delete measurements for this metric
-    await measurementDataSource.deleteMeasurementsForMetric(id);
+    final remaining = all.where((definition) => definition.id != id).toList();
+    final measurements = await measurementDataSource.loadMeasurements();
+
+    var definitionsWriteStarted = false;
+    try {
+      await measurementDataSource.deleteMeasurementsForMetric(id);
+      definitionsWriteStarted = true;
+      await definitionDataSource.saveDefinitions(remaining);
+    } catch (error, stackTrace) {
+      if (definitionsWriteStarted) {
+        try {
+          await definitionDataSource.saveDefinitions(all);
+        } catch (rollbackError) {
+          debugPrint('Failed to restore metric definitions after delete failure: $rollbackError');
+        }
+      }
+      try {
+        await measurementDataSource.saveMeasurements(measurements);
+      } catch (rollbackError) {
+        debugPrint('Failed to restore metric measurements after delete failure: $rollbackError');
+      }
+      Error.throwWithStackTrace(error, stackTrace);
+    }
   }
 
   Future<void> deleteDefinitionsForPlant(String plantId) async {
     final all = await definitionDataSource.loadDefinitions();
-    all.removeWhere((d) => d.plantId == plantId);
-    await definitionDataSource.saveDefinitions(all);
-    // Cascade: delete measurements for this plant
-    await measurementDataSource.deleteMeasurementsForPlant(plantId);
+    final remaining = all.where((definition) => definition.plantId != plantId).toList();
+    final measurements = await measurementDataSource.loadMeasurements();
+
+    try {
+      await measurementDataSource.deleteMeasurementsForPlant(plantId);
+      await definitionDataSource.saveDefinitions(remaining);
+    } catch (error, stackTrace) {
+      try {
+        await definitionDataSource.saveDefinitions(all);
+      } catch (rollbackError) {
+        debugPrint('Failed to restore metric definitions after plant delete failure: $rollbackError');
+      }
+      try {
+        await measurementDataSource.saveMeasurements(measurements);
+      } catch (rollbackError) {
+        debugPrint('Failed to restore metric measurements after plant delete failure: $rollbackError');
+      }
+      Error.throwWithStackTrace(error, stackTrace);
+    }
   }
 
   // --- Measurements ---
@@ -68,17 +104,6 @@ class MetricRepository {
   Future<List<MetricMeasurement>> getMeasurementsForPlant(String plantId) async {
     final all = await measurementDataSource.loadMeasurements();
     return all.where((m) => m.plantId == plantId).toList()..sort((a, b) => a.measuredAt.compareTo(b.measuredAt));
-  }
-
-  Future<List<MetricMeasurement>> getMeasurementsForMetricPaged(
-    String metricId, {
-    int limit = 50,
-    int offset = 0,
-  }) async {
-    final all = await getMeasurementsForMetric(metricId);
-    if (offset >= all.length) return [];
-    final end = (offset + limit).clamp(0, all.length);
-    return all.sublist(offset, end);
   }
 
   Future<MetricMeasurement?> getLatestMeasurement(String metricId) async {

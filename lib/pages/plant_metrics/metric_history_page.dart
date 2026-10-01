@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:openplants/l10n/l10n_x.dart';
 import 'package:openplants/pages/plant_metrics/metric_definition.dart';
 import 'package:openplants/pages/plant_metrics/metric_measurement.dart';
 import 'package:openplants/pages/plant_metrics/metric_usecases.dart';
@@ -22,6 +23,7 @@ class MetricHistoryPage extends StatefulWidget {
 class _MetricHistoryPageState extends State<MetricHistoryPage> {
   List<MetricMeasurement> _measurements = [];
   bool _loading = true;
+  bool _loadFailed = false;
 
   @override
   void initState() {
@@ -30,13 +32,20 @@ class _MetricHistoryPageState extends State<MetricHistoryPage> {
   }
 
   Future<void> _loadData() async {
-    final measurements = await widget.usecases.getMeasurementsForMetric(
-      widget.definition.id,
-    );
     setState(() {
-      _measurements = measurements;
-      _loading = false;
+      _loading = true;
+      _loadFailed = false;
     });
+    try {
+      final measurements = await widget.usecases.getMeasurementsForMetric(widget.definition.id);
+      if (!mounted) return;
+      setState(() => _measurements = measurements);
+    } catch (error, stackTrace) {
+      debugPrint('Failed to load metric history for ${widget.definition.id}: $error\n$stackTrace');
+      if (mounted) setState(() => _loadFailed = true);
+    } finally {
+      if (mounted) setState(() => _loading = false);
+    }
   }
 
   @override
@@ -53,9 +62,27 @@ class _MetricHistoryPageState extends State<MetricHistoryPage> {
       ),
       body: _loading
           ? const Center(child: CircularProgressIndicator())
-          : _measurements.isEmpty
-              ? _buildEmptyState()
-              : _buildHistoryView(),
+          : _loadFailed
+              ? _buildLoadError()
+              : _measurements.isEmpty
+                  ? _buildEmptyState()
+                  : _buildHistoryView(),
+    );
+  }
+
+  Widget _buildLoadError() {
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(context.l10n.generalFailureMessage),
+          TextButton.icon(
+            onPressed: _loadData,
+            icon: const Icon(Icons.refresh),
+            label: Text(context.l10n.retry),
+          ),
+        ],
+      ),
     );
   }
 
@@ -67,14 +94,14 @@ class _MetricHistoryPageState extends State<MetricHistoryPage> {
           Icon(Icons.history, size: 64, color: Colors.grey[400]),
           const SizedBox(height: 16),
           Text(
-            'No measurements yet',
+            context.l10n.metricsNoData,
             style: Theme.of(context).textTheme.headlineSmall,
           ),
           const SizedBox(height: 8),
           ElevatedButton.icon(
             onPressed: () => _showRecordMeasurementSheet(context),
             icon: const Icon(Icons.add),
-            label: const Text('Record First Measurement'),
+            label: Text(context.l10n.metricsRecordFirst),
           ),
         ],
       ),
@@ -82,13 +109,15 @@ class _MetricHistoryPageState extends State<MetricHistoryPage> {
   }
 
   Widget _buildHistoryView() {
+    final validMeasurements =
+        _measurements.where((measurement) => measurement.validate(widget.definition) == null).toList();
     return Column(
       children: [
         if (widget.definition.valueType == MetricValueType.numeric)
           SizedBox(
             height: 200,
             child: _NumericGraph(
-              measurements: _measurements,
+              measurements: validMeasurements,
               bounds: widget.definition.numericBounds,
             ),
           ),
@@ -134,6 +163,7 @@ class _NumericGraph extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (measurements.isEmpty) return const SizedBox.shrink();
+    if (measurements.length < 2) return const SizedBox.shrink();
 
     return Padding(
       padding: const EdgeInsets.all(16),
@@ -233,27 +263,30 @@ class _MeasurementTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text(_formatValue()),
-      subtitle: Text(_formatDate(measurement.measuredAt)),
+      title: Text(
+        measurement.validate(definition) == null ? _formatValue(context) : context.l10n.metricsInvalidMeasurement,
+      ),
+      subtitle: Text(_formatDate(context, measurement.measuredAt)),
       trailing: measurement.notes != null ? const Icon(Icons.note, size: 16) : null,
     );
   }
 
-  String _formatValue() {
+  String _formatValue(BuildContext context) {
     switch (definition.valueType) {
       case MetricValueType.numeric:
         final val = (measurement.value as num).toDouble();
         return '${val.toStringAsFixed(1)}${definition.unit ?? ''}';
       case MetricValueType.boolean:
-        return measurement.value == true ? 'Yes' : 'No';
+        return measurement.value == true ? context.l10n.metricsYes : context.l10n.metricsNo;
       case MetricValueType.categorical:
         return measurement.value.toString();
     }
   }
 
-  String _formatDate(DateTime date) {
-    return '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')} '
-        '${date.hour.toString().padLeft(2, '0')}:${date.minute.toString().padLeft(2, '0')}';
+  String _formatDate(BuildContext context, DateTime date) {
+    final localizations = MaterialLocalizations.of(context);
+    return '${localizations.formatMediumDate(date)} '
+        '${localizations.formatTimeOfDay(TimeOfDay.fromDateTime(date))}';
   }
 }
 
@@ -290,20 +323,21 @@ class _RecordMeasurementSheetState extends State<_RecordMeasurementSheet> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text('Record ${widget.definition.name}', style: Theme.of(context).textTheme.headlineSmall),
+          Text(
+            context.l10n.metricsRecordMeasurement(widget.definition.name),
+            style: Theme.of(context).textTheme.headlineSmall,
+          ),
           const SizedBox(height: 16),
           _buildValueInput(),
           const SizedBox(height: 8),
           TextField(
             controller: _notesController,
-            decoration: const InputDecoration(
-              labelText: 'Notes (optional)',
-            ),
+            decoration: InputDecoration(labelText: context.l10n.metricsNotes),
           ),
           const SizedBox(height: 16),
           ElevatedButton(
             onPressed: _save,
-            child: const Text('Save'),
+            child: Text(context.l10n.metricsSave),
           ),
           const SizedBox(height: 16),
         ],
@@ -318,40 +352,40 @@ class _RecordMeasurementSheetState extends State<_RecordMeasurementSheet> {
           controller: _valueController,
           keyboardType: TextInputType.number,
           decoration: InputDecoration(
-            labelText: 'Value',
-            hintText:
-                widget.definition.unit != null ? 'Enter value in ${widget.definition.unit}' : 'Enter numeric value',
+            labelText: context.l10n.metricsValue,
           ),
         );
       case MetricValueType.boolean:
-        return Row(
-          children: [
-            Expanded(
-              child: ListTile(
-                title: const Text('Yes'),
-                leading: Radio<bool>(
-                  value: true,
-                  groupValue: _valueController.text == 'true' ? true : null,
-                  onChanged: (v) => setState(() => _valueController.text = 'true'),
+        return RadioGroup<bool>(
+          groupValue: switch (_valueController.text) {
+            'true' => true,
+            'false' => false,
+            _ => null,
+          },
+          onChanged: (value) {
+            if (value != null) setState(() => _valueController.text = value.toString());
+          },
+          child: Row(
+            children: [
+              Expanded(
+                child: ListTile(
+                  title: Text(context.l10n.metricsYes),
+                  leading: const Radio<bool>(value: true),
                 ),
               ),
-            ),
-            Expanded(
-              child: ListTile(
-                title: const Text('No'),
-                leading: Radio<bool>(
-                  value: false,
-                  groupValue: _valueController.text == 'false' ? false : null,
-                  onChanged: (v) => setState(() => _valueController.text = 'false'),
+              Expanded(
+                child: ListTile(
+                  title: Text(context.l10n.metricsNo),
+                  leading: const Radio<bool>(value: false),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         );
       case MetricValueType.categorical:
         return DropdownButtonFormField<String>(
-          value: _selectedCategory,
-          decoration: const InputDecoration(labelText: 'Value'),
+          initialValue: _selectedCategory,
+          decoration: InputDecoration(labelText: context.l10n.metricsValue),
           items: widget.definition.categoryOptions.map((opt) {
             return DropdownMenuItem(value: opt, child: Text(opt));
           }).toList(),
