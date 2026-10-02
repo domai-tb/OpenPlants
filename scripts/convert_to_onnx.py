@@ -165,6 +165,7 @@ def export_onnx(
     print("[5/7] Checking ONNX graph")
     exported = onnx.load(str(onnx_path))
     onnx.checker.check_model(exported)
+    validation_model_bytes = exported.SerializeToString() if validate else None
     onnx.save_model(
         exported,
         str(onnx_path),
@@ -204,7 +205,7 @@ def export_onnx(
     if validate:
         print("[7/7] Validating ONNXRuntime output against PyTorch")
         ort_session = ort.InferenceSession(
-            str(onnx_path),
+            validation_model_bytes,
             providers=["CPUExecutionProvider"],
         )
 
