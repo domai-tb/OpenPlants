@@ -1,0 +1,7 @@
+Neue Funktionen und Zuverlässigkeitsverbesserungen.
+
+- Pflegevorlagen je Pflanzenart mit anpassbaren und ausblendbaren Standardaufgaben.
+- Pflanzenmesswerte, Verlauf, Diagramme, Validierung und Warnungen.
+- Lokale Benachrichtigungen mit Zeitzonenbehandlung, Startabgleich und Einstellungen.
+- Durchsuchbarer, lokalisierter Pflanzenartenkatalog.
+- Pflegezustand neuer, gesunder Pflanzen und Navigation zu Messwerten korrigiert.

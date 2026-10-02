@@ -1,0 +1,13 @@
+OpenPlants ist eine quelloffene, datenschutzfreundliche Pflanzen-App für Android.
+
+Verwalte deine Pflanzen, plane die Pflege und verpasse keine Bewässerung.
+
+Funktionen:
+- Eigene Pflanzensammlung mit Fotos und Pflegeverlauf
+- Anpassbare Pflegepläne (Gießen, Düngen, Besprühen, Schneiden und mehr)
+- Pflegeerinnerungen mit Benachrichtigungen
+- Pflanzenerkennung per Foto direkt auf dem Gerät mit einem integrierten KI-Modell
+- Dunkles Design und mehrsprachige Oberfläche (Deutsch, Englisch)
+- Kein Konto erforderlich, deine Daten bleiben auf deinem Gerät
+
+Entwickelt mit Clean Architecture. Lizenz: AGPL-3.0.
