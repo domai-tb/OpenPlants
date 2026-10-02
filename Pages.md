@@ -18,9 +18,9 @@ OpenPlants exposes three primary navigation destinations: **Today**, **Care Sche
 
 ## Reference and Identification
 
-- **Plant Identification** — uses the bundled local classifier to identify a plant from an image.
+- **Plant Identification** — identifies a plant from an image when compatible ONNX model files are supplied in `assets/ml/plant-identification/`. Model files are not included in this checkout.
 - **Species Library** — provides species information and care-plan data.
-- **Model Info** — presents information about the bundled identification model.
+- **Model Info** — presents metadata supplied alongside an identification model.
 
 Each feature owns its presentation, use cases, repository, data source, and domain data where those layers apply. See [Architecture](Architecture) for the dependency rules.
 

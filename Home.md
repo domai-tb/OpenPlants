@@ -1,37 +1,30 @@
-# OpenPlant 🌱
+# OpenPlants 🌱
 
-An open-source & privacy-friendly companion app for your plants.
+OpenPlants is an open-source, privacy-friendly Flutter companion for tracking plant care.
 
 ## Features
 
-- Track your plants and their care routines
-- Set watering and care reminders
-- Responsive layout (bottom nav on phones, side nav on tablets)
-- Dark mode support
-- Multi-language support (English, German)
+- Plant collection, care schedules, journal, and photo timeline
+- Local care reminders
+- Plant identification, symptom diagnosis, and light assessment
+- Dark mode, system text scaling, and English/German localization
 
-## Architecture
+Plant identification requires ONNX model files in `assets/ml/plant-identification/`; those model files are not included
+in this checkout.
 
-Clean Architecture with layered design:
-- **Presentation**: Flutter widgets (pages)
-- **Application**: Use-cases orchestrate business logic
-- **Domain**: Entities and repositories
-- **Infrastructure**: Datasources (API, DB, platform)
+## Development
 
-## Getting Started
+Flutter is pinned with FVM. From the repository root:
 
 ```bash
 fvm flutter pub get
 fvm flutter run
+fvm flutter analyze
+fvm flutter test --dart-define=platform=vm
 ```
 
-## Project Structure
-
-- `lib/pages/` — Feature modules (page1–page6 placeholders)
-- `lib/core/` — App-wide concerns (settings, theme, DI)
-- `lib/widgets/` — Reusable UI building blocks
-- `assets/l10n/` — Localization ARB files
+Feature modules live under `lib/pages/`; app-wide services and dependency setup live under `lib/core/`. Tests are in `test/`.
 
 ## License
 
-AGPL v3 — See [LICENSE](LICENSE).
+AGPL v3 — See [LICENSE](LICENSE.md).
