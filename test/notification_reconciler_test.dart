@@ -17,6 +17,7 @@ import 'package:openplants/pages/notifications/notification_reconciler.dart';
 import 'package:openplants/pages/notifications/notification_repository.dart';
 import 'package:openplants/pages/notifications/notification_usecases.dart';
 import 'package:openplants/pages/plant_collection/plant_collection_datasource.dart';
+import 'package:openplants/pages/plant_collection/plant_collection_item_entity.dart';
 import 'package:openplants/pages/plant_collection/plant_collection_repository.dart';
 import 'package:openplants/pages/plant_collection/plant_collection_usecases.dart';
 import 'package:openplants/pages/plant_journal/plant_journal_datasource.dart';
@@ -132,6 +133,27 @@ void main() {
   });
 
   group('NotificationReconciler', () {
+    test('schedules due built-in tasks when no per-rule reminder is configured', () async {
+      SharedPreferences.setMockInitialValues({});
+      final preferences = await SharedPreferences.getInstance();
+      final fixture = await _createFixture(preferences);
+      await PlantCollectionDataSource(prefs: preferences).addPlant(
+        PlantEntity(
+          id: 'plant-1',
+          name: 'Fern',
+          createdAt: DateTime.now(),
+          updatedAt: DateTime.now(),
+        ),
+      );
+
+      await fixture.reconciler.reconcileCurrentState();
+
+      final taskTypes = fixture.notifications.pending.values
+          .map((notification) => NotificationPayload.decode(notification.payload)?.taskType);
+      expect(taskTypes, contains('watering'));
+      fixture.dispose();
+    });
+
     test('does not change existing reminders before the local timezone is resolved', () async {
       SharedPreferences.setMockInitialValues({});
       final preferences = await SharedPreferences.getInstance();

@@ -12,6 +12,17 @@ import 'package:openplants/pages/notifications/notification_entity.dart';
 import 'package:openplants/pages/notifications/notification_repository.dart';
 import 'package:openplants/pages/notifications/notification_usecases.dart';
 
+const _defaultReminderTime = '09:00';
+const _defaultReminderDays = [
+  'monday',
+  'tuesday',
+  'wednesday',
+  'thursday',
+  'friday',
+  'saturday',
+  'sunday',
+];
+
 /// Reconciles OS reminders with the current care schedule and notification settings.
 class NotificationReconciler {
   final NotificationRepository _repository;
@@ -76,12 +87,13 @@ class NotificationReconciler {
       final taskType = _taskTypeName(task.taskType);
       if (taskType == null) continue;
       final rule = rulesByTask['${task.plantId}\u0000$taskType'];
-      if (rule == null || !rule.isEnabled || !rule.reminderEnabled) continue;
+      if (!task.taskType.isBuiltIn && (rule == null || !rule.reminderEnabled)) continue;
 
+      final useRuleReminder = rule?.reminderEnabled == true;
       final scheduledTime = nextReminderTime(
         dueDate: task.dueDate,
-        reminderTime: rule.reminderTime,
-        reminderDays: rule.reminderDays,
+        reminderTime: useRuleReminder ? rule?.reminderTime ?? _defaultReminderTime : _defaultReminderTime,
+        reminderDays: useRuleReminder ? rule?.reminderDays ?? _defaultReminderDays : _defaultReminderDays,
         now: now,
         location: tz.local,
       );
@@ -90,9 +102,9 @@ class NotificationReconciler {
       inputs.add(
         ReconcilerInput(
           plantId: task.plantId,
-          ruleId: rule.id,
+          ruleId: rule?.id ?? taskType,
           taskType: taskType,
-          metricId: rule.metricId,
+          metricId: rule?.metricId,
           scheduledTime: scheduledTime,
           isOverdue: task.status == CareTaskStatus.overdue,
           title: localization.notificationReminderTitle,

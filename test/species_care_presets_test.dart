@@ -162,7 +162,7 @@ void main() {
       for (final rule in rules) {
         expect(rule.plantId, 'p1');
         expect(rule.isEnabled, true);
-        expect(rule.reminderEnabled, false);
+        expect(rule.reminderEnabled, true);
         expect(rule.reminderTime, isNull);
         expect(rule.reminderDays, isNull);
         expect(rule.id, contains('p1_preset_'));

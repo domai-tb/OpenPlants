@@ -23,6 +23,7 @@ List<CustomCareRuleEntity> speciesCarePresets(
       plantId: plantId,
       taskType: BuiltInTaskType.watering.name,
       intervalDays: _wateringInterval(species.waterNeeds),
+      reminderEnabled: true,
       createdAt: now,
     ),
   );
@@ -34,6 +35,7 @@ List<CustomCareRuleEntity> speciesCarePresets(
       plantId: plantId,
       taskType: BuiltInTaskType.fertilizing.name,
       intervalDays: _fertilizingInterval(species.waterNeeds),
+      reminderEnabled: true,
       createdAt: now,
     ),
   );
@@ -47,6 +49,7 @@ List<CustomCareRuleEntity> speciesCarePresets(
         plantId: plantId,
         taskType: BuiltInTaskType.misting.name,
         intervalDays: mistingDays,
+        reminderEnabled: true,
         createdAt: now,
       ),
     );
@@ -59,6 +62,7 @@ List<CustomCareRuleEntity> speciesCarePresets(
       plantId: plantId,
       taskType: BuiltInTaskType.pruning.name,
       intervalDays: 30,
+      reminderEnabled: true,
       createdAt: now,
     ),
   );
@@ -70,6 +74,7 @@ List<CustomCareRuleEntity> speciesCarePresets(
       plantId: plantId,
       taskType: BuiltInTaskType.rotating.name,
       intervalDays: 14,
+      reminderEnabled: true,
       createdAt: now,
     ),
   );
@@ -81,6 +86,7 @@ List<CustomCareRuleEntity> speciesCarePresets(
       plantId: plantId,
       taskType: BuiltInTaskType.repotting.name,
       intervalDays: species.repottingIntervalMonths * 30,
+      reminderEnabled: true,
       createdAt: now,
     ),
   );
@@ -92,6 +98,7 @@ List<CustomCareRuleEntity> speciesCarePresets(
       plantId: plantId,
       taskType: BuiltInTaskType.leafCleaning.name,
       intervalDays: 14,
+      reminderEnabled: true,
       createdAt: now,
     ),
   );
@@ -103,6 +110,7 @@ List<CustomCareRuleEntity> speciesCarePresets(
       plantId: plantId,
       taskType: BuiltInTaskType.pestInspection.name,
       intervalDays: 21,
+      reminderEnabled: true,
       createdAt: now,
     ),
   );
