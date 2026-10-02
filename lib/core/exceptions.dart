@@ -25,6 +25,9 @@ class RateLimitException implements Exception {}
 /// A referenced custom care rule does not exist.
 class RuleNotFoundException implements Exception {}
 
+/// A custom care rule already exists for this task type on this plant.
+class DuplicateRuleException implements Exception {}
+
 // ---------------------------------------------------------------------------
 // Local persistence failures
 // ---------------------------------------------------------------------------

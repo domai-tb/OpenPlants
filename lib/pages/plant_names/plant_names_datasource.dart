@@ -2,11 +2,14 @@ import 'dart:convert';
 
 import 'package:flutter/services.dart';
 
-import 'package:open_plants/pages/plant_names/plant_names_entity.dart';
+import 'package:openplants/pages/plant_names/plant_names_entity.dart';
 
 /// Loads plant names from the bundled JSON asset.
 class PlantNamesDatasource {
+  final AssetBundle _bundle;
   Map<String, PlantNameEntry>? _cache;
+
+  PlantNamesDatasource({AssetBundle? bundle}) : _bundle = bundle ?? rootBundle;
 
   /// Loads and returns the plant names lookup map.
   ///
@@ -15,7 +18,7 @@ class PlantNamesDatasource {
     if (_cache != null) return _cache!;
 
     try {
-      final jsonStr = await rootBundle.loadString('assets/data/plant_names.json');
+      final jsonStr = await _bundle.loadString('assets/data/plant_names.json');
       final decoded = jsonDecode(jsonStr) as Map<String, dynamic>;
 
       _cache = decoded.map(

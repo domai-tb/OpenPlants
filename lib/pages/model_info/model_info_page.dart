@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:open_plants/core/app_scope.dart';
-import 'package:open_plants/pages/model_info/model_info_item_entity.dart';
+import 'package:openplants/core/app_scope.dart';
+import 'package:openplants/pages/model_info/model_info_item_entity.dart';
 
 /// Read-only page displaying bundled ONNX model metadata.
 class ModelInfoPage extends StatefulWidget {

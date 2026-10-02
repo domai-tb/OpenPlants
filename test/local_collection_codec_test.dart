@@ -3,9 +3,9 @@ import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:open_plants/core/exceptions.dart';
-import 'package:open_plants/core/local_collection_codec.dart';
-import 'package:open_plants/pages/plant_collection/plant_collection_item_entity.dart';
+import 'package:openplants/core/exceptions.dart';
+import 'package:openplants/core/local_collection_codec.dart';
+import 'package:openplants/pages/plant_collection/plant_collection_item_entity.dart';
 
 void main() {
   late SharedPreferences prefs;
@@ -16,6 +16,21 @@ void main() {
   });
 
   group('LocalCollectionCodec', () {
+    test('reports a write failure when SharedPreferences returns false', () async {
+      final codec = LocalCollectionCodec<PlantEntity>(
+        prefs: _FalseWritePreferences(),
+        key: 'plant_collection_v1',
+        fromJson: PlantEntity.fromJson,
+        toJson: (e) => e.toJson(),
+        keyExtractor: (e) => e.id,
+      );
+
+      await expectLater(
+        codec.save(const []),
+        throwsA(isA<StateError>().having((error) => error.message, 'message', contains('plant_collection_v1'))),
+      );
+    });
+
     group('missing key', () {
       test('returns empty collection when key does not exist', () async {
         final codec = LocalCollectionCodec<PlantEntity>(
@@ -351,4 +366,15 @@ void main() {
       });
     });
   });
+}
+
+class _FalseWritePreferences implements SharedPreferences {
+  @override
+  String? getString(String key) => null;
+
+  @override
+  Future<bool> setString(String key, String value) async => false;
+
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }

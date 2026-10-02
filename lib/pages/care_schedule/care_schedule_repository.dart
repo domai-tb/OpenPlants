@@ -1,12 +1,12 @@
-import 'package:open_plants/pages/care_schedule/care_schedule_action.dart';
-import 'package:open_plants/pages/care_schedule/care_schedule_datasource.dart';
-import 'package:open_plants/pages/care_schedule/care_task_type.dart';
-import 'package:open_plants/pages/care_schedule/custom_care_rule.dart';
-import 'package:open_plants/pages/care_schedule/room_config.dart';
-import 'package:open_plants/pages/care_schedule/schedule_config.dart';
-import 'package:open_plants/pages/care_schedule/species_care_profile.dart';
-import 'package:open_plants/pages/care_schedule/species_care_profiles.dart';
-import 'package:open_plants/pages/care_schedule/task_completion.dart';
+import 'package:openplants/pages/care_schedule/care_schedule_action.dart';
+import 'package:openplants/pages/care_schedule/care_schedule_datasource.dart';
+import 'package:openplants/pages/care_schedule/care_task_type.dart';
+import 'package:openplants/pages/care_schedule/custom_care_rule.dart';
+import 'package:openplants/pages/care_schedule/room_config.dart';
+import 'package:openplants/pages/care_schedule/schedule_config.dart';
+import 'package:openplants/pages/care_schedule/species_care_profile.dart';
+import 'package:openplants/pages/care_schedule/species_care_profiles.dart';
+import 'package:openplants/pages/care_schedule/task_completion.dart';
 
 /// Repository for care schedule domain operations.
 ///
@@ -134,6 +134,25 @@ class CareScheduleRepository {
     final all = await dataSource.loadCustomCareRules();
     all.removeWhere((r) => r.id == ruleId);
     await dataSource.saveCustomCareRules(all);
+  }
+
+  /// Removes and returns rules linked to a metric.
+  Future<List<CustomCareRuleEntity>> deleteCustomCareRulesForMetric(String metricId) async {
+    final all = await dataSource.loadCustomCareRules();
+    final linked = all.where((rule) => rule.metricId == metricId).toList();
+    if (linked.isEmpty) return [];
+    final remaining = all.where((rule) => rule.metricId != metricId).toList();
+    await dataSource.saveCustomCareRules(remaining);
+    return linked;
+  }
+
+  /// Restores rules removed while a linked metric deletion was being attempted.
+  Future<void> restoreCustomCareRules(List<CustomCareRuleEntity> rules) async {
+    if (rules.isEmpty) return;
+    final current = await dataSource.loadCustomCareRules();
+    final restoredIds = rules.map((rule) => rule.id).toSet();
+    final remaining = current.where((rule) => !restoredIds.contains(rule.id));
+    await dataSource.saveCustomCareRules([...remaining, ...rules]);
   }
 
   // --- Species Profile ---

@@ -1,18 +1,18 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:open_plants/pages/care_schedule/care_schedule_action.dart';
-import 'package:open_plants/pages/care_schedule/care_schedule_repository.dart';
-import 'package:open_plants/pages/care_schedule/care_schedule_usecases.dart';
-import 'package:open_plants/pages/care_schedule/care_task.dart';
-import 'package:open_plants/pages/care_schedule/care_task_type.dart';
-import 'package:open_plants/pages/care_schedule/schedule_config.dart';
-import 'package:open_plants/pages/care_schedule/schedule_engine.dart';
-import 'package:open_plants/pages/care_schedule/species_care_profile.dart';
-import 'package:open_plants/pages/care_schedule/task_completion.dart';
-import 'package:open_plants/pages/plant_collection/plant_collection_usecases.dart';
-import 'package:open_plants/pages/plant_journal/plant_journal_item_entity.dart';
-import 'package:open_plants/pages/plant_journal/plant_journal_usecases.dart';
+import 'package:openplants/pages/care_schedule/care_schedule_action.dart';
+import 'package:openplants/pages/care_schedule/care_schedule_repository.dart';
+import 'package:openplants/pages/care_schedule/care_schedule_usecases.dart';
+import 'package:openplants/pages/care_schedule/care_task.dart';
+import 'package:openplants/pages/care_schedule/care_task_type.dart';
+import 'package:openplants/pages/care_schedule/schedule_config.dart';
+import 'package:openplants/pages/care_schedule/schedule_engine.dart';
+import 'package:openplants/pages/care_schedule/species_care_profile.dart';
+import 'package:openplants/pages/care_schedule/task_completion.dart';
+import 'package:openplants/pages/plant_collection/plant_collection_usecases.dart';
+import 'package:openplants/pages/plant_journal/plant_journal_item_entity.dart';
+import 'package:openplants/pages/plant_journal/plant_journal_usecases.dart';
 
 import 'cross_feature_regression_test.mocks.dart';
 

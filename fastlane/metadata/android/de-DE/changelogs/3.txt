@@ -1,0 +1,7 @@
+Neue Funktionen, mehr Zuverlässigkeit.
+
+- Pflanzenartspezifische Pflegevorlagen mit anpassbaren, ausblendbaren Standardvorgaben ergänzt.
+- Pflanzenmesswerte, Verlauf, Diagramme, Validierung und Warnungen hinzugefügt.
+- Lokale Benachrichtigungsplanung, Zeitzonenbehandlung, Startabgleich und Benachrichtigungseinstellungen ergänzt.
+- Durchsuchbaren, lokalisierten Pflanzenartenkatalog hinzugefügt.
+- Pflegestatus neuer Pflanzen im Status „Glücklich“ korrigiert; Messwertnavigation repariert.

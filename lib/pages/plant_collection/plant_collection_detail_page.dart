@@ -4,34 +4,36 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-import 'package:open_plants/core/app_scope.dart';
-import 'package:open_plants/core/date_utils.dart';
-import 'package:open_plants/l10n/l10n_x.dart';
-import 'package:open_plants/pages/plant_collection/plant_collection_form_page.dart';
-import 'package:open_plants/pages/plant_collection/plant_collection_item_entity.dart';
-import 'package:open_plants/pages/plant_collection/plant_collection_usecases.dart';
-import 'package:open_plants/pages/plant_collection/plant_data_cleanup.dart';
-import 'package:open_plants/pages/plant_journal/plant_journal_page.dart';
-import 'package:open_plants/pages/plant_journal/plant_journal_usecases.dart';
-import 'package:open_plants/pages/plant_photo_timeline/plant_photo_timeline_item_entity.dart';
-import 'package:open_plants/pages/plant_photo_timeline/plant_photo_timeline_page.dart';
-import 'package:open_plants/pages/plant_photo_timeline/plant_photo_timeline_usecases.dart';
-import 'package:open_plants/pages/care_schedule/care_schedule_usecases.dart';
-import 'package:open_plants/pages/care_schedule/custom_care_rule_usecases.dart';
-import 'package:open_plants/pages/care_schedule/widgets/care_rules_section.dart';
-import 'package:open_plants/pages/light_assessment/interactive_light_assessment_page.dart';
-import 'package:open_plants/pages/light_assessment/light_assessment_usecases.dart';
-import 'package:open_plants/pages/diagnosis/diagnosis_history_usecases.dart';
-import 'package:open_plants/pages/diagnosis/diagnosis_item_entity.dart';
-import 'package:open_plants/pages/diagnosis/diagnosis_page.dart';
-import 'package:open_plants/pages/diagnosis/diagnosis_result_entity.dart';
-import 'package:open_plants/pages/diagnosis/diagnosis_result_page.dart';
-import 'package:open_plants/pages/room_profiles/room_profiles_usecases.dart';
-import 'package:open_plants/pages/symptom_logger/symptom_logger_extensions.dart';
-import 'package:open_plants/pages/symptom_logger/symptom_logger_item_entity.dart';
-import 'package:open_plants/pages/symptom_logger/symptom_logger_page.dart';
-import 'package:open_plants/pages/symptom_logger/symptom_logger_usecases.dart';
-import 'package:open_plants/widgets/confirm_dialog.dart';
+import 'package:openplants/core/app_scope.dart';
+import 'package:openplants/core/date_utils.dart';
+import 'package:openplants/l10n/l10n_x.dart';
+import 'package:openplants/pages/plant_collection/plant_collection_form_page.dart';
+import 'package:openplants/pages/plant_collection/plant_collection_item_entity.dart';
+import 'package:openplants/pages/plant_collection/plant_collection_usecases.dart';
+import 'package:openplants/pages/plant_collection/plant_deletion_coordinator.dart';
+import 'package:openplants/pages/plant_journal/plant_journal_page.dart';
+import 'package:openplants/pages/plant_metrics/metric_list_page.dart';
+import 'package:openplants/pages/plant_metrics/metric_usecases.dart';
+import 'package:openplants/pages/plant_names/plant_names_usecases.dart';
+import 'package:openplants/pages/plant_photo_timeline/plant_photo_timeline_item_entity.dart';
+import 'package:openplants/pages/plant_photo_timeline/plant_photo_timeline_page.dart';
+import 'package:openplants/pages/plant_photo_timeline/plant_photo_timeline_usecases.dart';
+import 'package:openplants/pages/care_schedule/care_schedule_usecases.dart';
+import 'package:openplants/pages/care_schedule/custom_care_rule_usecases.dart';
+import 'package:openplants/pages/care_schedule/widgets/care_rules_section.dart';
+import 'package:openplants/pages/light_assessment/interactive_light_assessment_page.dart';
+import 'package:openplants/pages/light_assessment/light_assessment_usecases.dart';
+import 'package:openplants/pages/diagnosis/diagnosis_history_usecases.dart';
+import 'package:openplants/pages/diagnosis/diagnosis_item_entity.dart';
+import 'package:openplants/pages/diagnosis/diagnosis_page.dart';
+import 'package:openplants/pages/diagnosis/diagnosis_result_entity.dart';
+import 'package:openplants/pages/diagnosis/diagnosis_result_page.dart';
+import 'package:openplants/pages/room_profiles/room_profiles_usecases.dart';
+import 'package:openplants/pages/symptom_logger/symptom_logger_extensions.dart';
+import 'package:openplants/pages/symptom_logger/symptom_logger_item_entity.dart';
+import 'package:openplants/pages/symptom_logger/symptom_logger_page.dart';
+import 'package:openplants/pages/symptom_logger/symptom_logger_usecases.dart';
+import 'package:openplants/widgets/confirm_dialog.dart';
 
 class PlantCollectionDetailPage extends StatefulWidget {
   final PlantEntity plant;
@@ -46,20 +48,26 @@ class _PlantCollectionDetailPageState extends State<PlantCollectionDetailPage> {
   late PlantCollectionUsecases _usecases;
   late PlantPhotoTimelineUseCases _photoTimelineUsecases;
   late SymptomLoggerUseCases _symptomUsecases;
-  late PlantJournalUseCases _journalUsecases;
   late RoomProfilesUsecases _roomUsecases;
   late CustomCareRuleUsecases _careRuleUsecases;
   late LightAssessmentUseCases _lightAssessmentUsecases;
   late DiagnosisHistoryUseCases _diagnosisHistoryUsecases;
   late CareScheduleUsecases _careScheduleUsecases;
-  late PlantDataCleanup _dataCleanup;
+  late MetricUsecases _metricUsecases;
+  late PlantNamesUsecases _plantNamesUsecases;
+  late PlantDeletionCoordinator _plantDeletion;
   bool _wired = false;
   late PlantEntity _plant;
   List<SymptomLogEntry> _symptomHistory = const [];
   bool _loadingSymptoms = true;
+  bool _symptomLoadFailed = false;
   String? _roomName;
   List<PlantPhoto> _photos = [];
   DiagnosisResultEntity? _latestDiagnosis;
+  Future<String>? _speciesDisplayNameFuture;
+  String? _speciesLookupId;
+  String? _speciesLookupName;
+  String? _speciesLookupLocale;
   final ImagePicker _imagePicker = ImagePicker();
 
   @override
@@ -71,36 +79,61 @@ class _PlantCollectionDetailPageState extends State<PlantCollectionDetailPage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    if (_wired) return;
-    final services = AppScope.of(context).services;
-    _usecases = services.plantCollection;
-    _photoTimelineUsecases = services.plantPhotoTimeline;
-    _symptomUsecases = services.symptomLogger;
-    _journalUsecases = services.plantJournal;
-    _roomUsecases = services.roomProfiles;
-    _careRuleUsecases = services.customCareRules;
-    _lightAssessmentUsecases = services.lightAssessment;
-    _diagnosisHistoryUsecases = services.diagnosisHistory;
-    _careScheduleUsecases = services.careSchedule;
-    _dataCleanup = PlantDataCleanup(
-      journalUsecases: _journalUsecases,
-      symptomUsecases: _symptomUsecases,
-      diagnosisHistoryUsecases: _diagnosisHistoryUsecases,
-      photoTimelineUsecases: _photoTimelineUsecases,
-      careScheduleUsecases: _careScheduleUsecases,
-    );
-    _wired = true;
-    _loadSymptomHistory();
-    _loadRoomName();
-    _loadPhotos();
-    _loadLatestDiagnosis();
+    if (!_wired) {
+      final services = AppScope.of(context).services;
+      _usecases = services.plantCollection;
+      _photoTimelineUsecases = services.plantPhotoTimeline;
+      _symptomUsecases = services.symptomLogger;
+      _roomUsecases = services.roomProfiles;
+      _careRuleUsecases = services.customCareRules;
+      _lightAssessmentUsecases = services.lightAssessment;
+      _diagnosisHistoryUsecases = services.diagnosisHistory;
+      _careScheduleUsecases = services.careSchedule;
+      _metricUsecases = services.metric;
+      _plantNamesUsecases = services.plantNames;
+      _plantDeletion = services.plantDeletion;
+      _wired = true;
+      _loadSymptomHistory();
+      _loadRoomName();
+      _loadPhotos();
+      _loadLatestDiagnosis();
+    }
+    _refreshSpeciesDisplayName();
+  }
+
+  void _refreshSpeciesDisplayName() {
+    final localeCode = Localizations.localeOf(context).languageCode;
+    if (_speciesLookupId == _plant.speciesId &&
+        _speciesLookupName == _plant.speciesName &&
+        _speciesLookupLocale == localeCode) {
+      return;
+    }
+
+    _speciesLookupId = _plant.speciesId;
+    _speciesLookupName = _plant.speciesName;
+    _speciesLookupLocale = localeCode;
+    final speciesId = _plant.speciesId;
+    _speciesDisplayNameFuture = speciesId == null
+        ? null
+        : _plantNamesUsecases.getDisplayName(
+            speciesId,
+            localeCode: localeCode,
+            scientificName: _plant.speciesName,
+          );
   }
 
   Future<void> _loadRoomName() async {
-    if (_plant.roomId == null) return;
-    final room = await _roomUsecases.getById(_plant.roomId!);
-    if (!mounted) return;
-    setState(() => _roomName = room?.name);
+    final roomId = _plant.roomId;
+    if (roomId == null) {
+      if (mounted) setState(() => _roomName = null);
+      return;
+    }
+    try {
+      final room = await _roomUsecases.getById(roomId);
+      if (mounted) setState(() => _roomName = room?.name);
+    } catch (_) {
+      if (mounted) setState(() => _roomName = null);
+    }
   }
 
   Future<void> _loadPhotos() async {
@@ -199,12 +232,18 @@ class _PlantCollectionDetailPageState extends State<PlantCollectionDetailPage> {
     if (_symptomHistory.isEmpty) {
       setState(() => _loadingSymptoms = true);
     }
-    final history = await _symptomUsecases.getSymptomHistory(_plant.id);
-    if (!mounted) return;
-    setState(() {
-      _symptomHistory = history;
-      _loadingSymptoms = false;
-    });
+    try {
+      final history = await _symptomUsecases.getSymptomHistory(_plant.id);
+      if (!mounted) return;
+      setState(() {
+        _symptomHistory = history;
+        _symptomLoadFailed = false;
+      });
+    } catch (_) {
+      if (mounted) setState(() => _symptomLoadFailed = true);
+    } finally {
+      if (mounted) setState(() => _loadingSymptoms = false);
+    }
   }
 
   Future<void> _editPlant() async {
@@ -215,7 +254,11 @@ class _PlantCollectionDetailPageState extends State<PlantCollectionDetailPage> {
     );
 
     if (result != null && mounted) {
-      setState(() => _plant = result);
+      setState(() {
+        _plant = result;
+        _refreshSpeciesDisplayName();
+      });
+      await _loadRoomName();
     }
   }
 
@@ -230,13 +273,25 @@ class _PlantCollectionDetailPageState extends State<PlantCollectionDetailPage> {
     );
 
     if (confirmed == true && mounted) {
-      // Delete all associated data (photos, journal, symptoms, diagnosis, care schedule)
-      await _dataCleanup.deleteAllForPlant(_plant.id);
-      // Delete the plant itself
-      await _usecases.deletePlant(_plant.id);
-      if (mounted) {
-        Navigator.of(context).pop();
-      }
+      await _deletePlantAndRelatedData();
+    }
+  }
+
+  Future<void> _deletePlantAndRelatedData() async {
+    try {
+      await _plantDeletion.deletePlant(_plant.id);
+      if (mounted) Navigator.of(context).pop();
+    } catch (_) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(context.l10n.generalFailureMessage),
+          action: SnackBarAction(
+            label: context.l10n.retry,
+            onPressed: () => unawaited(_deletePlantAndRelatedData()),
+          ),
+        ),
+      );
     }
   }
 
@@ -274,6 +329,18 @@ class _PlantCollectionDetailPageState extends State<PlantCollectionDetailPage> {
         builder: (_) => PlantJournalPage(
           plantId: _plant.id,
           plantName: _plant.name,
+        ),
+      ),
+    );
+  }
+
+  void _openMetrics() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => MetricListPage(
+          plantId: _plant.id,
+          plantName: _plant.name,
+          usecases: _metricUsecases,
         ),
       ),
     );
@@ -356,13 +423,52 @@ class _PlantCollectionDetailPageState extends State<PlantCollectionDetailPage> {
             tooltip: context.l10n.symptomLoggerLogSymptom,
             onPressed: _logSymptom,
           ),
-          IconButton(
-            icon: const Icon(Icons.edit),
-            onPressed: _editPlant,
-          ),
-          IconButton(
-            icon: const Icon(Icons.delete),
-            onPressed: _deletePlant,
+          PopupMenuButton<String>(
+            onSelected: (value) {
+              switch (value) {
+                case 'metrics':
+                  _openMetrics();
+                case 'edit':
+                  _editPlant();
+                case 'delete':
+                  _deletePlant();
+              }
+            },
+            itemBuilder: (context) => [
+              PopupMenuItem(
+                value: 'metrics',
+                child: Row(
+                  children: [
+                    const Icon(Icons.analytics_outlined, size: 20),
+                    const SizedBox(width: 12),
+                    Text(context.l10n.metricsTitle),
+                  ],
+                ),
+              ),
+              const PopupMenuItem(
+                value: 'edit',
+                child: Row(
+                  children: [
+                    Icon(Icons.edit, size: 20),
+                    SizedBox(width: 12),
+                    Text('Edit'),
+                  ],
+                ),
+              ),
+              PopupMenuItem(
+                value: 'delete',
+                child: Row(
+                  children: [
+                    Icon(Icons.delete, size: 20, color: Theme.of(context).colorScheme.error),
+                    const SizedBox(width: 12),
+                    Text(
+                      'Delete',
+                      style: TextStyle(color: Theme.of(context).colorScheme.error),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
         ],
       ),
@@ -398,13 +504,8 @@ class _PlantCollectionDetailPageState extends State<PlantCollectionDetailPage> {
           const Divider(height: 32),
 
           // Species
-          if (_plant.speciesName != null) ...[
-            _buildInfoRow(
-              theme,
-              icon: Icons.spa,
-              label: context.l10n.species,
-              value: _plant.speciesName!,
-            ),
+          if (_plant.speciesId != null || _plant.speciesName != null) ...[
+            _buildSpeciesInfoRow(theme),
             const Divider(height: 32),
           ],
 
@@ -543,6 +644,7 @@ class _PlantCollectionDetailPageState extends State<PlantCollectionDetailPage> {
           CareRulesSection(
             plantId: _plant.id,
             usecases: _careRuleUsecases,
+            careScheduleUsecases: _careScheduleUsecases,
           ),
           const SizedBox(height: 24),
 
@@ -590,6 +692,14 @@ class _PlantCollectionDetailPageState extends State<PlantCollectionDetailPage> {
             icon: const Icon(Icons.book_outlined),
             label: Text(context.l10n.journalTitle),
           ),
+          const SizedBox(height: 12),
+
+          // Metrics button
+          OutlinedButton.icon(
+            onPressed: _openMetrics,
+            icon: const Icon(Icons.analytics_outlined),
+            label: Text(context.l10n.metricsTitle),
+          ),
           const SizedBox(height: 24),
 
           // Latest diagnosis badge
@@ -608,6 +718,17 @@ class _PlantCollectionDetailPageState extends State<PlantCollectionDetailPage> {
                 padding: EdgeInsets.all(16),
                 child: CircularProgressIndicator(),
               ),
+            )
+          else if (_symptomLoadFailed)
+            Row(
+              children: [
+                Expanded(child: Text(context.l10n.unexpectedError)),
+                IconButton(
+                  tooltip: 'Retry',
+                  onPressed: () => unawaited(_loadSymptomHistory()),
+                  icon: const Icon(Icons.refresh),
+                ),
+              ],
             )
           else if (_symptomHistory.isEmpty)
             Padding(
@@ -893,6 +1014,34 @@ class _PlantCollectionDetailPageState extends State<PlantCollectionDetailPage> {
   }
 
   // --- Shared helpers ---
+
+  Widget _buildSpeciesInfoRow(ThemeData theme) {
+    final fallbackName = _plant.speciesName ?? _plant.speciesId ?? '';
+    final speciesId = _plant.speciesId;
+    if (speciesId == null) {
+      return _buildInfoRow(
+        theme,
+        icon: Icons.spa,
+        label: context.l10n.species,
+        value: fallbackName,
+      );
+    }
+
+    return FutureBuilder<String>(
+      future: _speciesDisplayNameFuture,
+      initialData: fallbackName,
+      builder: (context, snapshot) {
+        final value =
+            snapshot.connectionState == ConnectionState.waiting ? fallbackName : snapshot.data ?? fallbackName;
+        return _buildInfoRow(
+          theme,
+          icon: Icons.spa,
+          label: context.l10n.species,
+          value: value,
+        );
+      },
+    );
+  }
 
   Widget _buildInfoRow(
     ThemeData theme, {

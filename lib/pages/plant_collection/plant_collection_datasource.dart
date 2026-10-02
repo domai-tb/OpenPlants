@@ -2,10 +2,11 @@ import 'dart:io';
 
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:uuid/uuid.dart';
 
-import 'package:open_plants/core/exceptions.dart';
-import 'package:open_plants/core/local_collection_codec.dart';
-import 'package:open_plants/pages/plant_collection/plant_collection_item_entity.dart';
+import 'package:openplants/core/exceptions.dart';
+import 'package:openplants/core/local_collection_codec.dart';
+import 'package:openplants/pages/plant_collection/plant_collection_item_entity.dart';
 
 /// Data source for plant collection persistence.
 ///
@@ -103,7 +104,7 @@ class PlantCollectionDataSource {
     }
 
     final extension = sourceFile.path.split('.').last;
-    final targetPath = '${photoDir.path}/$plantId.$extension';
+    final targetPath = '${photoDir.path}/${plantId}_${const Uuid().v4()}.$extension';
 
     await sourceFile.copy(targetPath);
     return targetPath;

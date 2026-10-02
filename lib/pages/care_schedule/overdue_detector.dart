@@ -1,4 +1,4 @@
-import 'package:open_plants/pages/care_schedule/care_task.dart';
+import 'package:openplants/pages/care_schedule/care_task.dart';
 
 /// Detects overdue tasks based on elapsed time vs effective interval.
 class OverdueDetector {
@@ -17,7 +17,7 @@ class OverdueDetector {
   }) {
     if (overriddenDueDate != null) {
       // Use the overridden due date for status computation
-      final daysUntilDue = overriddenDueDate.difference(today).inDays;
+      final daysUntilDue = calendarDaysBetween(today, overriddenDueDate);
 
       if (daysUntilDue < 0) {
         return CareTaskStatus.overdue;
@@ -33,7 +33,7 @@ class OverdueDetector {
       return CareTaskStatus.dueToday;
     }
 
-    final elapsed = today.difference(lastCompletedAt).inDays;
+    final elapsed = calendarDaysBetween(lastCompletedAt, today);
     final overdueThreshold = (effectiveIntervalDays * _toleranceMultiplier).ceil();
 
     if (elapsed > overdueThreshold) {
@@ -68,16 +68,15 @@ class GraceWindowDetector {
     if (completedAt == null) return false;
 
     // Must be same calendar day
-    final isSameDay =
-        completedAt.year == today.year && completedAt.month == today.month && completedAt.day == today.day;
-    if (!isSameDay) return false;
+    final normalizedToday = calendarDate(today);
+    if (calendarDaysBetween(completedAt, normalizedToday) != 0) return false;
 
     // Next due date = completedAt + effectiveIntervalDays
-    final nextDue = completedAt.add(Duration(days: effectiveIntervalDays));
+    final nextDue = addCalendarDays(completedAt, effectiveIntervalDays);
 
     // If next due is still today or in the past, the task needs doing again
     // today — don't treat as "just completed"
-    if (!nextDue.isAfter(today)) return false;
+    if (!nextDue.isAfter(normalizedToday)) return false;
 
     return true;
   }

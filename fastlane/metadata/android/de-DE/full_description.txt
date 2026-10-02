@@ -1,0 +1,13 @@
+OpenPlant ist eine quelloffene, datenschutzfreundliche Begleit-App für Android.
+
+Verwalte deine Pflanzen, organisiere ihre Pflege und verpasse keine Bewässerung.
+
+Funktionen:
+- Pflanzensammlung mit Fotos und Pflegeverlauf
+- Anpassbare Pflegepläne (Gießen, Düngen, Besprühen, Schneiden und mehr)
+- Pflegeerinnerungen mit Benachrichtigungen
+- Pflanzenerkennung direkt auf dem Gerät mit einem integrierten KI-Modell
+- Dunkles Design und mehrsprachige Unterstützung (Englisch, Deutsch)
+- Kein Konto erforderlich, keine Daten verlassen dein Gerät
+
+Entwickelt mit Clean Architecture. Lizenziert unter AGPL v3.

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/services.dart';
+import 'package:openplants/pages/model_info/model_info_item_entity.dart' show ModelInfoItem;
 
 /// Loads bundled model metadata JSON asset lazily with in-memory caching.
 class ModelInfoDatasource {
@@ -37,7 +38,7 @@ class ModelInfoDatasource {
   }
 
   String _formatInputSize(dynamic shape) {
-    if (shape is List && shape.length >= 3) {
+    if (shape is List && shape.length >= 4) {
       return '${shape[2]}x${shape[3]}';
     }
     return 'unknown';

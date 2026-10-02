@@ -1,10 +1,11 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:uuid/uuid.dart';
 
-import 'package:open_plants/pages/plant_collection/plant_collection_repository.dart';
-import 'package:open_plants/pages/plant_photo_timeline/plant_photo_timeline_datasource.dart';
-import 'package:open_plants/pages/plant_photo_timeline/plant_photo_timeline_item_entity.dart';
+import 'package:openplants/pages/plant_collection/plant_collection_repository.dart';
+import 'package:openplants/pages/plant_photo_timeline/plant_photo_timeline_datasource.dart';
+import 'package:openplants/pages/plant_photo_timeline/plant_photo_timeline_item_entity.dart';
 
 /// Repository for plant growth photo domain operations.
 ///
@@ -51,14 +52,19 @@ class PlantPhotoTimelineRepository {
       updatedAt: DateTime.now(),
     );
 
-    await plantCollection.replacePlant(updatedPlant);
+    try {
+      await plantCollection.replacePlant(updatedPlant);
+    } catch (_) {
+      await _deletePhotoFileBestEffort(filePath);
+      rethrow;
+    }
 
     return photo;
   }
 
   /// Delete a photo from a plant's timeline.
   ///
-  /// Removes both the file from disk and the metadata entry.
+  /// Removes the metadata entry, then attempts to delete the file from disk.
   Future<void> deletePhoto(String plantId, String photoId) async {
     final plants = await plantCollection.loadPlants();
     final plant = plants.firstWhere(
@@ -70,7 +76,6 @@ class PlantPhotoTimelineRepository {
     if (photoIndex == -1) return;
 
     final photo = plant.photos[photoIndex];
-    await dataSource.deletePhotoFile(photo.filePath);
 
     final updatedPhotos = List<PlantPhoto>.from(plant.photos)..removeAt(photoIndex);
     final updatedPlant = plant.copyWith(
@@ -79,6 +84,7 @@ class PlantPhotoTimelineRepository {
     );
 
     await plantCollection.replacePlant(updatedPlant);
+    await _deletePhotoFileBestEffort(photo.filePath);
   }
 
   /// Get the photo timeline for a plant, sorted newest-first.
@@ -123,14 +129,14 @@ class PlantPhotoTimelineRepository {
     return sorted;
   }
 
-  /// Delete all photo files and metadata for a plant (used during plant deletion).
+  /// Clear photo metadata and attempt to delete all associated files.
   Future<void> deleteAllPhotos(String plantId) async {
-    await dataSource.deleteAllPhotoFiles(plantId);
-
-    // Also clear the photos metadata from the plant entity
     final plants = await plantCollection.loadPlants();
     final plantIndex = plants.indexWhere((p) => p.id == plantId);
-    if (plantIndex == -1) return;
+    if (plantIndex == -1) {
+      await _deleteAllPhotoFiles(plantId);
+      return;
+    }
 
     final plant = plants[plantIndex];
     if (plant.photos.isNotEmpty) {
@@ -139,6 +145,25 @@ class PlantPhotoTimelineRepository {
         updatedAt: DateTime.now(),
       );
       await plantCollection.replacePlant(updatedPlant);
+    }
+
+    await _deleteAllPhotoFiles(plantId);
+  }
+
+  Future<void> _deletePhotoFileBestEffort(String filePath) async {
+    try {
+      await dataSource.deletePhotoFile(filePath);
+    } catch (error) {
+      debugPrint('Failed to delete timeline photo "$filePath": $error');
+    }
+  }
+
+  Future<void> _deleteAllPhotoFiles(String plantId) async {
+    try {
+      await dataSource.deleteAllPhotoFiles(plantId);
+    } catch (error) {
+      debugPrint('Failed to delete timeline photos for plant "$plantId": $error');
+      rethrow;
     }
   }
 }

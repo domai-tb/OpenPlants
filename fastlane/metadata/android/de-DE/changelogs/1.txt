@@ -1,0 +1,8 @@
+Erstveröffentlichung von OpenPlants.
+
+- Verwalte eine eigene Pflanzensammlung mit Fotos und Pflegeverlauf.
+- Erstelle anpassbare Pflegepläne und Erinnerungen.
+- Identifiziere Pflanzen anhand von Fotos direkt auf dem Gerät.
+- Entdecke Pflanzenarten und Pflegehinweise.
+- Erfasse Symptome, Diagnosen, Tagebucheinträge, Räume und Wachstumsfotos.
+- Nutze den Dunkelmodus, die deutsche und englische Sprachversion und die App ohne Konto.

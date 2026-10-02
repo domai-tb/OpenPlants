@@ -2,11 +2,11 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import 'package:open_plants/core/app_scope.dart';
-import 'package:open_plants/l10n/l10n_x.dart';
-import 'package:open_plants/pages/species_library/species_detail_page.dart';
-import 'package:open_plants/pages/species_library/species_library_item_entity.dart';
-import 'package:open_plants/pages/species_library/species_library_usecases.dart';
+import 'package:openplants/core/app_scope.dart';
+import 'package:openplants/l10n/l10n_x.dart';
+import 'package:openplants/pages/species_library/species_detail_page.dart';
+import 'package:openplants/pages/species_library/species_library_item_entity.dart';
+import 'package:openplants/pages/species_library/species_library_usecases.dart';
 
 /// Browsable, searchable list of all species in the library.
 class SpeciesLibraryPage extends StatefulWidget {
@@ -20,6 +20,7 @@ class _SpeciesLibraryPageState extends State<SpeciesLibraryPage> {
   late SpeciesLibraryUsecases _usecases;
   bool _wired = false;
   bool _loading = true;
+  bool _loadFailed = false;
   List<SpeciesEntity> _allSpecies = const [];
   List<SpeciesEntity> _filteredSpecies = const [];
   final TextEditingController _searchController = TextEditingController();
@@ -42,14 +43,26 @@ class _SpeciesLibraryPageState extends State<SpeciesLibraryPage> {
   }
 
   Future<void> _load() async {
-    setState(() => _loading = true);
-    final species = await _usecases.getAllSpecies();
-    if (!mounted) return;
     setState(() {
-      _allSpecies = species;
-      _filteredSpecies = species;
-      _loading = false;
+      _loading = true;
+      _loadFailed = false;
     });
+    try {
+      final species = await _usecases.getAllSpecies();
+      if (!mounted) return;
+      setState(() {
+        _allSpecies = species;
+        _filteredSpecies = species;
+        _loading = false;
+      });
+    } catch (error, stackTrace) {
+      debugPrint('Failed to load species library: $error\n$stackTrace');
+      if (!mounted) return;
+      setState(() {
+        _loading = false;
+        _loadFailed = true;
+      });
+    }
   }
 
   void _onSearchChanged(String query) {
@@ -70,7 +83,6 @@ class _SpeciesLibraryPageState extends State<SpeciesLibraryPage> {
       MaterialPageRoute(
         builder: (_) => SpeciesDetailPage(
           species: species,
-          usecases: _usecases,
         ),
       ),
     );
@@ -84,54 +96,66 @@ class _SpeciesLibraryPageState extends State<SpeciesLibraryPage> {
       appBar: AppBar(
         title: Text(context.l10n.speciesListTitle),
       ),
-      body: Column(
-        children: [
-          // Search field
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-            child: TextField(
-              controller: _searchController,
-              onChanged: _onSearchChanged,
-              decoration: InputDecoration(
-                hintText: context.l10n.speciesListSearchHint,
-                prefixIcon: const Icon(Icons.search),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              ),
-            ),
-          ),
-          // Species list
-          Expanded(
-            child: _loading
-                ? const Center(child: CircularProgressIndicator())
-                : _filteredSpecies.isEmpty
-                    ? Center(
-                        child: Padding(
-                          padding: const EdgeInsets.all(32),
-                          child: Text(
-                            context.l10n.speciesListEmptyState,
-                            style: theme.textTheme.bodyLarge?.copyWith(
-                              color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
-                            ),
-                          ),
-                        ),
-                      )
-                    : ListView.builder(
-                        padding: const EdgeInsets.only(bottom: 16),
-                        itemCount: _filteredSpecies.length,
-                        itemBuilder: (context, index) {
-                          final species = _filteredSpecies[index];
-                          return _SpeciesListItem(
-                            species: species,
-                            onTap: () => _openSpecies(species),
-                          );
-                        },
+      body: _loading
+          ? const Center(child: CircularProgressIndicator())
+          : _loadFailed
+              ? Center(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(context.l10n.generalFailureMessage),
+                      TextButton.icon(
+                        onPressed: _load,
+                        icon: const Icon(Icons.refresh),
+                        label: Text(context.l10n.retry),
                       ),
-          ),
-        ],
-      ),
+                    ],
+                  ),
+                )
+              : Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+                      child: TextField(
+                        controller: _searchController,
+                        onChanged: _onSearchChanged,
+                        decoration: InputDecoration(
+                          hintText: context.l10n.speciesListSearchHint,
+                          prefixIcon: const Icon(Icons.search),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: _filteredSpecies.isEmpty
+                          ? Center(
+                              child: Padding(
+                                padding: const EdgeInsets.all(32),
+                                child: Text(
+                                  context.l10n.speciesListEmptyState,
+                                  style: theme.textTheme.bodyLarge?.copyWith(
+                                    color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+                                  ),
+                                ),
+                              ),
+                            )
+                          : ListView.builder(
+                              padding: const EdgeInsets.only(bottom: 16),
+                              itemCount: _filteredSpecies.length,
+                              itemBuilder: (context, index) {
+                                final species = _filteredSpecies[index];
+                                return _SpeciesListItem(
+                                  species: species,
+                                  onTap: () => _openSpecies(species),
+                                );
+                              },
+                            ),
+                    ),
+                  ],
+                ),
     );
   }
 }

@@ -1,4 +1,4 @@
-import 'package:open_plants/pages/care_schedule/care_task_type.dart';
+import 'package:openplants/pages/care_schedule/care_task_type.dart';
 
 /// An immutable event recording that a care task was completed.
 class TaskCompletion {
@@ -6,12 +6,14 @@ class TaskCompletion {
   final String plantId;
   final DateTime completedAt;
   final String? note;
+  final String? alertEpisodeId;
 
   const TaskCompletion({
     required this.taskType,
     required this.plantId,
     required this.completedAt,
     this.note,
+    this.alertEpisodeId,
   });
 
   TaskCompletion copyWith({
@@ -19,6 +21,7 @@ class TaskCompletion {
     String? plantId,
     DateTime? completedAt,
     String? note,
+    String? alertEpisodeId,
     bool clearNote = false,
   }) {
     return TaskCompletion(
@@ -26,6 +29,7 @@ class TaskCompletion {
       plantId: plantId ?? this.plantId,
       completedAt: completedAt ?? this.completedAt,
       note: clearNote ? null : (note ?? this.note),
+      alertEpisodeId: alertEpisodeId ?? this.alertEpisodeId,
     );
   }
 
@@ -35,6 +39,7 @@ class TaskCompletion {
       'plantId': plantId,
       'completedAt': completedAt.toIso8601String(),
       'note': note,
+      'alertEpisodeId': alertEpisodeId,
     };
   }
 
@@ -44,6 +49,7 @@ class TaskCompletion {
       plantId: json['plantId'] as String,
       completedAt: DateTime.parse(json['completedAt'] as String),
       note: json['note'] as String?,
+      alertEpisodeId: json['alertEpisodeId'] as String?,
     );
   }
 }

@@ -1,6 +1,6 @@
-import 'package:open_plants/pages/care_schedule/care_task_type.dart';
-import 'package:open_plants/pages/care_schedule/room_config.dart';
-import 'package:open_plants/pages/room_profiles/room_profiles_entity.dart';
+import 'package:openplants/pages/care_schedule/care_task_type.dart';
+import 'package:openplants/pages/care_schedule/room_config.dart';
+import 'package:openplants/pages/room_profiles/room_profiles_entity.dart';
 
 /// Applies room-context modifiers to watering and misting intervals.
 class RoomModifier {

@@ -1,6 +1,6 @@
 # Getting Started
 
-OpenPlants is an Android-focused Flutter application. The project pins Flutter **3.41.0** with [FVM](https://fvm.app/), so always run Flutter and Dart through `fvm`.
+OpenPlants is an Android-focused Flutter application. The project pins Flutter **3.41.4** with [FVM](https://fvm.app/), so always run Flutter and Dart through `fvm`.
 
 ## Prerequisites
 

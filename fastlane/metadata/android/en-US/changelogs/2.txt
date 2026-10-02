@@ -1,0 +1,3 @@
+Maintenance release.
+
+- Fixed loading of the on-device plant-identification model and its export metadata.

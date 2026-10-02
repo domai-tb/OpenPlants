@@ -1,0 +1,120 @@
+name: Release Preflight
+
+on:
+  push:
+    tags:
+      - "v*"
+
+concurrency:
+  group: preflight-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version-file: .fvmrc
+
+      - name: Set up FVM
+        run: dart pub global activate fvm
+
+      - name: Cache pub dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.pub-cache
+          key: pub-${{ runner.os }}-${{ hashFiles('pubspec.lock') }}
+          restore-keys: |
+            pub-${{ runner.os }}-
+
+      - name: Install dependencies
+        run: fvm flutter pub get
+
+      - name: Verify formatting
+        run: fvm dart format --set-exit-if-changed --line-length=120 .
+
+      - name: Analyze
+        run: fvm flutter analyze
+
+      - name: Test
+        run: fvm flutter test --dart-define=platform=vm
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Export plant-identification model
+        run: ./scripts/run_export.sh
+
+      - name: Build unsigned split-ABI release APKs
+        run: fvm flutter build apk --release --split-per-abi
+
+      - name: Upload unsigned APK
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: actions/upload-artifact@v4
+        with:
+          name: openplant-unsigned-${{ github.ref_name }}
+          path: build/app/outputs/flutter-apk/app-*-release.apk
+          if-no-files-found: error
+          retention-days: 90
+
+      - name: Generate checksums
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          cd build/app/outputs/flutter-apk
+          sha256sum app-*-release.apk > checksums.txt
+
+      - name: Upload checksum
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: actions/upload-artifact@v4
+        with:
+          name: openplant-checksums-${{ github.ref_name }}
+          path: build/app/outputs/flutter-apk/checksums.txt
+          if-no-files-found: error
+          retention-days: 90
+
+      - name: Write provenance
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          APP_VERSION=$(grep '^version:' pubspec.yaml | head -1 | awk '{print $2}')
+          FLUTTER_VERSION=$(grep '"flutter"' .fvmrc | sed 's/.*"flutter": *"//;s/".*//')
+          GRADLE_VERSION=$(grep distributionUrl android/gradle/wrapper/gradle-wrapper.properties | sed 's/.*gradle-//;s/-.*//')
+          AGP_VERSION=$(grep 'com.android.application' android/settings.gradle.kts | sed 's/.*version "//;s/".*//')
+          KOTLIN_VERSION=$(grep 'org.jetbrains.kotlin.android' android/settings.gradle.kts | sed 's/.*version "//;s/".*//')
+          JAVA_VERSION=$(java -version 2>&1 | head -n 1 | cut -d'"' -f2)
+          cat > provenance.json << EOF
+          {
+            "tag": "${{ github.ref_name }}",
+            "commit_sha": "${{ github.sha }}",
+            "app_version": "$APP_VERSION",
+            "flutter": "$FLUTTER_VERSION",
+            "gradle": "$GRADLE_VERSION",
+            "agp": "$AGP_VERSION",
+            "kotlin": "$KOTLIN_VERSION",
+            "java": "$JAVA_VERSION",
+            "min_sdk": "26",
+            "label": "unsigned split-ABI preflight evidence — not a production release"
+          }
+          EOF
+
+      - name: Upload provenance
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: actions/upload-artifact@v4
+        with:
+          name: openplant-provenance-${{ github.ref_name }}
+          path: provenance.json
+          if-no-files-found: error
+          retention-days: 90

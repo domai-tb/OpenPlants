@@ -1,0 +1,13 @@
+OpenPlant is an open-source, privacy-friendly plant companion app for Android.
+
+Track your plants, manage care routines, and never miss a watering again.
+
+Features:
+- Plant collection with photos and care history
+- Customizable care schedules (watering, fertilizing, misting, pruning, and more)
+- Care reminders with notifications
+- On-device plant identification using a bundled AI model
+- Dark mode and multi-language support (English, German)
+- No account required, no data leaves your device
+
+Built with Clean Architecture. AGPL v3 licensed.

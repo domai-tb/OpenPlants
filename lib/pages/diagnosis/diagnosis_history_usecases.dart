@@ -1,5 +1,5 @@
-import 'package:open_plants/pages/diagnosis/diagnosis_repository.dart';
-import 'package:open_plants/pages/diagnosis/diagnosis_result_entity.dart';
+import 'package:openplants/pages/diagnosis/diagnosis_repository.dart';
+import 'package:openplants/pages/diagnosis/diagnosis_result_entity.dart';
 
 /// Use-cases for querying and managing persisted diagnosis history.
 class DiagnosisHistoryUseCases {

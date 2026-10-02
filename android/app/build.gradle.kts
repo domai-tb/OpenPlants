@@ -22,13 +22,15 @@ android {
     compileOptions {
         // Flag to enable support for the new language APIs
         isCoreLibraryDesugaringEnabled = true
-        // Sets Java compatibility to Java 11
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        // Sets Java compatibility to Java 17
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_11.toString()
+    kotlin {
+        compilerOptions {
+            jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
+        }
     }
 
     defaultConfig {
@@ -41,26 +43,26 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
-
-        // Add the Dart define flag for Cronet HTTP without Play Services
-        applicationVariants.all { 
-            mergedFlavor.manifestPlaceholders["cronetHttpNoPlay"] = "true"
-        }
     }
 
-    signingConfigs {
-        create("release") {
-            keyAlias = keystoreProperties["keyAlias"] as? String
-            keyPassword = keystoreProperties["keyPassword"] as? String
-            storeFile = keystoreProperties["storeFile"]?.toString()?.let { file(it) }
-            storePassword = keystoreProperties["storePassword"] as? String
+    if (keystorePropertiesFile.exists()) {
+        signingConfigs {
+            create("release") {
+                keyAlias = keystoreProperties["keyAlias"] as? String
+                keyPassword = keystoreProperties["keyPassword"] as? String
+                storeFile = keystoreProperties["storeFile"]?.toString()?.let { file(it) }
+                storePassword = keystoreProperties["storePassword"] as? String
+            }
         }
     }
 
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            signingConfig = signingConfigs.getByName("release")
+            // Use signing config only when key.properties is present (local dev).
+            // F-Droid and CI builds produce an unsigned APK without signing material.
+            if (keystorePropertiesFile.exists()) {
+                signingConfig = signingConfigs.getByName("release")
+            }
 
             isMinifyEnabled = true
             isShrinkResources = true
@@ -79,7 +81,7 @@ flutter {
 }
 
 dependencies {
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:2.2.10")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:2.3.20")
     implementation("androidx.appcompat:appcompat:1.7.1")
     implementation("androidx.appcompat:appcompat-resources:1.7.1")
 
@@ -87,17 +89,4 @@ dependencies {
     // enables you to use modern Java features and APIs in your app 
     // even on older Android devices with lower API levels. 
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.5")
-
-    // Keep Android config minimal; avoid unnecessary Play Services requirements.
-    //
-    // The Dio packages uses [cronet_http] libary to perform network requests. 
-    // At default, this libary depends on Google Play services instead of 
-    // of the embedded version of Cronet. Setting the embedded version (based on
-    // native libaries) here will remove the dependency on Google Play services.
-    //
-    // Note: https://github.com/cfug/dio/issues/2042
-    // Note: https://github.com/dart-lang/http/blob/master/pkgs/cronet_http/android/build.gradle
-    // Note: https://mvnrepository.com/artifact/org.chromium.net/cronet-embedded
-    //
-    implementation("org.chromium.net:cronet-embedded:119.6045.31")
 }

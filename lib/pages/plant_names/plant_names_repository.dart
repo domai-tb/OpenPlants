@@ -1,4 +1,4 @@
-import 'package:open_plants/pages/plant_names/plant_names_datasource.dart';
+import 'package:openplants/pages/plant_names/plant_names_datasource.dart';
 
 /// Resolves plant species to localized display names using tiered lookup:
 /// 1. In-memory cache (from datasource)
@@ -25,13 +25,9 @@ class PlantNamesRepository {
       final exactMatch = entry.localizedNames[localeCode];
       if (exactMatch != null) return exactMatch;
 
-      final languageCode = localeCode.split('_').first;
+      final languageCode = localeCode.replaceAll('-', '_').split('_').first;
       final langMatch = entry.localizedNames[languageCode];
       if (langMatch != null) return langMatch;
-
-      // Try English as fallback within the entry
-      final enFallback = entry.localizedNames['en'];
-      if (enFallback != null) return enFallback;
     }
 
     return scientificName ?? speciesId;

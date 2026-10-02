@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter_onnxruntime/flutter_onnxruntime.dart';
-import 'package:open_plants/pages/plant_identification/classifier/model_asset_cache.dart';
+import 'package:openplants/pages/plant_identification/classifier/model_asset_cache.dart';
 import 'package:path_provider/path_provider.dart';
 
 /// Manages the ONNX Runtime session for plant classification.
@@ -12,11 +12,7 @@ class PlantClassifier {
   OnnxRuntime? _ort;
   OrtSession? _session;
 
-  late final ModelAssetCache _cache = ModelAssetCache(
-    modelAssetPath: _modelAsset,
-    dataAssetPath: _dataAsset,
-    identityAssetPath: _identityAsset,
-  );
+  late final ModelAssetCache _cache = const ModelAssetCache();
 
   static const String _modelAsset = 'assets/ml/plant-identification/model.onnx';
   static const String _dataAsset = 'assets/ml/plant-identification/model.onnx.data';
@@ -65,9 +61,10 @@ class PlantClassifier {
     final sess = await session;
 
     final inputTensor = await OrtValue.fromList(inputData, inputShape);
+    Map<String, OrtValue>? outputs;
 
     try {
-      final outputs = await sess.run({inputName: inputTensor});
+      outputs = await sess.run({inputName: inputTensor});
 
       if (outputs.isEmpty) {
         throw Exception('Model returned empty output');
@@ -77,15 +74,10 @@ class PlantClassifier {
       final flat = await output.asFlattenedList();
       final logits = flat.map((e) => (e as num).toDouble()).toList();
 
-      await inputTensor.dispose();
-      for (final t in outputs.values) {
-        await t.dispose();
-      }
-
       return logits;
-    } catch (e) {
-      await inputTensor.dispose();
-      rethrow;
+    } finally {
+      final tensors = [inputTensor, ...?outputs?.values];
+      await Future.wait(tensors.map((tensor) => tensor.dispose()));
     }
   }
 

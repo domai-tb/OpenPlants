@@ -1,17 +1,26 @@
 import 'dart:io';
 
-import 'package:open_plants/core/exceptions.dart';
-import 'package:open_plants/pages/plant_collection/plant_collection_item_entity.dart';
-import 'package:open_plants/pages/plant_collection/plant_collection_repository.dart';
+import 'package:flutter/foundation.dart';
+
+import 'package:openplants/core/exceptions.dart';
+import 'package:openplants/pages/plant_collection/plant_collection_item_entity.dart';
+import 'package:openplants/pages/plant_collection/plant_collection_repository.dart';
 
 /// Use cases for plant collection business logic.
 class PlantCollectionUsecases {
   final PlantCollectionRepository repository;
+  final Future<void> Function()? onNotificationsChanged;
 
-  const PlantCollectionUsecases({required this.repository});
+  const PlantCollectionUsecases({required this.repository, this.onNotificationsChanged});
 
   /// Load all plants from storage.
   Future<List<PlantEntity>> loadPlants() => repository.loadPlants();
+
+  /// Replace all persisted plants and refresh their scheduled notifications.
+  Future<void> replaceAllPlants(List<PlantEntity> plants) async {
+    await repository.replaceAllPlants(plants);
+    await _syncNotifications();
+  }
 
   /// Get a single plant by ID.
   ///
@@ -28,8 +37,10 @@ class PlantCollectionUsecases {
   ///
   /// If [photoFile] is provided, it will be stored in the app's documents
   /// directory and the path will be saved on the entity.
-  Future<PlantEntity> addPlant(PlantEntity plant, {File? photoFile}) {
-    return repository.addPlant(plant, photoFile: photoFile);
+  Future<PlantEntity> addPlant(PlantEntity plant, {File? photoFile}) async {
+    final saved = await repository.addPlant(plant, photoFile: photoFile);
+    await _syncNotifications();
+    return saved;
   }
 
   /// Update an existing plant.
@@ -41,8 +52,9 @@ class PlantCollectionUsecases {
   /// Throws [PhotoSaveFailure] if persistence fails after staging a new photo.
   /// Throws [PhotoClearFailure] if persistence fails when clearing a photo.
   Future<PlantEntity> updatePlant(PlantEntity plant, {File? photoFile}) async {
+    late final PlantEntity saved;
     try {
-      return await repository.updatePlant(plant, photoFile: photoFile);
+      saved = await repository.updatePlant(plant, photoFile: photoFile);
     } on Exception catch (e) {
       // Classify the failure based on what was being attempted
       if (photoFile != null) {
@@ -52,12 +64,20 @@ class PlantCollectionUsecases {
       }
       rethrow;
     }
+    await _syncNotifications();
+    return saved;
   }
 
   /// Delete a plant by ID.
   ///
   /// Also removes the photo file from disk.
-  Future<void> deletePlant(String id) => repository.deletePlant(id);
+  Future<void> deletePlant(String id) async {
+    await repository.deletePlant(id);
+    await _syncNotifications();
+  }
+
+  /// Delete a plant photo while a pending deletion is being retried.
+  Future<void> deletePhotoFile(String photoPath) => repository.deletePhotoFile(photoPath);
 
   /// Search plants by name substring.
   Future<List<PlantEntity>> searchPlants(String query) async {
@@ -90,7 +110,9 @@ class PlantCollectionUsecases {
       lastWateredAt: DateTime.now(),
     );
 
-    return repository.updatePlant(updated);
+    final saved = await repository.updatePlant(updated);
+    await _syncNotifications();
+    return saved;
   }
 
   /// Mark a plant as fertilized.
@@ -105,6 +127,16 @@ class PlantCollectionUsecases {
       lastFertilizedAt: DateTime.now(),
     );
 
-    return repository.updatePlant(updated);
+    final saved = await repository.updatePlant(updated);
+    await _syncNotifications();
+    return saved;
+  }
+
+  Future<void> _syncNotifications() async {
+    try {
+      await onNotificationsChanged?.call();
+    } catch (error) {
+      debugPrint('Failed to sync notifications after plant change: $error');
+    }
   }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 
-import 'package:open_plants/core/app_services.dart';
-import 'package:open_plants/core/settings.dart';
+import 'package:openplants/core/app_services.dart';
+import 'package:openplants/core/settings.dart';
 
 /// Lightweight app-wide scope that avoids external state-management packages.
 class AppScope extends InheritedWidget {

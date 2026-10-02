@@ -1,31 +1,6 @@
-/// Task types for care tasks.
-enum CareTaskType {
-  water,
-  fertilize,
-  mist,
-  prune,
-  rotate,
-  repot,
-  clean,
-  inspect,
-}
+import 'package:openplants/pages/care_schedule/care_task.dart' as schedule;
 
-/// A single care task displayed on the dashboard.
-class CareTask {
-  final String plantName;
-  final String? plantId;
-  final CareTaskType taskType;
-  final DateTime dueDate;
-  final int daysOverdue;
-
-  const CareTask({
-    required this.plantName,
-    this.plantId,
-    required this.taskType,
-    required this.dueDate,
-    this.daysOverdue = 0,
-  });
-}
+typedef CareTask = schedule.CareTask;
 
 /// Aggregate data for the today dashboard.
 class DashboardData {

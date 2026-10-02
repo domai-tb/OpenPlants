@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:open_plants/pages/plant_identification/classifier/classification_result.dart';
+import 'package:openplants/pages/plant_identification/classifier/classification_result.dart';
 
 /// Displays a single species prediction with name and confidence percentage.
 ///

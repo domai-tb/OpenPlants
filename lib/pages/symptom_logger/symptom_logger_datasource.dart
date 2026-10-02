@@ -2,9 +2,9 @@ import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:open_plants/core/exceptions.dart';
-import 'package:open_plants/core/local_collection_codec.dart';
-import 'package:open_plants/pages/symptom_logger/symptom_logger_item_entity.dart';
+import 'package:openplants/core/exceptions.dart';
+import 'package:openplants/core/local_collection_codec.dart';
+import 'package:openplants/pages/symptom_logger/symptom_logger_item_entity.dart';
 
 /// Data source for symptom logger persistence.
 ///
@@ -111,7 +111,7 @@ class SymptomLoggerDataSource {
     final prefs = _prefsOverride ?? await SharedPreferences.getInstance();
     final allDrafts = await _loadAllDrafts(prefs);
     allDrafts[plantId] = draft;
-    await prefs.setString(_draftPrefsKey, jsonEncode(allDrafts));
+    await _saveAllDrafts(prefs, allDrafts);
   }
 
   /// Loads the draft for a specific plant, or null if none exists.
@@ -126,7 +126,17 @@ class SymptomLoggerDataSource {
     final prefs = _prefsOverride ?? await SharedPreferences.getInstance();
     final allDrafts = await _loadAllDrafts(prefs);
     allDrafts.remove(plantId);
-    await prefs.setString(_draftPrefsKey, jsonEncode(allDrafts));
+    await _saveAllDrafts(prefs, allDrafts);
+  }
+
+  Future<void> _saveAllDrafts(
+    SharedPreferences prefs,
+    Map<String, dynamic> drafts,
+  ) async {
+    final didPersist = await prefs.setString(_draftPrefsKey, jsonEncode(drafts));
+    if (!didPersist) {
+      throw StateError('Failed to persist "$_draftPrefsKey" to SharedPreferences.');
+    }
   }
 
   Future<Map<String, dynamic>> _loadAllDrafts(SharedPreferences prefs) async {

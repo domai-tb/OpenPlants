@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:open_plants/l10n/l10n.dart';
-import 'package:open_plants/pages/home/page_navigator.dart';
-import 'package:open_plants/pages/home/widgets/bottom_nav_bar.dart';
-import 'package:open_plants/pages/home/widgets/bottom_nav_bar_item.dart';
+import 'package:openplants/l10n/l10n.dart';
+import 'package:openplants/pages/home/page_navigator.dart';
+import 'package:openplants/pages/home/widgets/bottom_nav_bar.dart';
+import 'package:openplants/pages/home/widgets/bottom_nav_bar_item.dart';
 
 Widget buildNavBar({
   required PageItem currentPage,
@@ -76,6 +76,22 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(selected, equals(PageItem.careSchedule));
+  });
+
+  testWidgets('tapping an inactive item label calls onSelectedPage', (tester) async {
+    PageItem? selected;
+    await tester.pumpWidget(
+      buildNavBar(
+        currentPage: PageItem.dashboard,
+        onSelectedPage: (page) => selected = page,
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Care Schedule'));
+    await tester.pumpAndSettle();
+
+    expect(selected, PageItem.careSchedule);
   });
 
   testWidgets('BottomNavBarItem shows active icon when isActive is true', (tester) async {

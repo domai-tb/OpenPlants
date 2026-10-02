@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 
-import 'package:open_plants/core/app_scope.dart';
-import 'package:open_plants/l10n/l10n_x.dart';
-import 'package:open_plants/pages/care_schedule/care_schedule_usecases.dart';
-import 'package:open_plants/pages/care_schedule/care_task.dart';
-import 'package:open_plants/pages/care_schedule/care_task_type.dart';
-import 'package:open_plants/pages/care_schedule/widgets/care_task_card.dart';
-import 'package:open_plants/pages/care_schedule/widgets/empty_schedule_state.dart';
-import 'package:open_plants/pages/home/widgets/page_navigation_animation.dart';
-import 'package:open_plants/pages/symptom_logger/symptom_logger_extensions.dart';
-import 'package:open_plants/pages/symptom_logger/symptom_logger_item_entity.dart';
+import 'package:openplants/core/app_scope.dart';
+import 'package:openplants/l10n/l10n_x.dart';
+import 'package:openplants/pages/care_schedule/care_schedule_usecases.dart';
+import 'package:openplants/pages/care_schedule/care_task.dart';
+import 'package:openplants/pages/care_schedule/care_task_type.dart';
+import 'package:openplants/pages/notifications/notification_entity.dart';
+import 'package:openplants/pages/care_schedule/widgets/care_task_card.dart';
+import 'package:openplants/pages/care_schedule/widgets/empty_schedule_state.dart';
+import 'package:openplants/pages/home/widgets/page_navigation_animation.dart';
+import 'package:openplants/pages/symptom_logger/symptom_logger_extensions.dart';
+import 'package:openplants/pages/symptom_logger/symptom_logger_item_entity.dart';
 
 /// Care schedule page — dashboard showing overdue, due-today, and upcoming tasks.
 class CareSchedulePage extends StatefulWidget {
@@ -18,12 +19,14 @@ class CareSchedulePage extends StatefulWidget {
 
   /// Notifies this page to reload data after a tab switch.
   final Listenable? tabSwitchNotifier;
+  final ValueNotifier<NotificationPayload?>? notificationPayloadNotifier;
 
   const CareSchedulePage({
     super.key,
     required this.pageEntryAnimationKey,
     required this.pageExitAnimationKey,
     this.tabSwitchNotifier,
+    this.notificationPayloadNotifier,
   });
 
   @override
@@ -42,6 +45,7 @@ class _CareSchedulePageState extends State<CareSchedulePage> with AutomaticKeepA
   List<SymptomLogEntry> _recentSymptoms = [];
   Map<String, ({String name, String environment})> _taskRoomContext = {};
   bool _loading = true;
+  bool _loadFailed = false;
   String? _selectedPlantId;
   CareTaskType? _selectedTaskType;
   bool _completedEarlyExpanded = false;
@@ -56,6 +60,7 @@ class _CareSchedulePageState extends State<CareSchedulePage> with AutomaticKeepA
     _usecases = AppScope.of(context).services.careSchedule;
     _wired = true;
     widget.tabSwitchNotifier?.addListener(_reloadOnTabSwitch);
+    widget.notificationPayloadNotifier?.addListener(_applyNotificationTarget);
     _load();
   }
 
@@ -63,15 +68,40 @@ class _CareSchedulePageState extends State<CareSchedulePage> with AutomaticKeepA
     _load();
   }
 
+  void _applyNotificationTarget() {
+    final payload = widget.notificationPayloadNotifier?.value;
+    if (payload == null || _loading || _loadFailed) return;
+
+    CareTask? matchingTask;
+    for (final task in _tasks) {
+      final taskType = task.taskType.builtIn?.name ?? task.taskType.customName;
+      if (task.plantId == payload.plantId && taskType == payload.taskType) {
+        matchingTask = task;
+        break;
+      }
+    }
+    final plantExists = _tasks.any((task) => task.plantId == payload.plantId);
+
+    setState(() {
+      _selectedPlantId = plantExists ? payload.plantId : null;
+      _selectedTaskType = matchingTask?.taskType;
+    });
+    widget.notificationPayloadNotifier?.value = null;
+  }
+
   @override
   void dispose() {
     widget.tabSwitchNotifier?.removeListener(_reloadOnTabSwitch);
+    widget.notificationPayloadNotifier?.removeListener(_applyNotificationTarget);
     _scrollController.dispose();
     super.dispose();
   }
 
   Future<void> _load() async {
-    setState(() => _loading = true);
+    setState(() {
+      _loading = true;
+      _loadFailed = false;
+    });
     try {
       final result = await _usecases.getSchedule();
       if (!mounted) return;
@@ -89,10 +119,16 @@ class _CareSchedulePageState extends State<CareSchedulePage> with AutomaticKeepA
         _recentSymptoms = allSymptoms.take(20).toList();
         _taskRoomContext = result.roomContext;
         _loading = false;
+        _loadFailed = false;
       });
+      _applyNotificationTarget();
     } catch (e) {
       if (!mounted) return;
-      setState(() => _loading = false);
+      debugPrint('Failed to load care schedule: $e');
+      setState(() {
+        _loading = false;
+        _loadFailed = true;
+      });
     }
   }
 
@@ -122,13 +158,26 @@ class _CareSchedulePageState extends State<CareSchedulePage> with AutomaticKeepA
         child: Scaffold(
           body: _loading
               ? const Center(child: CircularProgressIndicator())
-              : _tasks.isEmpty && _recentSymptoms.isEmpty
-                  ? const EmptyScheduleState()
-                  : RefreshIndicator(
-                      key: _refreshIndicatorKey,
-                      onRefresh: _load,
-                      child: _buildContent(theme),
-                    ),
+              : _loadFailed
+                  ? Center(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(context.l10n.generalFailureMessage),
+                          TextButton(
+                            onPressed: _load,
+                            child: Text(context.l10n.plantIdTryAgain),
+                          ),
+                        ],
+                      ),
+                    )
+                  : _tasks.isEmpty && _recentSymptoms.isEmpty
+                      ? const EmptyScheduleState()
+                      : RefreshIndicator(
+                          key: _refreshIndicatorKey,
+                          onRefresh: _load,
+                          child: _buildContent(theme),
+                        ),
         ),
       ),
     );
@@ -393,12 +442,16 @@ class _CareSchedulePageState extends State<CareSchedulePage> with AutomaticKeepA
                 DropdownMenuItem<CareTaskType?>(
                   child: Text(context.l10n.careScheduleAllTypes),
                 ),
-                ..._tasks.map((t) => t.taskType).toSet().map(
-                      (type) => DropdownMenuItem<CareTaskType?>(
-                        value: type,
-                        child: Text(type.label),
-                      ),
-                    ),
+                ..._tasks.map((task) => task.taskType).toSet().map((type) {
+                  final task = _tasks.firstWhere((candidate) => candidate.taskType == type);
+                  final label = task.alertMetricName == null
+                      ? type.label
+                      : context.l10n.careScheduleMetricAlert(task.alertMetricName!);
+                  return DropdownMenuItem<CareTaskType?>(
+                    value: type,
+                    child: Text(label),
+                  );
+                }),
               ],
               onChanged: (value) {
                 setState(() => _selectedTaskType = value);
@@ -411,14 +464,21 @@ class _CareSchedulePageState extends State<CareSchedulePage> with AutomaticKeepA
   }
 
   Future<void> _completeTask(CareTask task) async {
-    await _usecases.completeTask(task: task);
+    try {
+      await _usecases.completeTask(task: task);
+    } catch (e) {
+      if (!mounted) return;
+      debugPrint('Failed to complete care task: $e');
+      _showActionError();
+      return;
+    }
     if (!mounted) return;
 
     // Show confirmation SnackBar with next-due info
     // The next due date is always today + effectiveIntervalDays after completion
     final daysUntilNext = task.effectiveIntervalDays;
     final message = context.l10n.careScheduleCompletionSnackbar(
-      task.taskType.label,
+      task.alertMetricName == null ? task.taskType.label : context.l10n.careScheduleMetricAlert(task.alertMetricName!),
       daysUntilNext,
     );
     ScaffoldMessenger.of(context)
@@ -433,14 +493,34 @@ class _CareSchedulePageState extends State<CareSchedulePage> with AutomaticKeepA
   }
 
   Future<void> _snoozeTask(CareTask task, int days) async {
-    await _usecases.snoozeTask(task: task, days: days);
+    try {
+      await _usecases.snoozeTask(task: task, days: days);
+    } catch (e) {
+      if (!mounted) return;
+      debugPrint('Failed to snooze care task: $e');
+      _showActionError();
+      return;
+    }
     if (!mounted) return;
     await _load();
   }
 
   Future<void> _skipTask(CareTask task) async {
-    await _usecases.skipTask(task: task);
+    try {
+      await _usecases.skipTask(task: task);
+    } catch (e) {
+      if (!mounted) return;
+      debugPrint('Failed to skip care task: $e');
+      _showActionError();
+      return;
+    }
     if (!mounted) return;
     await _load();
+  }
+
+  void _showActionError() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(context.l10n.generalFailureMessage)),
+    );
   }
 }

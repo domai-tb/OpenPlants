@@ -1,0 +1,7 @@
+New features and reliability improvements.
+
+- Added species-based care presets with editable and suppressible defaults.
+- Added plant metrics, measurement history, charts, validation, and alerts.
+- Added local notification scheduling, timezone handling, startup reconciliation, and notification settings.
+- Added a searchable, localized species catalog.
+- Fixed care status on newly created happy plants and repaired metric navigation.

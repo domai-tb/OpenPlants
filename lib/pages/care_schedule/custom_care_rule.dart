@@ -2,6 +2,9 @@
 ///
 /// Custom rules are per-plant and take precedence over species defaults,
 /// room modifiers, and pot-type modifiers when enabled.
+///
+/// Optional metric linkage: when [metricId] is set, the rule triggers
+/// measurement reminders and alert tasks for the linked metric.
 class CustomCareRuleEntity {
   final String id;
   final String plantId;
@@ -13,6 +16,14 @@ class CustomCareRuleEntity {
   final bool isEnabled;
   final DateTime createdAt;
 
+  /// Optional link to a metric definition. When set, this rule generates
+  /// measurement reminders based on the metric's measurement history.
+  final String? metricId;
+
+  /// Whether a measurement is required before task completion.
+  /// Only meaningful when [metricId] is set.
+  final bool isMeasurementRequired;
+
   const CustomCareRuleEntity({
     required this.id,
     required this.plantId,
@@ -23,6 +34,8 @@ class CustomCareRuleEntity {
     this.reminderDays,
     this.isEnabled = true,
     required this.createdAt,
+    this.metricId,
+    this.isMeasurementRequired = false,
   });
 
   CustomCareRuleEntity copyWith({
@@ -37,6 +50,9 @@ class CustomCareRuleEntity {
     bool clearReminderDays = false,
     bool? isEnabled,
     DateTime? createdAt,
+    String? metricId,
+    bool clearMetricId = false,
+    bool? isMeasurementRequired,
   }) {
     return CustomCareRuleEntity(
       id: id ?? this.id,
@@ -48,6 +64,8 @@ class CustomCareRuleEntity {
       reminderDays: clearReminderDays ? null : (reminderDays ?? this.reminderDays),
       isEnabled: isEnabled ?? this.isEnabled,
       createdAt: createdAt ?? this.createdAt,
+      metricId: clearMetricId ? null : (metricId ?? this.metricId),
+      isMeasurementRequired: isMeasurementRequired ?? this.isMeasurementRequired,
     );
   }
 
@@ -62,6 +80,8 @@ class CustomCareRuleEntity {
       'reminderDays': reminderDays,
       'isEnabled': isEnabled,
       'createdAt': createdAt.toIso8601String(),
+      'metricId': metricId,
+      'isMeasurementRequired': isMeasurementRequired,
     };
   }
 
@@ -76,6 +96,8 @@ class CustomCareRuleEntity {
       reminderDays: json['reminderDays'] != null ? (json['reminderDays'] as List<dynamic>).cast<String>() : null,
       isEnabled: json['isEnabled'] as bool? ?? true,
       createdAt: DateTime.parse(json['createdAt'] as String),
+      metricId: json['metricId'] as String?,
+      isMeasurementRequired: json['isMeasurementRequired'] as bool? ?? false,
     );
   }
 }

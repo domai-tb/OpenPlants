@@ -2,14 +2,14 @@ import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:open_plants/core/exceptions.dart';
-import 'package:open_plants/core/local_collection_codec.dart';
-import 'package:open_plants/pages/care_schedule/care_schedule_action.dart';
-import 'package:open_plants/pages/care_schedule/care_task_type.dart';
-import 'package:open_plants/pages/care_schedule/custom_care_rule.dart';
-import 'package:open_plants/pages/care_schedule/room_config.dart';
-import 'package:open_plants/pages/care_schedule/schedule_config.dart';
-import 'package:open_plants/pages/care_schedule/task_completion.dart';
+import 'package:openplants/core/exceptions.dart';
+import 'package:openplants/core/local_collection_codec.dart';
+import 'package:openplants/pages/care_schedule/care_schedule_action.dart';
+import 'package:openplants/pages/care_schedule/care_task_type.dart';
+import 'package:openplants/pages/care_schedule/custom_care_rule.dart';
+import 'package:openplants/pages/care_schedule/room_config.dart';
+import 'package:openplants/pages/care_schedule/schedule_config.dart';
+import 'package:openplants/pages/care_schedule/task_completion.dart';
 
 /// Data source for care schedule persistence.
 ///
@@ -38,6 +38,11 @@ class CareScheduleDataSource {
 
   Future<SharedPreferences> _getPrefs() async {
     return _prefsOverride ?? await SharedPreferences.getInstance();
+  }
+
+  Future<void> _saveJson(SharedPreferences prefs, String key, Object json) async {
+    final saved = await prefs.setString(key, jsonEncode(json));
+    if (!saved) throw StateError('Failed to persist "$key" to SharedPreferences.');
   }
 
   Future<LocalCollectionCodec<TaskCompletion>> _getCompletionsCodec() async {
@@ -106,7 +111,7 @@ class CareScheduleDataSource {
     configs[plantId] = config;
     final prefs = await _getPrefs();
     final json = configs.map((key, value) => MapEntry(key, value.toJson()));
-    await prefs.setString(_scheduleConfigsKey, jsonEncode(json));
+    await _saveJson(prefs, _scheduleConfigsKey, json);
   }
 
   /// Delete a schedule config for a specific plant.
@@ -115,7 +120,7 @@ class CareScheduleDataSource {
     configs.remove(plantId);
     final prefs = await _getPrefs();
     final json = configs.map((key, value) => MapEntry(key, value.toJson()));
-    await prefs.setString(_scheduleConfigsKey, jsonEncode(json));
+    await _saveJson(prefs, _scheduleConfigsKey, json);
   }
 
   // --- Room Configs ---
@@ -156,7 +161,7 @@ class CareScheduleDataSource {
     configs[config.roomName] = config;
     final prefs = await _getPrefs();
     final json = configs.map((key, value) => MapEntry(key, value.toJson()));
-    await prefs.setString(_roomConfigsKey, jsonEncode(json));
+    await _saveJson(prefs, _roomConfigsKey, json);
   }
 
   /// Delete a room config by name.
@@ -165,7 +170,7 @@ class CareScheduleDataSource {
     configs.remove(roomName);
     final prefs = await _getPrefs();
     final json = configs.map((key, value) => MapEntry(key, value.toJson()));
-    await prefs.setString(_roomConfigsKey, jsonEncode(json));
+    await _saveJson(prefs, _roomConfigsKey, json);
   }
 
   // --- Task Completions ---
@@ -293,7 +298,7 @@ class CareScheduleDataSource {
     actions[key] = action;
     final prefs = await _getPrefs();
     final json = actions.map((k, v) => MapEntry(k, v.toJson()));
-    await prefs.setString(_scheduleActionsKey, jsonEncode(json));
+    await _saveJson(prefs, _scheduleActionsKey, json);
   }
 
   /// Delete the schedule action for a specific plant and task type.
@@ -302,7 +307,7 @@ class CareScheduleDataSource {
     actions.remove('${plantId}_${taskType.key}');
     final prefs = await _getPrefs();
     final json = actions.map((k, v) => MapEntry(k, v.toJson()));
-    await prefs.setString(_scheduleActionsKey, jsonEncode(json));
+    await _saveJson(prefs, _scheduleActionsKey, json);
   }
 
   /// Delete all schedule actions for a specific plant.
@@ -311,6 +316,6 @@ class CareScheduleDataSource {
     actions.removeWhere((key, _) => key.startsWith('${plantId}_'));
     final prefs = await _getPrefs();
     final json = actions.map((k, v) => MapEntry(k, v.toJson()));
-    await prefs.setString(_scheduleActionsKey, jsonEncode(json));
+    await _saveJson(prefs, _scheduleActionsKey, json);
   }
 }

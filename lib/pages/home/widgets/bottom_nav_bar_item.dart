@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:open_plants/widgets/custom_button.dart';
+import 'package:openplants/widgets/custom_button.dart';
+
+const _iconHeight = 26.0;
+const _animationCurve = Curves.easeOutExpo;
+const _animationDuration = Duration(milliseconds: 300);
 
 /// A widget that displays an item in the bottom navigation menu which allows the user
 /// to switch between different pages. When active, the whole item is moved up and the title
 /// text fades in while also moving up. The item also changes its icon-color when it's the
 /// active navigation menu item.
-class BottomNavBarItem extends StatefulWidget {
+class BottomNavBarItem extends StatelessWidget {
   final IconData activeIcon;
   final IconData inactiveIcon;
 
@@ -32,60 +36,44 @@ class BottomNavBarItem extends StatefulWidget {
   });
 
   @override
-  State<BottomNavBarItem> createState() => _BottomNavBarItemState();
-}
-
-class _BottomNavBarItemState extends State<BottomNavBarItem> {
-  // Adjust this value in order to change the icon height of each navbar-element
-  static const double iconHeight = 26;
-  // Adjust this value in order to change the animation curve that is used for the
-  // vertical translation-animation
-  static const Curve animationCurve = Curves.easeOutExpo;
-  // Adjust this value in order to change the animation speed that is used for
-  // all animations
-  static const Duration animationDuration = Duration(milliseconds: 300);
-
-  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
-    return AnimatedPadding(
-      padding: widget.isActive ? const EdgeInsets.only(top: 2) : const EdgeInsets.only(top: 7),
-      duration: animationDuration,
-      curve: animationCurve,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          // Icon-button
-          CustomButton(
-            tapHandler: () => widget.onTap(),
-            child: Padding(
+    return CustomButton(
+      tapHandler: onTap,
+      child: AnimatedPadding(
+        padding: isActive ? const EdgeInsets.only(top: 2) : const EdgeInsets.only(top: 7),
+        duration: _animationDuration,
+        curve: _animationCurve,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
               padding: EdgeInsets.only(
-                top: widget.iconVerticalPadding,
-                bottom: widget.iconVerticalPadding,
+                top: iconVerticalPadding,
+                bottom: iconVerticalPadding,
               ),
               child: Icon(
-                widget.isActive ? widget.activeIcon : widget.inactiveIcon,
-                size: iconHeight,
-                color: widget.isActive ? colorScheme.secondary : colorScheme.onSurfaceVariant,
+                isActive ? activeIcon : inactiveIcon,
+                size: _iconHeight,
+                color: isActive ? colorScheme.secondary : colorScheme.onSurfaceVariant,
               ),
             ),
-          ),
-          // Text
-          AnimatedPadding(
-            padding: widget.isActive ? EdgeInsets.zero : const EdgeInsets.only(top: 6),
-            duration: animationDuration,
-            curve: animationCurve,
-            child: Center(
-              child: Text(
-                widget.title,
-                style: theme.textTheme.labelSmall,
-                textAlign: TextAlign.center,
+            AnimatedPadding(
+              padding: isActive ? EdgeInsets.zero : const EdgeInsets.only(top: 6),
+              duration: _animationDuration,
+              curve: _animationCurve,
+              child: Center(
+                child: Text(
+                  title,
+                  style: theme.textTheme.labelSmall,
+                  textAlign: TextAlign.center,
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

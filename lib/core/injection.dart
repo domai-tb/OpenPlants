@@ -1,55 +1,66 @@
 import 'package:get_it/get_it.dart';
 
-import 'package:open_plants/core/app_services.dart';
-import 'package:open_plants/core/date_formatter.dart';
-import 'package:open_plants/core/locale_service.dart';
-import 'package:open_plants/core/settings.dart';
-import 'package:open_plants/core/unit_preferences.dart';
-import 'package:open_plants/pages/model_info/model_info_datasource.dart';
-import 'package:open_plants/pages/model_info/model_info_repository.dart';
-import 'package:open_plants/pages/model_info/model_info_usecases.dart';
-import 'package:open_plants/pages/care_schedule/care_schedule_datasource.dart';
-import 'package:open_plants/pages/care_schedule/care_schedule_repository.dart';
-import 'package:open_plants/pages/care_schedule/care_schedule_usecases.dart';
-import 'package:open_plants/pages/care_schedule/custom_care_rule_usecases.dart';
-import 'package:open_plants/pages/plant_identification/classifier/plant_classifier_datasource.dart';
-import 'package:open_plants/pages/plant_identification/classifier/plant_classifier_repository.dart';
-import 'package:open_plants/pages/plant_identification/classifier/plant_classifier_usecases.dart';
-import 'package:open_plants/pages/more/more_datasource.dart';
-import 'package:open_plants/pages/more/more_repository.dart';
-import 'package:open_plants/pages/more/more_usecases.dart';
-import 'package:open_plants/pages/plant_collection/plant_collection_datasource.dart';
-import 'package:open_plants/pages/plant_collection/plant_collection_repository.dart';
-import 'package:open_plants/pages/plant_collection/plant_collection_usecases.dart';
-import 'package:open_plants/pages/plant_journal/plant_journal_datasource.dart';
-import 'package:open_plants/pages/plant_journal/plant_journal_repository.dart';
-import 'package:open_plants/pages/plant_journal/plant_journal_usecases.dart';
-import 'package:open_plants/pages/plant_photo_timeline/plant_photo_timeline_datasource.dart';
-import 'package:open_plants/pages/plant_photo_timeline/plant_photo_timeline_repository.dart';
-import 'package:open_plants/pages/plant_photo_timeline/plant_photo_timeline_usecases.dart';
-import 'package:open_plants/pages/room_profiles/room_profiles_datasource.dart';
-import 'package:open_plants/pages/room_profiles/room_profiles_repository.dart';
-import 'package:open_plants/pages/room_profiles/room_profiles_usecases.dart';
-import 'package:open_plants/pages/species_library/species_library_datasource.dart';
-import 'package:open_plants/pages/species_library/species_library_repository.dart';
-import 'package:open_plants/pages/species_library/species_library_usecases.dart';
-import 'package:open_plants/pages/symptom_logger/symptom_logger_datasource.dart';
-import 'package:open_plants/pages/symptom_logger/symptom_logger_repository.dart';
-import 'package:open_plants/pages/symptom_logger/symptom_logger_usecases.dart';
-import 'package:open_plants/pages/today_dashboard/today_dashboard_datasource.dart';
-import 'package:open_plants/pages/today_dashboard/today_dashboard_repository.dart';
-import 'package:open_plants/pages/today_dashboard/today_dashboard_usecases.dart';
-import 'package:open_plants/pages/light_assessment/light_assessment_datasource.dart';
-import 'package:open_plants/pages/light_assessment/light_assessment_repository.dart';
-import 'package:open_plants/pages/light_assessment/light_assessment_usecases.dart';
-import 'package:open_plants/pages/diagnosis/auto_diagnosis_service.dart';
-import 'package:open_plants/pages/diagnosis/diagnosis_datasource.dart';
-import 'package:open_plants/pages/diagnosis/diagnosis_history_usecases.dart';
-import 'package:open_plants/pages/diagnosis/diagnosis_repository.dart';
-import 'package:open_plants/pages/diagnosis/diagnosis_usecases.dart';
-import 'package:open_plants/pages/plant_names/plant_names_datasource.dart';
-import 'package:open_plants/pages/plant_names/plant_names_repository.dart';
-import 'package:open_plants/pages/plant_names/plant_names_usecases.dart';
+import 'package:openplants/core/app_services.dart';
+import 'package:openplants/core/date_formatter.dart';
+import 'package:openplants/core/locale_service.dart';
+import 'package:openplants/core/settings.dart';
+import 'package:openplants/core/unit_preferences.dart';
+import 'package:openplants/pages/model_info/model_info_datasource.dart';
+import 'package:openplants/pages/model_info/model_info_repository.dart';
+import 'package:openplants/pages/model_info/model_info_usecases.dart';
+import 'package:openplants/pages/care_schedule/care_schedule_datasource.dart';
+import 'package:openplants/pages/care_schedule/care_schedule_repository.dart';
+import 'package:openplants/pages/care_schedule/care_schedule_usecases.dart';
+import 'package:openplants/pages/care_schedule/custom_care_rule_usecases.dart';
+import 'package:openplants/pages/plant_identification/classifier/plant_classifier_datasource.dart';
+import 'package:openplants/pages/plant_identification/classifier/plant_classifier_repository.dart';
+import 'package:openplants/pages/plant_identification/classifier/plant_classifier_usecases.dart';
+import 'package:openplants/pages/more/more_datasource.dart';
+import 'package:openplants/pages/more/more_repository.dart';
+import 'package:openplants/pages/more/more_usecases.dart';
+import 'package:openplants/pages/plant_collection/plant_collection_datasource.dart';
+import 'package:openplants/pages/plant_collection/plant_collection_repository.dart';
+import 'package:openplants/pages/plant_collection/plant_collection_usecases.dart';
+import 'package:openplants/pages/plant_collection/plant_data_cleanup.dart';
+import 'package:openplants/pages/plant_collection/plant_deletion_coordinator.dart';
+import 'package:openplants/pages/plant_journal/plant_journal_datasource.dart';
+import 'package:openplants/pages/plant_journal/plant_journal_repository.dart';
+import 'package:openplants/pages/plant_journal/plant_journal_usecases.dart';
+import 'package:openplants/pages/plant_photo_timeline/plant_photo_timeline_datasource.dart';
+import 'package:openplants/pages/plant_photo_timeline/plant_photo_timeline_repository.dart';
+import 'package:openplants/pages/plant_photo_timeline/plant_photo_timeline_usecases.dart';
+import 'package:openplants/pages/room_profiles/room_profiles_datasource.dart';
+import 'package:openplants/pages/room_profiles/room_profiles_repository.dart';
+import 'package:openplants/pages/room_profiles/room_profiles_usecases.dart';
+import 'package:openplants/pages/species_library/species_library_datasource.dart';
+import 'package:openplants/pages/species_library/species_library_repository.dart';
+import 'package:openplants/pages/species_library/species_library_usecases.dart';
+import 'package:openplants/pages/symptom_logger/symptom_logger_datasource.dart';
+import 'package:openplants/pages/symptom_logger/symptom_logger_repository.dart';
+import 'package:openplants/pages/symptom_logger/symptom_logger_usecases.dart';
+import 'package:openplants/pages/today_dashboard/today_dashboard_datasource.dart';
+import 'package:openplants/pages/today_dashboard/today_dashboard_repository.dart';
+import 'package:openplants/pages/today_dashboard/today_dashboard_usecases.dart';
+import 'package:openplants/pages/light_assessment/light_assessment_datasource.dart';
+import 'package:openplants/pages/light_assessment/light_assessment_repository.dart';
+import 'package:openplants/pages/light_assessment/light_assessment_usecases.dart';
+import 'package:openplants/pages/diagnosis/auto_diagnosis_service.dart';
+import 'package:openplants/pages/diagnosis/diagnosis_datasource.dart';
+import 'package:openplants/pages/diagnosis/diagnosis_history_usecases.dart';
+import 'package:openplants/pages/diagnosis/diagnosis_repository.dart';
+import 'package:openplants/pages/diagnosis/diagnosis_usecases.dart';
+import 'package:openplants/pages/plant_names/plant_names_datasource.dart';
+import 'package:openplants/pages/plant_names/plant_names_repository.dart';
+import 'package:openplants/pages/plant_names/plant_names_usecases.dart';
+import 'package:openplants/pages/plant_metrics/metric_definition_datasource.dart';
+import 'package:openplants/pages/plant_metrics/metric_measurement_datasource.dart';
+import 'package:openplants/pages/plant_metrics/metric_repository.dart';
+import 'package:openplants/pages/plant_metrics/metric_usecases.dart';
+import 'package:openplants/pages/notifications/notification_datasource.dart';
+import 'package:openplants/pages/notifications/notification_repository.dart';
+import 'package:openplants/pages/notifications/notification_usecases.dart';
+import 'package:openplants/pages/notifications/notification_reconciler.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 /// Global service locator (GetIt).
 ///
@@ -101,10 +112,17 @@ Future<void> init() async {
     PlantCollectionDataSource.new,
   );
   sl.registerLazySingleton<PlantCollectionRepository>(
-    () => PlantCollectionRepository(dataSource: sl()),
+    () => PlantCollectionRepository(
+      dataSource: sl(),
+      speciesLibrary: sl(),
+      careSchedule: sl(),
+    ),
   );
   sl.registerLazySingleton<PlantCollectionUsecases>(
-    () => PlantCollectionUsecases(repository: sl()),
+    () => PlantCollectionUsecases(
+      repository: sl(),
+      onNotificationsChanged: () => sl<NotificationReconciler>().reconcileSafely(),
+    ),
   );
 
   // Plant Photo Timeline
@@ -134,7 +152,7 @@ Future<void> init() async {
 
   // Today Dashboard
   sl.registerLazySingleton<TodayDashboardDataSource>(
-    () => TodayDashboardDataSource(plantCollection: sl()),
+    () => TodayDashboardDataSource(plantCollection: sl(), careSchedule: sl()),
   );
   sl.registerLazySingleton<TodayDashboardRepository>(
     () => TodayDashboardRepository(dataSource: sl()),
@@ -156,10 +174,15 @@ Future<void> init() async {
       plantCollection: sl(),
       plantJournal: sl(),
       roomProfiles: sl(),
+      metricUsecases: sl(),
+      onNotificationsChanged: () => sl<NotificationReconciler>().reconcileSafely(),
     ),
   );
   sl.registerLazySingleton<CustomCareRuleUsecases>(
-    () => CustomCareRuleUsecases(repository: sl()),
+    () => CustomCareRuleUsecases(
+      repository: sl(),
+      onNotificationsChanged: () => sl<NotificationReconciler>().reconcileSafely(),
+    ),
   );
 
   // Symptom Logger
@@ -259,14 +282,81 @@ Future<void> init() async {
   );
 
   // Plant Names
-  sl.registerLazySingleton<PlantNamesDatasource>(
-    PlantNamesDatasource.new,
-  );
+  sl.registerLazySingleton<PlantNamesDatasource>(PlantNamesDatasource.new);
   sl.registerLazySingleton<PlantNamesRepository>(
     () => PlantNamesRepository(datasource: sl()),
   );
   sl.registerLazySingleton<PlantNamesUsecases>(
-    () => PlantNamesUsecases(repository: sl()),
+    () => PlantNamesUsecases(repository: sl(), localeService: sl()),
+  );
+  await sl<PlantNamesDatasource>().loadPlantNames();
+
+  // Plant Metrics
+  sl.registerLazySingleton<MetricDefinitionDataSource>(
+    MetricDefinitionDataSource.new,
+  );
+  sl.registerLazySingleton<MetricMeasurementDataSource>(
+    MetricMeasurementDataSource.new,
+  );
+  sl.registerLazySingleton<MetricRepository>(
+    () => MetricRepository(
+      definitionDataSource: sl(),
+      measurementDataSource: sl(),
+    ),
+  );
+  sl.registerLazySingleton<MetricUsecases>(
+    () => MetricUsecases(
+      repository: sl(),
+      deleteLinkedCareRules: (metricId, deleteMetric) =>
+          sl<CustomCareRuleUsecases>().deleteForMetric(metricId, deleteMetric),
+      onNotificationsChanged: () => sl<NotificationReconciler>().reconcileSafely(),
+    ),
+  );
+
+  // Notifications
+  sl.registerLazySingleton<NotificationDataSource>(
+    NotificationDataSource.new,
+  );
+  sl.registerLazySingleton<NotificationRepository>(
+    () => NotificationRepository(datasource: sl()),
+  );
+  sl.registerLazySingleton<FlutterLocalNotificationsPlugin>(
+    FlutterLocalNotificationsPlugin.new,
+  );
+  sl.registerLazySingleton<NotificationUsecases>(
+    () => NotificationUsecases(
+      repository: sl(),
+      plugin: sl(),
+    ),
+  );
+  sl.registerLazySingleton<NotificationReconciler>(
+    () => NotificationReconciler(
+      repository: sl(),
+      usecases: sl(),
+      careRepository: sl(),
+      careSchedule: sl(),
+      settings: sl(),
+      localeService: sl(),
+    ),
+  );
+
+  sl.registerLazySingleton<PendingPlantDeletionDataSource>(PendingPlantDeletionDataSource.new);
+  sl.registerLazySingleton<PlantDataCleanup>(
+    () => PlantDataCleanup(
+      journalUsecases: sl(),
+      symptomUsecases: sl(),
+      diagnosisHistoryUsecases: sl(),
+      photoTimelineUsecases: sl(),
+      careScheduleUsecases: sl(),
+      metricUsecases: sl(),
+    ),
+  );
+  sl.registerLazySingleton<PlantDeletionCoordinator>(
+    () => PlantDeletionCoordinator(
+      plantCollection: sl(),
+      dataCleanup: sl(),
+      pendingDeletes: sl(),
+    ),
   );
 
   // Aggregate wiring
@@ -275,6 +365,7 @@ Future<void> init() async {
       plantIdentification: sl(),
       more: sl(),
       plantCollection: sl(),
+      plantDeletion: sl(),
       plantPhotoTimeline: sl(),
       speciesLibrary: sl(),
       todayDashboard: sl(),
@@ -292,6 +383,9 @@ Future<void> init() async {
       temperatureFormatter: sl(),
       dateFormatter: sl(),
       plantNames: sl(),
+      metric: sl(),
+      notification: sl(),
+      notificationReconciler: sl(),
     ),
   );
 }

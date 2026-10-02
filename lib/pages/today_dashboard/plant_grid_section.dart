@@ -2,13 +2,13 @@ import 'dart:io' show File;
 
 import 'package:flutter/material.dart';
 
-import 'package:open_plants/core/app_scope.dart';
-import 'package:open_plants/core/constants.dart';
-import 'package:open_plants/l10n/l10n.dart';
-import 'package:open_plants/l10n/l10n_x.dart';
-import 'package:open_plants/pages/plant_collection/plant_collection_item_entity.dart';
-import 'package:open_plants/pages/plant_collection/plant_collection_usecases.dart';
-import 'package:open_plants/pages/room_profiles/room_profiles_usecases.dart';
+import 'package:openplants/core/app_scope.dart';
+import 'package:openplants/core/constants.dart';
+import 'package:openplants/l10n/l10n.dart';
+import 'package:openplants/l10n/l10n_x.dart';
+import 'package:openplants/pages/plant_collection/plant_collection_item_entity.dart';
+import 'package:openplants/pages/plant_collection/plant_collection_usecases.dart';
+import 'package:openplants/pages/room_profiles/room_profiles_usecases.dart';
 
 /// Section widget that displays the plant collection as a searchable,
 /// filterable grid within the today dashboard.
@@ -82,19 +82,23 @@ class PlantGridSectionState extends State<PlantGridSection> {
     setState(() => _loading = true);
 
     try {
-      final rooms = await _roomUsecases.getAll();
       final roomNames = <String, String>{};
-      for (final room in rooms) {
-        roomNames[room.id] = room.name;
+      try {
+        final rooms = await _roomUsecases.getAll();
+        for (final room in rooms) {
+          roomNames[room.id] = room.name;
+        }
+      } catch (_) {
+        // Keep the plant collection visible even if room metadata is corrupt.
       }
 
-      List<PlantEntity> plants;
-      if (widget.query.isNotEmpty) {
-        plants = await _usecases.searchPlants(widget.query);
-      } else if (widget.filterStatus != null) {
-        plants = await _usecases.filterByCareStatus(widget.filterStatus);
-      } else {
-        plants = await _usecases.loadPlants();
+      var plants = await _usecases.loadPlants();
+      final query = widget.query.trim().toLowerCase();
+      if (query.isNotEmpty) {
+        plants = plants.where((plant) => plant.name.toLowerCase().contains(query)).toList();
+      }
+      if (widget.filterStatus != null) {
+        plants = plants.where((plant) => plant.effectiveCareStatus == widget.filterStatus).toList();
       }
 
       // Apply room filter.

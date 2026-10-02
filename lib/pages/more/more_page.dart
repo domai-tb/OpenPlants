@@ -2,29 +2,28 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
-import 'package:open_plants/core/app_scope.dart';
-import 'package:open_plants/l10n/l10n_x.dart';
-import 'package:open_plants/pages/home/widgets/page_navigation_animation.dart';
-import 'package:open_plants/pages/more/more_about_page.dart';
-import 'package:open_plants/pages/more/more_item_entity.dart';
-import 'package:open_plants/pages/more/more_settings_page.dart';
-import 'package:open_plants/pages/more/more_usecases.dart';
-import 'package:open_plants/pages/plant_collection/plant_collection_item_entity.dart';
-import 'package:open_plants/pages/room_profiles/room_profiles_page.dart';
-import 'package:open_plants/pages/species_library/species_library_page.dart';
-import 'package:open_plants/pages/symptom_logger/symptom_logger_page.dart';
-import 'package:open_plants/pages/diagnosis/diagnosis_page.dart';
-import 'package:open_plants/pages/light_assessment/interactive_light_assessment_page.dart';
-import 'package:open_plants/widgets/scroll_to_top_button.dart';
+import 'package:openplants/core/app_scope.dart';
+import 'package:openplants/l10n/l10n_x.dart';
+import 'package:openplants/pages/home/widgets/page_navigation_animation.dart';
+import 'package:openplants/pages/more/more_about_page.dart';
+import 'package:openplants/pages/more/more_item_entity.dart';
+import 'package:openplants/pages/more/more_settings_page.dart';
+import 'package:openplants/pages/more/more_usecases.dart';
+import 'package:openplants/pages/notifications/notification_settings_page.dart';
+import 'package:openplants/pages/plant_collection/plant_collection_item_entity.dart';
+import 'package:openplants/pages/room_profiles/room_profiles_page.dart';
+import 'package:openplants/pages/species_library/species_library_page.dart';
+import 'package:openplants/pages/symptom_logger/symptom_logger_page.dart';
+import 'package:openplants/pages/diagnosis/diagnosis_page.dart';
+import 'package:openplants/pages/light_assessment/interactive_light_assessment_page.dart';
+import 'package:openplants/widgets/scroll_to_top_button.dart';
 
 class MorePage extends StatefulWidget {
-  final GlobalKey<NavigatorState> mainNavigatorKey;
   final GlobalKey<AnimatedEntryState> pageEntryAnimationKey;
   final GlobalKey<AnimatedExitState> pageExitAnimationKey;
 
   const MorePage({
     super.key,
-    required this.mainNavigatorKey,
     required this.pageEntryAnimationKey,
     required this.pageExitAnimationKey,
   });
@@ -60,12 +59,20 @@ class _MorePageState extends State<MorePage> with AutomaticKeepAliveClientMixin<
 
   Future<void> _load() async {
     setState(() => _loading = true);
-    final items = await _usecases.getMenuItems();
-    if (!mounted) return;
-    setState(() {
-      _items = items;
-      _loading = false;
-    });
+    try {
+      final items = await _usecases.getMenuItems();
+      if (!mounted) return;
+      setState(() {
+        _items = items;
+        _loading = false;
+      });
+    } catch (_) {
+      if (!mounted) return;
+      setState(() => _loading = false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(context.l10n.generalFailureMessage)),
+      );
+    }
   }
 
   void _open(MoreItemEntity item) {
@@ -81,6 +88,9 @@ class _MorePageState extends State<MorePage> with AutomaticKeepAliveClientMixin<
         break;
       case 'settings':
         Navigator.of(context).push(MaterialPageRoute(builder: (_) => const MoreSettingsPage()));
+        break;
+      case 'notifications':
+        Navigator.of(context).push(MaterialPageRoute(builder: (_) => const NotificationSettingsPage()));
         break;
       case 'about':
         Navigator.of(context).push(MaterialPageRoute(builder: (_) => const MoreAboutPage()));
@@ -116,7 +126,16 @@ class _MorePageState extends State<MorePage> with AutomaticKeepAliveClientMixin<
 
   Future<void> _logSymptom() async {
     final plantCollection = AppScope.of(context).services.plantCollection;
-    final plants = await plantCollection.loadPlants();
+    final List<PlantEntity> plants;
+    try {
+      plants = await plantCollection.loadPlants();
+    } catch (_) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(context.l10n.generalFailureMessage)),
+      );
+      return;
+    }
 
     if (!mounted || plants.isEmpty) return;
 
@@ -201,12 +220,22 @@ class _MorePageState extends State<MorePage> with AutomaticKeepAliveClientMixin<
       switch (item.id) {
         case 'species_list':
           return context.l10n.moreSpeciesListTitle;
+        case 'rooms':
+          return context.l10n.moreRoomsTitle;
+        case 'light_assessment':
+          return context.l10n.moreLightAssessmentTitle;
+        case 'log_symptom':
+          return context.l10n.moreLogSymptomTitle;
+        case 'diagnosis':
+          return context.l10n.moreDiagnosisTitle;
+        case 'notifications':
+          return context.l10n.moreNotificationsTitle;
         case 'settings':
           return context.l10n.settingsTitle;
         case 'about':
           return context.l10n.aboutTitle;
         default:
-          return item.title;
+          return item.id;
       }
     }
 
@@ -214,12 +243,22 @@ class _MorePageState extends State<MorePage> with AutomaticKeepAliveClientMixin<
       switch (item.id) {
         case 'species_list':
           return context.l10n.moreSpeciesListSubtitle;
+        case 'rooms':
+          return context.l10n.moreRoomsSubtitle;
+        case 'light_assessment':
+          return context.l10n.moreLightAssessmentSubtitle;
+        case 'log_symptom':
+          return context.l10n.moreLogSymptomSubtitle;
+        case 'diagnosis':
+          return context.l10n.moreDiagnosisSubtitle;
+        case 'notifications':
+          return context.l10n.moreNotificationsSubtitle;
         case 'settings':
           return context.l10n.menuSettingsSubtitle;
         case 'about':
           return context.l10n.menuAboutSubtitle;
         default:
-          return item.subtitle;
+          return '';
       }
     }
 
@@ -249,6 +288,7 @@ class _MorePageState extends State<MorePage> with AutomaticKeepAliveClientMixin<
                         onRefresh: _load,
                         child: ListView.builder(
                           controller: _scrollController,
+                          physics: const AlwaysScrollableScrollPhysics(),
                           padding: const EdgeInsets.only(top: 10),
                           itemCount: _loading ? 2 : _items.length,
                           itemBuilder: (context, index) {

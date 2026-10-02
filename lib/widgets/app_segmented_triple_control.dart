@@ -84,6 +84,7 @@ class AppSegmentedTripleControlState extends State<AppSegmentedTripleControl> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final titles = [widget.leftTitle, widget.centerTitle, widget.rightTitle];
 
     return SizedBox(
       height: 42,
@@ -120,58 +121,35 @@ class AppSegmentedTripleControlState extends State<AppSegmentedTripleControl> {
               ),
             ),
           ),
-          // Labels
           Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Expanded(
-                child: Text(
-                  widget.leftTitle,
-                  textAlign: TextAlign.center,
-                  style: theme.textTheme.labelMedium?.copyWith(
-                    color: colorScheme.onSurface,
+            children: List.generate(
+              titles.length,
+              (index) => Expanded(
+                child: Semantics(
+                  button: true,
+                  selected: selected == index,
+                  label: titles[index],
+                  onTap: () => _picked(index),
+                  child: ExcludeSemantics(
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(6),
+                      onTap: () => _picked(index),
+                      child: SizedBox.expand(
+                        child: Center(
+                          child: Text(
+                            titles[index],
+                            textAlign: TextAlign.center,
+                            style: theme.textTheme.labelMedium?.copyWith(
+                              color: colorScheme.onSurface,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               ),
-              Expanded(
-                child: Text(
-                  widget.centerTitle,
-                  textAlign: TextAlign.center,
-                  style: theme.textTheme.labelMedium?.copyWith(
-                    color: colorScheme.onSurface,
-                  ),
-                ),
-              ),
-              Expanded(
-                child: Text(
-                  widget.rightTitle,
-                  textAlign: TextAlign.center,
-                  style: theme.textTheme.labelMedium?.copyWith(
-                    color: colorScheme.onSurface,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          // GestureDetector
-          Row(
-            children: [
-              Expanded(
-                child: GestureDetector(
-                  onTap: () => _picked(0),
-                ),
-              ),
-              Expanded(
-                child: GestureDetector(
-                  onTap: () => _picked(1),
-                ),
-              ),
-              Expanded(
-                child: GestureDetector(
-                  onTap: () => _picked(2),
-                ),
-              ),
-            ],
+            ),
           ),
         ],
       ),

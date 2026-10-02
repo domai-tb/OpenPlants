@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-import 'package:open_plants/core/app_scope.dart';
-import 'package:open_plants/l10n/l10n.dart';
-import 'package:open_plants/l10n/l10n_x.dart';
-import 'package:open_plants/pages/diagnosis/diagnosis_item_entity.dart';
-import 'package:open_plants/pages/diagnosis/diagnosis_page.dart';
-import 'package:open_plants/pages/diagnosis/diagnosis_result_entity.dart';
-import 'package:open_plants/pages/symptom_logger/symptom_logger_item_entity.dart';
-import 'package:open_plants/pages/symptom_logger/symptom_logger_page.dart';
+import 'package:openplants/core/app_scope.dart';
+import 'package:openplants/l10n/l10n.dart';
+import 'package:openplants/l10n/l10n_x.dart';
+import 'package:openplants/pages/diagnosis/diagnosis_item_entity.dart';
+import 'package:openplants/pages/diagnosis/diagnosis_page.dart';
+import 'package:openplants/pages/diagnosis/diagnosis_result_entity.dart';
+import 'package:openplants/pages/symptom_logger/symptom_logger_item_entity.dart';
+import 'package:openplants/pages/symptom_logger/symptom_logger_page.dart';
 
 /// Page that displays the semantic outcome returned by the diagnosis engine.
 ///
@@ -70,14 +70,23 @@ class _DiagnosisResultPageState extends State<DiagnosisResultPage> {
 
     final loader = widget.linkedSymptomLoader;
     final symptomLogger = loader == null ? AppScope.of(context).services.symptomLogger : null;
-    final symptom = loader != null
-        ? await loader(symptomId)
-        : (await symptomLogger!.getSymptomHistory(widget.entity!.plantId))
-            .where((entry) => entry.id == symptomId)
-            .firstOrNull;
-    if (!mounted) return;
+    try {
+      final symptom = loader != null
+          ? await loader(symptomId)
+          : (await symptomLogger!.getSymptomHistory(widget.entity!.plantId))
+              .where((entry) => entry.id == symptomId)
+              .firstOrNull;
+      if (!mounted) return;
 
-    setState(() => _linkedSymptom = symptom);
+      setState(() => _linkedSymptom = symptom);
+    } catch (e) {
+      debugPrint('Failed to load linked symptom for diagnosis: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(context.l10n.generalFailureMessage)),
+        );
+      }
+    }
   }
 
   @override

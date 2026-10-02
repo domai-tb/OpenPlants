@@ -6,11 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-import 'package:open_plants/core/app_scope.dart';
-import 'package:open_plants/pages/light_assessment/camera_estimation_service.dart';
-import 'package:open_plants/pages/light_assessment/light_assessment_item_entity.dart';
-import 'package:open_plants/pages/light_assessment/light_assessment_usecases.dart';
-import 'package:open_plants/pages/plant_collection/plant_collection_item_entity.dart';
+import 'package:openplants/core/app_scope.dart';
+import 'package:openplants/l10n/l10n_x.dart';
+import 'package:openplants/pages/light_assessment/camera_estimation_service.dart';
+import 'package:openplants/pages/light_assessment/light_assessment_item_entity.dart';
+import 'package:openplants/pages/light_assessment/light_assessment_usecases.dart';
+import 'package:openplants/pages/plant_collection/plant_collection_item_entity.dart';
 
 /// A full-screen interactive camera view for real-time light level assessment.
 ///
@@ -60,6 +61,7 @@ class _InteractiveLightAssessmentPageState extends State<InteractiveLightAssessm
   bool _hasPermission = false;
   bool _permissionPermanentlyDenied = false;
   bool _initializing = true;
+  bool _cameraInitializationFailed = false;
 
   // ---- Live estimation state ----
   double _currentBrightness = 0;
@@ -100,17 +102,21 @@ class _InteractiveLightAssessmentPageState extends State<InteractiveLightAssessm
     if (!mounted) return;
     setState(() {
       _initializing = true;
+      _cameraInitializationFailed = false;
     });
 
+    var permissionGranted = false;
     try {
       final status = await Permission.camera.status;
 
       if (status.isGranted) {
+        permissionGranted = true;
         await _setupCameraAndStream();
         if (mounted) {
           setState(() {
             _hasPermission = true;
             _initializing = false;
+            _cameraInitializationFailed = false;
           });
           _startCameraTimer();
         }
@@ -130,28 +136,79 @@ class _InteractiveLightAssessmentPageState extends State<InteractiveLightAssessm
         }
       }
     } catch (e) {
+      debugPrint('Failed to initialize light assessment camera: $e');
       if (mounted) {
         setState(() {
-          _hasPermission = true;
+          _hasPermission = permissionGranted;
           _initializing = false;
+          _cameraInitializationFailed = permissionGranted;
         });
       }
     }
   }
 
   Future<void> _requestPermission() async {
-    final status = await Permission.camera.request();
-    if (status.isGranted) {
-      await _setupCameraAndStream();
+    var permissionGranted = false;
+    setState(() {
+      _initializing = true;
+      _cameraInitializationFailed = false;
+    });
+    try {
+      final status = await Permission.camera.request();
+      if (status.isGranted) {
+        permissionGranted = true;
+        await _setupCameraAndStream();
+        if (mounted) {
+          setState(() {
+            _hasPermission = true;
+            _permissionPermanentlyDenied = false;
+            _initializing = false;
+          });
+          _startCameraTimer();
+        }
+      } else if (mounted) {
+        setState(() {
+          _hasPermission = false;
+          _permissionPermanentlyDenied = status.isPermanentlyDenied;
+          _initializing = false;
+        });
+      }
+    } catch (e) {
+      debugPrint('Failed to initialize light assessment camera: $e');
       if (mounted) {
         setState(() {
-          _hasPermission = true;
-          _permissionPermanentlyDenied = false;
+          _hasPermission = permissionGranted;
+          _cameraInitializationFailed = permissionGranted;
+          _initializing = false;
         });
-        _startCameraTimer();
       }
-    } else if (status.isPermanentlyDenied && mounted) {
-      setState(() => _permissionPermanentlyDenied = true);
+    }
+  }
+
+  Future<void> _retryCameraInitialization() async {
+    if (!mounted) return;
+    setState(() {
+      _initializing = true;
+      _cameraInitializationFailed = false;
+    });
+    try {
+      await _cameraService.dispose();
+      await _setupCameraAndStream();
+      if (!mounted) return;
+      setState(() {
+        _hasPermission = true;
+        _initializing = false;
+        _cameraInitializationFailed = false;
+      });
+      _startCameraTimer();
+    } catch (e) {
+      debugPrint('Failed to initialize light assessment camera: $e');
+      if (!mounted) return;
+      setState(() {
+        _hasPermission = true;
+        _initializing = false;
+        _cameraInitializationFailed = true;
+      });
     }
   }
 
@@ -218,9 +275,14 @@ class _InteractiveLightAssessmentPageState extends State<InteractiveLightAssessm
     });
 
     // Brief flash feedback
-    Future.delayed(const Duration(milliseconds: 200), () {
-      if (mounted) setState(() => _showCaptureFlash = false);
-    });
+    unawaited(
+      Future.delayed(
+        const Duration(milliseconds: 200),
+        () {
+          if (mounted) setState(() => _showCaptureFlash = false);
+        },
+      ),
+    );
 
     try {
       final result = await _cameraService.estimate();
@@ -238,6 +300,8 @@ class _InteractiveLightAssessmentPageState extends State<InteractiveLightAssessm
       setState(() {
         _capturing = false;
       });
+      debugPrint('Failed to estimate light level: $e');
+      _showError();
     }
   }
 
@@ -261,27 +325,27 @@ class _InteractiveLightAssessmentPageState extends State<InteractiveLightAssessm
 
       if (!mounted) return;
 
-      // Persist the light level
-      await widget.usecases.setLightLevel(
-        widget.plantId!,
-        _capturedResult!.level,
-      );
-
-      widget.onLightLevelSet?.call(_capturedResult!.level);
+      // Save directly in plant context, or ask where to save in standalone mode.
+      final level = _capturedResult!.level;
+      if (widget.plantId != null) {
+        await widget.usecases.setLightLevel(widget.plantId!, level);
+        widget.onLightLevelSet?.call(level);
+      } else if (!await _showPlantSelectionDialogIfNeeded(level)) {
+        return;
+      }
 
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              'Light level set to ${_capturedResult!.level.label}',
-            ),
-          ),
-        );
+        if (widget.plantId != null) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(context.l10n.lightAssessmentLevelSet(_lightLevelLabel(context, level)))),
+          );
+        }
         Navigator.of(context).pop();
       }
     } catch (e) {
       if (!mounted) return;
       debugPrint('Failed to save light level: $e');
+      _showError();
     }
   }
 
@@ -298,10 +362,21 @@ class _InteractiveLightAssessmentPageState extends State<InteractiveLightAssessm
   // ---------------------------------------------------------------------------
 
   Future<void> _setCurrentLevel() async {
+    if (!_cameraService.isControllerInitialized) {
+      _showError();
+      return;
+    }
     if (widget.plantId == null) {
       // Standalone mode — prompt to select a plant (Task 3.5)
-      final saved = await _showPlantSelectionDialogIfNeeded(_currentLevel);
-      if (saved && mounted) Navigator.of(context).pop();
+      try {
+        final saved = await _showPlantSelectionDialogIfNeeded(_currentLevel);
+        if (saved && mounted) Navigator.of(context).pop();
+      } catch (e) {
+        if (mounted) {
+          debugPrint('Failed to set light level: $e');
+          _showError();
+        }
+      }
       return;
     }
 
@@ -311,7 +386,7 @@ class _InteractiveLightAssessmentPageState extends State<InteractiveLightAssessm
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Light level set to ${_currentLevel.label}'),
+            content: Text(context.l10n.lightAssessmentLevelSet(_lightLevelLabel(context, _currentLevel))),
           ),
         );
         Navigator.of(context).pop();
@@ -319,6 +394,7 @@ class _InteractiveLightAssessmentPageState extends State<InteractiveLightAssessm
     } catch (e) {
       if (!mounted) return;
       debugPrint('Failed to set level: $e');
+      _showError();
     }
   }
 
@@ -339,7 +415,7 @@ class _InteractiveLightAssessmentPageState extends State<InteractiveLightAssessm
 
     if (plants.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('No plants to save to. Add a plant first.')),
+        SnackBar(content: Text(context.l10n.lightAssessmentNoPlants)),
       );
       return false;
     }
@@ -351,7 +427,9 @@ class _InteractiveLightAssessmentPageState extends State<InteractiveLightAssessm
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('${plants.first.name}: Light level set to ${level.label}'),
+            content: Text(
+              context.l10n.lightAssessmentPlantLevelSet(plants.first.name, _lightLevelLabel(context, level)),
+            ),
           ),
         );
       }
@@ -371,7 +449,7 @@ class _InteractiveLightAssessmentPageState extends State<InteractiveLightAssessm
               Padding(
                 padding: const EdgeInsets.all(16),
                 child: Text(
-                  'Save light level to…',
+                  context.l10n.lightAssessmentSaveToPlant,
                   style: sheetTheme.textTheme.titleMedium,
                 ),
               ),
@@ -395,7 +473,7 @@ class _InteractiveLightAssessmentPageState extends State<InteractiveLightAssessm
                             )
                           : const Icon(Icons.yard),
                       title: Text(plant.name),
-                      subtitle: Text('Set to ${level.label}'),
+                      subtitle: Text(context.l10n.lightAssessmentSetToLevel(_lightLevelLabel(context, level))),
                       onTap: () => Navigator.of(ctx).pop(plant),
                     );
                   },
@@ -413,7 +491,7 @@ class _InteractiveLightAssessmentPageState extends State<InteractiveLightAssessm
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('${plant.name}: Light level set to ${level.label}'),
+            content: Text(context.l10n.lightAssessmentPlantLevelSet(plant.name, _lightLevelLabel(context, level))),
           ),
         );
       }
@@ -421,6 +499,12 @@ class _InteractiveLightAssessmentPageState extends State<InteractiveLightAssessm
     }
 
     return false;
+  }
+
+  void _showError() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(context.l10n.generalFailureMessage)),
+    );
   }
 
   // ---------------------------------------------------------------------------
@@ -449,6 +533,7 @@ class _InteractiveLightAssessmentPageState extends State<InteractiveLightAssessm
     } catch (e) {
       if (!mounted) return;
       debugPrint('Failed to pick photo: $e');
+      _showError();
     }
   }
 
@@ -470,6 +555,10 @@ class _InteractiveLightAssessmentPageState extends State<InteractiveLightAssessm
   Widget _buildBody(ThemeData theme) {
     if (_initializing) {
       return _buildLoadingState(theme);
+    }
+
+    if (_cameraInitializationFailed) {
+      return _buildCameraUnavailableState(theme);
     }
 
     if (_permissionPermanentlyDenied) {
@@ -501,12 +590,45 @@ class _InteractiveLightAssessmentPageState extends State<InteractiveLightAssessm
             CircularProgressIndicator(color: theme.colorScheme.primary),
             const SizedBox(height: 16),
             Text(
-              'Initializing camera...',
+              context.l10n.cameraInitializing,
               style: theme.textTheme.bodyLarge?.copyWith(
                 color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCameraUnavailableState(ThemeData theme) {
+    return SafeArea(
+      child: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(32),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.videocam_off, size: 64, color: theme.colorScheme.error),
+              const SizedBox(height: 16),
+              Text(
+                context.l10n.cameraInitializationFailed,
+                textAlign: TextAlign.center,
+                style: theme.textTheme.bodyLarge,
+              ),
+              const SizedBox(height: 24),
+              FilledButton(
+                onPressed: _retryCameraInitialization,
+                child: Text(context.l10n.plantIdTryAgain),
+              ),
+              TextButton.icon(
+                onPressed: _pickFromGallery,
+                icon: const Icon(Icons.photo_library),
+                label: Text(context.l10n.cameraUseGalleryInstead),
+              ),
+              TextButton(onPressed: _closeCamera, child: Text(context.l10n.back)),
+            ],
+          ),
         ),
       ),
     );
@@ -527,7 +649,7 @@ class _InteractiveLightAssessmentPageState extends State<InteractiveLightAssessm
               Icon(Icons.camera_alt, size: 72, color: theme.colorScheme.onSurface.withValues(alpha: 0.5)),
               const SizedBox(height: 24),
               Text(
-                'Camera access is needed to assess light levels in real time.',
+                context.l10n.lightAssessmentCameraPermissionNeeded,
                 style: theme.textTheme.bodyLarge?.copyWith(
                   color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                 ),
@@ -537,21 +659,21 @@ class _InteractiveLightAssessmentPageState extends State<InteractiveLightAssessm
               FilledButton.icon(
                 onPressed: _requestPermission,
                 icon: const Icon(Icons.camera_alt),
-                label: const Text('Grant access'),
+                label: Text(context.l10n.cameraGrantAccess),
               ),
               const SizedBox(height: 16),
               TextButton.icon(
                 onPressed: _pickFromGallery,
                 icon: Icon(Icons.photo_library, color: theme.colorScheme.onSurface.withValues(alpha: 0.7)),
                 label: Text(
-                  'Use gallery instead',
+                  context.l10n.cameraUseGalleryInstead,
                   style: TextStyle(color: theme.colorScheme.onSurface.withValues(alpha: 0.7)),
                 ),
               ),
               const SizedBox(height: 16),
               TextButton(
                 onPressed: _closeCamera,
-                child: const Text('Cancel'),
+                child: Text(context.l10n.cancel),
               ),
             ],
           ),
@@ -571,8 +693,7 @@ class _InteractiveLightAssessmentPageState extends State<InteractiveLightAssessm
               Icon(Icons.block, size: 72, color: theme.colorScheme.error),
               const SizedBox(height: 24),
               Text(
-                'Camera permission was permanently denied. '
-                'Please enable it in system settings.',
+                context.l10n.cameraPermissionPermanentlyDenied,
                 style: theme.textTheme.bodyLarge?.copyWith(
                   color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                 ),
@@ -582,12 +703,12 @@ class _InteractiveLightAssessmentPageState extends State<InteractiveLightAssessm
               FilledButton.icon(
                 onPressed: openAppSettings,
                 icon: const Icon(Icons.settings),
-                label: const Text('Open settings'),
+                label: Text(context.l10n.cameraOpenSettings),
               ),
               const SizedBox(height: 16),
               TextButton(
                 onPressed: _closeCamera,
-                child: const Text('Go back'),
+                child: Text(context.l10n.back),
               ),
             ],
           ),
@@ -618,7 +739,9 @@ class _InteractiveLightAssessmentPageState extends State<InteractiveLightAssessm
               children: [
                 Expanded(
                   child: Text(
-                    widget.plantName != null ? 'Light Assessment — ${widget.plantName}' : 'Light Assessment',
+                    widget.plantName != null
+                        ? context.l10n.lightAssessmentPageTitle(widget.plantName!)
+                        : context.l10n.moreLightAssessmentTitle,
                     style: theme.textTheme.displayMedium,
                   ),
                 ),
@@ -743,7 +866,7 @@ class _InteractiveLightAssessmentPageState extends State<InteractiveLightAssessm
                 ),
                 const SizedBox(width: 10),
                 Text(
-                  _currentLevel.label,
+                  _lightLevelLabel(context, _currentLevel),
                   style: theme.textTheme.headlineSmall?.copyWith(
                     color: levelColor,
                     fontWeight: FontWeight.bold,
@@ -777,12 +900,12 @@ class _InteractiveLightAssessmentPageState extends State<InteractiveLightAssessm
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  '$brightnessPercent%',
+                  context.l10n.lightAssessmentBrightness(brightnessPercent),
                   style: theme.textTheme.bodySmall?.copyWith(color: Colors.white60),
                 ),
                 // Confidence (Task 4.5)
                 Text(
-                  'Confidence: ${(_currentConfidence * 100).round()}%',
+                  context.l10n.lightAssessmentConfidence((_currentConfidence * 100).round()),
                   style: theme.textTheme.bodySmall?.copyWith(color: Colors.white60),
                 ),
               ],
@@ -802,6 +925,24 @@ class _InteractiveLightAssessmentPageState extends State<InteractiveLightAssessm
     };
   }
 
+  String _lightLevelLabel(BuildContext context, LightLevel level) {
+    return switch (level) {
+      LightLevel.low => context.l10n.speciesLibraryLightLow,
+      LightLevel.medium => context.l10n.speciesLibraryLightMedium,
+      LightLevel.brightIndirect => context.l10n.speciesLibraryLightBright,
+      LightLevel.direct => context.l10n.speciesLibraryLightDirect,
+    };
+  }
+
+  String _estimateDescription(BuildContext context, LightLevel level) {
+    return switch (level) {
+      LightLevel.low => context.l10n.lightAssessmentEstimateLow,
+      LightLevel.medium => context.l10n.lightAssessmentEstimateMedium,
+      LightLevel.brightIndirect => context.l10n.lightAssessmentEstimateBright,
+      LightLevel.direct => context.l10n.lightAssessmentEstimateDirect,
+    };
+  }
+
   // ---------------------------------------------------------------------------
   // Guidance text (Task 4.4)
   // ---------------------------------------------------------------------------
@@ -810,8 +951,7 @@ class _InteractiveLightAssessmentPageState extends State<InteractiveLightAssessm
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Text(
-        'Move around to see how light levels change. '
-        'For best results, hold the camera steady for a moment.',
+        context.l10n.lightAssessmentLiveGuidance,
         style: theme.textTheme.bodySmall?.copyWith(
           color: Colors.white54,
           fontStyle: FontStyle.italic,
@@ -837,24 +977,24 @@ class _InteractiveLightAssessmentPageState extends State<InteractiveLightAssessm
               const Icon(Icons.timer_off, size: 64, color: Colors.white54),
               const SizedBox(height: 24),
               Text(
-                'Camera timed out',
+                context.l10n.lightAssessmentCameraTimedOut,
                 style: theme.textTheme.headlineSmall?.copyWith(color: Colors.white),
               ),
               const SizedBox(height: 12),
               Text(
-                'The camera will close automatically to save battery.',
+                context.l10n.lightAssessmentCameraTimeoutDescription,
                 style: theme.textTheme.bodyLarge?.copyWith(color: Colors.white60),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 32),
               FilledButton(
                 onPressed: _resetCameraTimer,
-                child: const Text('Continue assessing'),
+                child: Text(context.l10n.lightAssessmentContinueAssessing),
               ),
               const SizedBox(height: 12),
               TextButton(
                 onPressed: _closeCamera,
-                child: const Text('Close'),
+                child: Text(MaterialLocalizations.of(context).closeButtonTooltip),
               ),
             ],
           ),
@@ -877,7 +1017,7 @@ class _InteractiveLightAssessmentPageState extends State<InteractiveLightAssessm
           child: ElevatedButton.icon(
             onPressed: _setCurrentLevel,
             icon: const Icon(Icons.check, size: 20),
-            label: Text('Set this level (${_currentLevel.label})'),
+            label: Text(context.l10n.lightAssessmentSetThisLevel(_lightLevelLabel(context, _currentLevel))),
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.white.withValues(alpha: 0.2),
               foregroundColor: Colors.white,
@@ -897,7 +1037,7 @@ class _InteractiveLightAssessmentPageState extends State<InteractiveLightAssessm
             // Gallery button
             _SmallControlButton(
               icon: Icons.photo_library,
-              label: 'Gallery',
+              label: context.l10n.plantIdGallery,
               onTap: _pickFromGallery,
             ),
             const SizedBox(width: 40),
@@ -957,7 +1097,7 @@ class _InteractiveLightAssessmentPageState extends State<InteractiveLightAssessm
       appBar: AppBar(
         backgroundColor: theme.colorScheme.surface,
         foregroundColor: theme.colorScheme.onSurface,
-        title: const Text('Assessment Result'),
+        title: Text(context.l10n.lightAssessmentResultTitle),
         leading: IconButton(
           icon: const Icon(Icons.close),
           onPressed: _dismissCaptureResult,
@@ -988,7 +1128,7 @@ class _InteractiveLightAssessmentPageState extends State<InteractiveLightAssessm
 
                     // Level label
                     Text(
-                      result.level.label,
+                      _lightLevelLabel(context, result.level),
                       style: theme.textTheme.displaySmall?.copyWith(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
@@ -999,7 +1139,7 @@ class _InteractiveLightAssessmentPageState extends State<InteractiveLightAssessm
                     // Description
                     const SizedBox(height: 8),
                     Text(
-                      result.description,
+                      _estimateDescription(context, result.level),
                       style: theme.textTheme.bodyLarge?.copyWith(color: Colors.white60),
                       textAlign: TextAlign.center,
                     ),
@@ -1007,7 +1147,7 @@ class _InteractiveLightAssessmentPageState extends State<InteractiveLightAssessm
                     // Brightness
                     const SizedBox(height: 8),
                     Text(
-                      'Brightness: ${(result.brightness * 100).round()}%',
+                      context.l10n.lightAssessmentBrightness((result.brightness * 100).round()),
                       style: theme.textTheme.bodyMedium?.copyWith(color: Colors.white38),
                       textAlign: TextAlign.center,
                     ),
@@ -1030,8 +1170,7 @@ class _InteractiveLightAssessmentPageState extends State<InteractiveLightAssessm
                     const SizedBox(width: 12),
                     Expanded(
                       child: Text(
-                        'You can accept this estimate or go back to the '
-                        'camera for a different reading.',
+                        context.l10n.lightAssessmentResultGuidance,
                         style: theme.textTheme.bodySmall?.copyWith(
                           color: Colors.white54,
                         ),
@@ -1047,7 +1186,7 @@ class _InteractiveLightAssessmentPageState extends State<InteractiveLightAssessm
               FilledButton.icon(
                 onPressed: widget.plantId != null ? _acceptCapturedPhoto : _acceptStandalone,
                 icon: const Icon(Icons.check_circle),
-                label: const Text('Accept & Save'),
+                label: Text(context.l10n.lightAssessmentAcceptAndSave),
                 style: FilledButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 16),
                 ),
@@ -1056,7 +1195,7 @@ class _InteractiveLightAssessmentPageState extends State<InteractiveLightAssessm
               OutlinedButton.icon(
                 onPressed: _dismissCaptureResult,
                 icon: const Icon(Icons.refresh),
-                label: const Text('Retake'),
+                label: Text(context.l10n.lightAssessmentTakeNewPhoto),
                 style: OutlinedButton.styleFrom(
                   foregroundColor: Colors.white,
                   side: const BorderSide(color: Colors.white38),
@@ -1072,8 +1211,14 @@ class _InteractiveLightAssessmentPageState extends State<InteractiveLightAssessm
 
   Future<void> _acceptStandalone() async {
     if (_capturedResult == null) return;
-    final saved = await _showPlantSelectionDialogIfNeeded(_capturedResult!.level);
-    if (saved && mounted) Navigator.of(context).pop();
+    try {
+      final saved = await _showPlantSelectionDialogIfNeeded(_capturedResult!.level);
+      if (saved && mounted) Navigator.of(context).pop();
+    } catch (e) {
+      if (!mounted) return;
+      debugPrint('Failed to save light assessment: $e');
+      _showError();
+    }
   }
 }
 

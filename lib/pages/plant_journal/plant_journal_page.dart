@@ -3,19 +3,19 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
-import 'package:open_plants/core/app_scope.dart';
-import 'package:open_plants/l10n/l10n_x.dart';
-import 'package:open_plants/pages/diagnosis/diagnosis_page.dart';
-import 'package:open_plants/pages/diagnosis/diagnosis_repository.dart';
-import 'package:open_plants/pages/diagnosis/diagnosis_result_page.dart';
-import 'package:open_plants/pages/plant_journal/plant_journal_entry_form_page.dart';
-import 'package:open_plants/pages/plant_journal/plant_journal_extensions.dart';
-import 'package:open_plants/pages/plant_journal/plant_journal_item_entity.dart';
-import 'package:open_plants/pages/plant_journal/plant_journal_usecases.dart';
-import 'package:open_plants/pages/plant_journal/widgets/journal_diagnosis_card.dart';
-import 'package:open_plants/pages/plant_journal/widgets/journal_symptom_card.dart';
-import 'package:open_plants/pages/symptom_logger/symptom_logger_page.dart';
-import 'package:open_plants/widgets/confirm_dialog.dart';
+import 'package:openplants/core/app_scope.dart';
+import 'package:openplants/l10n/l10n_x.dart';
+import 'package:openplants/pages/diagnosis/diagnosis_page.dart';
+import 'package:openplants/pages/diagnosis/diagnosis_repository.dart';
+import 'package:openplants/pages/diagnosis/diagnosis_result_page.dart';
+import 'package:openplants/pages/plant_journal/plant_journal_entry_form_page.dart';
+import 'package:openplants/pages/plant_journal/plant_journal_extensions.dart';
+import 'package:openplants/pages/plant_journal/plant_journal_item_entity.dart';
+import 'package:openplants/pages/plant_journal/plant_journal_usecases.dart';
+import 'package:openplants/pages/plant_journal/widgets/journal_diagnosis_card.dart';
+import 'package:openplants/pages/plant_journal/widgets/journal_symptom_card.dart';
+import 'package:openplants/pages/symptom_logger/symptom_logger_page.dart';
+import 'package:openplants/widgets/confirm_dialog.dart';
 
 /// Timeline view of journal entries for a specific plant.
 ///
@@ -41,6 +41,7 @@ class _PlantJournalPageState extends State<PlantJournalPage> {
 
   List<JournalEntry> _entries = [];
   bool _loading = true;
+  bool _loadFailed = false;
 
   @override
   void didChangeDependencies() {
@@ -52,13 +53,19 @@ class _PlantJournalPageState extends State<PlantJournalPage> {
   }
 
   Future<void> _load() async {
-    setState(() => _loading = true);
-    final entries = await _usecases.getUnifiedTimeline(widget.plantId);
-    if (!mounted) return;
     setState(() {
-      _entries = entries;
-      _loading = false;
+      _loading = true;
+      _loadFailed = false;
     });
+    try {
+      final entries = await _usecases.getUnifiedTimeline(widget.plantId);
+      if (!mounted) return;
+      setState(() => _entries = entries);
+    } catch (_) {
+      if (mounted) setState(() => _loadFailed = true);
+    } finally {
+      if (mounted) setState(() => _loading = false);
+    }
   }
 
   Future<void> _addEntry() async {
@@ -169,16 +176,34 @@ class _PlantJournalPageState extends State<PlantJournalPage> {
       ),
       body: _loading
           ? const Center(child: CircularProgressIndicator())
-          : _entries.isEmpty
-              ? _buildEmptyState(context)
-              : ListView.builder(
-                  padding: const EdgeInsets.all(16),
-                  itemCount: _entries.length,
-                  itemBuilder: (context, index) => _buildEntryCard(context, _entries[index]),
-                ),
+          : _loadFailed
+              ? _buildLoadError(context)
+              : _entries.isEmpty
+                  ? _buildEmptyState(context)
+                  : ListView.builder(
+                      padding: const EdgeInsets.all(16),
+                      itemCount: _entries.length,
+                      itemBuilder: (context, index) => _buildEntryCard(context, _entries[index]),
+                    ),
       floatingActionButton: FloatingActionButton(
         onPressed: _addEntry,
         child: const Icon(Icons.add),
+      ),
+    );
+  }
+
+  Widget _buildLoadError(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(context.l10n.unexpectedError),
+          TextButton.icon(
+            onPressed: _load,
+            icon: const Icon(Icons.refresh),
+            label: Text(context.l10n.retry),
+          ),
+        ],
       ),
     );
   }
@@ -234,7 +259,6 @@ class _PlantJournalPageState extends State<PlantJournalPage> {
       case JournalEntryType.symptom:
         return JournalSymptomCard(
           entry: entry,
-          onTap: () => _editEntry(entry),
         );
       case JournalEntryType.diagnosis:
         return JournalDiagnosisCard(

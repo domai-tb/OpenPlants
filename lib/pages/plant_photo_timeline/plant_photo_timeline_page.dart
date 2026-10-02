@@ -2,12 +2,12 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
-import 'package:open_plants/core/app_scope.dart';
-import 'package:open_plants/core/date_utils.dart';
-import 'package:open_plants/l10n/l10n_x.dart';
-import 'package:open_plants/pages/plant_photo_timeline/plant_photo_timeline_item_entity.dart';
-import 'package:open_plants/pages/plant_photo_timeline/plant_photo_timeline_usecases.dart';
-import 'package:open_plants/widgets/confirm_dialog.dart';
+import 'package:openplants/core/app_scope.dart';
+import 'package:openplants/core/date_utils.dart';
+import 'package:openplants/l10n/l10n_x.dart';
+import 'package:openplants/pages/plant_photo_timeline/plant_photo_timeline_item_entity.dart';
+import 'package:openplants/pages/plant_photo_timeline/plant_photo_timeline_usecases.dart';
+import 'package:openplants/widgets/confirm_dialog.dart';
 
 /// Dedicated page showing a plant's growth photo timeline.
 ///
@@ -32,6 +32,7 @@ class _PlantPhotoTimelinePageState extends State<PlantPhotoTimelinePage> {
   bool _wired = false;
   List<PlantPhoto> _photos = [];
   bool _loading = true;
+  bool _loadFailed = false;
 
   @override
   void didChangeDependencies() {
@@ -43,13 +44,19 @@ class _PlantPhotoTimelinePageState extends State<PlantPhotoTimelinePage> {
   }
 
   Future<void> _load() async {
-    setState(() => _loading = true);
-    final photos = await _usecases.getTimeline(widget.plantId);
-    if (!mounted) return;
     setState(() {
-      _photos = photos;
-      _loading = false;
+      _loading = true;
+      _loadFailed = false;
     });
+    try {
+      final photos = await _usecases.getTimeline(widget.plantId);
+      if (!mounted) return;
+      setState(() => _photos = photos);
+    } catch (_) {
+      if (mounted) setState(() => _loadFailed = true);
+    } finally {
+      if (mounted) setState(() => _loading = false);
+    }
   }
 
   Future<void> _deletePhoto(PlantPhoto photo) async {
@@ -114,9 +121,27 @@ class _PlantPhotoTimelinePageState extends State<PlantPhotoTimelinePage> {
       ),
       body: _loading
           ? const Center(child: CircularProgressIndicator())
-          : _photos.isEmpty
-              ? _buildEmptyState(theme)
-              : _buildTimeline(theme),
+          : _loadFailed
+              ? _buildLoadError(context)
+              : _photos.isEmpty
+                  ? _buildEmptyState(theme)
+                  : _buildTimeline(theme),
+    );
+  }
+
+  Widget _buildLoadError(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(context.l10n.unexpectedError),
+          TextButton.icon(
+            onPressed: _load,
+            icon: const Icon(Icons.refresh),
+            label: Text(context.l10n.retry),
+          ),
+        ],
+      ),
     );
   }
 

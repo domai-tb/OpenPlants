@@ -26,11 +26,11 @@ When the user captures or selects a photo on the add-plant form, the system SHAL
 - **THEN** the system SHALL display an error message and the user can still set species manually or leave it blank
 
 ### Requirement: User can add a plant
-The system SHALL allow users to create a new plant entry with name (required), optional photo, optional species, optional room (selected from defined rooms), optional notes, initial care status (default: happy), and an empty photo timeline.
+The system SHALL allow users to create a new plant entry with name (required), optional photo, optional species, optional room (selected from defined rooms), optional notes, initial care status (default: happy), and an empty photo timeline. When the initial care status is `happy`, the system SHALL set `lastWateredAt` and `lastFertilizedAt` to the creation timestamp so the effective care status reflects the user's explicit choice.
 
 #### Scenario: Add plant with minimal info
 - **WHEN** user taps "Add plant" and enters only a name
-- **THEN** the system creates a plant with name as entered, default care status "happy", empty photo timeline, and all other fields empty
+- **THEN** the system creates a plant with name as entered, default care status "happy", `lastWateredAt` and `lastFertilizedAt` set to creation time, empty photo timeline, and all other fields empty
 
 #### Scenario: Add plant with photo from gallery
 - **WHEN** user taps "Add plant", fills in name, and picks a photo from the gallery
@@ -55,6 +55,14 @@ The system SHALL allow users to create a new plant entry with name (required), o
 #### Scenario: Add plant with all optional fields
 - **WHEN** user taps "Add plant" and provides name, photo, species, room selection, and notes
 - **THEN** the system creates a plant with all provided fields persisted and the photo added to its timeline
+
+#### Scenario: Add plant with needs-water status
+- **WHEN** user taps "Add plant", selects "Needs Water" care status, and saves
+- **THEN** the system creates the plant with care status "needsWater" and `lastWateredAt` and `lastFertilizedAt` remain null
+
+#### Scenario: Add plant with needs-fertilizer status
+- **WHEN** user taps "Add plant", selects "Needs Fertilizer" care status, and saves
+- **THEN** the system creates the plant with care status "needsFertilizer" and `lastWateredAt` and `lastFertilizedAt` remain null
 
 ### Requirement: Plant form shows room picker
 The system SHALL display a dropdown picker in the plant form that lists all defined rooms, with an option to create a new room.

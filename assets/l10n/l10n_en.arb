@@ -46,6 +46,9 @@
   "onboardingPrivacyBadgeNoTrackers": "No trackers",
   "onboardingPreferencesTitle": "Preferences",
   "themeLabel": "Theme",
+  "themeSystem": "System",
+  "themeLight": "Light",
+  "themeDark": "Dark",
   "languageLabel": "Language",
   "languageSystem": "System",
   "languageEnglish": "English",
@@ -68,7 +71,8 @@
   "serverFailureMessage": "Could not load server data.",
   "generalFailureMessage": "An error has occurred.",
   "errorMessage": "Error.",
-  "unexpectedError": "An unexpected error occured...",
+  "unexpectedError": "An unexpected error occurred.",
+  "retry": "Retry",
   "invalid2FATokenFailureMessage": "Your TOTP is incorrect. Please try again!",
   "invalidLoginIDAndPasswordFailureMessage": "The credentials are invalid!",
   "welcome": "Welcome!",
@@ -83,6 +87,14 @@
   "enter_totp": "Please enter your TOTP.",
   "plantIdCapturePrompt": "Take a photo of a plant to identify it",
   "plantIdCamera": "Camera",
+  "cameraAccessNeeded": "Camera access is needed to take photos of your plants.",
+  "cameraGrantAccess": "Grant access",
+  "cameraPermissionPermanentlyDenied": "Camera permission was permanently denied. Enable it in system settings.",
+  "cameraOpenSettings": "Open settings",
+  "cameraUseGalleryInstead": "Use gallery instead",
+  "cameraInitializing": "Initializing camera...",
+  "cameraInitializationFailed": "Camera could not be initialized.",
+  "cameraCapturePhoto": "Take photo",
   "plantIdGallery": "Gallery",
   "plantIdResults": "Results",
   "plantIdRetake": "Retake",
@@ -288,6 +300,12 @@
   "careRulesReminderTimeHint": "09:00",
   "careRulesReminderDays": "Reminder days",
   "careRulesSaveFailed": "Failed to save rule: {error}",
+  "careRulesBadgeCustom": "Custom",
+  "careRulesBadgeDefault": "Default",
+  "speciesPickerTitle": "Select Species",
+  "speciesPickerSearch": "Search species",
+  "speciesPickerSearchHint": "Enter common or scientific name",
+  "speciesPickerEmpty": "No species found",
   "diagnosisTitle": "Plant Diagnosis",
   "diagnosisSubtitle": "Diagnose plant problems",
   "diagnosisStep": "Step",
@@ -570,6 +588,117 @@
   "speciesListEmptyState": "No species found",
   "moreSpeciesListTitle": "Species List",
   "moreSpeciesListSubtitle": "Browse all plant species",
+  "moreRoomsTitle": "Rooms",
+  "moreRoomsSubtitle": "Manage room locations",
+  "roomEmptyTitle": "No rooms yet",
+  "roomAddAction": "Add Room",
+  "roomFormTitleNew": "New Room",
+  "roomFormTitleEdit": "Edit Room",
+  "roomFormQuickStart": "Quick Start",
+  "roomNameDuplicate": "A room with this name already exists",
+  "roomDeleteTitle": "Delete \"{roomName}\"?",
+  "@roomDeleteTitle": {
+    "placeholders": {
+      "roomName": { "type": "String" }
+    }
+  },
+  "roomDeleteAssignedPlants": "{count, plural, one {This room has 1 plant assigned. It will be unassigned when the room is deleted.} other {This room has {count} plants assigned. They will be unassigned when the room is deleted.}}",
+  "@roomDeleteAssignedPlants": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "roomDeleteNoAssignments": "This room has no plants assigned.",
+  "roomPresetBedroom": "Bedroom",
+  "roomPresetKitchen": "Kitchen",
+  "roomPresetBathroom": "Bathroom",
+  "roomPresetLivingRoom": "Living Room",
+  "roomPresetBalcony": "Balcony",
+  "roomPresetOffice": "Office",
+  "moreLightAssessmentTitle": "Light Assessment",
+  "moreLightAssessmentSubtitle": "Assess light levels for your plants",
+  "lightAssessmentPageTitle": "Light Assessment — {plantName}",
+  "@lightAssessmentPageTitle": {
+    "placeholders": {
+      "plantName": { "type": "String" }
+    }
+  },
+  "lightAssessmentCurrentLevel": "Current Light Level",
+  "lightAssessmentNotSet": "Not set",
+  "lightAssessmentClear": "Clear",
+  "lightAssessmentSelectLevel": "Select Light Level",
+  "lightAssessmentLowDescription": "Dark corners, north-facing windows, interior rooms",
+  "lightAssessmentMediumDescription": "East-facing windows, indirect light most of the day",
+  "lightAssessmentBrightDescription": "Near south or west windows, but outside direct sun rays",
+  "lightAssessmentDirectDescription": "Direct sun rays reach the plant for at least 4 hours",
+  "lightAssessmentCameraHeading": "Interactive Camera",
+  "lightAssessmentCameraDescription": "Move around in real time to see how light levels change before setting the level or taking a photo.",
+  "lightAssessmentCameraButton": "Assess with camera",
+  "lightAssessmentPhotoHeading": "Estimate from Photo",
+  "lightAssessmentPhotoDescription": "Light level is estimated from your plant's photo. For best results, use a photo that shows the plant in its usual spot.",
+  "lightAssessmentEstimateLow": "Looks like low light",
+  "lightAssessmentEstimateMedium": "Looks like medium light",
+  "lightAssessmentEstimateBright": "Looks like bright indirect light",
+  "lightAssessmentEstimateDirect": "Looks like direct sunlight",
+  "lightAssessmentBrightness": "Brightness: {percentage}%",
+  "@lightAssessmentBrightness": {
+    "placeholders": {
+      "percentage": { "type": "int" }
+    }
+  },
+  "lightAssessmentUseEstimate": "Use this",
+  "lightAssessmentDismissEstimate": "Dismiss",
+  "lightAssessmentTakeNewPhoto": "Take new photo",
+  "lightAssessmentChooseFromGallery": "Choose from gallery",
+  "lightAssessmentNoPhoto": "No photo yet. Take a photo of your plant to estimate its light level.",
+  "lightAssessmentLevelSet": "Light level set to {level}",
+  "@lightAssessmentLevelSet": {
+    "placeholders": {
+      "level": { "type": "String" }
+    }
+  },
+  "lightAssessmentLevelCleared": "Light level cleared",
+  "lightAssessmentPlantLevelSet": "{plantName}: Light level set to {level}",
+  "@lightAssessmentPlantLevelSet": {
+    "placeholders": {
+      "plantName": { "type": "String" },
+      "level": { "type": "String" }
+    }
+  },
+  "lightAssessmentNoPlants": "No plants to save to. Add a plant first.",
+  "lightAssessmentSaveToPlant": "Save light level to…",
+  "lightAssessmentSetToLevel": "Set to {level}",
+  "@lightAssessmentSetToLevel": {
+    "placeholders": {
+      "level": { "type": "String" }
+    }
+  },
+  "lightAssessmentCameraPermissionNeeded": "Camera access is needed to assess light levels in real time.",
+  "lightAssessmentConfidence": "Confidence: {percentage}%",
+  "@lightAssessmentConfidence": {
+    "placeholders": {
+      "percentage": { "type": "int" }
+    }
+  },
+  "lightAssessmentLiveGuidance": "Move around to see how light levels change. For best results, hold the camera steady for a moment.",
+  "lightAssessmentCameraTimedOut": "Camera timed out",
+  "lightAssessmentCameraTimeoutDescription": "The camera will close automatically to save battery.",
+  "lightAssessmentContinueAssessing": "Continue assessing",
+  "lightAssessmentSetThisLevel": "Set this level ({level})",
+  "@lightAssessmentSetThisLevel": {
+    "placeholders": {
+      "level": { "type": "String" }
+    }
+  },
+  "lightAssessmentResultTitle": "Assessment Result",
+  "lightAssessmentResultGuidance": "You can accept this estimate or go back to the camera for a different reading.",
+  "lightAssessmentAcceptAndSave": "Accept & Save",
+  "moreLogSymptomTitle": "Log Symptom",
+  "moreLogSymptomSubtitle": "Record a plant health issue",
+  "moreDiagnosisTitle": "Plant Diagnosis",
+  "moreDiagnosisSubtitle": "Diagnose plant problems",
+  "moreNotificationsTitle": "Notifications",
+  "moreNotificationsSubtitle": "Configure notification settings",
   "careScheduleCompletedEarly": "Completed early",
   "careScheduleCompletedEarlyNextDue": "Completed early — next due in {days} days",
   "@careScheduleCompletedEarlyNextDue": {
@@ -594,6 +723,132 @@
       "days": {
         "type": "int",
         "example": "7"
+      }
+    }
+  },
+  "metricsTitle": "Metrics",
+  "metricsEmpty": "No metrics yet",
+  "metricsEmptyDescription": "Add a metric to track things like soil moisture, temperature, or leaf health.",
+  "metricsAdd": "Add Metric",
+  "metricsName": "Name",
+  "metricsNameHint": "e.g., Soil Moisture",
+  "metricsUnit": "Unit",
+  "metricsUnitHint": "e.g., %, °C",
+  "metricsValueType": "Value Type",
+  "metricsSave": "Save",
+  "metricsNoData": "No data",
+  "metricsRecordMeasurement": "Record {name}",
+  "@metricsRecordMeasurement": {
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "example": "Soil Moisture"
+      }
+    }
+  },
+  "metricsValue": "Value",
+  "metricsNotes": "Notes (optional)",
+  "metricsRecordFirst": "Record First Measurement",
+  "metricsNoMeasurements": "No measurements yet",
+  "metricsValueTypeNumeric": "Numeric",
+  "metricsValueTypeBoolean": "Boolean",
+  "metricsValueTypeCategorical": "Categorical",
+  "metricsDeleteTitle": "Delete \"{name}\"?",
+  "@metricsDeleteTitle": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "metricsDeleteBody": "Delete this metric and all its measurements? This cannot be undone.",
+  "metricsActions": "Metric actions",
+  "metricsEdit": "Edit",
+  "metricsEnable": "Enable",
+  "metricsDisable": "Disable",
+  "metricsDelete": "Delete",
+  "metricsInvalidMeasurement": "Invalid measurement",
+  "metricsYes": "Yes",
+  "metricsNo": "No",
+  "metricsMinimumAlert": "Minimum alert value (optional)",
+  "metricsMaximumAlert": "Maximum alert value (optional)",
+  "metricsOptions": "Options",
+  "metricsOptionsHint": "Comma-separated, e.g., Good, Fair, Poor",
+  "metricsAlertOn": "Alert on {option}",
+  "@metricsAlertOn": {
+    "placeholders": {
+      "option": { "type": "String" }
+    }
+  },
+  "metricsAlertWhenYes": "Alert when Yes",
+  "metricsAlertWhenNo": "Alert when No",
+  "metricsAlertResponse": "Alert response",
+  "metricsAlertResponseWarning": "Warning only",
+  "metricsAlertResponseCareTask": "Create care task",
+  "metricsUnitRequired": "Unit is required",
+  "metricsNameRequired": "Metric name is required",
+  "metricsCategoryOptionsRequired": "Add at least one option",
+  "metricsCategoryOptionsUnique": "Options must be unique",
+  "metricsMinimumMustBeFinite": "Minimum must be a finite number",
+  "metricsMaximumMustBeFinite": "Maximum must be a finite number",
+  "metricsMinimumCannotExceedMaximum": "Minimum cannot exceed maximum",
+  "speciesCarePlanWaterLow": "Water every 2–3 weeks and let the soil dry completely between waterings.",
+  "speciesCarePlanWaterModerate": "Water weekly and let the top inch of soil dry between waterings.",
+  "speciesCarePlanWaterFrequent": "Water 2–3 times a week and keep the soil evenly moist.",
+  "speciesCarePlanLightLow": "Keep in low light and away from direct sun. North-facing rooms are suitable.",
+  "speciesCarePlanLightMedium": "Provide bright indirect light. East- or west-facing windows are suitable.",
+  "speciesCarePlanLightBright": "Provide bright indirect light, such as at a south-facing window with a sheer curtain.",
+  "speciesCarePlanLightDirect": "Provide direct sunlight, such as at a south-facing windowsill, or use a grow light.",
+  "speciesCarePlanHumidityLow": "Average household humidity (30–40%) is suitable.",
+  "speciesCarePlanHumidityModerate": "Higher humidity (40–60%) is preferred. Try a pebble tray or occasional misting.",
+  "speciesCarePlanHumidityHigh": "High humidity (60%+) is needed. Use a humidifier or terrarium.",
+  "speciesCarePlanSoil": "Use {soilType} and a pot with drainage to help prevent root rot.",
+  "@speciesCarePlanSoil": {
+    "placeholders": {
+      "soilType": { "type": "String" }
+    }
+  },
+  "speciesSoilCactus": "a very well-draining cactus or succulent mix",
+  "speciesSoilOrchid": "a coarse orchid-bark mix",
+  "speciesSoilAroid": "an airy aroid mix",
+  "speciesSoilPeatFree": "a peat-free mix",
+  "speciesSoilPeatMoss": "a moisture-retentive mix with peat moss",
+  "speciesSoilMoistureRetentive": "a moisture-retentive mix",
+  "speciesSoilPottingMix": "a well-draining potting mix",
+  "speciesCarePlanRepotAnnual": "Annual repotting is recommended.",
+  "speciesCarePlanRepotEveryTwoYears": "Repot every 1–2 years.",
+  "speciesCarePlanRepotWhenRootBound": "Repot only when the roots fill the pot.",
+  "notificationsTitle": "Notifications",
+  "notificationsEnable": "Enable Notifications",
+  "notificationsEnableDescription": "Master switch for all notifications",
+  "notificationsDueTasks": "Due Task Reminders",
+  "notificationsDueTasksDescription": "Notify when care tasks are due",
+  "notificationsOverdueTasks": "Overdue Task Alerts",
+  "notificationsOverdueTasksDescription": "Alert when care tasks are overdue",
+  "notificationsPermissionStatus": "Permission Status",
+  "notificationsPermissionEnabled": "Notifications enabled",
+  "notificationsPermissionDisabled": "Notifications disabled",
+  "notificationsChannelName": "Care Reminders",
+  "notificationsChannelDescription": "Reminders for plant care tasks",
+  "notificationsPermissionExplanation": "Allow notifications so OpenPlants can send local reminders for your care rules.",
+  "notificationsRequestPermission": "Allow notifications",
+  "notificationsOpenSettings": "Open app settings",
+  "notificationsPermissionBlocked": "Notifications are blocked by the operating system.",
+  "notificationReminderTitle": "Plant care reminder",
+  "notificationReminderBody": "{taskType} for {plantName} is due.",
+  "careScheduleMetricAlert": "Metric alert: {metricName}",
+  "@careScheduleMetricAlert": {
+    "placeholders": {
+      "metricName": {
+        "type": "String"
+      }
+    }
+  },
+  "@notificationReminderBody": {
+    "placeholders": {
+      "taskType": {
+        "type": "String"
+      },
+      "plantName": {
+        "type": "String"
       }
     }
   }

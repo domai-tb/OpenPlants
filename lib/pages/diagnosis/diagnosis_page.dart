@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
-import 'package:open_plants/core/app_scope.dart';
-import 'package:open_plants/l10n/l10n_x.dart';
-import 'package:open_plants/pages/diagnosis/diagnosis_item_entity.dart';
-import 'package:open_plants/pages/diagnosis/diagnosis_result_entity.dart';
-import 'package:open_plants/pages/diagnosis/diagnosis_result_page.dart';
+import 'package:openplants/core/app_scope.dart';
+import 'package:openplants/l10n/l10n_x.dart';
+import 'package:openplants/pages/diagnosis/diagnosis_item_entity.dart';
+import 'package:openplants/pages/diagnosis/diagnosis_result_entity.dart';
+import 'package:openplants/pages/diagnosis/diagnosis_result_page.dart';
 
 /// Multi-step questionnaire for collecting symptom and plant context information
 /// to feed into the diagnosis engine.
@@ -134,24 +134,24 @@ class _DiagnosisPageState extends State<DiagnosisPage> {
     if (_evaluating) return;
     setState(() => _evaluating = true);
 
+    final plantSpecies = _plantSpeciesController.text.trim();
+    final diagnosisContext = DiagnosisContext(
+      symptoms: _selectedSymptoms.toList(),
+      plantSpecies: plantSpecies.isEmpty ? null : plantSpecies,
+      potType: _potType,
+      soilType: _soilType,
+      wateringFrequency: _wateringFrequency,
+      lightExposure: _lightExposure,
+      humidityLevel: _humidityLevel,
+      recentFertilizing: _recentFertilizing,
+      pestSigns: _pestSigns,
+    );
+
+    final repository = AppScope.of(context).services.diagnosis;
+    late final DiagnosisResultEntity entity;
     try {
-      final plantSpecies = _plantSpeciesController.text.trim();
-      final diagnosisContext = DiagnosisContext(
-        symptoms: _selectedSymptoms.toList(),
-        plantSpecies: plantSpecies.isEmpty ? null : plantSpecies,
-        potType: _potType,
-        soilType: _soilType,
-        wateringFrequency: _wateringFrequency,
-        lightExposure: _lightExposure,
-        humidityLevel: _humidityLevel,
-        recentFertilizing: _recentFertilizing,
-        pestSigns: _pestSigns,
-      );
-
-      final repository = AppScope.of(context).services.diagnosis;
       final result = repository.evaluate(diagnosisContext);
-
-      final entity = DiagnosisResultEntity(
+      entity = DiagnosisResultEntity(
         id: const Uuid().v4(),
         plantId: '',
         plantSymptoms: _selectedSymptoms.toList(),
@@ -162,14 +162,26 @@ class _DiagnosisPageState extends State<DiagnosisPage> {
       );
 
       await repository.saveResult(entity);
+    } catch (e) {
+      debugPrint('Failed to save diagnosis: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(context.l10n.generalFailureMessage)),
+        );
+      }
+      if (mounted) setState(() => _evaluating = false);
+      return;
+    }
 
-      if (!mounted) return;
-
+    if (!mounted) return;
+    try {
       await Navigator.of(context).push(
         MaterialPageRoute(
           builder: (_) => DiagnosisResultPage(entity: entity),
         ),
       );
+    } catch (e) {
+      debugPrint('Failed to open diagnosis results: $e');
     } finally {
       if (mounted) setState(() => _evaluating = false);
     }

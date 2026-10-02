@@ -1,20 +1,18 @@
-import 'dart:io' show Platform;
-
 import 'package:flutter/material.dart';
 
-import 'package:open_plants/core/constants.dart';
-import 'package:open_plants/pages/home/page_navigator.dart';
-import 'package:open_plants/pages/home/widgets/bottom_nav_bar_item.dart';
+import 'package:openplants/core/constants.dart';
+import 'package:openplants/pages/home/page_navigator.dart';
+import 'package:openplants/pages/home/widgets/bottom_nav_bar_item.dart';
 
 /// Creates the bottom navigation bar that lets the user switch between different pages.
 /// With 3 fixed tabs, the items fit without scrolling.
-class BottomNavBar extends StatefulWidget {
+class BottomNavBar extends StatelessWidget {
   /// Needs the currently active page in order to highlight it
   final PageItem currentPage;
   final List<PageItem> pages;
 
   /// Calls this function when an item of the navigation bar is selected.
-  final Function(PageItem) onSelectedPage;
+  final ValueChanged<PageItem> onSelectedPage;
 
   const BottomNavBar({
     super.key,
@@ -24,17 +22,12 @@ class BottomNavBar extends StatefulWidget {
   });
 
   @override
-  State<BottomNavBar> createState() => _BottomNavBarState();
-}
-
-class _BottomNavBarState extends State<BottomNavBar> {
-  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
     return Container(
       height: bottomNavBarHeight,
-      padding: Platform.isIOS ? const EdgeInsets.only(bottom: 20) : null,
+      padding: const EdgeInsets.only(bottom: 20),
       decoration: BoxDecoration(
         color: theme.cardColor,
         borderRadius: const BorderRadius.only(
@@ -50,7 +43,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
         ],
       ),
       child: Row(
-        children: widget.pages.map((page) {
+        children: pages.map((page) {
           final presentation = pageItemPresentation(context, page);
 
           return Expanded(
@@ -58,8 +51,8 @@ class _BottomNavBarState extends State<BottomNavBar> {
               title: presentation.title,
               activeIcon: presentation.activeIcon,
               inactiveIcon: presentation.inactiveIcon,
-              onTap: () => widget.onSelectedPage(page),
-              isActive: widget.currentPage == page,
+              onTap: () => onSelectedPage(page),
+              isActive: currentPage == page,
             ),
           );
         }).toList(),

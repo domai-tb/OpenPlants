@@ -20,7 +20,7 @@ No `Makefile`, no `taskfile`, no scripts beyond the above.
 
 ## Flutter Version
 
-Pinned to **3.41.0** via FVM (`.fvmrc`). Never use bare `flutter` or `dart` — always go through `fvm`.
+Pinned to **3.41.4** via FVM (`.fvmrc`). Never use bare `flutter` or `dart` — always go through `fvm`.
 
 ## Architecture
 

@@ -1,8 +1,8 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:open_plants/core/exceptions.dart';
-import 'package:open_plants/core/local_collection_codec.dart';
-import 'package:open_plants/pages/diagnosis/diagnosis_result_entity.dart';
+import 'package:openplants/core/exceptions.dart';
+import 'package:openplants/core/local_collection_codec.dart';
+import 'package:openplants/pages/diagnosis/diagnosis_result_entity.dart';
 
 /// Data source for diagnosis result persistence.
 ///

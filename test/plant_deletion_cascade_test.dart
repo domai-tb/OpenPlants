@@ -1,17 +1,17 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:open_plants/pages/care_schedule/care_schedule_datasource.dart';
-import 'package:open_plants/pages/care_schedule/care_task_type.dart';
-import 'package:open_plants/pages/care_schedule/custom_care_rule.dart';
-import 'package:open_plants/pages/care_schedule/task_completion.dart';
-import 'package:open_plants/pages/diagnosis/diagnosis_datasource.dart';
-import 'package:open_plants/pages/diagnosis/diagnosis_item_entity.dart';
-import 'package:open_plants/pages/diagnosis/diagnosis_result_entity.dart';
-import 'package:open_plants/pages/plant_journal/plant_journal_datasource.dart';
-import 'package:open_plants/pages/plant_journal/plant_journal_item_entity.dart';
-import 'package:open_plants/pages/symptom_logger/symptom_logger_datasource.dart';
-import 'package:open_plants/pages/symptom_logger/symptom_logger_item_entity.dart';
+import 'package:openplants/pages/care_schedule/care_schedule_datasource.dart';
+import 'package:openplants/pages/care_schedule/care_task_type.dart';
+import 'package:openplants/pages/care_schedule/custom_care_rule.dart';
+import 'package:openplants/pages/care_schedule/task_completion.dart';
+import 'package:openplants/pages/diagnosis/diagnosis_datasource.dart';
+import 'package:openplants/pages/diagnosis/diagnosis_item_entity.dart';
+import 'package:openplants/pages/diagnosis/diagnosis_result_entity.dart';
+import 'package:openplants/pages/plant_journal/plant_journal_datasource.dart';
+import 'package:openplants/pages/plant_journal/plant_journal_item_entity.dart';
+import 'package:openplants/pages/symptom_logger/symptom_logger_datasource.dart';
+import 'package:openplants/pages/symptom_logger/symptom_logger_item_entity.dart';
 
 void main() {
   group('Plant deletion cascade — datasource deleteForPlant', () {

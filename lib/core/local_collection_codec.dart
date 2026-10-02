@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:open_plants/core/exceptions.dart';
+import 'package:openplants/core/exceptions.dart';
 
 // ---------------------------------------------------------------------------
 // Result types
@@ -157,11 +157,12 @@ class LocalCollectionCodec<T> {
   /// Replaces the entire collection.
   ///
   /// Throws [BlockedAfterDecodeFailure] if the most recent [load] returned a
-  /// failure.
-  Future<void> save(List<T> items) {
+  /// failure. Throws [StateError] if SharedPreferences rejects the write.
+  Future<void> save(List<T> items) async {
     _assertNotBlocked();
     final json = items.map(_toJson).toList();
-    return _prefs.setString(_key, jsonEncode(json));
+    final saved = await _prefs.setString(_key, jsonEncode(json));
+    if (!saved) throw StateError('Failed to persist "$_key" to SharedPreferences.');
   }
 
   /// Appends an item to the collection.

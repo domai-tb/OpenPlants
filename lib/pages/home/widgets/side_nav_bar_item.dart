@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:open_plants/widgets/custom_button.dart';
+import 'package:openplants/widgets/custom_button.dart';
 
-class SideNavBarItem extends StatefulWidget {
+class SideNavBarItem extends StatelessWidget {
   final IconData activeIcon;
   final IconData inactiveIcon;
 
@@ -36,11 +36,6 @@ class SideNavBarItem extends StatefulWidget {
   });
 
   @override
-  State<SideNavBarItem> createState() => _SideNavBarItemState();
-}
-
-class _SideNavBarItemState extends State<SideNavBarItem> {
-  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
@@ -50,24 +45,24 @@ class _SideNavBarItemState extends State<SideNavBarItem> {
       child:
           // Icon-button
           CustomButton(
-        tapHandler: () => widget.onTap(),
+        tapHandler: onTap,
         child: Padding(
-          padding: EdgeInsets.symmetric(vertical: widget.verticalPadding),
+          padding: EdgeInsets.symmetric(vertical: verticalPadding),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               Padding(
-                padding: EdgeInsets.only(left: 14, right: 14, bottom: widget.bottomIconPadding),
+                padding: EdgeInsets.only(left: 14, right: 14, bottom: bottomIconPadding),
                 child: Icon(
-                  widget.isActive ? widget.activeIcon : widget.inactiveIcon,
-                  size: widget.iconHeight,
-                  color: widget.isActive ? colorScheme.secondary : colorScheme.onSurfaceVariant,
+                  isActive ? activeIcon : inactiveIcon,
+                  size: iconHeight,
+                  color: isActive ? colorScheme.secondary : colorScheme.onSurfaceVariant,
                 ),
               ),
               // Text
               Text(
-                widget.title,
-                style: widget.isActive
+                title,
+                style: isActive
                     ? theme.textTheme.labelSmall?.copyWith(fontWeight: FontWeight.w700)
                     : theme.textTheme.labelSmall,
               ),

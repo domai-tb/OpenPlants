@@ -153,6 +153,15 @@ class AppLocalizationsDe extends AppLocalizations {
   String get themeLabel => 'Theme';
 
   @override
+  String get themeSystem => 'System';
+
+  @override
+  String get themeLight => 'Hell';
+
+  @override
+  String get themeDark => 'Dunkel';
+
+  @override
   String get languageLabel => 'Sprache';
 
   @override
@@ -225,6 +234,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get unexpectedError => 'Ein unerwarteter Fehler ist aufgetreten...';
 
   @override
+  String get retry => 'Erneut versuchen';
+
+  @override
   String get invalid2FATokenFailureMessage =>
       'Dein Einmalcode (TOTP) is ungültig. Bitte versuche es erneut!';
 
@@ -269,6 +281,33 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get plantIdCamera => 'Kamera';
+
+  @override
+  String get cameraAccessNeeded =>
+      'Für Pflanzenfotos wird Kamerazugriff benötigt.';
+
+  @override
+  String get cameraGrantAccess => 'Zugriff erlauben';
+
+  @override
+  String get cameraPermissionPermanentlyDenied =>
+      'Kamerazugriff wurde dauerhaft verweigert. Aktiviere ihn in den Systemeinstellungen.';
+
+  @override
+  String get cameraOpenSettings => 'Einstellungen öffnen';
+
+  @override
+  String get cameraUseGalleryInstead => 'Stattdessen Galerie verwenden';
+
+  @override
+  String get cameraInitializing => 'Kamera wird initialisiert...';
+
+  @override
+  String get cameraInitializationFailed =>
+      'Die Kamera konnte nicht initialisiert werden.';
+
+  @override
+  String get cameraCapturePhoto => 'Foto aufnehmen';
 
   @override
   String get plantIdGallery => 'Galerie';
@@ -858,6 +897,24 @@ class AppLocalizationsDe extends AppLocalizations {
   String careRulesSaveFailed(Object error) {
     return 'Regel konnte nicht gespeichert werden: $error';
   }
+
+  @override
+  String get careRulesBadgeCustom => 'Custom';
+
+  @override
+  String get careRulesBadgeDefault => 'Default';
+
+  @override
+  String get speciesPickerTitle => 'Select Species';
+
+  @override
+  String get speciesPickerSearch => 'Search species';
+
+  @override
+  String get speciesPickerSearchHint => 'Enter common or scientific name';
+
+  @override
+  String get speciesPickerEmpty => 'No species found';
 
   @override
   String get diagnosisTitle => 'Pflanzendiagnose';
@@ -1621,10 +1678,249 @@ class AppLocalizationsDe extends AppLocalizations {
   String get speciesListEmptyState => 'No species found';
 
   @override
-  String get moreSpeciesListTitle => 'Species List';
+  String get moreSpeciesListTitle => 'Artenliste';
 
   @override
-  String get moreSpeciesListSubtitle => 'Browse all plant species';
+  String get moreSpeciesListSubtitle => 'Alle Pflanzenarten durchsuchen';
+
+  @override
+  String get moreRoomsTitle => 'Räume';
+
+  @override
+  String get moreRoomsSubtitle => 'Pflanzenräume verwalten';
+
+  @override
+  String get roomEmptyTitle => 'Noch keine Räume';
+
+  @override
+  String get roomAddAction => 'Raum hinzufügen';
+
+  @override
+  String get roomFormTitleNew => 'Neuer Raum';
+
+  @override
+  String get roomFormTitleEdit => 'Raum bearbeiten';
+
+  @override
+  String get roomFormQuickStart => 'Schnellstart';
+
+  @override
+  String get roomNameDuplicate => 'Ein Raum mit diesem Namen existiert bereits';
+
+  @override
+  String roomDeleteTitle(String roomName) {
+    return '„$roomName“ löschen?';
+  }
+
+  @override
+  String roomDeleteAssignedPlants(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          'Diesem Raum sind $count Pflanzen zugeordnet. Sie werden beim Löschen des Raums entfernt.',
+      one:
+          'Diesem Raum ist 1 Pflanze zugeordnet. Sie wird beim Löschen des Raums entfernt.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get roomDeleteNoAssignments =>
+      'Diesem Raum sind keine Pflanzen zugeordnet.';
+
+  @override
+  String get roomPresetBedroom => 'Schlafzimmer';
+
+  @override
+  String get roomPresetKitchen => 'Küche';
+
+  @override
+  String get roomPresetBathroom => 'Badezimmer';
+
+  @override
+  String get roomPresetLivingRoom => 'Wohnzimmer';
+
+  @override
+  String get roomPresetBalcony => 'Balkon';
+
+  @override
+  String get roomPresetOffice => 'Büro';
+
+  @override
+  String get moreLightAssessmentTitle => 'Lichtmessung';
+
+  @override
+  String get moreLightAssessmentSubtitle =>
+      'Lichtverhältnisse für Pflanzen einschätzen';
+
+  @override
+  String lightAssessmentPageTitle(String plantName) {
+    return 'Lichtmessung — $plantName';
+  }
+
+  @override
+  String get lightAssessmentCurrentLevel => 'Aktuelle Lichtstufe';
+
+  @override
+  String get lightAssessmentNotSet => 'Nicht festgelegt';
+
+  @override
+  String get lightAssessmentClear => 'Zurücksetzen';
+
+  @override
+  String get lightAssessmentSelectLevel => 'Lichtstufe auswählen';
+
+  @override
+  String get lightAssessmentLowDescription =>
+      'Dunkle Ecken, Nordfenster und Innenräume';
+
+  @override
+  String get lightAssessmentMediumDescription =>
+      'Ostfenster mit indirektem Licht während des größten Teils des Tages';
+
+  @override
+  String get lightAssessmentBrightDescription =>
+      'In der Nähe von Süd- oder Westfenstern, aber ohne direkte Sonnenstrahlen';
+
+  @override
+  String get lightAssessmentDirectDescription =>
+      'Mindestens vier Stunden direkte Sonnenstrahlen auf der Pflanze';
+
+  @override
+  String get lightAssessmentCameraHeading => 'Interaktive Kamera';
+
+  @override
+  String get lightAssessmentCameraDescription =>
+      'Bewege dich in Echtzeit, um zu sehen, wie sich die Lichtstärke verändert, bevor du sie festlegst oder ein Foto aufnimmst.';
+
+  @override
+  String get lightAssessmentCameraButton => 'Mit Kamera einschätzen';
+
+  @override
+  String get lightAssessmentPhotoHeading =>
+      'Licht anhand eines Fotos einschätzen';
+
+  @override
+  String get lightAssessmentPhotoDescription =>
+      'Die Lichtstärke wird anhand eines Fotos deiner Pflanze eingeschätzt. Am besten eignet sich ein Foto am üblichen Standort.';
+
+  @override
+  String get lightAssessmentEstimateLow => 'Sieht nach wenig Licht aus';
+
+  @override
+  String get lightAssessmentEstimateMedium => 'Sieht nach mittlerem Licht aus';
+
+  @override
+  String get lightAssessmentEstimateBright =>
+      'Sieht nach hellem, indirektem Licht aus';
+
+  @override
+  String get lightAssessmentEstimateDirect =>
+      'Sieht nach direktem Sonnenlicht aus';
+
+  @override
+  String lightAssessmentBrightness(int percentage) {
+    return 'Helligkeit: $percentage%';
+  }
+
+  @override
+  String get lightAssessmentUseEstimate => 'Übernehmen';
+
+  @override
+  String get lightAssessmentDismissEstimate => 'Verwerfen';
+
+  @override
+  String get lightAssessmentTakeNewPhoto => 'Neues Foto aufnehmen';
+
+  @override
+  String get lightAssessmentChooseFromGallery => 'Aus Galerie auswählen';
+
+  @override
+  String get lightAssessmentNoPhoto =>
+      'Noch kein Foto vorhanden. Nimm ein Foto deiner Pflanze auf, um die Lichtstärke einzuschätzen.';
+
+  @override
+  String lightAssessmentLevelSet(String level) {
+    return 'Lichtstufe auf $level gesetzt';
+  }
+
+  @override
+  String get lightAssessmentLevelCleared => 'Lichtstufe zurückgesetzt';
+
+  @override
+  String lightAssessmentPlantLevelSet(String plantName, String level) {
+    return '$plantName: Lichtstufe auf $level gesetzt';
+  }
+
+  @override
+  String get lightAssessmentNoPlants =>
+      'Es gibt keine Pflanze zum Speichern. Füge zuerst eine Pflanze hinzu.';
+
+  @override
+  String get lightAssessmentSaveToPlant => 'Lichtstufe speichern für …';
+
+  @override
+  String lightAssessmentSetToLevel(String level) {
+    return 'Einstellen auf $level';
+  }
+
+  @override
+  String get lightAssessmentCameraPermissionNeeded =>
+      'Für die Echtzeitmessung der Lichtstärke wird Kamerazugriff benötigt.';
+
+  @override
+  String lightAssessmentConfidence(int percentage) {
+    return 'Sicherheit: $percentage%';
+  }
+
+  @override
+  String get lightAssessmentLiveGuidance =>
+      'Bewege die Kamera, um zu sehen, wie sich die Lichtstärke verändert. Halte sie für genauere Ergebnisse kurz ruhig.';
+
+  @override
+  String get lightAssessmentCameraTimedOut => 'Zeitlimit der Kamera erreicht';
+
+  @override
+  String get lightAssessmentCameraTimeoutDescription =>
+      'Die Kamera wird automatisch geschlossen, um den Akku zu schonen.';
+
+  @override
+  String get lightAssessmentContinueAssessing => 'Weiter messen';
+
+  @override
+  String lightAssessmentSetThisLevel(String level) {
+    return 'Diese Stufe einstellen ($level)';
+  }
+
+  @override
+  String get lightAssessmentResultTitle => 'Messergebnis';
+
+  @override
+  String get lightAssessmentResultGuidance =>
+      'Du kannst diese Einschätzung übernehmen oder zur Kamera zurückkehren, um erneut zu messen.';
+
+  @override
+  String get lightAssessmentAcceptAndSave => 'Übernehmen und speichern';
+
+  @override
+  String get moreLogSymptomTitle => 'Symptom erfassen';
+
+  @override
+  String get moreLogSymptomSubtitle => 'Pflanzengesundheit dokumentieren';
+
+  @override
+  String get moreDiagnosisTitle => 'Pflanzendiagnose';
+
+  @override
+  String get moreDiagnosisSubtitle => 'Pflanzenprobleme diagnostizieren';
+
+  @override
+  String get moreNotificationsTitle => 'Benachrichtigungen';
+
+  @override
+  String get moreNotificationsSubtitle =>
+      'Benachrichtigungseinstellungen verwalten';
 
   @override
   String get careScheduleCompletedEarly => 'Completed early';
@@ -1644,5 +1940,304 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String careScheduleCompletionSnackbar(String taskType, int days) {
     return '$taskType marked done — next due in $days days';
+  }
+
+  @override
+  String get metricsTitle => 'Messwerte';
+
+  @override
+  String get metricsEmpty => 'Noch keine Messwerte';
+
+  @override
+  String get metricsEmptyDescription =>
+      'Füge Messwerte hinzu, um Bodenfeuchtigkeit, Temperatur oder Pflanzengesundheit zu verfolgen.';
+
+  @override
+  String get metricsAdd => 'Messwert hinzufügen';
+
+  @override
+  String get metricsName => 'Name';
+
+  @override
+  String get metricsNameHint => 'z. B. Bodenfeuchtigkeit';
+
+  @override
+  String get metricsUnit => 'Einheit';
+
+  @override
+  String get metricsUnitHint => 'z. B. %, °C';
+
+  @override
+  String get metricsValueType => 'Wertetyp';
+
+  @override
+  String get metricsSave => 'Speichern';
+
+  @override
+  String get metricsNoData => 'Keine Daten';
+
+  @override
+  String metricsRecordMeasurement(String name) {
+    return 'Eintrag für $name hinzufügen';
+  }
+
+  @override
+  String get metricsValue => 'Wert';
+
+  @override
+  String get metricsNotes => 'Notizen (optional)';
+
+  @override
+  String get metricsRecordFirst => 'Ersten Messwert eintragen';
+
+  @override
+  String get metricsNoMeasurements => 'Noch keine Messwerte';
+
+  @override
+  String get metricsValueTypeNumeric => 'Zahl';
+
+  @override
+  String get metricsValueTypeBoolean => 'Ja/Nein';
+
+  @override
+  String get metricsValueTypeCategorical => 'Kategorie';
+
+  @override
+  String metricsDeleteTitle(String name) {
+    return '„$name“ löschen?';
+  }
+
+  @override
+  String get metricsDeleteBody =>
+      'Diesen Messwert und alle zugehörigen Einträge löschen? Das kann nicht rückgängig gemacht werden.';
+
+  @override
+  String get metricsActions => 'Messwertaktionen';
+
+  @override
+  String get metricsEdit => 'Bearbeiten';
+
+  @override
+  String get metricsEnable => 'Aktivieren';
+
+  @override
+  String get metricsDisable => 'Deaktivieren';
+
+  @override
+  String get metricsDelete => 'Löschen';
+
+  @override
+  String get metricsInvalidMeasurement => 'Ungültiger Messwert';
+
+  @override
+  String get metricsYes => 'Ja';
+
+  @override
+  String get metricsNo => 'Nein';
+
+  @override
+  String get metricsMinimumAlert => 'Unterer Alarmwert (optional)';
+
+  @override
+  String get metricsMaximumAlert => 'Oberer Alarmwert (optional)';
+
+  @override
+  String get metricsOptions => 'Optionen';
+
+  @override
+  String get metricsOptionsHint => 'Kommagetrennt, z. B. Gut, Mittel, Schlecht';
+
+  @override
+  String metricsAlertOn(String option) {
+    return 'Alarm bei $option';
+  }
+
+  @override
+  String get metricsAlertWhenYes => 'Bei Ja alarmieren';
+
+  @override
+  String get metricsAlertWhenNo => 'Bei Nein alarmieren';
+
+  @override
+  String get metricsAlertResponse => 'Alarmreaktion';
+
+  @override
+  String get metricsAlertResponseWarning => 'Nur warnen';
+
+  @override
+  String get metricsAlertResponseCareTask => 'Pflegeaufgabe erstellen';
+
+  @override
+  String get metricsUnitRequired => 'Eine Einheit ist erforderlich';
+
+  @override
+  String get metricsNameRequired => 'Name des Messwerts erforderlich';
+
+  @override
+  String get metricsCategoryOptionsRequired =>
+      'Mindestens eine Option hinzufügen';
+
+  @override
+  String get metricsCategoryOptionsUnique => 'Optionen müssen eindeutig sein';
+
+  @override
+  String get metricsMinimumMustBeFinite =>
+      'Minimum muss eine endliche Zahl sein';
+
+  @override
+  String get metricsMaximumMustBeFinite =>
+      'Maximum muss eine endliche Zahl sein';
+
+  @override
+  String get metricsMinimumCannotExceedMaximum =>
+      'Minimum darf das Maximum nicht überschreiten';
+
+  @override
+  String get speciesCarePlanWaterLow =>
+      'Alle 2–3 Wochen gießen und die Erde zwischen den Wassergaben vollständig trocknen lassen.';
+
+  @override
+  String get speciesCarePlanWaterModerate =>
+      'Wöchentlich gießen und die oberen 2–3 cm Erde zwischen den Wassergaben trocknen lassen.';
+
+  @override
+  String get speciesCarePlanWaterFrequent =>
+      'Zwei- bis dreimal pro Woche gießen und die Erde gleichmäßig feucht halten.';
+
+  @override
+  String get speciesCarePlanLightLow =>
+      'An einen lichtarmen Ort ohne direkte Sonne stellen. Räume mit Nordfenstern sind geeignet.';
+
+  @override
+  String get speciesCarePlanLightMedium =>
+      'Helles, indirektes Licht bieten. Ost- oder Westfenster sind geeignet.';
+
+  @override
+  String get speciesCarePlanLightBright =>
+      'Helles, indirektes Licht bieten, etwa an einem Südfenster mit lichtdurchlässigem Vorhang.';
+
+  @override
+  String get speciesCarePlanLightDirect =>
+      'Direkte Sonne bieten, etwa auf einer Südfensterbank, oder eine Pflanzenlampe verwenden.';
+
+  @override
+  String get speciesCarePlanHumidityLow =>
+      'Die übliche Luftfeuchtigkeit in Wohnräumen (30–40 %) ist geeignet.';
+
+  @override
+  String get speciesCarePlanHumidityModerate =>
+      'Eine höhere Luftfeuchtigkeit (40–60 %) ist besser. Eine Kieselschale oder gelegentliches Besprühen kann helfen.';
+
+  @override
+  String get speciesCarePlanHumidityHigh =>
+      'Hohe Luftfeuchtigkeit (ab 60 %) ist nötig. Einen Luftbefeuchter oder ein Terrarium verwenden.';
+
+  @override
+  String speciesCarePlanSoil(String soilType) {
+    return '$soilType verwenden und einen Topf mit Abflusslöchern wählen, damit Wurzelfäule vermieden wird.';
+  }
+
+  @override
+  String get speciesSoilCactus =>
+      'eine sehr durchlässige Kakteen- oder Sukkulentenerde';
+
+  @override
+  String get speciesSoilOrchid => 'eine grobe Mischung mit Orchideenrinde';
+
+  @override
+  String get speciesSoilAroid => 'eine lockere Aroid-Mischung';
+
+  @override
+  String get speciesSoilPeatFree => 'eine torffreie Erde';
+
+  @override
+  String get speciesSoilPeatMoss =>
+      'eine feuchtigkeitsspeichernde Mischung mit Torfmoos';
+
+  @override
+  String get speciesSoilMoistureRetentive =>
+      'eine feuchtigkeitsspeichernde Mischung';
+
+  @override
+  String get speciesSoilPottingMix => 'eine gut durchlässige Blumenerde';
+
+  @override
+  String get speciesCarePlanRepotAnnual =>
+      'Jährliches Umtopfen wird empfohlen.';
+
+  @override
+  String get speciesCarePlanRepotEveryTwoYears =>
+      'Alle ein bis zwei Jahre umtopfen.';
+
+  @override
+  String get speciesCarePlanRepotWhenRootBound =>
+      'Nur umtopfen, wenn die Wurzeln den Topf ausfüllen.';
+
+  @override
+  String get notificationsTitle => 'Benachrichtigungen';
+
+  @override
+  String get notificationsEnable => 'Benachrichtigungen aktivieren';
+
+  @override
+  String get notificationsEnableDescription =>
+      'Hauptschalter für alle Benachrichtigungen';
+
+  @override
+  String get notificationsDueTasks => 'Erinnerungen für fällige Aufgaben';
+
+  @override
+  String get notificationsDueTasksDescription =>
+      'Bei fälligen Pflegeaufgaben benachrichtigen';
+
+  @override
+  String get notificationsOverdueTasks => 'Warnungen für überfällige Aufgaben';
+
+  @override
+  String get notificationsOverdueTasksDescription =>
+      'Bei überfälligen Pflegeaufgaben warnen';
+
+  @override
+  String get notificationsPermissionStatus => 'Berechtigungsstatus';
+
+  @override
+  String get notificationsPermissionEnabled => 'Benachrichtigungen aktiviert';
+
+  @override
+  String get notificationsPermissionDisabled =>
+      'Benachrichtigungen deaktiviert';
+
+  @override
+  String get notificationsChannelName => 'Pflanzenpflege-Erinnerungen';
+
+  @override
+  String get notificationsChannelDescription =>
+      'Erinnerungen für Pflanzenpflegeaufgaben';
+
+  @override
+  String get notificationsPermissionExplanation =>
+      'Erlaube Benachrichtigungen, damit OpenPlants lokale Erinnerungen für deine Pflegeregeln senden kann.';
+
+  @override
+  String get notificationsRequestPermission => 'Benachrichtigungen erlauben';
+
+  @override
+  String get notificationsOpenSettings => 'App-Einstellungen öffnen';
+
+  @override
+  String get notificationsPermissionBlocked =>
+      'Benachrichtigungen sind durch das Betriebssystem blockiert.';
+
+  @override
+  String get notificationReminderTitle => 'Pflanzenpflege-Erinnerung';
+
+  @override
+  String notificationReminderBody(String taskType, String plantName) {
+    return '$taskType für $plantName ist fällig.';
+  }
+
+  @override
+  String careScheduleMetricAlert(String metricName) {
+    return 'Metrikwarnung: $metricName';
   }
 }

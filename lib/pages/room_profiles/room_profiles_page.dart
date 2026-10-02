@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
-import 'package:open_plants/core/app_scope.dart';
-import 'package:open_plants/pages/room_profiles/room_profiles_entity.dart';
-import 'package:open_plants/pages/room_profiles/room_profiles_form_page.dart';
-import 'package:open_plants/pages/room_profiles/room_profiles_usecases.dart';
-import 'package:open_plants/pages/plant_collection/plant_collection_usecases.dart';
+import 'package:openplants/core/app_scope.dart';
+import 'package:openplants/l10n/l10n_x.dart';
+import 'package:openplants/pages/plant_collection/plant_collection_item_entity.dart';
+import 'package:openplants/pages/plant_collection/plant_collection_usecases.dart';
+import 'package:openplants/pages/room_profiles/room_profiles_entity.dart';
+import 'package:openplants/pages/room_profiles/room_profiles_form_page.dart';
+import 'package:openplants/pages/room_profiles/room_profiles_usecases.dart';
 
 /// Page for managing room profiles.
 class RoomProfilesPage extends StatefulWidget {
@@ -21,6 +23,7 @@ class _RoomProfilesPageState extends State<RoomProfilesPage> {
 
   List<RoomEntity> _rooms = [];
   bool _loading = true;
+  bool _loadFailed = false;
 
   @override
   void didChangeDependencies() {
@@ -34,13 +37,25 @@ class _RoomProfilesPageState extends State<RoomProfilesPage> {
   }
 
   Future<void> _load() async {
-    setState(() => _loading = true);
-    final rooms = await _usecases.getAll();
-    if (!mounted) return;
     setState(() {
-      _rooms = rooms;
-      _loading = false;
+      _loading = true;
+      _loadFailed = false;
     });
+    try {
+      final rooms = await _usecases.getAll();
+      if (!mounted) return;
+      setState(() {
+        _rooms = rooms;
+        _loading = false;
+      });
+    } catch (error, stackTrace) {
+      debugPrint('Failed to load room profiles: $error\n$stackTrace');
+      if (!mounted) return;
+      setState(() {
+        _loading = false;
+        _loadFailed = true;
+      });
+    }
   }
 
   Future<void> _addRoom() async {
@@ -58,7 +73,14 @@ class _RoomProfilesPageState extends State<RoomProfilesPage> {
   }
 
   Future<void> _deleteRoom(RoomEntity room) async {
-    final plants = await _plantUsecases.loadPlants();
+    late final List<PlantEntity> plants;
+    try {
+      plants = await _plantUsecases.loadPlants();
+    } catch (error, stackTrace) {
+      debugPrint('Failed to load plants before deleting room ${room.id}: $error\n$stackTrace');
+      if (mounted) _showDeleteFailure();
+      return;
+    }
     final affectedCount = plants.where((p) => p.roomId == room.id).length;
 
     if (!mounted) return;
@@ -71,45 +93,61 @@ class _RoomProfilesPageState extends State<RoomProfilesPage> {
       ),
     );
 
-    if (confirmed == true) {
+    if (confirmed == true && mounted) {
       try {
-        // Update affected plants first (clear roomId)
-        for (final plant in plants) {
-          if (plant.roomId == room.id) {
-            await _plantUsecases.updatePlant(plant.copyWith(clearRoomId: true));
-          }
-        }
-        // Then delete the room
-        await _usecases.delete(room.id);
+        await _usecases.deleteAndUnassignPlants(room.id, plantCollection: _plantUsecases);
         await _load();
-      } catch (e) {
+      } catch (error, stackTrace) {
+        debugPrint('Failed to delete room ${room.id}: $error\n$stackTrace');
         if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Error deleting room: $e')),
-          );
+          _showDeleteFailure();
         }
       }
     }
+  }
+
+  void _showDeleteFailure() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(context.l10n.generalFailureMessage)),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Rooms'),
+        title: Text(context.l10n.moreRoomsTitle),
       ),
       body: _loading
           ? const Center(child: CircularProgressIndicator())
-          : _rooms.isEmpty
-              ? _buildEmptyState(context)
-              : ListView.builder(
-                  padding: const EdgeInsets.all(16),
-                  itemCount: _rooms.length,
-                  itemBuilder: (context, index) => _buildRoomTile(context, _rooms[index]),
-                ),
+          : _loadFailed
+              ? _buildLoadError(context)
+              : _rooms.isEmpty
+                  ? _buildEmptyState(context)
+                  : ListView.builder(
+                      padding: const EdgeInsets.all(16),
+                      itemCount: _rooms.length,
+                      itemBuilder: (context, index) => _buildRoomTile(context, _rooms[index]),
+                    ),
       floatingActionButton: FloatingActionButton(
         onPressed: _addRoom,
         child: const Icon(Icons.add),
+      ),
+    );
+  }
+
+  Widget _buildLoadError(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(context.l10n.generalFailureMessage),
+          TextButton.icon(
+            onPressed: _load,
+            icon: const Icon(Icons.refresh),
+            label: Text(context.l10n.retry),
+          ),
+        ],
       ),
     );
   }
@@ -127,19 +165,19 @@ class _RoomProfilesPageState extends State<RoomProfilesPage> {
           ),
           const SizedBox(height: 16),
           Text(
-            'No rooms yet',
+            context.l10n.roomEmptyTitle,
             style: theme.textTheme.headlineSmall,
           ),
           const SizedBox(height: 8),
           Text(
-            'Create rooms to organize your plants by location',
+            context.l10n.moreRoomsSubtitle,
             style: theme.textTheme.bodyMedium,
           ),
           const SizedBox(height: 24),
           FilledButton.icon(
             onPressed: _addRoom,
             icon: const Icon(Icons.add),
-            label: const Text('Add Room'),
+            label: Text(context.l10n.roomAddAction),
           ),
         ],
       ),
@@ -173,13 +211,13 @@ class _RoomProfilesPageState extends State<RoomProfilesPage> {
                         children: [
                           _buildBadge(
                             context,
-                            label: _lightLevelLabel(room.lightLevel),
+                            label: _lightLevelLabel(context, room.lightLevel),
                             icon: Icons.light_mode,
                           ),
                           const SizedBox(width: 8),
                           _buildBadge(
                             context,
-                            label: _humidityLevelLabel(room.humidityLevel),
+                            label: _humidityLevelLabel(context, room.humidityLevel),
                             icon: Icons.water_drop_outlined,
                           ),
                         ],
@@ -232,27 +270,27 @@ class _RoomProfilesPageState extends State<RoomProfilesPage> {
     );
   }
 
-  String _lightLevelLabel(RoomLightLevel level) {
+  String _lightLevelLabel(BuildContext context, RoomLightLevel level) {
     switch (level) {
       case RoomLightLevel.low:
-        return 'Low light';
+        return context.l10n.speciesLibraryLightLow;
       case RoomLightLevel.medium:
-        return 'Medium';
+        return context.l10n.speciesLibraryLightMedium;
       case RoomLightLevel.bright:
-        return 'Bright';
+        return context.l10n.speciesLibraryLightBright;
       case RoomLightLevel.directSun:
-        return 'Direct sun';
+        return context.l10n.speciesLibraryLightDirect;
     }
   }
 
-  String _humidityLevelLabel(RoomHumidityLevel level) {
+  String _humidityLevelLabel(BuildContext context, RoomHumidityLevel level) {
     switch (level) {
       case RoomHumidityLevel.low:
-        return 'Low humidity';
+        return context.l10n.diagnosisHumidityLow;
       case RoomHumidityLevel.medium:
-        return 'Medium';
+        return context.l10n.diagnosisHumidityModerate;
       case RoomHumidityLevel.high:
-        return 'High humidity';
+        return context.l10n.diagnosisHumidityHigh;
     }
   }
 }
@@ -270,24 +308,21 @@ class _DeleteRoomDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text('Delete "$roomName"?'),
+      title: Text(context.l10n.roomDeleteTitle(roomName)),
       content: affectedPlantCount > 0
-          ? Text(
-              'This room has $affectedPlantCount plant(s) assigned. '
-              'They will be unassigned when the room is deleted.',
-            )
-          : const Text('This room has no plants assigned.'),
+          ? Text(context.l10n.roomDeleteAssignedPlants(affectedPlantCount))
+          : Text(context.l10n.roomDeleteNoAssignments),
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(false),
-          child: const Text('Cancel'),
+          child: Text(context.l10n.cancel),
         ),
         FilledButton(
           onPressed: () => Navigator.of(context).pop(true),
           style: FilledButton.styleFrom(
             backgroundColor: Theme.of(context).colorScheme.error,
           ),
-          child: const Text('Delete'),
+          child: Text(context.l10n.confirm),
         ),
       ],
     );

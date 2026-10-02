@@ -1,0 +1,8 @@
+Initial OpenPlants release.
+
+- Manage a personal plant collection with photos and care history.
+- Create customizable care schedules and reminders.
+- Identify plants on-device from photos.
+- Browse species and care guidance.
+- Record symptoms, diagnoses, journal entries, rooms, and growth photos.
+- Use dark mode, English/German localization, and no account.

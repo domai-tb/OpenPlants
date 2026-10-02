@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
 
-import 'package:open_plants/core/app_scope.dart';
-import 'package:open_plants/core/constants.dart';
-import 'package:open_plants/l10n/l10n.dart';
-import 'package:open_plants/l10n/l10n_x.dart';
-import 'package:open_plants/pages/diagnosis/diagnosis_page.dart';
-import 'package:open_plants/pages/home/home_page.dart';
-import 'package:open_plants/pages/home/widgets/page_navigation_animation.dart';
-import 'package:open_plants/pages/plant_collection/plant_collection_detail_page.dart';
-import 'package:open_plants/pages/plant_collection/plant_collection_form_page.dart';
-import 'package:open_plants/pages/plant_collection/plant_collection_item_entity.dart';
-import 'package:open_plants/pages/plant_identification/plant_identification_page.dart';
-import 'package:open_plants/pages/today_dashboard/plant_grid_section.dart';
-import 'package:open_plants/pages/today_dashboard/today_dashboard_entity.dart';
-import 'package:open_plants/pages/today_dashboard/today_dashboard_usecases.dart';
-import 'package:open_plants/widgets/app_search_bar.dart';
+import 'package:openplants/core/app_scope.dart';
+import 'package:openplants/core/constants.dart';
+import 'package:openplants/l10n/l10n.dart';
+import 'package:openplants/l10n/l10n_x.dart';
+import 'package:openplants/pages/diagnosis/diagnosis_page.dart';
+import 'package:openplants/pages/home/home_page.dart';
+import 'package:openplants/pages/home/widgets/page_navigation_animation.dart';
+import 'package:openplants/pages/plant_collection/plant_collection_detail_page.dart';
+import 'package:openplants/pages/plant_collection/plant_collection_form_page.dart';
+import 'package:openplants/pages/plant_collection/plant_collection_item_entity.dart';
+import 'package:openplants/pages/plant_identification/plant_identification_page.dart';
+import 'package:openplants/pages/care_schedule/care_task.dart' show calendarDaysBetween;
+import 'package:openplants/pages/care_schedule/care_task_type.dart' as care;
+import 'package:openplants/pages/today_dashboard/plant_grid_section.dart';
+import 'package:openplants/pages/today_dashboard/today_dashboard_entity.dart';
+import 'package:openplants/pages/today_dashboard/today_dashboard_usecases.dart';
+import 'package:openplants/widgets/app_search_bar.dart';
 
 class TodayDashboardPage extends StatefulWidget {
   final GlobalKey<NavigatorState> mainNavigatorKey;
@@ -695,13 +697,15 @@ class _CareTaskCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final l10n = context.l10n;
+    final today = DateTime.now();
+    final daysOverdue = -calendarDaysBetween(today, task.dueDate);
 
     return Material(
       color: isOverdue ? theme.colorScheme.errorContainer : theme.cardColor,
       borderRadius: BorderRadius.circular(12),
       child: InkWell(
         borderRadius: BorderRadius.circular(12),
-        onTap: task.plantId != null ? () => onNavigateToPlantDetail?.call(task.plantId!) : null,
+        onTap: () => onNavigateToPlantDetail?.call(task.plantId),
         child: Padding(
           padding: const EdgeInsets.all(14),
           child: Row(
@@ -722,13 +726,15 @@ class _CareTaskCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      _taskTypeLabel(l10n, task.taskType),
+                      task.alertMetricName == null
+                          ? _taskTypeLabel(l10n, task.taskType)
+                          : l10n.careScheduleMetricAlert(task.alertMetricName!),
                       style: theme.textTheme.bodyMedium,
                     ),
                   ],
                 ),
               ),
-              if (isOverdue && task.daysOverdue > 0)
+              if (isOverdue && daysOverdue > 0)
                 Container(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 8,
@@ -739,7 +745,7 @@ class _CareTaskCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Text(
-                    '${task.daysOverdue}${l10n.daysOverdue}',
+                    '$daysOverdue${l10n.daysOverdue}',
                     style: theme.textTheme.labelSmall?.copyWith(
                       color: theme.colorScheme.onError,
                     ),
@@ -752,29 +758,31 @@ class _CareTaskCard extends StatelessWidget {
     );
   }
 
-  IconData _iconForTaskType(CareTaskType type) {
-    return switch (type) {
-      CareTaskType.water => Icons.water_drop,
-      CareTaskType.fertilize => Icons.spa,
-      CareTaskType.mist => Icons.water,
-      CareTaskType.prune => Icons.content_cut,
-      CareTaskType.rotate => Icons.replay,
-      CareTaskType.repot => Icons.inventory_2_outlined,
-      CareTaskType.clean => Icons.cleaning_services,
-      CareTaskType.inspect => Icons.search,
+  IconData _iconForTaskType(care.CareTaskType type) {
+    return switch (type.builtIn) {
+      care.BuiltInTaskType.watering => Icons.water_drop,
+      care.BuiltInTaskType.fertilizing => Icons.spa,
+      care.BuiltInTaskType.misting => Icons.water,
+      care.BuiltInTaskType.pruning => Icons.content_cut,
+      care.BuiltInTaskType.rotating => Icons.replay,
+      care.BuiltInTaskType.repotting => Icons.inventory_2_outlined,
+      care.BuiltInTaskType.leafCleaning => Icons.cleaning_services,
+      care.BuiltInTaskType.pestInspection => Icons.search,
+      null => Icons.checklist,
     };
   }
 
-  String _taskTypeLabel(AppLocalizations l10n, CareTaskType type) {
-    return switch (type) {
-      CareTaskType.water => l10n.taskTypeWater,
-      CareTaskType.fertilize => l10n.taskTypeFertilize,
-      CareTaskType.mist => l10n.taskTypeMist,
-      CareTaskType.prune => l10n.taskTypePrune,
-      CareTaskType.rotate => l10n.taskTypeRotate,
-      CareTaskType.repot => l10n.taskTypeRepot,
-      CareTaskType.clean => l10n.taskTypeClean,
-      CareTaskType.inspect => l10n.taskTypeInspect,
+  String _taskTypeLabel(AppLocalizations l10n, care.CareTaskType type) {
+    return switch (type.builtIn) {
+      care.BuiltInTaskType.watering => l10n.taskTypeWater,
+      care.BuiltInTaskType.fertilizing => l10n.taskTypeFertilize,
+      care.BuiltInTaskType.misting => l10n.taskTypeMist,
+      care.BuiltInTaskType.pruning => l10n.taskTypePrune,
+      care.BuiltInTaskType.rotating => l10n.taskTypeRotate,
+      care.BuiltInTaskType.repotting => l10n.taskTypeRepot,
+      care.BuiltInTaskType.leafCleaning => l10n.taskTypeClean,
+      care.BuiltInTaskType.pestInspection => l10n.taskTypeInspect,
+      null => type.customName ?? 'Unknown',
     };
   }
 }

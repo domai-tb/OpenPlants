@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -14,10 +13,10 @@ class SettingsController with ChangeNotifier {
 
   SettingsController._(this._prefs, this._settings);
 
-  static Future<SettingsController> load() async {
-    final prefs = await SharedPreferences.getInstance();
+  static Future<SettingsController> load({SharedPreferences? prefs}) async {
+    final preferences = prefs ?? await SharedPreferences.getInstance();
 
-    final raw = prefs.getString(_prefsKey);
+    final raw = preferences.getString(_prefsKey);
     Settings settings = const Settings();
 
     if (raw != null && raw.trim().isNotEmpty) {
@@ -29,17 +28,18 @@ class SettingsController with ChangeNotifier {
       }
     }
 
-    return SettingsController._(prefs, settings);
+    return SettingsController._(preferences, settings);
   }
 
   Settings get settings => _settings;
 
-  void update(Settings newSettings) {
+  Future<void> update(Settings newSettings) async {
+    final raw = jsonEncode(newSettings.toJson());
+    final saved = await _prefs.setString(_prefsKey, raw);
+    if (!saved) throw StateError('Failed to persist "$_prefsKey" to SharedPreferences.');
+
     _settings = newSettings;
     notifyListeners();
-
-    final raw = jsonEncode(newSettings.toJson());
-    unawaited(_prefs.setString(_prefsKey, raw));
   }
 }
 
@@ -52,14 +52,20 @@ class Settings {
   final bool didCompleteOnboarding;
   final String? localeCode;
   final TemperatureUnit temperatureUnit;
+  final bool notificationsEnabled;
+  final bool notifyDueTasks;
+  final bool notifyOverdueTasks;
 
   const Settings({
     this.useSystemDarkmode = true,
     this.useDarkmode = false,
-    this.useSystemTextScaling = false,
+    this.useSystemTextScaling = true,
     this.didCompleteOnboarding = false,
     this.localeCode,
     this.temperatureUnit = TemperatureUnit.celsius,
+    this.notificationsEnabled = true,
+    this.notifyDueTasks = true,
+    this.notifyOverdueTasks = true,
   });
 
   Settings copyWith({
@@ -69,6 +75,9 @@ class Settings {
     bool? didCompleteOnboarding,
     Object? localeCode = _noChange,
     TemperatureUnit? temperatureUnit,
+    bool? notificationsEnabled,
+    bool? notifyDueTasks,
+    bool? notifyOverdueTasks,
   }) {
     return Settings(
       useSystemDarkmode: useSystemDarkmode ?? this.useSystemDarkmode,
@@ -77,6 +86,9 @@ class Settings {
       didCompleteOnboarding: didCompleteOnboarding ?? this.didCompleteOnboarding,
       localeCode: identical(localeCode, _noChange) ? this.localeCode : localeCode as String?,
       temperatureUnit: temperatureUnit ?? this.temperatureUnit,
+      notificationsEnabled: notificationsEnabled ?? this.notificationsEnabled,
+      notifyDueTasks: notifyDueTasks ?? this.notifyDueTasks,
+      notifyOverdueTasks: notifyOverdueTasks ?? this.notifyOverdueTasks,
     );
   }
 
@@ -84,10 +96,13 @@ class Settings {
     return Settings(
       useSystemDarkmode: json['useSystemDarkmode'] ?? true,
       useDarkmode: json['useDarkmode'] ?? false,
-      useSystemTextScaling: json['useSystemTextScaling'] ?? false,
+      useSystemTextScaling: json['useSystemTextScaling'] ?? true,
       didCompleteOnboarding: json['didCompleteOnboarding'] ?? false,
       localeCode: json['localeCode'],
       temperatureUnit: json['temperatureUnit'] == 'fahrenheit' ? TemperatureUnit.fahrenheit : TemperatureUnit.celsius,
+      notificationsEnabled: json['notificationsEnabled'] ?? true,
+      notifyDueTasks: json['notifyDueTasks'] ?? true,
+      notifyOverdueTasks: json['notifyOverdueTasks'] ?? true,
     );
   }
 
@@ -99,6 +114,9 @@ class Settings {
       'didCompleteOnboarding': didCompleteOnboarding,
       'localeCode': localeCode,
       'temperatureUnit': temperatureUnit == TemperatureUnit.fahrenheit ? 'fahrenheit' : 'celsius',
+      'notificationsEnabled': notificationsEnabled,
+      'notifyDueTasks': notifyDueTasks,
+      'notifyOverdueTasks': notifyOverdueTasks,
     };
   }
 }
