@@ -1,0 +1,3 @@
+Wartungsrelease.
+
+- Laden des auf dem Gerät verwendeten Pflanzenbestimmungsmodells und seiner Export-Metadaten korrigiert.
