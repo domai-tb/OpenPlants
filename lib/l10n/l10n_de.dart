@@ -100,8 +100,7 @@ class AppLocalizationsDe extends AppLocalizations {
       'Willkommen bei OpenPlants — deine Open-Source & datenschutzfreundliche Pflanzen-App.';
 
   @override
-  String get onboardingIntroHint =>
-      'Erfasse deine Pflanzen, setze Erinnerungen und beobachte ihr Wachstum.';
+  String get onboardingIntroHint => 'Erfasse deine Pflanzen, setze Erinnerungen und beobachte ihr Wachstum.';
 
   @override
   String get onboardingPrivacyTitle => 'Dein Datenschutz ist uns wichtig';
@@ -117,8 +116,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get onboardingPrivacyNoAccount => 'Kein Konto nötig';
 
   @override
-  String get onboardingPrivacyNoAccountBody =>
-      'Keine Anmeldung, kein Login, kein Konto. Einfach öffnen und nutzen.';
+  String get onboardingPrivacyNoAccountBody => 'Keine Anmeldung, kein Login, kein Konto. Einfach öffnen und nutzen.';
 
   @override
   String get onboardingPrivacyPhotosPrivate => 'Fotos bleiben privat';
@@ -195,8 +193,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get plantNamesDescription => 'Lokalisierter Dienst für Pflanzennamen.';
 
   @override
-  String get walletPlaceholderBody =>
-      'Platzhalter fuer eine Wallet-aehnliche Funktion.';
+  String get walletPlaceholderBody => 'Platzhalter fuer eine Wallet-aehnliche Funktion.';
 
   @override
   String get primaryAction => 'Primaere Aktion';
@@ -221,8 +218,7 @@ class AppLocalizationsDe extends AppLocalizations {
       'OpenPlants ist eine Open-Source & datenschutzfreundliche Begleiter-App fuer deine Pflanzen.\n\nErfasse deine Pflanzenpflege, setze Giesserinnerungen und halte deinen Garten gesund — alles ohne dein Privatschutz zu kompromittieren.';
 
   @override
-  String get serverFailureMessage =>
-      'Serverdaten konnten nicht geladen werden.';
+  String get serverFailureMessage => 'Serverdaten konnten nicht geladen werden.';
 
   @override
   String get generalFailureMessage => 'Ein Fehler ist aufgetreten.';
@@ -237,19 +233,16 @@ class AppLocalizationsDe extends AppLocalizations {
   String get retry => 'Erneut versuchen';
 
   @override
-  String get invalid2FATokenFailureMessage =>
-      'Dein Einmalcode (TOTP) is ungültig. Bitte versuche es erneut!';
+  String get invalid2FATokenFailureMessage => 'Dein Einmalcode (TOTP) is ungültig. Bitte versuche es erneut!';
 
   @override
-  String get invalidLoginIDAndPasswordFailureMessage =>
-      'Die Anmeldedaten sind ungültig!';
+  String get invalidLoginIDAndPasswordFailureMessage => 'Die Anmeldedaten sind ungültig!';
 
   @override
   String get welcome => 'Willkommen!';
 
   @override
-  String get login_prompt =>
-      'Bitte melde dich mit deinem Benutzernamen und deinem Passwort an.';
+  String get login_prompt => 'Bitte melde dich mit deinem Benutzernamen und deinem Passwort an.';
 
   @override
   String get username => 'Benutzername';
@@ -276,15 +269,13 @@ class AppLocalizationsDe extends AppLocalizations {
   String get enter_totp => 'Bitte gib deinen Einmalcode (TOTP) ein.';
 
   @override
-  String get plantIdCapturePrompt =>
-      'Mache ein Foto einer Pflanze, um sie zu erkennen';
+  String get plantIdCapturePrompt => 'Mache ein Foto einer Pflanze, um sie zu erkennen';
 
   @override
   String get plantIdCamera => 'Kamera';
 
   @override
-  String get cameraAccessNeeded =>
-      'Für Pflanzenfotos wird Kamerazugriff benötigt.';
+  String get cameraAccessNeeded => 'Für Pflanzenfotos wird Kamerazugriff benötigt.';
 
   @override
   String get cameraGrantAccess => 'Zugriff erlauben';
@@ -303,8 +294,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get cameraInitializing => 'Kamera wird initialisiert...';
 
   @override
-  String get cameraInitializationFailed =>
-      'Die Kamera konnte nicht initialisiert werden.';
+  String get cameraInitializationFailed => 'Die Kamera konnte nicht initialisiert werden.';
 
   @override
   String get cameraCapturePhoto => 'Foto aufnehmen';
@@ -343,19 +333,16 @@ class AppLocalizationsDe extends AppLocalizations {
   String get plantIdSelectSpecies => 'Select a species';
 
   @override
-  String get plantIdCouldNotIdentifyEnterManually =>
-      'Could not identify species. Enter manually below.';
+  String get plantIdCouldNotIdentifyEnterManually => 'Could not identify species. Enter manually below.';
 
   @override
   String get plantIdEnterSpeciesManually => 'Enter species manually';
 
   @override
-  String get plantIdSkipIdentification =>
-      'Skip identification / enter manually';
+  String get plantIdSkipIdentification => 'Skip identification / enter manually';
 
   @override
-  String get plantIdIdentificationErrorWithManual =>
-      'Identification failed. You can still enter the species manually.';
+  String get plantIdIdentificationErrorWithManual => 'Identification failed. You can still enter the species manually.';
 
   @override
   String get plantCollectionTitle => 'Pflanzensammlung';
@@ -364,8 +351,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get plantCollectionEmpty => 'Noch keine Pflanzen';
 
   @override
-  String get plantCollectionTapToAdd =>
-      'Tippe auf + um deine erste Pflanze hinzuzufuegen';
+  String get plantCollectionTapToAdd => 'Tippe auf + um deine erste Pflanze hinzuzufuegen';
 
   @override
   String get addPlant => 'Pflanze hinzufuegen';
@@ -486,8 +472,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get careScheduleAllTypes => 'Alle Typen';
 
   @override
-  String get careScheduleEmpty =>
-      'Fügen Sie Pflanzen hinzu, um Pflegeaufgaben zu sehen';
+  String get careScheduleEmpty => 'Fügen Sie Pflanzen hinzu, um Pflegeaufgaben zu sehen';
 
   @override
   String careTaskCompleted(String taskType) {
@@ -533,8 +518,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get symptomLoggerStepReview => 'Review';
 
   @override
-  String get symptomLoggerSelectSymptoms =>
-      'What symptoms do you see? (select at least one)';
+  String get symptomLoggerSelectSymptoms => 'What symptoms do you see? (select at least one)';
 
   @override
   String get symptomLoggerSelectSeverity => 'How severe is the problem?';
@@ -555,8 +539,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get symptomLoggerNotesLabel => 'Notes';
 
   @override
-  String get symptomLoggerNotesHint =>
-      'Add any observations (optional, max 500 characters)';
+  String get symptomLoggerNotesHint => 'Add any observations (optional, max 500 characters)';
 
   @override
   String get symptomLoggerPhotoLabel => 'Photo';
@@ -577,8 +560,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get symptomLoggerSave => 'Save Entry';
 
   @override
-  String get symptomLoggerSelectRequired =>
-      'Please make a selection before proceeding';
+  String get symptomLoggerSelectRequired => 'Please make a selection before proceeding';
 
   @override
   String get symptomLoggerSelectPlant => 'Select a plant';
@@ -614,22 +596,19 @@ class AppLocalizationsDe extends AppLocalizations {
   String get symptomSeverityMild => 'Mild';
 
   @override
-  String get symptomSeverityMildDesc =>
-      'Minor issue, plant looks mostly healthy';
+  String get symptomSeverityMildDesc => 'Minor issue, plant looks mostly healthy';
 
   @override
   String get symptomSeverityModerate => 'Moderate';
 
   @override
-  String get symptomSeverityModerateDesc =>
-      'Noticeable problem, needs attention soon';
+  String get symptomSeverityModerateDesc => 'Noticeable problem, needs attention soon';
 
   @override
   String get symptomSeveritySevere => 'Severe';
 
   @override
-  String get symptomSeveritySevereDesc =>
-      'Serious issue, requires immediate action';
+  String get symptomSeveritySevereDesc => 'Serious issue, requires immediate action';
 
   @override
   String get symptomPartLeaves => 'Leaves';
@@ -695,8 +674,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get symptomLoggerMarkResolved => 'Mark Resolved';
 
   @override
-  String get symptomLoggerMarkResolvedConfirm =>
-      'Mark this symptom as resolved?';
+  String get symptomLoggerMarkResolvedConfirm => 'Mark this symptom as resolved?';
 
   @override
   String get symptomLoggerRecentEvents => 'Recent Health Events';
@@ -716,8 +694,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get journalEmpty => 'Noch keine Tagebucheinträge';
 
   @override
-  String get journalTapToAdd =>
-      'Tippe auf + um deinen ersten Eintrag hinzuzufügen';
+  String get journalTapToAdd => 'Tippe auf + um deinen ersten Eintrag hinzuzufügen';
 
   @override
   String get journalNewEntry => 'Neuer Tagebucheintrag';
@@ -729,8 +706,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get journalDeleteEntry => 'Eintrag löschen';
 
   @override
-  String get journalDeleteConfirm =>
-      'Möchtest du diesen Tagebucheintrag wirklich löschen?';
+  String get journalDeleteConfirm => 'Möchtest du diesen Tagebucheintrag wirklich löschen?';
 
   @override
   String get journalEntryType => 'Eintragstyp';
@@ -784,22 +760,19 @@ class AppLocalizationsDe extends AppLocalizations {
   String get growthPhotosEmpty => 'Füge dein erstes Wachstumsfoto hinzu';
 
   @override
-  String get growthPhotosEmptyHint =>
-      'Füge Fotos von der Pflanzendetailseite hinzu';
+  String get growthPhotosEmptyHint => 'Füge Fotos von der Pflanzendetailseite hinzu';
 
   @override
   String get growthPhotosNoTimeline => 'Noch keine Wachstumsfotos';
 
   @override
-  String get growthPhotosNoTimelineHint =>
-      'Füge Fotos von der Pflanzendetailseite hinzu';
+  String get growthPhotosNoTimelineHint => 'Füge Fotos von der Pflanzendetailseite hinzu';
 
   @override
   String get growthPhotoDeleteTitle => 'Foto löschen';
 
   @override
-  String get growthPhotoDeleteConfirm =>
-      'Möchtest du dieses Foto wirklich löschen?';
+  String get growthPhotoDeleteConfirm => 'Möchtest du dieses Foto wirklich löschen?';
 
   @override
   String get growthPhotoNotFound => 'Foto nicht gefunden';
@@ -820,8 +793,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get careRulesEmpty => 'Keine benutzerdefinierten Regeln';
 
   @override
-  String get careRulesEmptyHint =>
-      'Füge eine Regel hinzu, um den berechneten Plan zu überschreiben';
+  String get careRulesEmptyHint => 'Füge eine Regel hinzu, um den berechneten Plan zu überschreiben';
 
   @override
   String careRulesActiveCount(num count) {
@@ -943,16 +915,13 @@ class AppLocalizationsDe extends AppLocalizations {
   String get diagnosisStepReview => 'Überprüfung';
 
   @override
-  String get diagnosisSelectSymptoms =>
-      'Welche Symptome siehst du an deiner Pflanze? (mindestens eines auswählen)';
+  String get diagnosisSelectSymptoms => 'Welche Symptome siehst du an deiner Pflanze? (mindestens eines auswählen)';
 
   @override
-  String get diagnosisSymptomRequired =>
-      'Bitte wähle mindestens ein Symptom aus';
+  String get diagnosisSymptomRequired => 'Bitte wähle mindestens ein Symptom aus';
 
   @override
-  String get diagnosisEnvironmentTitle =>
-      'Erzähle uns von der Umgebung deiner Pflanze';
+  String get diagnosisEnvironmentTitle => 'Erzähle uns von der Umgebung deiner Pflanze';
 
   @override
   String get diagnosisWateringFrequency => 'Gießhäufigkeit';
@@ -982,15 +951,13 @@ class AppLocalizationsDe extends AppLocalizations {
   String get diagnosisRecentFertilizing => 'Kürzlich gedüngt';
 
   @override
-  String get diagnosisRecentFertilizingHint =>
-      'Hast du in den letzten 3 Monaten gedüngt?';
+  String get diagnosisRecentFertilizingHint => 'Hast du in den letzten 3 Monaten gedüngt?';
 
   @override
   String get diagnosisPestSigns => 'Anzeichen für Schädlinge';
 
   @override
-  String get diagnosisPestSignsHint =>
-      'Hast du Insekten, Gespinste oder klebrige Rückstände bemerkt?';
+  String get diagnosisPestSignsHint => 'Hast du Insekten, Gespinste oder klebrige Rückstände bemerkt?';
 
   @override
   String get diagnosisReviewTitle => 'Überprüfe deine Antworten';
@@ -1076,8 +1043,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get diagnosisEmptyInputTitle => 'Keine Symptome ausgewählt';
 
   @override
-  String get diagnosisEmptyInputDesc =>
-      'Wähle mindestens ein Symptom aus, bevor du eine Diagnose startest.';
+  String get diagnosisEmptyInputDesc => 'Wähle mindestens ein Symptom aus, bevor du eine Diagnose startest.';
 
   @override
   String get diagnosisDisclaimer =>
@@ -1183,8 +1149,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get diagnosisSymptomBrownTips => 'Braune Spitzen / trockene Ränder';
 
   @override
-  String get diagnosisSymptomBrownPatches =>
-      'Braune Flecken / verbrannte Stellen';
+  String get diagnosisSymptomBrownPatches => 'Braune Flecken / verbrannte Stellen';
 
   @override
   String get diagnosisSymptomPaleLeaves => 'Blasse Blätter';
@@ -1293,84 +1258,71 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
-  String get diagnosisEvidenceFrequentWateringTooWet =>
-      'Du gießt häufig, wodurch die Erde zu nass bleiben kann.';
+  String get diagnosisEvidenceFrequentWateringTooWet => 'Du gießt häufig, wodurch die Erde zu nass bleiben kann.';
 
   @override
   String get diagnosisEvidenceNoDrainage =>
       'Dein Topf hat keine Abflusslöcher, sodass überschüssiges Wasser nicht ablaufen kann.';
 
   @override
-  String get diagnosisEvidenceOverwateringSigns =>
-      'Dies sind häufige Anzeichen für Überwässerung.';
+  String get diagnosisEvidenceOverwateringSigns => 'Dies sind häufige Anzeichen für Überwässerung.';
 
   @override
-  String get diagnosisEvidenceInfrequentWateringTooDry =>
-      'Du gießt selten, wodurch die Erde zu trocken werden kann.';
+  String get diagnosisEvidenceInfrequentWateringTooDry => 'Du gießt selten, wodurch die Erde zu trocken werden kann.';
 
   @override
-  String get diagnosisEvidenceUnderwateringSigns =>
-      'Dies sind häufige Anzeichen für Wassermangel.';
+  String get diagnosisEvidenceUnderwateringSigns => 'Dies sind häufige Anzeichen für Wassermangel.';
 
   @override
-  String get diagnosisEvidenceLowLightExposure =>
-      'Deine Pflanze erhält wenig Licht.';
+  String get diagnosisEvidenceLowLightExposure => 'Deine Pflanze erhält wenig Licht.';
 
   @override
   String get diagnosisEvidenceLowLightSigns =>
       'Vergeiltes Wachstum und blasse Blätter sind typische Anzeichen für Lichtmangel.';
 
   @override
-  String get diagnosisEvidenceDirectSunlight =>
-      'Deine Pflanze erhält direktes Sonnenlicht.';
+  String get diagnosisEvidenceDirectSunlight => 'Deine Pflanze erhält direktes Sonnenlicht.';
 
   @override
-  String get diagnosisEvidenceSunburnSigns =>
-      'Braune, verbrannte Flecken können auf Sonnenschäden hinweisen.';
+  String get diagnosisEvidenceSunburnSigns => 'Braune, verbrannte Flecken können auf Sonnenschäden hinweisen.';
 
   @override
-  String get diagnosisEvidenceLowHumidityEnvironment =>
-      'Die Luftfeuchtigkeit in der Umgebung ist niedrig.';
+  String get diagnosisEvidenceLowHumidityEnvironment => 'Die Luftfeuchtigkeit in der Umgebung ist niedrig.';
 
   @override
   String get diagnosisEvidenceLowHumiditySigns =>
       'Braune Blattspitzen und eingerollte Blätter treten häufig bei trockener Raumluft auf.';
 
   @override
-  String get diagnosisEvidenceNotFertilizedRecently =>
-      'Du hast in letzter Zeit nicht gedüngt.';
+  String get diagnosisEvidenceNotFertilizedRecently => 'Du hast in letzter Zeit nicht gedüngt.';
 
   @override
   String get diagnosisEvidenceNutrientSigns =>
       'Blasses oder vergilbendes Wachstum kann auf einen Nährstoffmangel hinweisen.';
 
   @override
-  String get diagnosisEvidenceFrequentWateringRootProblems =>
-      'Häufiges Gießen kann zu Wurzelproblemen führen.';
+  String get diagnosisEvidenceFrequentWateringRootProblems => 'Häufiges Gießen kann zu Wurzelproblemen führen.';
 
   @override
   String get diagnosisEvidenceRootProblemSigns =>
       'Welken trotz feuchter Erde und fauliger Geruch sind Anzeichen für Wurzelprobleme.';
 
   @override
-  String get diagnosisEvidencePestSignsObserved =>
-      'Du hast Anzeichen für Schädlinge bemerkt.';
+  String get diagnosisEvidencePestSignsObserved => 'Du hast Anzeichen für Schädlinge bemerkt.';
 
   @override
   String get diagnosisEvidencePestInfestationSigns =>
       'Sichtbare Insekten, klebrige Rückstände und Blattschäden können auf Schädlingsbefall hinweisen.';
 
   @override
-  String get diagnosisEvidenceDefault =>
-      'Auf Grundlage deiner Antworten wurde diese Ursache als Möglichkeit erkannt.';
+  String get diagnosisEvidenceDefault => 'Auf Grundlage deiner Antworten wurde diese Ursache als Möglichkeit erkannt.';
 
   @override
   String get diagnosisFallbackEvidence =>
       'Anhand der bereitgestellten Informationen stach keine einzelne Ursache hervor. Das Problem könnte durch Faktoren verursacht werden, die der Fragebogen nicht abdeckt.';
 
   @override
-  String get diagnosisActionOverwateringDrySoil =>
-      'Lass die oberen 5–8 cm der Erde trocknen, bevor du erneut gießt.';
+  String get diagnosisActionOverwateringDrySoil => 'Lass die oberen 5–8 cm der Erde trocknen, bevor du erneut gießt.';
 
   @override
   String get diagnosisActionOverwateringDrainage =>
@@ -1401,8 +1353,7 @@ class AppLocalizationsDe extends AppLocalizations {
       'Erwäge eine Pflanzenlampe, wenn nur wenig natürliches Licht vorhanden ist.';
 
   @override
-  String get diagnosisActionLowLightRotate =>
-      'Drehe die Pflanze regelmäßig, damit alle Seiten Licht erhalten.';
+  String get diagnosisActionLowLightRotate => 'Drehe die Pflanze regelmäßig, damit alle Seiten Licht erhalten.';
 
   @override
   String get diagnosisActionSunburnIndirectLight =>
@@ -1441,16 +1392,14 @@ class AppLocalizationsDe extends AppLocalizations {
       'Stelle sicher, dass der pH-Wert der Erde für die Pflanzenart geeignet ist.';
 
   @override
-  String get diagnosisActionRootsInspect =>
-      'Nimm die Pflanze aus dem Topf und untersuche die Wurzeln.';
+  String get diagnosisActionRootsInspect => 'Nimm die Pflanze aus dem Topf und untersuche die Wurzeln.';
 
   @override
   String get diagnosisActionRootsTrim =>
       'Entferne braune, weiche oder übel riechende Wurzeln mit einer sterilen Schere.';
 
   @override
-  String get diagnosisActionRootsRepot =>
-      'Topfe die Pflanze in frische, gut durchlässige Erde um und gieße seltener.';
+  String get diagnosisActionRootsRepot => 'Topfe die Pflanze in frische, gut durchlässige Erde um und gieße seltener.';
 
   @override
   String get diagnosisActionPestsIsolate =>
@@ -1469,8 +1418,7 @@ class AppLocalizationsDe extends AppLocalizations {
       'Stelle sicher, dass deine Pflanze für ihre Art geeignete Licht- und Wassermengen erhält.';
 
   @override
-  String get diagnosisActionDefaultMoisture =>
-      'Prüfe die Bodenfeuchtigkeit vor dem Gießen.';
+  String get diagnosisActionDefaultMoisture => 'Prüfe die Bodenfeuchtigkeit vor dem Gießen.';
 
   @override
   String get diagnosisCheckOverwateringRoots =>
@@ -1493,16 +1441,14 @@ class AppLocalizationsDe extends AppLocalizations {
       'Beobachte, ob neues Wachstum nach dem Umstellen an einen helleren Ort weiterhin vergeilt.';
 
   @override
-  String get diagnosisCheckLowLightHours =>
-      'Notiere, wie viele Stunden Licht die Pflanze täglich erhält.';
+  String get diagnosisCheckLowLightHours => 'Notiere, wie viele Stunden Licht die Pflanze täglich erhält.';
 
   @override
   String get diagnosisCheckSunburnPatches =>
       'Prüfe, ob sich die braunen Flecken nach dem Umstellen nicht weiter ausbreiten.';
 
   @override
-  String get diagnosisCheckSunburnNewLeaves =>
-      'Beobachte neue Blätter — sie sollten ohne braune Flecken wachsen.';
+  String get diagnosisCheckSunburnNewLeaves => 'Beobachte neue Blätter — sie sollten ohne braune Flecken wachsen.';
 
   @override
   String get diagnosisCheckLowHumidityTips =>
@@ -1517,8 +1463,7 @@ class AppLocalizationsDe extends AppLocalizations {
       'Beobachte nach dem Düngen, ob neues Wachstum innerhalb von 2–3 Wochen gesünder aussieht.';
 
   @override
-  String get diagnosisCheckNutrientsRoots =>
-      'Prüfe, ob die Erde verdichtet oder die Pflanze stark durchwurzelt ist.';
+  String get diagnosisCheckNutrientsRoots => 'Prüfe, ob die Erde verdichtet oder die Pflanze stark durchwurzelt ist.';
 
   @override
   String get diagnosisCheckRootsHealthy =>
@@ -1533,12 +1478,10 @@ class AppLocalizationsDe extends AppLocalizations {
       'Untersuche die Pflanze 3–4 Wochen lang wöchentlich, um sicherzustellen, dass der Befall beseitigt ist.';
 
   @override
-  String get diagnosisCheckPestsNearbyPlants =>
-      'Prüfe Pflanzen in der Nähe auf Anzeichen einer Ausbreitung.';
+  String get diagnosisCheckPestsNearbyPlants => 'Prüfe Pflanzen in der Nähe auf Anzeichen einer Ausbreitung.';
 
   @override
-  String get diagnosisCheckDefaultMoreDetails =>
-      'Fülle den Fragebogen erneut mit weiteren Details aus.';
+  String get diagnosisCheckDefaultMoreDetails => 'Fülle den Fragebogen erneut mit weiteren Details aus.';
 
   @override
   String get diagnosisCheckDefaultExpert =>
@@ -1717,17 +1660,14 @@ class AppLocalizationsDe extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other:
-          'Diesem Raum sind $count Pflanzen zugeordnet. Sie werden beim Löschen des Raums entfernt.',
-      one:
-          'Diesem Raum ist 1 Pflanze zugeordnet. Sie wird beim Löschen des Raums entfernt.',
+      other: 'Diesem Raum sind $count Pflanzen zugeordnet. Sie werden beim Löschen des Raums entfernt.',
+      one: 'Diesem Raum ist 1 Pflanze zugeordnet. Sie wird beim Löschen des Raums entfernt.',
     );
     return '$_temp0';
   }
 
   @override
-  String get roomDeleteNoAssignments =>
-      'Diesem Raum sind keine Pflanzen zugeordnet.';
+  String get roomDeleteNoAssignments => 'Diesem Raum sind keine Pflanzen zugeordnet.';
 
   @override
   String get roomPresetBedroom => 'Schlafzimmer';
@@ -1751,8 +1691,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get moreLightAssessmentTitle => 'Lichtmessung';
 
   @override
-  String get moreLightAssessmentSubtitle =>
-      'Lichtverhältnisse für Pflanzen einschätzen';
+  String get moreLightAssessmentSubtitle => 'Lichtverhältnisse für Pflanzen einschätzen';
 
   @override
   String lightAssessmentPageTitle(String plantName) {
@@ -1772,20 +1711,17 @@ class AppLocalizationsDe extends AppLocalizations {
   String get lightAssessmentSelectLevel => 'Lichtstufe auswählen';
 
   @override
-  String get lightAssessmentLowDescription =>
-      'Dunkle Ecken, Nordfenster und Innenräume';
+  String get lightAssessmentLowDescription => 'Dunkle Ecken, Nordfenster und Innenräume';
 
   @override
-  String get lightAssessmentMediumDescription =>
-      'Ostfenster mit indirektem Licht während des größten Teils des Tages';
+  String get lightAssessmentMediumDescription => 'Ostfenster mit indirektem Licht während des größten Teils des Tages';
 
   @override
   String get lightAssessmentBrightDescription =>
       'In der Nähe von Süd- oder Westfenstern, aber ohne direkte Sonnenstrahlen';
 
   @override
-  String get lightAssessmentDirectDescription =>
-      'Mindestens vier Stunden direkte Sonnenstrahlen auf der Pflanze';
+  String get lightAssessmentDirectDescription => 'Mindestens vier Stunden direkte Sonnenstrahlen auf der Pflanze';
 
   @override
   String get lightAssessmentCameraHeading => 'Interaktive Kamera';
@@ -1798,8 +1734,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get lightAssessmentCameraButton => 'Mit Kamera einschätzen';
 
   @override
-  String get lightAssessmentPhotoHeading =>
-      'Licht anhand eines Fotos einschätzen';
+  String get lightAssessmentPhotoHeading => 'Licht anhand eines Fotos einschätzen';
 
   @override
   String get lightAssessmentPhotoDescription =>
@@ -1812,12 +1747,10 @@ class AppLocalizationsDe extends AppLocalizations {
   String get lightAssessmentEstimateMedium => 'Sieht nach mittlerem Licht aus';
 
   @override
-  String get lightAssessmentEstimateBright =>
-      'Sieht nach hellem, indirektem Licht aus';
+  String get lightAssessmentEstimateBright => 'Sieht nach hellem, indirektem Licht aus';
 
   @override
-  String get lightAssessmentEstimateDirect =>
-      'Sieht nach direktem Sonnenlicht aus';
+  String get lightAssessmentEstimateDirect => 'Sieht nach direktem Sonnenlicht aus';
 
   @override
   String lightAssessmentBrightness(int percentage) {
@@ -1854,8 +1787,7 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
-  String get lightAssessmentNoPlants =>
-      'Es gibt keine Pflanze zum Speichern. Füge zuerst eine Pflanze hinzu.';
+  String get lightAssessmentNoPlants => 'Es gibt keine Pflanze zum Speichern. Füge zuerst eine Pflanze hinzu.';
 
   @override
   String get lightAssessmentSaveToPlant => 'Lichtstufe speichern für …';
@@ -1919,8 +1851,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get moreNotificationsTitle => 'Benachrichtigungen';
 
   @override
-  String get moreNotificationsSubtitle =>
-      'Benachrichtigungseinstellungen verwalten';
+  String get moreNotificationsSubtitle => 'Benachrichtigungseinstellungen verwalten';
 
   @override
   String get careScheduleCompletedEarly => 'Completed early';
@@ -1934,8 +1865,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get careScheduleCompletedSection => 'Completed Early';
 
   @override
-  String get careScheduleCompletedDueAgainToday =>
-      'Completed — due again today';
+  String get careScheduleCompletedDueAgainToday => 'Completed — due again today';
 
   @override
   String careScheduleCompletionSnackbar(String taskType, int days) {
@@ -2074,23 +2004,19 @@ class AppLocalizationsDe extends AppLocalizations {
   String get metricsNameRequired => 'Name des Messwerts erforderlich';
 
   @override
-  String get metricsCategoryOptionsRequired =>
-      'Mindestens eine Option hinzufügen';
+  String get metricsCategoryOptionsRequired => 'Mindestens eine Option hinzufügen';
 
   @override
   String get metricsCategoryOptionsUnique => 'Optionen müssen eindeutig sein';
 
   @override
-  String get metricsMinimumMustBeFinite =>
-      'Minimum muss eine endliche Zahl sein';
+  String get metricsMinimumMustBeFinite => 'Minimum muss eine endliche Zahl sein';
 
   @override
-  String get metricsMaximumMustBeFinite =>
-      'Maximum muss eine endliche Zahl sein';
+  String get metricsMaximumMustBeFinite => 'Maximum muss eine endliche Zahl sein';
 
   @override
-  String get metricsMinimumCannotExceedMaximum =>
-      'Minimum darf das Maximum nicht überschreiten';
+  String get metricsMinimumCannotExceedMaximum => 'Minimum darf das Maximum nicht überschreiten';
 
   @override
   String get speciesCarePlanWaterLow =>
@@ -2109,8 +2035,7 @@ class AppLocalizationsDe extends AppLocalizations {
       'An einen lichtarmen Ort ohne direkte Sonne stellen. Räume mit Nordfenstern sind geeignet.';
 
   @override
-  String get speciesCarePlanLightMedium =>
-      'Helles, indirektes Licht bieten. Ost- oder Westfenster sind geeignet.';
+  String get speciesCarePlanLightMedium => 'Helles, indirektes Licht bieten. Ost- oder Westfenster sind geeignet.';
 
   @override
   String get speciesCarePlanLightBright =>
@@ -2121,8 +2046,7 @@ class AppLocalizationsDe extends AppLocalizations {
       'Direkte Sonne bieten, etwa auf einer Südfensterbank, oder eine Pflanzenlampe verwenden.';
 
   @override
-  String get speciesCarePlanHumidityLow =>
-      'Die übliche Luftfeuchtigkeit in Wohnräumen (30–40 %) ist geeignet.';
+  String get speciesCarePlanHumidityLow => 'Die übliche Luftfeuchtigkeit in Wohnräumen (30–40 %) ist geeignet.';
 
   @override
   String get speciesCarePlanHumidityModerate =>
@@ -2138,8 +2062,7 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
-  String get speciesSoilCactus =>
-      'eine sehr durchlässige Kakteen- oder Sukkulentenerde';
+  String get speciesSoilCactus => 'eine sehr durchlässige Kakteen- oder Sukkulentenerde';
 
   @override
   String get speciesSoilOrchid => 'eine grobe Mischung mit Orchideenrinde';
@@ -2151,27 +2074,22 @@ class AppLocalizationsDe extends AppLocalizations {
   String get speciesSoilPeatFree => 'eine torffreie Erde';
 
   @override
-  String get speciesSoilPeatMoss =>
-      'eine feuchtigkeitsspeichernde Mischung mit Torfmoos';
+  String get speciesSoilPeatMoss => 'eine feuchtigkeitsspeichernde Mischung mit Torfmoos';
 
   @override
-  String get speciesSoilMoistureRetentive =>
-      'eine feuchtigkeitsspeichernde Mischung';
+  String get speciesSoilMoistureRetentive => 'eine feuchtigkeitsspeichernde Mischung';
 
   @override
   String get speciesSoilPottingMix => 'eine gut durchlässige Blumenerde';
 
   @override
-  String get speciesCarePlanRepotAnnual =>
-      'Jährliches Umtopfen wird empfohlen.';
+  String get speciesCarePlanRepotAnnual => 'Jährliches Umtopfen wird empfohlen.';
 
   @override
-  String get speciesCarePlanRepotEveryTwoYears =>
-      'Alle ein bis zwei Jahre umtopfen.';
+  String get speciesCarePlanRepotEveryTwoYears => 'Alle ein bis zwei Jahre umtopfen.';
 
   @override
-  String get speciesCarePlanRepotWhenRootBound =>
-      'Nur umtopfen, wenn die Wurzeln den Topf ausfüllen.';
+  String get speciesCarePlanRepotWhenRootBound => 'Nur umtopfen, wenn die Wurzeln den Topf ausfüllen.';
 
   @override
   String get notificationsTitle => 'Benachrichtigungen';
@@ -2180,22 +2098,19 @@ class AppLocalizationsDe extends AppLocalizations {
   String get notificationsEnable => 'Benachrichtigungen aktivieren';
 
   @override
-  String get notificationsEnableDescription =>
-      'Hauptschalter für alle Benachrichtigungen';
+  String get notificationsEnableDescription => 'Hauptschalter für alle Benachrichtigungen';
 
   @override
   String get notificationsDueTasks => 'Erinnerungen für fällige Aufgaben';
 
   @override
-  String get notificationsDueTasksDescription =>
-      'Bei fälligen Pflegeaufgaben benachrichtigen';
+  String get notificationsDueTasksDescription => 'Bei fälligen Pflegeaufgaben benachrichtigen';
 
   @override
   String get notificationsOverdueTasks => 'Warnungen für überfällige Aufgaben';
 
   @override
-  String get notificationsOverdueTasksDescription =>
-      'Bei überfälligen Pflegeaufgaben warnen';
+  String get notificationsOverdueTasksDescription => 'Bei überfälligen Pflegeaufgaben warnen';
 
   @override
   String get notificationsPermissionStatus => 'Berechtigungsstatus';
@@ -2204,15 +2119,13 @@ class AppLocalizationsDe extends AppLocalizations {
   String get notificationsPermissionEnabled => 'Benachrichtigungen aktiviert';
 
   @override
-  String get notificationsPermissionDisabled =>
-      'Benachrichtigungen deaktiviert';
+  String get notificationsPermissionDisabled => 'Benachrichtigungen deaktiviert';
 
   @override
   String get notificationsChannelName => 'Pflanzenpflege-Erinnerungen';
 
   @override
-  String get notificationsChannelDescription =>
-      'Erinnerungen für Pflanzenpflegeaufgaben';
+  String get notificationsChannelDescription => 'Erinnerungen für Pflanzenpflegeaufgaben';
 
   @override
   String get notificationsPermissionExplanation =>
@@ -2225,8 +2138,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get notificationsOpenSettings => 'App-Einstellungen öffnen';
 
   @override
-  String get notificationsPermissionBlocked =>
-      'Benachrichtigungen sind durch das Betriebssystem blockiert.';
+  String get notificationsPermissionBlocked => 'Benachrichtigungen sind durch das Betriebssystem blockiert.';
 
   @override
   String get notificationReminderTitle => 'Pflanzenpflege-Erinnerung';

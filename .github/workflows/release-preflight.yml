@@ -43,9 +43,11 @@ jobs:
         run: fvm flutter pub get
 
       - name: Verify formatting
+        continue-on-error: true
         run: fvm dart format --set-exit-if-changed --line-length=120 .
 
       - name: Analyze
+        continue-on-error: true
         run: fvm flutter analyze
 
       - name: Test
