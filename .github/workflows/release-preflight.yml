@@ -61,15 +61,15 @@ jobs:
       - name: Export plant-identification model
         run: ./scripts/run_export.sh
 
-      - name: Build unsigned split-ABI release APKs
-        run: fvm flutter build apk --release --split-per-abi
+      - name: Build unsigned release APK
+        run: fvm flutter build apk --release
 
       - name: Upload unsigned APK
         if: startsWith(github.ref, 'refs/tags/')
         uses: actions/upload-artifact@v4
         with:
-          name: openplant-unsigned-${{ github.ref_name }}
-          path: build/app/outputs/flutter-apk/app-*-release.apk
+          name: OpenPlants-${{ github.ref_name }}-unsigned.apk
+          path: build/app/outputs/flutter-apk/app-release.apk
           if-no-files-found: error
           retention-days: 90
 
@@ -108,7 +108,7 @@ jobs:
             "kotlin": "$KOTLIN_VERSION",
             "java": "$JAVA_VERSION",
             "min_sdk": "26",
-            "label": "unsigned split-ABI preflight evidence — not a production release"
+            "label": "unsigned preflight evidence — not a production release"
           }
           EOF
 
