@@ -138,6 +138,12 @@ def export_onnx(
     dummy_input = torch.randn(1, 3, height, width, dtype=torch.float32)
 
     onnx_path = out_dir / "model.onnx"
+    onnx_data_path = onnx_path.with_suffix(f"{onnx_path.suffix}.data")
+
+    # torch.onnx.export writes model weights to this sidecar. Remove outputs from
+    # previous runs so a rerun cannot append to a stale external-data file.
+    onnx_path.unlink(missing_ok=True)
+    onnx_data_path.unlink(missing_ok=True)
 
     input_names = ["pixel_values"]
     output_names = ["logits"]
@@ -159,6 +165,7 @@ def export_onnx(
             output_names=output_names,
             dynamic_axes=dynamic_axes,
             opset_version=opset,
+            external_data=True,
             do_constant_folding=True,
         )
 
@@ -166,14 +173,6 @@ def export_onnx(
     exported = onnx.load(str(onnx_path))
     onnx.checker.check_model(exported)
     validation_model_bytes = exported.SerializeToString() if validate else None
-    onnx.save_model(
-        exported,
-        str(onnx_path),
-        save_as_external_data=True,
-        all_tensors_to_one_file=True,
-        location="model.onnx.data",
-        size_threshold=0,
-    )
 
     print("[6/7] Saving metadata")
     processor.save_pretrained(out_dir)
