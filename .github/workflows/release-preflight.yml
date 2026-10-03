@@ -40,7 +40,9 @@ jobs:
             pub-${{ runner.os }}-
 
       - name: Install dependencies
-        run: fvm flutter pub get
+        run: |
+          fvm flutter config --jdk-dir="$JAVA_HOME"
+          fvm flutter pub get --enforce-lockfile
 
       - name: Verify formatting
         continue-on-error: true
