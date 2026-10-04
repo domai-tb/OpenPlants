@@ -1,7 +1,7 @@
 name: openplants
 description: 🌱 Open-Source & Privacy-Friendly Companion App for your Plants
 publish_to: "none"
-version: 1.1.1+4
+version: 1.1.2+5
 
 environment:
   sdk: ">=3.6.0 <4.0.0"
@@ -11,16 +11,16 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   camera: ^0.12.0+2
-  get_it: ^9.2.1
-  image: ^4.5.3
-  image_picker: ^1.2.0
+  get_it: ^9.3.0
+  image: ^4.10.1
+  image_picker: ^1.2.3
   # ponytail: 13.x requires API 37; upgrade when the pinned Android toolchain supports it.
   permission_handler: ^12.0.3
   intl: ^0.20.2
-  path_provider: ^2.1.5
-  flutter_onnxruntime: ^1.8.0
-  shared_preferences: ^2.3.3
-  uuid: ^4.5.1
+  path_provider: ^2.1.6
+  flutter_onnxruntime: ^1.8.5
+  shared_preferences: ^2.5.5
+  uuid: ^4.6.0
   flutter_local_notifications: ^22.3.1
   timezone: ^0.11.1
 
@@ -28,9 +28,9 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
-  test: ^1.25.0
-  mockito: ^5.4.4
-  build_runner: ^2.4.9
+  test: ^1.30.0
+  mockito: ^5.6.4
+  build_runner: ^2.15.1
 
 flutter:
   uses-material-design: true
