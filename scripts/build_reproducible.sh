@@ -14,7 +14,7 @@ mkdir -m 700 -- "$BUILD"
 rsync -a \
   --exclude='.git/' --exclude='.fvm/' --exclude='.dart_tool/' \
   --exclude='.gradle/' --exclude='build/' --exclude='.flutter-plugins*' \
-  --exclude='android/local.properties' \
+  --exclude='android/local.properties' --exclude='scripts/.venv/' \
   "$SOURCE/" "$BUILD/"
 
 cd "$BUILD"
