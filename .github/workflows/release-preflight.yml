@@ -40,7 +40,9 @@ jobs:
             pub-${{ runner.os }}-
 
       - name: Install dependencies
-        run: fvm flutter pub get
+        run: |
+          fvm flutter config --jdk-dir="$JAVA_HOME"
+          fvm flutter pub get --enforce-lockfile
 
       - name: Verify formatting
         continue-on-error: true
@@ -77,7 +79,7 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
         run: |
           cd build/app/outputs/flutter-apk
-          sha256sum app-*-release.apk > checksums.txt
+          sha256sum app-release.apk > checksums.txt
 
       - name: Upload checksum
         if: startsWith(github.ref, 'refs/tags/')

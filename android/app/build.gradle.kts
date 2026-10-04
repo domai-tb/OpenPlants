@@ -33,6 +33,13 @@ android {
         }
     }
 
+    dependenciesInfo {
+        // Disables dependency metadata when building APKs.
+        includeInApk = false
+        // Disables dependency metadata when building Android App Bundles.
+        includeInBundle = false
+    }
+    
     defaultConfig {
         // Application ID: https://developer.android.com/studio/build/application-id.html
         applicationId = "com.domai_tb.openplants"
