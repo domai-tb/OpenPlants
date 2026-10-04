@@ -79,7 +79,7 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
         run: |
           cd build/app/outputs/flutter-apk
-          sha256sum app-*-release.apk > checksums.txt
+          sha256sum app-release.apk > checksums.txt
 
       - name: Upload checksum
         if: startsWith(github.ref, 'refs/tags/')
