@@ -16,7 +16,7 @@ if (keystorePropertiesFile.exists()) {
 
 android {
     namespace = "com.domai_tb.openplants"
-    compileSdk = flutter.compileSdkVersion
+    compileSdk = 37 // flutter.compileSdk = 36
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
