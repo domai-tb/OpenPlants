@@ -110,23 +110,11 @@ abstract class AppLocalizations {
   /// **'OpenPlants'**
   String get appTitle;
 
-  /// No description provided for @todayDashboardTitle.
+  /// No description provided for @myPlantsTitle.
   ///
   /// In en, this message translates to:
-  /// **'Today'**
-  String get todayDashboardTitle;
-
-  /// No description provided for @dueToday.
-  ///
-  /// In en, this message translates to:
-  /// **'Due Today'**
-  String get dueToday;
-
-  /// No description provided for @overdue.
-  ///
-  /// In en, this message translates to:
-  /// **'Overdue'**
-  String get overdue;
+  /// **'My Plants'**
+  String get myPlantsTitle;
 
   /// No description provided for @recentPlants.
   ///
@@ -163,18 +151,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Diagnose'**
   String get quickDiagnose;
-
-  /// No description provided for @daysOverdue.
-  ///
-  /// In en, this message translates to:
-  /// **'d overdue'**
-  String get daysOverdue;
-
-  /// No description provided for @taskDueToday.
-  ///
-  /// In en, this message translates to:
-  /// **'Due today'**
-  String get taskDueToday;
 
   /// No description provided for @taskTypeWater.
   ///

@@ -152,7 +152,7 @@ Future<void> init() async {
 
   // Today Dashboard
   sl.registerLazySingleton<TodayDashboardDataSource>(
-    () => TodayDashboardDataSource(plantCollection: sl(), careSchedule: sl()),
+    () => TodayDashboardDataSource(plantCollection: sl()),
   );
   sl.registerLazySingleton<TodayDashboardRepository>(
     () => TodayDashboardRepository(dataSource: sl()),

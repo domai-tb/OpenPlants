@@ -11,8 +11,6 @@ import 'package:openplants/pages/plant_collection/plant_collection_detail_page.d
 import 'package:openplants/pages/plant_collection/plant_collection_form_page.dart';
 import 'package:openplants/pages/plant_collection/plant_collection_item_entity.dart';
 import 'package:openplants/pages/plant_identification/plant_identification_page.dart';
-import 'package:openplants/pages/care_schedule/care_task.dart' show calendarDaysBetween;
-import 'package:openplants/pages/care_schedule/care_task_type.dart' as care;
 import 'package:openplants/pages/today_dashboard/plant_grid_section.dart';
 import 'package:openplants/pages/today_dashboard/today_dashboard_entity.dart';
 import 'package:openplants/pages/today_dashboard/today_dashboard_usecases.dart';
@@ -186,7 +184,7 @@ class _TodayDashboardPageState extends State<TodayDashboardPage>
         const SizedBox(height: 24),
         _buildFilterControls(theme, l10n),
         const SizedBox(height: 12),
-        // ── Scrollable section (tasks + plant grid) ─────────────────
+        // ── Scrollable section (plant grid) ───────────────────────────
         Expanded(
           child: RefreshIndicator(
             key: _refreshIndicatorKey,
@@ -198,16 +196,6 @@ class _TodayDashboardPageState extends State<TodayDashboardPage>
                   padding: EdgeInsets.zero,
                   sliver: SliverList(
                     delegate: SliverChildListDelegate([
-                      if (data.dueToday.isNotEmpty)
-                        _DueTasksSection(
-                          tasks: data.dueToday,
-                          onNavigateToPlantDetail: _openPlantDetail,
-                        ),
-                      if (data.overdue.isNotEmpty)
-                        _OverdueTasksSection(
-                          tasks: data.overdue,
-                          onNavigateToPlantDetail: _openPlantDetail,
-                        ),
                       PlantGridSection(
                         key: _plantGridKey,
                         onNavigateToPlantDetail: _openPlantDetail,
@@ -232,7 +220,7 @@ class _TodayDashboardPageState extends State<TodayDashboardPage>
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       child: Text(
-        l10n.todayDashboardTitle,
+        l10n.myPlantsTitle,
         style: theme.textTheme.displayMedium,
         textAlign: TextAlign.center,
       ),
@@ -590,200 +578,6 @@ class _ActionButton extends StatelessWidget {
         ),
       ),
     );
-  }
-}
-
-// ─── Due Tasks Section ──────────────────────────────────────────────────────
-
-class _DueTasksSection extends StatelessWidget {
-  final List<CareTask> tasks;
-  final ValueChanged<String>? onNavigateToPlantDetail;
-
-  const _DueTasksSection({
-    required this.tasks,
-    this.onNavigateToPlantDetail,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final l10n = context.l10n;
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            l10n.dueToday,
-            style: theme.textTheme.titleMedium,
-          ),
-          const SizedBox(height: 8),
-          ...tasks.map(
-            (task) => Padding(
-              padding: const EdgeInsets.only(bottom: 8),
-              child: _CareTaskCard(
-                task: task,
-                isOverdue: false,
-                onNavigateToPlantDetail: onNavigateToPlantDetail,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-// ─── Overdue Tasks Section ──────────────────────────────────────────────────
-
-class _OverdueTasksSection extends StatelessWidget {
-  final List<CareTask> tasks;
-  final ValueChanged<String>? onNavigateToPlantDetail;
-
-  const _OverdueTasksSection({
-    required this.tasks,
-    this.onNavigateToPlantDetail,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final l10n = context.l10n;
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(height: 16),
-          Text(
-            l10n.overdue,
-            style: theme.textTheme.titleMedium?.copyWith(
-              color: theme.colorScheme.error,
-            ),
-          ),
-          const SizedBox(height: 8),
-          ...tasks.map(
-            (task) => Padding(
-              padding: const EdgeInsets.only(bottom: 8),
-              child: _CareTaskCard(
-                task: task,
-                isOverdue: true,
-                onNavigateToPlantDetail: onNavigateToPlantDetail,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-// ─── Care Task Card ─────────────────────────────────────────────────────────
-
-class _CareTaskCard extends StatelessWidget {
-  final CareTask task;
-  final bool isOverdue;
-  final ValueChanged<String>? onNavigateToPlantDetail;
-
-  const _CareTaskCard({
-    required this.task,
-    required this.isOverdue,
-    this.onNavigateToPlantDetail,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final l10n = context.l10n;
-    final today = DateTime.now();
-    final daysOverdue = -calendarDaysBetween(today, task.dueDate);
-
-    return Material(
-      color: isOverdue ? theme.colorScheme.errorContainer : theme.cardColor,
-      borderRadius: BorderRadius.circular(12),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(12),
-        onTap: () => onNavigateToPlantDetail?.call(task.plantId),
-        child: Padding(
-          padding: const EdgeInsets.all(14),
-          child: Row(
-            children: [
-              Icon(
-                _iconForTaskType(task.taskType),
-                size: 24,
-                color: isOverdue ? theme.colorScheme.error : theme.colorScheme.primary,
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      task.plantName,
-                      style: theme.textTheme.headlineSmall,
-                    ),
-                    const SizedBox(height: 2),
-                    Text(
-                      task.alertMetricName == null
-                          ? _taskTypeLabel(l10n, task.taskType)
-                          : l10n.careScheduleMetricAlert(task.alertMetricName!),
-                      style: theme.textTheme.bodyMedium,
-                    ),
-                  ],
-                ),
-              ),
-              if (isOverdue && daysOverdue > 0)
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8,
-                    vertical: 4,
-                  ),
-                  decoration: BoxDecoration(
-                    color: theme.colorScheme.error,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Text(
-                    '$daysOverdue${l10n.daysOverdue}',
-                    style: theme.textTheme.labelSmall?.copyWith(
-                      color: theme.colorScheme.onError,
-                    ),
-                  ),
-                ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  IconData _iconForTaskType(care.CareTaskType type) {
-    return switch (type.builtIn) {
-      care.BuiltInTaskType.watering => Icons.water_drop,
-      care.BuiltInTaskType.fertilizing => Icons.spa,
-      care.BuiltInTaskType.misting => Icons.water,
-      care.BuiltInTaskType.pruning => Icons.content_cut,
-      care.BuiltInTaskType.rotating => Icons.replay,
-      care.BuiltInTaskType.repotting => Icons.inventory_2_outlined,
-      care.BuiltInTaskType.leafCleaning => Icons.cleaning_services,
-      care.BuiltInTaskType.pestInspection => Icons.search,
-      null => Icons.checklist,
-    };
-  }
-
-  String _taskTypeLabel(AppLocalizations l10n, care.CareTaskType type) {
-    return switch (type.builtIn) {
-      care.BuiltInTaskType.watering => l10n.taskTypeWater,
-      care.BuiltInTaskType.fertilizing => l10n.taskTypeFertilize,
-      care.BuiltInTaskType.misting => l10n.taskTypeMist,
-      care.BuiltInTaskType.pruning => l10n.taskTypePrune,
-      care.BuiltInTaskType.rotating => l10n.taskTypeRotate,
-      care.BuiltInTaskType.repotting => l10n.taskTypeRepot,
-      care.BuiltInTaskType.leafCleaning => l10n.taskTypeClean,
-      care.BuiltInTaskType.pestInspection => l10n.taskTypeInspect,
-      null => type.customName ?? 'Unknown',
-    };
   }
 }
 
