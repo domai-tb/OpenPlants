@@ -15,13 +15,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get appTitle => 'OpenPlants';
 
   @override
-  String get todayDashboardTitle => 'Today';
-
-  @override
-  String get dueToday => 'Due Today';
-
-  @override
-  String get overdue => 'Overdue';
+  String get myPlantsTitle => 'My Plants';
 
   @override
   String get recentPlants => 'Recent Plants';
@@ -40,12 +34,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get quickDiagnose => 'Diagnose';
-
-  @override
-  String get daysOverdue => 'd overdue';
-
-  @override
-  String get taskDueToday => 'Due today';
 
   @override
   String get taskTypeWater => 'Water';

@@ -1,0 +1,5 @@
+The My Plants screen now focuses on your collection and keeps due and overdue tasks separate.
+
+- Find overdue, due-today, and upcoming care tasks in Care Schedule.
+- Filter tasks by plant or care type.
+- Mark regular tasks done, snooze them for 1, 3, or 7 days, or skip them.

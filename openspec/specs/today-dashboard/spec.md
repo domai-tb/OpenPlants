@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Provide an at-a-glance view of today's care tasks and quick actions for plant care management.
+Provide a plants-only collection view titled "My Plants". Care tasks live on the Care Schedule page.
 
 ## Requirements
 
@@ -17,24 +17,13 @@ The system SHALL display a persistent row of action buttons at the top of the da
 - **WHEN** user taps "Diagnose"
 - **THEN** the system navigates to the plant diagnosis page
 
-### Requirement: Dashboard shows due tasks section
-The system SHALL query the care schedule engine and display care tasks that are due today, grouped under a "Due Today" heading.
+### Requirement: Dashboard is plants-only and titled My Plants
+The system SHALL display only the plant collection (grid, search, filters) on the dashboard, titled "My Plants" via l10n. The system SHALL NOT display care task sections on the dashboard.
 
-#### Scenario: Due today section appears when tasks exist
-- **WHEN** the care schedule engine reports one or more tasks due today
-- **THEN** the dashboard displays a "Due Today" section listing each task with plant name, task type, and due time
+#### Scenario: No task sections on dashboard
+- **WHEN** the user opens the dashboard with due or overdue tasks present
+- **THEN** no Due Today or Overdue section appears
 
-#### Scenario: Due today section hidden when no tasks
-- **WHEN** the care schedule engine reports zero tasks due today
-- **THEN** the dashboard hides the "Due Today" section entirely
-
-### Requirement: Dashboard shows overdue tasks section
-The system SHALL query the care schedule engine and display tasks past their due date, grouped under an "Overdue" heading.
-
-#### Scenario: Overdue section appears when tasks overdue
-- **WHEN** the care schedule engine reports one or more overdue tasks
-- **THEN** the dashboard displays an "Overdue" section with red urgency styling, listing each task with plant name, task type, and days overdue
-
-#### Scenario: Overdue section hidden when none overdue
-- **WHEN** the care schedule engine reports zero overdue tasks
-- **THEN** the dashboard hides the "Overdue" section
+#### Scenario: Header and nav show My Plants
+- **WHEN** the user views the dashboard tab or bottom navigation
+- **THEN** the label reads the localized "My Plants" string

@@ -27,7 +27,7 @@ class PageItemPresentation {
 PageItemPresentation pageItemPresentation(BuildContext context, PageItem item) {
   return switch (item) {
     PageItem.dashboard => PageItemPresentation(
-        title: context.l10n.todayDashboardTitle,
+        title: context.l10n.myPlantsTitle,
         activeIcon: Icons.today,
         inactiveIcon: Icons.today_outlined,
       ),

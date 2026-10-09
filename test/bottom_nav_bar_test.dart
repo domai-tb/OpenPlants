@@ -39,7 +39,7 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    expect(find.text('Today'), findsOneWidget);
+    expect(find.text('My Plants'), findsOneWidget);
     expect(find.text('Care Schedule'), findsOneWidget);
     expect(find.text('More'), findsOneWidget);
   });

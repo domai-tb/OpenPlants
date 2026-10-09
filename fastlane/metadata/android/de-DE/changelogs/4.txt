@@ -1,0 +1,4 @@
+Wartungsupdate.
+
+- Abhängigkeiten aktualisiert.
+- Reproduzierbarkeit der Android-Builds verbessert.

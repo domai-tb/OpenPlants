@@ -7,19 +7,24 @@ Provides the ONNX-based image classification pipeline: model loading, image prep
 ## Requirements
 
 ### Requirement: ONNX session lifecycle
-The system SHALL create a single ONNX Runtime session from the bundled `model.onnx` asset on first use and reuse it for all subsequent inference calls. The session SHALL be disposed when the plant identification feature is no longer needed.
+
+The system SHALL create a single ONNX Runtime session from the installed model package on first use and reuse it for all subsequent inference calls. The session SHALL be disposed when the plant identification feature is no longer needed and closed before its package is replaced or removed.
 
 #### Scenario: Session initialization on first inference
-- **WHEN** the classifier receives its first inference request
-- **THEN** it loads `assets/ml/plant-identification/model.onnx` into an ONNX Runtime session and stores it for reuse
+- **WHEN** the classifier receives its first inference request and a model is installed
+- **THEN** it loads the installed `model.onnx` and its adjacent external data into an ONNX Runtime session and stores it for reuse
 
 #### Scenario: Session reuse on subsequent inference
-- **WHEN** the classifier receives a second inference request after a session already exists
+- **WHEN** the classifier receives another inference request after a session already exists
 - **THEN** it reuses the existing session without creating a new one
 
 #### Scenario: Session disposal
-- **WHEN** the classifier is disposed
+- **WHEN** the classifier is disposed or the active package is about to change
 - **THEN** the ONNX Runtime session and all associated native resources are released
+
+#### Scenario: No model is installed
+- **WHEN** the classifier receives an inference request without an installed model
+- **THEN** it returns a classified model-not-installed error without attempting to load Flutter assets
 
 ### Requirement: Image preprocessing pipeline
 The system SHALL convert a raw image (from camera or gallery) into an input tensor matching the model contract: `pixel_values` shaped `[1, 3, 224, 224]` float32 in NCHW layout.
@@ -70,36 +75,29 @@ The system SHALL map the top-k highest-probability indices to species names usin
 - **THEN** the top-1 result label matches `labels.json["42"]`
 
 ### Requirement: Label file loading
-The system SHALL load `assets/ml/plant-identification/labels.json` at initialization and maintain a map from string indices to Latin species names.
+
+The system SHALL load `labels.json` from the same installed model package as the ONNX graph and maintain a map from string indices to Latin species names.
+
+#### Scenario: Labels loaded from installed package
+- **WHEN** the classifier initializes with an installed model
+- **THEN** the matching `labels.json` is decoded and available for index-to-name lookup
 
 #### Scenario: Labels loaded from asset
-- **WHEN** the classifier initializes
-- **THEN** `labels.json` is decoded and available for index-to-name lookup
+- **WHEN** the classifier migrates a compatible legacy cached model
+- **THEN** the bundled `labels.json` is copied into the installed package and decoded for index-to-name lookup
 
 #### Scenario: Missing labels file
-- **WHEN** `labels.json` cannot be found or parsed
+- **WHEN** `labels.json` cannot be found or parsed in the installed package
 - **THEN** the system returns an initialization error with a descriptive message
 
-### Requirement: Cached ONNX assets match bundled model identity
-The classifier SHALL treat `model.onnx`, `model.onnx.data`, and a bundled model identity as one cache unit. It SHALL create a session from cached files only when both files are non-empty and the installed identity equals the bundled identity.
+### Requirement: Classifier package files stay paired
 
-#### Scenario: Matching cache is reused
-- **WHEN** both cached model files are non-empty and the cached identity matches the bundled identity
-- **THEN** the classifier reuses the cached files without copying bundled assets
+The classifier SHALL use the model graph, external data, metadata, and labels from one active installation. It SHALL NOT combine a model graph from one package with labels from another package.
 
-#### Scenario: Legacy cache without identity is refreshed
-- **WHEN** cached model files exist but no cached identity marker exists
-- **THEN** the classifier refreshes both files from bundled assets before creating the session
+#### Scenario: Package is replaced
+- **WHEN** the active package is replaced
+- **THEN** the classifier closes the old session and uses the graph and labels from the new package on the next inference
 
-#### Scenario: Updated bundled model invalidates cache
-- **WHEN** the bundled identity differs from the cached identity
-- **THEN** the classifier replaces both cached model files with the bundled pair
-- **AND** writes the new identity only after both replacement files are valid
-
-#### Scenario: Incomplete cache is refreshed
-- **WHEN** either cached model file is missing or empty
-- **THEN** the classifier refreshes both files before creating the session
-
-#### Scenario: Interrupted refresh is recovered
-- **WHEN** temporary files or model files exist without a matching identity after an interrupted refresh
-- **THEN** the next initialization discards stale temporary state and refreshes the complete cache unit
+#### Scenario: Package files are incomplete
+- **WHEN** a required installed package file is missing or empty
+- **THEN** the classifier returns a model-loading error and does not create a session from a partial package
