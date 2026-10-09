@@ -21,14 +21,26 @@ class _RoomPreset {
 
 const List<_RoomPreset> _presets = [
   _RoomPreset(
-      name: _RoomPresetName.bedroom, lightLevel: RoomLightLevel.medium, humidityLevel: RoomHumidityLevel.medium),
+    name: _RoomPresetName.bedroom,
+    lightLevel: RoomLightLevel.medium,
+    humidityLevel: RoomHumidityLevel.medium,
+  ),
   _RoomPreset(
-      name: _RoomPresetName.kitchen, lightLevel: RoomLightLevel.bright, humidityLevel: RoomHumidityLevel.medium),
+    name: _RoomPresetName.kitchen,
+    lightLevel: RoomLightLevel.bright,
+    humidityLevel: RoomHumidityLevel.medium,
+  ),
   _RoomPreset(name: _RoomPresetName.bathroom, lightLevel: RoomLightLevel.low, humidityLevel: RoomHumidityLevel.high),
   _RoomPreset(
-      name: _RoomPresetName.livingRoom, lightLevel: RoomLightLevel.bright, humidityLevel: RoomHumidityLevel.medium),
+    name: _RoomPresetName.livingRoom,
+    lightLevel: RoomLightLevel.bright,
+    humidityLevel: RoomHumidityLevel.medium,
+  ),
   _RoomPreset(
-      name: _RoomPresetName.balcony, lightLevel: RoomLightLevel.directSun, humidityLevel: RoomHumidityLevel.low),
+    name: _RoomPresetName.balcony,
+    lightLevel: RoomLightLevel.directSun,
+    humidityLevel: RoomHumidityLevel.low,
+  ),
   _RoomPreset(name: _RoomPresetName.office, lightLevel: RoomLightLevel.medium, humidityLevel: RoomHumidityLevel.low),
 ];
 
