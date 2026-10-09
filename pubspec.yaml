@@ -1,7 +1,7 @@
 name: openplants
 description: 🌱 Open-Source & Privacy-Friendly Companion App for your Plants
 publish_to: "none"
-version: 1.1.2+5
+version: 1.1.3+6
 
 environment:
   sdk: ">=3.6.0 <4.0.0"
@@ -15,7 +15,7 @@ dependencies:
   image: ^4.10.1
   image_picker: ^1.2.3
   # ponytail: 13.x requires API 37; upgrade when the pinned Android toolchain supports it.
-  permission_handler: ^12.0.3
+  permission_handler: ^13.0.2
   intl: ^0.20.2
   path_provider: ^2.1.6
   flutter_onnxruntime: ^1.8.5
