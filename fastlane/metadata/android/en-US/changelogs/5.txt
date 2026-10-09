@@ -1,0 +1,4 @@
+Maintenance release.
+
+- Updated dependencies.
+- Improved Android release build verification.
