@@ -125,7 +125,8 @@ class _SpeciesLibraryPageState extends State<SpeciesLibraryPage> {
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
-                          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                          contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 12),
                         ),
                       ),
                     ),
@@ -137,7 +138,8 @@ class _SpeciesLibraryPageState extends State<SpeciesLibraryPage> {
                                 child: Text(
                                   context.l10n.speciesListEmptyState,
                                   style: theme.textTheme.bodyLarge?.copyWith(
-                                    color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+                                    color: theme.colorScheme.onSurface
+                                        .withValues(alpha: 0.5),
                                   ),
                                 ),
                               ),
@@ -173,6 +175,9 @@ class _SpeciesListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final commonNames = species.displayCommonNames(
+      Localizations.localeOf(context).languageCode,
+    );
     final hasToxicity = species.toxicToPets || species.toxicToHumans;
 
     return Padding(
@@ -197,12 +202,13 @@ class _SpeciesListItem extends StatelessWidget {
                           fontStyle: FontStyle.italic,
                         ),
                       ),
-                      if (species.commonNames.isNotEmpty) ...[
+                      if (commonNames.isNotEmpty) ...[
                         const SizedBox(height: 2),
                         Text(
-                          species.commonNames.first,
+                          commonNames.first,
                           style: theme.textTheme.bodyMedium?.copyWith(
-                            color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                            color: theme.colorScheme.onSurface
+                                .withValues(alpha: 0.6),
                           ),
                         ),
                       ],

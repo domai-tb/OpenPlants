@@ -30,7 +30,7 @@ class BottomNavBarItem extends StatelessWidget {
     required this.activeIcon,
     required this.inactiveIcon,
     required this.title,
-    this.iconVerticalPadding = 6,
+    this.iconVerticalPadding = 3,
     required this.onTap,
     this.isActive = false,
   });
@@ -43,7 +43,7 @@ class BottomNavBarItem extends StatelessWidget {
     return CustomButton(
       tapHandler: onTap,
       child: AnimatedPadding(
-        padding: isActive ? const EdgeInsets.only(top: 2) : const EdgeInsets.only(top: 7),
+        padding: isActive ? const EdgeInsets.only(top: 2) : const EdgeInsets.only(top: 4),
         duration: _animationDuration,
         curve: _animationCurve,
         child: Column(

@@ -49,6 +49,7 @@
   "languageSystem": "System",
   "languageEnglish": "English",
   "languageGerman": "German",
+  "languageSpanish": "Spanish",
   "accessibilityLabel": "Accessibility",
   "useSystemTextScaling": "Use system text scaling",
   "temperatureUnitLabel": "Temperature Unit",

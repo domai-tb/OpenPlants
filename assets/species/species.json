@@ -2,6 +2,7 @@
   {
     "scientificName": "Monstera deliciosa",
     "commonNames": ["Swiss Cheese Plant", "Split-Leaf Philodendron"],
+    "commonNamesEs": ["Monstera deliciosa"],
     "difficulty": "easy",
     "lightNeeds": "medium",
     "waterNeeds": "moderate",
@@ -16,6 +17,7 @@
   {
     "scientificName": "Sansevieria trifasciata",
     "commonNames": ["Snake Plant", "Mother-in-Law's Tongue"],
+    "commonNamesEs": ["Lengua de suegra"],
     "difficulty": "easy",
     "lightNeeds": "low",
     "waterNeeds": "low",
@@ -30,6 +32,7 @@
   {
     "scientificName": "Ficus lyrata",
     "commonNames": ["Fiddle Leaf Fig", "Banjo Fig"],
+    "commonNamesEs": ["Ficus lira"],
     "difficulty": "moderate",
     "lightNeeds": "bright",
     "waterNeeds": "moderate",
@@ -44,6 +47,7 @@
   {
     "scientificName": "Chlorophytum comosum",
     "commonNames": ["Spider Plant", "Airplane Plant"],
+    "commonNamesEs": ["Planta Cinta", "Planta Araña"],
     "difficulty": "easy",
     "lightNeeds": "medium",
     "waterNeeds": "moderate",
@@ -58,6 +62,7 @@
   {
     "scientificName": "Aloe vera",
     "commonNames": ["Aloe", "Barbados Aloe"],
+    "commonNamesEs": ["Aloe vera"],
     "difficulty": "easy",
     "lightNeeds": "bright",
     "waterNeeds": "low",
@@ -72,6 +77,7 @@
   {
     "scientificName": "Calathea orbifolia",
     "commonNames": ["Calathea", "Prayer Plant"],
+    "commonNamesEs": ["Calatea ornata"],
     "difficulty": "challenging",
     "lightNeeds": "low",
     "waterNeeds": "moderate",
@@ -86,6 +92,7 @@
   {
     "scientificName": "Epipremnum aureum",
     "commonNames": ["Golden Pothos", "Devil's Ivy"],
+    "commonNamesEs": ["Poto"],
     "difficulty": "easy",
     "lightNeeds": "low",
     "waterNeeds": "low",
@@ -100,6 +107,7 @@
   {
     "scientificName": "Zamioculcas zamiifolia",
     "commonNames": ["ZZ Plant", "Zanzibar Gem"],
+    "commonNamesEs": ["Zamioculca"],
     "difficulty": "easy",
     "lightNeeds": "low",
     "waterNeeds": "low",
@@ -114,6 +122,7 @@
   {
     "scientificName": "Nephrolepis exaltata",
     "commonNames": ["Boston Fern", "Sword Fern"],
+    "commonNamesEs": ["Helecho de Boston", "Helecho rizado"],
     "difficulty": "moderate",
     "lightNeeds": "medium",
     "waterNeeds": "frequent",
@@ -128,6 +137,7 @@
   {
     "scientificName": "Spathiphyllum wallisii",
     "commonNames": ["Peace Lily", "Spath"],
+    "commonNamesEs": ["Lirio de la paz"],
     "difficulty": "easy",
     "lightNeeds": "low",
     "waterNeeds": "moderate",
@@ -142,6 +152,7 @@
   {
     "scientificName": "Dracaena marginata",
     "commonNames": ["Dragon Tree", "Madagascar Dragon Tree"],
+    "commonNamesEs": ["Drácena marginata"],
     "difficulty": "easy",
     "lightNeeds": "medium",
     "waterNeeds": "low",
@@ -156,6 +167,7 @@
   {
     "scientificName": "Peperomia obtusifolia",
     "commonNames": ["Baby Rubber Plant", "Pepper Face"],
+    "commonNamesEs": ["Peperomia"],
     "difficulty": "easy",
     "lightNeeds": "medium",
     "waterNeeds": "low",
@@ -170,6 +182,7 @@
   {
     "scientificName": "Strelitzia reginae",
     "commonNames": ["Bird of Paradise", "Crane Flower"],
+    "commonNamesEs": ["Flor del pájaro", "Estrelizia"],
     "difficulty": "moderate",
     "lightNeeds": "bright",
     "waterNeeds": "moderate",
@@ -184,6 +197,7 @@
   {
     "scientificName": "Maranta leuconeura",
     "commonNames": ["Prayer Plant", "Red Maranta"],
+    "commonNamesEs": ["Maranta"],
     "difficulty": "moderate",
     "lightNeeds": "low",
     "waterNeeds": "moderate",
@@ -198,6 +212,7 @@
   {
     "scientificName": "Cactaceae opuntia",
     "commonNames": ["Prickly Pear Cactus", "Bunny Ears Cactus"],
+    "commonNamesEs": ["Opuntia", "Chumbera"],
     "difficulty": "easy",
     "lightNeeds": "direct",
     "waterNeeds": "low",
@@ -212,6 +227,7 @@
   {
     "scientificName": "Anthurium andraeanum",
     "commonNames": ["Flamingo Flower", "Tail Flower"],
+    "commonNamesEs": ["Anturio", "Flor de flamenco"],
     "difficulty": "challenging",
     "lightNeeds": "bright",
     "waterNeeds": "moderate",
@@ -226,6 +242,7 @@
   {
     "scientificName": "Pilea peperomioides",
     "commonNames": ["Chinese Money Plant", "Pass It On Plant", "UFO Plant"],
+    "commonNamesEs": ["Planta china del dinero"],
     "difficulty": "easy",
     "lightNeeds": "medium",
     "waterNeeds": "moderate",
@@ -240,6 +257,7 @@
   {
     "scientificName": "Ficus elastica",
     "commonNames": ["Rubber Tree", "Rubber Plant"],
+    "commonNamesEs": ["Árbol del caucho gomero"],
     "difficulty": "easy",
     "lightNeeds": "medium",
     "waterNeeds": "moderate",
@@ -254,6 +272,7 @@
   {
     "scientificName": "Orchidaceae phalaenopsis",
     "commonNames": ["Moth Orchid", "Phalaenopsis Orchid"],
+    "commonNamesEs": ["Orquídea mariposa", "Orquídea alevilla"],
     "difficulty": "moderate",
     "lightNeeds": "medium",
     "waterNeeds": "low",
@@ -268,6 +287,7 @@
   {
     "scientificName": "Monstera adansonii",
     "commonNames": ["Swiss Cheese Vine", "Monkey Mask"],
+    "commonNamesEs": ["Monstera de hojas agujereadas"],
     "difficulty": "moderate",
     "lightNeeds": "medium",
     "waterNeeds": "moderate",
@@ -282,6 +302,7 @@
   {
     "scientificName": "Hoya carnosa",
     "commonNames": ["Wax Plant", "Porcelain Flower"],
+    "commonNamesEs": ["Flor de cera", "Flor de porcelana"],
     "difficulty": "easy",
     "lightNeeds": "bright",
     "waterNeeds": "low",
@@ -296,6 +317,7 @@
   {
     "scientificName": "Calathea makoyana",
     "commonNames": ["Peacock Plant", "Cathedral Windows"],
+    "commonNamesEs": ["Planta pavo real"],
     "difficulty": "challenging",
     "lightNeeds": "low",
     "waterNeeds": "moderate",
@@ -310,6 +332,7 @@
   {
     "scientificName": "Crassula ovata",
     "commonNames": ["Jade Plant", "Money Tree", "Friendship Tree"],
+    "commonNamesEs": ["Árbol de Jade", "Árbol del dinero"],
     "difficulty": "easy",
     "lightNeeds": "bright",
     "waterNeeds": "low",
@@ -324,6 +347,7 @@
   {
     "scientificName": "Philodendron hederaceum",
     "commonNames": ["Heartleaf Philodendron", "Sweetheart Plant"],
+    "commonNamesEs": ["Filodendro de hoja de corazón"],
     "difficulty": "easy",
     "lightNeeds": "low",
     "waterNeeds": "moderate",

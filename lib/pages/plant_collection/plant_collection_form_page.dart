@@ -389,6 +389,10 @@ class _PlantCollectionFormPageState extends State<PlantCollectionFormPage> {
             ),
             const SizedBox(height: 8),
             SegmentedButton<CareStatus>(
+              style: const ButtonStyle(
+                visualDensity: VisualDensity.compact,
+                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              ),
               segments: [
                 ButtonSegment(
                   value: CareStatus.happy,

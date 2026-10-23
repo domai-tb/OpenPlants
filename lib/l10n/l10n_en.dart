@@ -162,6 +162,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get languageGerman => 'German';
 
   @override
+  String get languageSpanish => 'Spanish';
+
+  @override
   String get accessibilityLabel => 'Accessibility';
 
   @override

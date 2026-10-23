@@ -14,6 +14,7 @@ enum HumidityPreference { low, moderate, high }
 class SpeciesEntity {
   final String scientificName;
   final List<String> commonNames;
+  final List<String> commonNamesEs;
   final Difficulty difficulty;
   final LightNeeds lightNeeds;
   final WaterNeeds waterNeeds;
@@ -28,6 +29,7 @@ class SpeciesEntity {
   const SpeciesEntity({
     required this.scientificName,
     required this.commonNames,
+    this.commonNamesEs = const [],
     required this.difficulty,
     required this.lightNeeds,
     required this.waterNeeds,
@@ -45,10 +47,14 @@ class SpeciesEntity {
     return SpeciesEntity(
       scientificName: json['scientificName'] as String,
       commonNames: List<String>.from(json['commonNames'] as List),
+      commonNamesEs: List<String>.from(
+        json['commonNamesEs'] as List? ?? const [],
+      ),
       difficulty: Difficulty.values.byName(json['difficulty'] as String),
       lightNeeds: LightNeeds.values.byName(json['lightNeeds'] as String),
       waterNeeds: WaterNeeds.values.byName(json['waterNeeds'] as String),
-      humidityPreference: HumidityPreference.values.byName(json['humidityPreference'] as String),
+      humidityPreference: HumidityPreference.values
+          .byName(json['humidityPreference'] as String),
       soilType: json['soilType'] as String,
       repottingIntervalMonths: json['repottingIntervalMonths'] as int,
       toxicToHumans: json['toxicToHumans'] as bool,
@@ -56,5 +62,11 @@ class SpeciesEntity {
       description: json['description'] as String,
       careSummary: json['careSummary'] as String,
     );
+  }
+  List<String> displayCommonNames(String languageCode) {
+    if (languageCode == 'es' && commonNamesEs.isNotEmpty) {
+      return commonNamesEs;
+    }
+    return commonNames;
   }
 }

@@ -1,50 +1,63 @@
+
 {
   "monstera_deliciosa": {
     "en": "Swiss Cheese Plant",
-    "de": "Monstera"
+    "de": "Monstera",
+    "es": "Monstera deliciosa"
   },
   "ficus_lyrata": {
     "en": "Fiddle Leaf Fig",
-    "de": "Geigenfeige"
+    "de": "Geigenfeige",
+    "es": "Ficus lira"
   },
   "sansevieria_trifasciata": {
     "en": "Snake Plant",
-    "de": "Bogenhanf"
+    "de": "Bogenhanf",
+    "es": "Lengua de suegra"
   },
   "epipremnum_aureum": {
     "en": "Golden Pothos",
-    "de": "Geldbaum"
+    "de": "Geldbaum",
+    "es": "Poto"
   },
   "chlorophytum_comosum": {
     "en": "Spider Plant",
-    "de": "Grünlilie"
+    "de": "Grünlilie",
+    "es": "Planta Cinta / Planta Araña"
   },
   "aloe_vera": {
     "en": "Aloe Vera",
-    "de": "Aloe Vera"
+    "de": "Aloe Vera",
+    "es": "Aloe vera"
   },
   "dracaena_marginata": {
     "en": "Dragon Tree",
-    "de": "Drachenbaum"
+    "de": "Drachenbaum",
+    "es": "Drácena marginata"
   },
   "spathiphyllum": {
     "en": "Peace Lily",
-    "de": "Einblatt"
+    "de": "Einblatt",
+    "es": "Lirio de la paz"
   },
   "zz_plant": {
     "en": "ZZ Plant",
-    "de": "ZZ-Pflanze"
+    "de": "ZZ-Pflanze",
+    "es": "Zamioculca"
   },
   "calathea_ornata": {
     "en": "Calathea",
-    "de": "Calathea"
+    "de": "Calathea",
+    "es": "Calatea ornata"
   },
   "pilea_peperomioides": {
     "en": "Chinese Money Plant",
-    "de": "Pilea"
+    "de": "Pilea",
+    "es": "Planta china del dinero"
   },
   "tradescantia_zebrina": {
     "en": "Wandering Dude",
-    "de": "Zebrina-Wanderkraut"
+    "de": "Zebrina-Wanderkraut",
+    "es": "Amor de hombre"
   }
 }

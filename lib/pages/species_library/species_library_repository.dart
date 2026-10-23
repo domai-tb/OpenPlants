@@ -5,7 +5,8 @@ import 'package:openplants/pages/species_library/species_library_item_entity.dar
 class SpeciesLibraryRepository {
   final SpeciesLibraryDatasource _datasource;
 
-  const SpeciesLibraryRepository({required SpeciesLibraryDatasource datasource}) : _datasource = datasource;
+  const SpeciesLibraryRepository({required SpeciesLibraryDatasource datasource})
+      : _datasource = datasource;
 
   /// Returns all species.
   Future<List<SpeciesEntity>> listAll() => _datasource.loadAll();
@@ -19,7 +20,11 @@ class SpeciesLibraryRepository {
 
     return all.where((s) {
       if (s.scientificName.toLowerCase().contains(trimmed)) return true;
+
       if (s.commonNames.any((n) => n.toLowerCase().contains(trimmed))) {
+        return true;
+      }
+      if (s.commonNamesEs.any((n) => n.toLowerCase().contains(trimmed))) {
         return true;
       }
       if (s.description.toLowerCase().contains(trimmed)) return true;
@@ -44,7 +49,8 @@ class SpeciesLibraryRepository {
     SpeciesEntity? bestMatch;
     int bestDistance = 2;
     for (final s in all) {
-      final distance = _levenshteinDistance(s.scientificName.toLowerCase(), normalized);
+      final distance =
+          _levenshteinDistance(s.scientificName.toLowerCase(), normalized);
       if (distance <= bestDistance) {
         bestDistance = distance;
         bestMatch = s;

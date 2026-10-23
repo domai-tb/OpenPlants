@@ -27,7 +27,7 @@ class BottomNavBar extends StatelessWidget {
 
     return Container(
       height: bottomNavBarHeight,
-      padding: const EdgeInsets.only(bottom: 20),
+      padding: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
         color: theme.cardColor,
         borderRadius: const BorderRadius.only(
