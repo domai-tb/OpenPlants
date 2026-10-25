@@ -9,8 +9,7 @@ class SpeciesLibraryDatasource {
   final AssetBundle _bundle;
 
   /// Defaults to [rootBundle], injectable for testing.
-  SpeciesLibraryDatasource({AssetBundle? bundle})
-      : _bundle = bundle ?? rootBundle;
+  SpeciesLibraryDatasource({AssetBundle? bundle}) : _bundle = bundle ?? rootBundle;
 
   List<SpeciesEntity>? _cachedSpecies;
 
@@ -24,9 +23,7 @@ class SpeciesLibraryDatasource {
     final jsonString = await _bundle.loadString('assets/species/species.json');
     final List<dynamic> jsonList = json.decode(jsonString) as List<dynamic>;
 
-    _cachedSpecies = jsonList
-        .map((e) => SpeciesEntity.fromJson(e as Map<String, dynamic>))
-        .toList(growable: false);
+    _cachedSpecies = jsonList.map((e) => SpeciesEntity.fromJson(e as Map<String, dynamic>)).toList(growable: false);
 
     return _cachedSpecies!;
   }

@@ -125,8 +125,7 @@ class _SpeciesLibraryPageState extends State<SpeciesLibraryPage> {
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
-                          contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 12),
+                          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                         ),
                       ),
                     ),
@@ -138,8 +137,7 @@ class _SpeciesLibraryPageState extends State<SpeciesLibraryPage> {
                                 child: Text(
                                   context.l10n.speciesListEmptyState,
                                   style: theme.textTheme.bodyLarge?.copyWith(
-                                    color: theme.colorScheme.onSurface
-                                        .withValues(alpha: 0.5),
+                                    color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
                                   ),
                                 ),
                               ),
@@ -207,8 +205,7 @@ class _SpeciesListItem extends StatelessWidget {
                         Text(
                           commonNames.first,
                           style: theme.textTheme.bodyMedium?.copyWith(
-                            color: theme.colorScheme.onSurface
-                                .withValues(alpha: 0.6),
+                            color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                           ),
                         ),
                       ],

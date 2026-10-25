@@ -44,6 +44,19 @@ void main() {
       );
     });
 
+    test('search filters by Spanish common name', () async {
+      final results = await repository.search('lengua de suegra');
+      expect(results.map((s) => s.scientificName), ['Sansevieria trifasciata']);
+    });
+
+    test('displayCommonNames returns Spanish names for the es locale', () async {
+      final species = await repository.listAll();
+      final snakePlant = species.firstWhere((s) => s.scientificName == 'Sansevieria trifasciata');
+
+      expect(snakePlant.displayCommonNames('es'), ['Lengua de suegra']);
+      expect(snakePlant.displayCommonNames('en'), snakePlant.commonNames);
+    });
+
     test('search filters by scientific name (case-insensitive)', () async {
       final results = await repository.search('monstera');
       expect(results, isNotEmpty);

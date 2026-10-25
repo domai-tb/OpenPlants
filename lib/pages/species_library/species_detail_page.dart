@@ -51,8 +51,7 @@ class SpeciesDetailPage extends StatelessWidget {
                           child: Text(
                             commonNames.sublist(1).join(', '),
                             style: theme.textTheme.bodyMedium?.copyWith(
-                              color: theme.colorScheme.onSurface
-                                  .withValues(alpha: 0.6),
+                              color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                             ),
                           ),
                         ),
@@ -88,8 +87,7 @@ class SpeciesDetailPage extends StatelessWidget {
               width: double.infinity,
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color:
-                    theme.colorScheme.primaryContainer.withValues(alpha: 0.3),
+                color: theme.colorScheme.primaryContainer.withValues(alpha: 0.3),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Row(
@@ -125,10 +123,8 @@ class SpeciesDetailPage extends StatelessWidget {
               title: context.l10n.speciesLibraryWatering,
               guidance: switch (species.waterNeeds) {
                 WaterNeeds.low => context.l10n.speciesCarePlanWaterLow,
-                WaterNeeds.moderate =>
-                  context.l10n.speciesCarePlanWaterModerate,
-                WaterNeeds.frequent =>
-                  context.l10n.speciesCarePlanWaterFrequent,
+                WaterNeeds.moderate => context.l10n.speciesCarePlanWaterModerate,
+                WaterNeeds.frequent => context.l10n.speciesCarePlanWaterFrequent,
               },
             ),
             const SizedBox(height: 12),
@@ -147,20 +143,16 @@ class SpeciesDetailPage extends StatelessWidget {
               icon: Icons.air,
               title: context.l10n.speciesLibraryHumidity,
               guidance: switch (species.humidityPreference) {
-                HumidityPreference.low =>
-                  context.l10n.speciesCarePlanHumidityLow,
-                HumidityPreference.moderate =>
-                  context.l10n.speciesCarePlanHumidityModerate,
-                HumidityPreference.high =>
-                  context.l10n.speciesCarePlanHumidityHigh,
+                HumidityPreference.low => context.l10n.speciesCarePlanHumidityLow,
+                HumidityPreference.moderate => context.l10n.speciesCarePlanHumidityModerate,
+                HumidityPreference.high => context.l10n.speciesCarePlanHumidityHigh,
               },
             ),
             const SizedBox(height: 12),
             _CarePlanSection(
               icon: Icons.landscape,
               title: context.l10n.speciesLibrarySoil,
-              guidance: context.l10n.speciesCarePlanSoil(
-                  _soilTypeLabel(context, species.soilType)),
+              guidance: context.l10n.speciesCarePlanSoil(_soilTypeLabel(context, species.soilType)),
             ),
             const SizedBox(height: 12),
             _CarePlanSection(
@@ -198,8 +190,7 @@ class SpeciesDetailPage extends StatelessWidget {
             ),
             _QuickFactRow(
               label: context.l10n.speciesLibraryRepottingInterval,
-              value: context.l10n
-                  .speciesLibraryMonths(species.repottingIntervalMonths),
+              value: context.l10n.speciesLibraryMonths(species.repottingIntervalMonths),
             ),
           ],
         ),
@@ -227,8 +218,7 @@ class SpeciesDetailPage extends StatelessWidget {
   String _humidityLabel(BuildContext context, HumidityPreference pref) {
     return switch (pref) {
       HumidityPreference.low => context.l10n.speciesLibraryHumidityLow,
-      HumidityPreference.moderate =>
-        context.l10n.speciesLibraryHumidityModerate,
+      HumidityPreference.moderate => context.l10n.speciesLibraryHumidityModerate,
       HumidityPreference.high => context.l10n.speciesLibraryHumidityHigh,
     };
   }
@@ -237,14 +227,12 @@ class SpeciesDetailPage extends StatelessWidget {
 String _soilTypeLabel(BuildContext context, String soilType) {
   final type = soilType.toLowerCase();
   final l10n = context.l10n;
-  if (type.contains('cactus') || type.contains('succulent'))
-    return l10n.speciesSoilCactus;
+  if (type.contains('cactus') || type.contains('succulent')) return l10n.speciesSoilCactus;
   if (type.contains('orchid')) return l10n.speciesSoilOrchid;
   if (type.contains('aroid')) return l10n.speciesSoilAroid;
   if (type.contains('peat-free')) return l10n.speciesSoilPeatFree;
   if (type.contains('peat moss')) return l10n.speciesSoilPeatMoss;
-  if (type.contains('moisture-retentive'))
-    return l10n.speciesSoilMoistureRetentive;
+  if (type.contains('moisture-retentive')) return l10n.speciesSoilMoistureRetentive;
   return l10n.speciesSoilPottingMix;
 }
 
@@ -257,8 +245,7 @@ class _DifficultyBadgeLarge extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    final (Color bgColor, Color textColor, IconData icon, String label) =
-        switch (difficulty) {
+    final (Color bgColor, Color textColor, IconData icon, String label) = switch (difficulty) {
       Difficulty.easy => (
           Colors.green.shade100,
           Colors.green.shade800,
@@ -331,8 +318,7 @@ class _ToxicityWarning extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(Icons.warning_amber_rounded,
-              color: Colors.red.shade700, size: 24),
+          Icon(Icons.warning_amber_rounded, color: Colors.red.shade700, size: 24),
           const SizedBox(width: 12),
           Expanded(
             child: Column(

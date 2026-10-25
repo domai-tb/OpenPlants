@@ -53,8 +53,7 @@ class SpeciesEntity {
       difficulty: Difficulty.values.byName(json['difficulty'] as String),
       lightNeeds: LightNeeds.values.byName(json['lightNeeds'] as String),
       waterNeeds: WaterNeeds.values.byName(json['waterNeeds'] as String),
-      humidityPreference: HumidityPreference.values
-          .byName(json['humidityPreference'] as String),
+      humidityPreference: HumidityPreference.values.byName(json['humidityPreference'] as String),
       soilType: json['soilType'] as String,
       repottingIntervalMonths: json['repottingIntervalMonths'] as int,
       toxicToHumans: json['toxicToHumans'] as bool,
