@@ -26,7 +26,8 @@ class NotificationUsecases {
 
   /// Initialize the notification plugin.
   Future<NotificationPayload?> initialize({required void Function(NotificationPayload) onNotificationTap}) async {
-    const androidSettings = AndroidInitializationSettings('@mipmap/ic_launcher');
+    // Alpha-only: @mipmap/ic_launcher is adaptive on API 26+ and renders blank in the status bar.
+    const androidSettings = AndroidInitializationSettings('@drawable/ic_launcher_foreground');
     const iosSettings = DarwinInitializationSettings(
       requestAlertPermission: false,
       requestBadgePermission: false,
